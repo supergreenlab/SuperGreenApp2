@@ -143,6 +143,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncInTimelapses();
     await _syncInChecklists();
     await _syncInChecklistSeeds();
+    await _syncInChecklistLogs();
     add(SyncerBlocEventSyncing(false, ''));
   }
 
@@ -363,7 +364,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       ChecklistSeedsCompanion checklistSeedsCompanion = checklistSeeds[i];
       ChecklistSeed? exists;
       try {
-        exists = await RelDB.get().checklistsDAO.getChecklistSeedForServerIDs(checklistSeedsCompanion.serverID.value!, checklistSeedsCompanion.checklistServerID.value!);
+        exists = await RelDB.get().checklistsDAO.getChecklistSeedForServerIDs(
+            checklistSeedsCompanion.serverID.value!, checklistSeedsCompanion.checklistServerID.value!);
       } catch (e) {}
       if (checklistSeedsCompanion is DeletedChecklistSeedsCompanion) {
         if (exists != null) {
@@ -407,6 +409,33 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     }
   }
 
+  Future _syncInChecklistLogs() async {
+    List<ChecklistLogsCompanion> checklists = await BackendAPI().checklistAPI.unsyncedChecklistLogs();
+    for (int i = 0; i < checklists.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'checklist: ${i + 1}/${checklists.length}'));
+      ChecklistLogsCompanion checklistLogsCompanion = checklists[i];
+      ChecklistLog? exists;
+      try {
+        exists = await RelDB.get().checklistsDAO.getChecklistLogForServerID(checklistLogsCompanion.serverID.value!);
+      } catch (e) {}
+      if (checklistLogsCompanion is DeletedChecklistsCompanion) {
+        if (exists != null) {
+          await ChecklistHelper.deleteChecklistLog(exists);
+        }
+      } else {
+        if (exists != null) {
+          await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().checklistsDAO.addChecklistLog(checklistLogsCompanion);
+        }
+      }
+      await UserEndHelper.setSynced("checklistLog", checklistLogsCompanion.serverID.value!);
+    }
+  }
+
   Future _syncOut() async {
     if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
       throw 'Can\'t sync over GSM';
@@ -421,6 +450,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncOutTimelapses();
     await _syncOutChecklists();
     await _syncOutChecklistSeeds();
+    await _syncOutChecklistLogs();
   }
 
   Future _syncOutDeletes() async {
@@ -540,6 +570,17 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       }
       Checklist checklist = checklists[i];
       await BackendAPI().checklistAPI.syncChecklist(checklist);
+    }
+  }
+
+  Future _syncOutChecklistLogs() async {
+    List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getUnsyncedChecklistLogs();
+    for (int i = 0; i < checklistLogs.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      ChecklistLog checklistLog = checklistLogs[i];
+      await BackendAPI().checklistAPI.syncChecklistLog(checklistLog);
     }
   }
 

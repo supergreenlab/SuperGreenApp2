@@ -123,15 +123,15 @@ class ChecklistSeeds extends Table {
   }
 }
 
-class DeletedChecklistHistoriesCompanion extends ChecklistHistoriesCompanion {
-  DeletedChecklistHistoriesCompanion(serverID) : super(serverID: serverID);
+class DeletedChecklistLogsCompanion extends ChecklistLogsCompanion {
+  DeletedChecklistLogsCompanion(serverID) : super(serverID: serverID);
 }
 
-class SkipChecklistHistoriesCompanion extends ChecklistHistoriesCompanion {
-  SkipChecklistHistoriesCompanion(serverID) : super(serverID: serverID);
+class SkipChecklistLogsCompanion extends ChecklistLogsCompanion {
+  SkipChecklistLogsCompanion(serverID) : super(serverID: serverID);
 }
 
-class ChecklistHistories extends Table {
+class ChecklistLogs extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get checklistSeed => integer()();
   IntColumn get checklist => integer()();
@@ -144,12 +144,12 @@ class ChecklistHistories extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<ChecklistHistoriesCompanion> fromMap(Map<String, dynamic> map) async {
+  static Future<ChecklistLogsCompanion> fromMap(Map<String, dynamic> map) async {
     Checklist checklist;
     try {
       checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(map['checklistID']);
     } catch (e) {
-      return SkipChecklistHistoriesCompanion(Value(map['id'] as String));
+      return SkipChecklistLogsCompanion(Value(map['id'] as String));
     }
 
     ChecklistSeed checklistSeed;
@@ -157,9 +157,9 @@ class ChecklistHistories extends Table {
       checklistSeed =
           await RelDB.get().checklistsDAO.getChecklistSeedForServerIDs(map['checklistSeedID'], map['checklistID']);
     } catch (e) {
-      return SkipChecklistHistoriesCompanion(Value(map['id'] as String));
+      return SkipChecklistLogsCompanion(Value(map['id'] as String));
     }
-    return ChecklistHistoriesCompanion(
+    return ChecklistLogsCompanion(
       checklistSeed: Value(checklistSeed.id),
       checklist: Value(checklist.id),
       checked: Value(map['checked']),
@@ -170,11 +170,11 @@ class ChecklistHistories extends Table {
     );
   }
 
-  static Future<Map<String, dynamic>> toMap(ChecklistHistories checklistHistory) async {
+  static Future<Map<String, dynamic>> toMap(ChecklistLog checklistLog) async {
     return {
-      'id': checklistHistory.serverID,
-      'checked': checklistHistory.checked,
-      'skipped': checklistHistory.skipped,
+      'id': checklistLog.serverID,
+      'checked': checklistLog.checked,
+      'skipped': checklistLog.skipped,
     };
   }
 }
@@ -182,7 +182,7 @@ class ChecklistHistories extends Table {
 @DriftAccessor(tables: [
   Checklists,
   ChecklistSeeds,
-  ChecklistHistories,
+  ChecklistLogs,
 ])
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   ChecklistsDAO(RelDB db) : super(db);
@@ -195,12 +195,20 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return into(checklistSeeds).insert(checklistSeed);
   }
 
+  Future<int> addChecklistLog(ChecklistLogsCompanion checklistLog) {
+    return into(checklistLogs).insert(checklistLog);
+  }
+
   Future<Checklist> getChecklistForPlant(int plantID) {
     return (select(checklists)..where((p) => p.plant.equals(plantID))).getSingle();
   }
 
   Future<Checklist> getChecklist(int id) {
     return (select(checklists)..where((p) => p.id.equals(id))).getSingle();
+  }
+
+  Future<ChecklistLog> getChecklistLogForServerID(String serverID) {
+    return (select(checklistLogs)..where((cks) => cks.serverID.equals(serverID))).getSingle();
   }
 
   Future<Checklist> getChecklistForServerID(String serverID) {
@@ -225,8 +233,16 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (update(checklists)..where((tbl) => tbl.id.equals(checklist.id.value))).write(checklist);
   }
 
+  Future updateChecklistLog(ChecklistLogsCompanion checklistLog) {
+    return (update(checklistLogs)..where((tbl) => tbl.id.equals(checklistLog.id.value))).write(checklistLog);
+  }
+
   Stream<List<ChecklistSeed>> watchChecklistSeeds(int checklistID) {
     return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).watch();
+  }
+
+  Future<List<ChecklistLog>> getUnsyncedChecklistLogs() {
+    return (select(checklistLogs)..where((b) => b.synced.equals(false))).get();
   }
 
   Future<List<Checklist>> getUnsyncedChecklists() {
@@ -243,5 +259,9 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future deleteChecklistSeed(ChecklistSeed checklistSeed) {
     return delete(checklistSeeds).delete(checklistSeed);
+  }
+
+  Future deleteChecklistLog(ChecklistLog checklistLog) {
+    return delete(checklistLogs).delete(checklistLog);
   }
 }

@@ -63,7 +63,7 @@ LazyDatabase _openConnection() {
   Deletes,
   Checklists,
   ChecklistSeeds,
-  ChecklistHistories,
+  ChecklistLogs,
 ], daos: [
   DevicesDAO,
   PlantsDAO,
@@ -137,7 +137,7 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 15) {
       await m.createTable(checklists);
       await m.createTable(checklistSeeds);
-      await m.createTable(checklistHistories);
+      await m.createTable(checklistLogs);
     }
   }
 

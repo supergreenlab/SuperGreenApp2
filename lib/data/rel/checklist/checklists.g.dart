@@ -9,6 +9,5 @@ part of 'checklists.dart';
 mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
   $ChecklistsTable get checklists => attachedDatabase.checklists;
   $ChecklistSeedsTable get checklistSeeds => attachedDatabase.checklistSeeds;
-  $ChecklistHistoriesTable get checklistHistories =>
-      attachedDatabase.checklistHistories;
+  $ChecklistLogsTable get checklistLogs => attachedDatabase.checklistLogs;
 }

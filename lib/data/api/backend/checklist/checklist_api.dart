@@ -114,4 +114,44 @@ class ChecklistAPI {
     }
     return results;
   }
+
+  Future syncChecklistLog(ChecklistLog checklistLog) async {
+    Map<String, dynamic> obj = await ChecklistLogs.toMap(checklistLog);
+    String? serverID = await BackendAPI().postPut('/checklistLog', obj);
+
+    ChecklistLogsCompanion checklistLogsCompanion = ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
+    if (serverID != null) {
+      checklistLogsCompanion = checklistLogsCompanion.copyWith(serverID: Value(serverID));
+    }
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion);
+  }
+
+  Future syncChecklistLogs(ChecklistLog checklistLog) async {
+    Map<String, dynamic> obj = await ChecklistLogs.toMap(checklistLog);
+    String? serverID = await BackendAPI().postPut('/checklistLog', obj);
+
+    ChecklistLogsCompanion checklistLogsCompanion = ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
+    if (serverID != null) {
+      checklistLogsCompanion = checklistLogsCompanion.copyWith(serverID: Value(serverID));
+    }
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion);
+  }
+
+  Future<List<ChecklistLogsCompanion>> unsyncedChecklistLogs() async {
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("ChecklistLogs");
+    List<dynamic> maps = syncData['items'];
+    List<ChecklistLogsCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      try {
+        ChecklistLogsCompanion fe = await ChecklistLogs.fromMap(maps[i]);
+        if (fe is SkipChecklistLogsCompanion) {
+          continue;
+        }
+        results.add(fe);
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
+    }
+    return results;
+  }
 }

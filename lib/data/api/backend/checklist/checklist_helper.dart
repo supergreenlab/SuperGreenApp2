@@ -42,4 +42,8 @@ class ChecklistHelper {
           .addDelete(DeletesCompanion(serverID: Value(checklistSeed.serverID!), type: Value('checklistseeds')));
     }
   }
+
+    static Future deleteChecklistLog(ChecklistLog checklistLog) async {
+      await RelDB.get().checklistsDAO.deleteChecklistLog(checklistLog);
+    }
 }

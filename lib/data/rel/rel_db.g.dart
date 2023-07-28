@@ -5351,8 +5351,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
   }
 }
 
-class ChecklistHistorie extends DataClass
-    implements Insertable<ChecklistHistorie> {
+class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
   final int id;
   final int checklistSeed;
   final int checklist;
@@ -5361,7 +5360,7 @@ class ChecklistHistorie extends DataClass
   final bool skipped;
   final String? serverID;
   final bool synced;
-  ChecklistHistorie(
+  ChecklistLog(
       {required this.id,
       required this.checklistSeed,
       required this.checklist,
@@ -5370,10 +5369,9 @@ class ChecklistHistorie extends DataClass
       required this.skipped,
       this.serverID,
       required this.synced});
-  factory ChecklistHistorie.fromData(Map<String, dynamic> data,
-      {String? prefix}) {
+  factory ChecklistLog.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return ChecklistHistorie(
+    return ChecklistLog(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       checklistSeed: const IntType()
@@ -5408,8 +5406,8 @@ class ChecklistHistorie extends DataClass
     return map;
   }
 
-  ChecklistHistoriesCompanion toCompanion(bool nullToAbsent) {
-    return ChecklistHistoriesCompanion(
+  ChecklistLogsCompanion toCompanion(bool nullToAbsent) {
+    return ChecklistLogsCompanion(
       id: Value(id),
       checklistSeed: Value(checklistSeed),
       checklist: Value(checklist),
@@ -5423,10 +5421,10 @@ class ChecklistHistorie extends DataClass
     );
   }
 
-  factory ChecklistHistorie.fromJson(Map<String, dynamic> json,
+  factory ChecklistLog.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ChecklistHistorie(
+    return ChecklistLog(
       id: serializer.fromJson<int>(json['id']),
       checklistSeed: serializer.fromJson<int>(json['checklistSeed']),
       checklist: serializer.fromJson<int>(json['checklist']),
@@ -5452,7 +5450,7 @@ class ChecklistHistorie extends DataClass
     };
   }
 
-  ChecklistHistorie copyWith(
+  ChecklistLog copyWith(
           {int? id,
           int? checklistSeed,
           int? checklist,
@@ -5461,7 +5459,7 @@ class ChecklistHistorie extends DataClass
           bool? skipped,
           String? serverID,
           bool? synced}) =>
-      ChecklistHistorie(
+      ChecklistLog(
         id: id ?? this.id,
         checklistSeed: checklistSeed ?? this.checklistSeed,
         checklist: checklist ?? this.checklist,
@@ -5473,7 +5471,7 @@ class ChecklistHistorie extends DataClass
       );
   @override
   String toString() {
-    return (StringBuffer('ChecklistHistorie(')
+    return (StringBuffer('ChecklistLog(')
           ..write('id: $id, ')
           ..write('checklistSeed: $checklistSeed, ')
           ..write('checklist: $checklist, ')
@@ -5492,7 +5490,7 @@ class ChecklistHistorie extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ChecklistHistorie &&
+      (other is ChecklistLog &&
           other.id == this.id &&
           other.checklistSeed == this.checklistSeed &&
           other.checklist == this.checklist &&
@@ -5503,7 +5501,7 @@ class ChecklistHistorie extends DataClass
           other.synced == this.synced);
 }
 
-class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
+class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
   final Value<int> id;
   final Value<int> checklistSeed;
   final Value<int> checklist;
@@ -5512,7 +5510,7 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
   final Value<bool> skipped;
   final Value<String?> serverID;
   final Value<bool> synced;
-  const ChecklistHistoriesCompanion({
+  const ChecklistLogsCompanion({
     this.id = const Value.absent(),
     this.checklistSeed = const Value.absent(),
     this.checklist = const Value.absent(),
@@ -5522,7 +5520,7 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   });
-  ChecklistHistoriesCompanion.insert({
+  ChecklistLogsCompanion.insert({
     this.id = const Value.absent(),
     required int checklistSeed,
     required int checklist,
@@ -5533,7 +5531,7 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
     this.synced = const Value.absent(),
   })  : checklistSeed = Value(checklistSeed),
         checklist = Value(checklist);
-  static Insertable<ChecklistHistorie> custom({
+  static Insertable<ChecklistLog> custom({
     Expression<int>? id,
     Expression<int>? checklistSeed,
     Expression<int>? checklist,
@@ -5555,7 +5553,7 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
     });
   }
 
-  ChecklistHistoriesCompanion copyWith(
+  ChecklistLogsCompanion copyWith(
       {Value<int>? id,
       Value<int>? checklistSeed,
       Value<int>? checklist,
@@ -5564,7 +5562,7 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
       Value<bool>? skipped,
       Value<String?>? serverID,
       Value<bool>? synced}) {
-    return ChecklistHistoriesCompanion(
+    return ChecklistLogsCompanion(
       id: id ?? this.id,
       checklistSeed: checklistSeed ?? this.checklistSeed,
       checklist: checklist ?? this.checklist,
@@ -5608,7 +5606,7 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
 
   @override
   String toString() {
-    return (StringBuffer('ChecklistHistoriesCompanion(')
+    return (StringBuffer('ChecklistLogsCompanion(')
           ..write('id: $id, ')
           ..write('checklistSeed: $checklistSeed, ')
           ..write('checklist: $checklist, ')
@@ -5622,12 +5620,12 @@ class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
   }
 }
 
-class $ChecklistHistoriesTable extends ChecklistHistories
-    with TableInfo<$ChecklistHistoriesTable, ChecklistHistorie> {
+class $ChecklistLogsTable extends ChecklistLogs
+    with TableInfo<$ChecklistLogsTable, ChecklistLog> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ChecklistHistoriesTable(this.attachedDatabase, [this._alias]);
+  $ChecklistLogsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
@@ -5697,11 +5695,11 @@ class $ChecklistHistoriesTable extends ChecklistHistories
         synced
       ];
   @override
-  String get aliasedName => _alias ?? 'checklist_histories';
+  String get aliasedName => _alias ?? 'checklist_logs';
   @override
-  String get actualTableName => 'checklist_histories';
+  String get actualTableName => 'checklist_logs';
   @override
-  VerificationContext validateIntegrity(Insertable<ChecklistHistorie> instance,
+  VerificationContext validateIntegrity(Insertable<ChecklistLog> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -5748,14 +5746,14 @@ class $ChecklistHistoriesTable extends ChecklistHistories
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ChecklistHistorie map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ChecklistHistorie.fromData(data,
+  ChecklistLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ChecklistLog.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $ChecklistHistoriesTable createAlias(String alias) {
-    return $ChecklistHistoriesTable(attachedDatabase, alias);
+  $ChecklistLogsTable createAlias(String alias) {
+    return $ChecklistLogsTable(attachedDatabase, alias);
   }
 }
 
@@ -5776,8 +5774,7 @@ abstract class _$RelDB extends GeneratedDatabase {
   late final $DeletesTable deletes = $DeletesTable(this);
   late final $ChecklistsTable checklists = $ChecklistsTable(this);
   late final $ChecklistSeedsTable checklistSeeds = $ChecklistSeedsTable(this);
-  late final $ChecklistHistoriesTable checklistHistories =
-      $ChecklistHistoriesTable(this);
+  late final $ChecklistLogsTable checklistLogs = $ChecklistLogsTable(this);
   late final DevicesDAO devicesDAO = DevicesDAO(this as RelDB);
   late final PlantsDAO plantsDAO = PlantsDAO(this as RelDB);
   late final FeedsDAO feedsDAO = FeedsDAO(this as RelDB);
@@ -5801,6 +5798,6 @@ abstract class _$RelDB extends GeneratedDatabase {
         deletes,
         checklists,
         checklistSeeds,
-        checklistHistories
+        checklistLogs
       ];
 }
