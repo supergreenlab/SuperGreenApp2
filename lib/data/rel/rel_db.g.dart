@@ -5351,6 +5351,414 @@ class $ChecklistSeedsTable extends ChecklistSeeds
   }
 }
 
+class ChecklistHistorie extends DataClass
+    implements Insertable<ChecklistHistorie> {
+  final int id;
+  final int checklistSeed;
+  final int checklist;
+  final String action;
+  final bool checked;
+  final bool skipped;
+  final String? serverID;
+  final bool synced;
+  ChecklistHistorie(
+      {required this.id,
+      required this.checklistSeed,
+      required this.checklist,
+      required this.action,
+      required this.checked,
+      required this.skipped,
+      this.serverID,
+      required this.synced});
+  factory ChecklistHistorie.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ChecklistHistorie(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      checklistSeed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}checklist_seed'])!,
+      checklist: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
+      action: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}action'])!,
+      checked: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}checked'])!,
+      skipped: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}skipped'])!,
+      serverID: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['checklist_seed'] = Variable<int>(checklistSeed);
+    map['checklist'] = Variable<int>(checklist);
+    map['action'] = Variable<String>(action);
+    map['checked'] = Variable<bool>(checked);
+    map['skipped'] = Variable<bool>(skipped);
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String?>(serverID);
+    }
+    map['synced'] = Variable<bool>(synced);
+    return map;
+  }
+
+  ChecklistHistoriesCompanion toCompanion(bool nullToAbsent) {
+    return ChecklistHistoriesCompanion(
+      id: Value(id),
+      checklistSeed: Value(checklistSeed),
+      checklist: Value(checklist),
+      action: Value(action),
+      checked: Value(checked),
+      skipped: Value(skipped),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced: Value(synced),
+    );
+  }
+
+  factory ChecklistHistorie.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChecklistHistorie(
+      id: serializer.fromJson<int>(json['id']),
+      checklistSeed: serializer.fromJson<int>(json['checklistSeed']),
+      checklist: serializer.fromJson<int>(json['checklist']),
+      action: serializer.fromJson<String>(json['action']),
+      checked: serializer.fromJson<bool>(json['checked']),
+      skipped: serializer.fromJson<bool>(json['skipped']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'checklistSeed': serializer.toJson<int>(checklistSeed),
+      'checklist': serializer.toJson<int>(checklist),
+      'action': serializer.toJson<String>(action),
+      'checked': serializer.toJson<bool>(checked),
+      'skipped': serializer.toJson<bool>(skipped),
+      'serverID': serializer.toJson<String?>(serverID),
+      'synced': serializer.toJson<bool>(synced),
+    };
+  }
+
+  ChecklistHistorie copyWith(
+          {int? id,
+          int? checklistSeed,
+          int? checklist,
+          String? action,
+          bool? checked,
+          bool? skipped,
+          String? serverID,
+          bool? synced}) =>
+      ChecklistHistorie(
+        id: id ?? this.id,
+        checklistSeed: checklistSeed ?? this.checklistSeed,
+        checklist: checklist ?? this.checklist,
+        action: action ?? this.action,
+        checked: checked ?? this.checked,
+        skipped: skipped ?? this.skipped,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistHistorie(')
+          ..write('id: $id, ')
+          ..write('checklistSeed: $checklistSeed, ')
+          ..write('checklist: $checklist, ')
+          ..write('action: $action, ')
+          ..write('checked: $checked, ')
+          ..write('skipped: $skipped, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, checklistSeed, checklist, action, checked, skipped, serverID, synced);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChecklistHistorie &&
+          other.id == this.id &&
+          other.checklistSeed == this.checklistSeed &&
+          other.checklist == this.checklist &&
+          other.action == this.action &&
+          other.checked == this.checked &&
+          other.skipped == this.skipped &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
+}
+
+class ChecklistHistoriesCompanion extends UpdateCompanion<ChecklistHistorie> {
+  final Value<int> id;
+  final Value<int> checklistSeed;
+  final Value<int> checklist;
+  final Value<String> action;
+  final Value<bool> checked;
+  final Value<bool> skipped;
+  final Value<String?> serverID;
+  final Value<bool> synced;
+  const ChecklistHistoriesCompanion({
+    this.id = const Value.absent(),
+    this.checklistSeed = const Value.absent(),
+    this.checklist = const Value.absent(),
+    this.action = const Value.absent(),
+    this.checked = const Value.absent(),
+    this.skipped = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  });
+  ChecklistHistoriesCompanion.insert({
+    this.id = const Value.absent(),
+    required int checklistSeed,
+    required int checklist,
+    this.action = const Value.absent(),
+    this.checked = const Value.absent(),
+    this.skipped = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  })  : checklistSeed = Value(checklistSeed),
+        checklist = Value(checklist);
+  static Insertable<ChecklistHistorie> custom({
+    Expression<int>? id,
+    Expression<int>? checklistSeed,
+    Expression<int>? checklist,
+    Expression<String>? action,
+    Expression<bool>? checked,
+    Expression<bool>? skipped,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (checklistSeed != null) 'checklist_seed': checklistSeed,
+      if (checklist != null) 'checklist': checklist,
+      if (action != null) 'action': action,
+      if (checked != null) 'checked': checked,
+      if (skipped != null) 'skipped': skipped,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
+  ChecklistHistoriesCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? checklistSeed,
+      Value<int>? checklist,
+      Value<String>? action,
+      Value<bool>? checked,
+      Value<bool>? skipped,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
+    return ChecklistHistoriesCompanion(
+      id: id ?? this.id,
+      checklistSeed: checklistSeed ?? this.checklistSeed,
+      checklist: checklist ?? this.checklist,
+      action: action ?? this.action,
+      checked: checked ?? this.checked,
+      skipped: skipped ?? this.skipped,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (checklistSeed.present) {
+      map['checklist_seed'] = Variable<int>(checklistSeed.value);
+    }
+    if (checklist.present) {
+      map['checklist'] = Variable<int>(checklist.value);
+    }
+    if (action.present) {
+      map['action'] = Variable<String>(action.value);
+    }
+    if (checked.present) {
+      map['checked'] = Variable<bool>(checked.value);
+    }
+    if (skipped.present) {
+      map['skipped'] = Variable<bool>(skipped.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String?>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistHistoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('checklistSeed: $checklistSeed, ')
+          ..write('checklist: $checklist, ')
+          ..write('action: $action, ')
+          ..write('checked: $checked, ')
+          ..write('skipped: $skipped, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChecklistHistoriesTable extends ChecklistHistories
+    with TableInfo<$ChecklistHistoriesTable, ChecklistHistorie> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChecklistHistoriesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _checklistSeedMeta =
+      const VerificationMeta('checklistSeed');
+  @override
+  late final GeneratedColumn<int?> checklistSeed = GeneratedColumn<int?>(
+      'checklist_seed', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _checklistMeta = const VerificationMeta('checklist');
+  @override
+  late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
+      'checklist', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _actionMeta = const VerificationMeta('action');
+  @override
+  late final GeneratedColumn<String?> action = GeneratedColumn<String?>(
+      'action', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
+  final VerificationMeta _checkedMeta = const VerificationMeta('checked');
+  @override
+  late final GeneratedColumn<bool?> checked = GeneratedColumn<bool?>(
+      'checked', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (checked IN (0, 1))',
+      defaultValue: Constant(false));
+  final VerificationMeta _skippedMeta = const VerificationMeta('skipped');
+  @override
+  late final GeneratedColumn<bool?> skipped = GeneratedColumn<bool?>(
+      'skipped', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (skipped IN (0, 1))',
+      defaultValue: Constant(false));
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: const StringType(),
+      requiredDuringInsert: false);
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  @override
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        checklistSeed,
+        checklist,
+        action,
+        checked,
+        skipped,
+        serverID,
+        synced
+      ];
+  @override
+  String get aliasedName => _alias ?? 'checklist_histories';
+  @override
+  String get actualTableName => 'checklist_histories';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChecklistHistorie> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('checklist_seed')) {
+      context.handle(
+          _checklistSeedMeta,
+          checklistSeed.isAcceptableOrUnknown(
+              data['checklist_seed']!, _checklistSeedMeta));
+    } else if (isInserting) {
+      context.missing(_checklistSeedMeta);
+    }
+    if (data.containsKey('checklist')) {
+      context.handle(_checklistMeta,
+          checklist.isAcceptableOrUnknown(data['checklist']!, _checklistMeta));
+    } else if (isInserting) {
+      context.missing(_checklistMeta);
+    }
+    if (data.containsKey('action')) {
+      context.handle(_actionMeta,
+          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
+    }
+    if (data.containsKey('checked')) {
+      context.handle(_checkedMeta,
+          checked.isAcceptableOrUnknown(data['checked']!, _checkedMeta));
+    }
+    if (data.containsKey('skipped')) {
+      context.handle(_skippedMeta,
+          skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChecklistHistorie map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ChecklistHistorie.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ChecklistHistoriesTable createAlias(String alias) {
+    return $ChecklistHistoriesTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$RelDB extends GeneratedDatabase {
   _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $DevicesTable devices = $DevicesTable(this);
@@ -5368,6 +5776,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   late final $DeletesTable deletes = $DeletesTable(this);
   late final $ChecklistsTable checklists = $ChecklistsTable(this);
   late final $ChecklistSeedsTable checklistSeeds = $ChecklistSeedsTable(this);
+  late final $ChecklistHistoriesTable checklistHistories =
+      $ChecklistHistoriesTable(this);
   late final DevicesDAO devicesDAO = DevicesDAO(this as RelDB);
   late final PlantsDAO plantsDAO = PlantsDAO(this as RelDB);
   late final FeedsDAO feedsDAO = FeedsDAO(this as RelDB);
@@ -5390,6 +5800,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         feedMedias,
         deletes,
         checklists,
-        checklistSeeds
+        checklistSeeds,
+        checklistHistories
       ];
 }

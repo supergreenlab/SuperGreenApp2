@@ -21,7 +21,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'checklists.g.dart';
 
-class DeletedChecklistsCompanion extends TimelapsesCompanion {
+class DeletedChecklistsCompanion extends ChecklistsCompanion {
   DeletedChecklistsCompanion(serverID) : super(serverID: serverID);
 }
 
@@ -59,7 +59,7 @@ class Checklists extends Table {
   }
 }
 
-class DeletedChecklistSeedsCompanion extends TimelapsesCompanion {
+class DeletedChecklistSeedsCompanion extends ChecklistSeedsCompanion {
   DeletedChecklistSeedsCompanion(serverID) : super(serverID: serverID);
 }
 
@@ -123,9 +123,66 @@ class ChecklistSeeds extends Table {
   }
 }
 
+class DeletedChecklistHistoriesCompanion extends ChecklistHistoriesCompanion {
+  DeletedChecklistHistoriesCompanion(serverID) : super(serverID: serverID);
+}
+
+class SkipChecklistHistoriesCompanion extends ChecklistHistoriesCompanion {
+  SkipChecklistHistoriesCompanion(serverID) : super(serverID: serverID);
+}
+
+class ChecklistHistories extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get checklistSeed => integer()();
+  IntColumn get checklist => integer()();
+
+  TextColumn get action => text().withDefault(Constant('{}'))();
+
+  BoolColumn get checked => boolean().withDefault(Constant(false))();
+  BoolColumn get skipped => boolean().withDefault(Constant(false))();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static Future<ChecklistHistoriesCompanion> fromMap(Map<String, dynamic> map) async {
+    Checklist checklist;
+    try {
+      checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(map['checklistID']);
+    } catch (e) {
+      return SkipChecklistHistoriesCompanion(Value(map['id'] as String));
+    }
+
+    ChecklistSeed checklistSeed;
+    try {
+      checklistSeed =
+          await RelDB.get().checklistsDAO.getChecklistSeedForServerIDs(map['checklistSeedID'], map['checklistID']);
+    } catch (e) {
+      return SkipChecklistHistoriesCompanion(Value(map['id'] as String));
+    }
+    return ChecklistHistoriesCompanion(
+      checklistSeed: Value(checklistSeed.id),
+      checklist: Value(checklist.id),
+      checked: Value(map['checked']),
+      skipped: Value(map['skipped']),
+      action: Value(map['action']),
+      serverID: Value(map['id'] as String),
+      synced: Value(true),
+    );
+  }
+
+  static Future<Map<String, dynamic>> toMap(ChecklistHistories checklistHistory) async {
+    return {
+      'id': checklistHistory.serverID,
+      'checked': checklistHistory.checked,
+      'skipped': checklistHistory.skipped,
+    };
+  }
+}
+
 @DriftAccessor(tables: [
   Checklists,
   ChecklistSeeds,
+  ChecklistHistories,
 ])
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   ChecklistsDAO(RelDB db) : super(db);
@@ -151,7 +208,9 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   }
 
   Future<ChecklistSeed> getChecklistSeedForServerIDs(String serverID, String checklistServerID) {
-    return (select(checklistSeeds)..where((cks) => cks.serverID.equals(serverID) & cks.checklistServerID.equals(checklistServerID))).getSingle();
+    return (select(checklistSeeds)
+          ..where((cks) => cks.serverID.equals(serverID) & cks.checklistServerID.equals(checklistServerID)))
+        .getSingle();
   }
 
   Future<List<ChecklistSeed>> getChecklistSeeds(int checklistID) {
