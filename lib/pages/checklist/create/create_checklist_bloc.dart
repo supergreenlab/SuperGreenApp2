@@ -74,8 +74,10 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
   Stream<CreateChecklistBlocState> mapEventToState(CreateChecklistBlocEvent event) async* {
     if (event is CreateChecklistBlocEventInit) {
       if (args.checklistSeed == null) {
+        Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
         checklistSeed = ChecklistSeedsCompanion.insert(
           checklist: this.args.checklist.id,
+          checklistServerID: Value(this.args.checklist.serverID),
           public: Value(false),
           repeat: Value(false),
           title: Value(''),
