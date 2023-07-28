@@ -117,6 +117,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
         _checklistButton(context, state),
         Expanded(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
