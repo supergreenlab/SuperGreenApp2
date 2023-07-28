@@ -29,7 +29,7 @@ class ChecklistActionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(checklistSeed.title);
+    return Text('${checklistSeed.title} ${checklistAction.type}');
 
     /*return AppBarAction(
         icon: FeedEntryIcons[FE_WATER]!,

@@ -77,7 +77,8 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
   Checklist? checklist;
   List<Tuple2<ChecklistSeed, ChecklistAction>> actions = [];
 
-  late StreamSubscription sub;
+  late StreamSubscription? subChecklist;
+  late StreamSubscription subLogs;
 
   AppbarChecklistBloc(this.plant) : super(AppbarChecklistBlocStateInit()) {
     add(AppbarChecklistBlocEventInit());
@@ -89,9 +90,12 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       try {
         checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
       } catch (e) {
+        subChecklist = RelDB.get().checklistsDAO.watchChecklistForPlant(this.plant.id).listen((event) {
+          add(AppbarChecklistBlocEventoad());
+        });
         yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
       }
-      sub = RelDB.get().checklistsDAO.watchChecklistLogs(checklist!.id).listen((e) {
+      subLogs = RelDB.get().checklistsDAO.watchChecklistLogs(checklist!.id).listen((e) {
         add(AppbarChecklistBlocEventoad());
       });
     } else if (event is AppbarChecklistBlocEventoad) {
@@ -101,6 +105,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
         yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
       }
       List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(checklist!.id);
+      actions = [];
       for (int i = 0; i < logs.length; ++i) {
         Map<String, dynamic> action = json.decode(logs[i].action);
         ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
@@ -119,7 +124,10 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
 
   @override
   Future<void> close() async {
-    await sub.cancel();
+    if (subChecklist != null) {
+      await subChecklist!.cancel();
+    }
+    await subLogs.cancel();
     return super.close();
   }
 }
