@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
@@ -58,20 +59,20 @@ class AppbarChecklistBlocStateCreated extends AppbarChecklistBlocState {
 class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
   final Plant plant;
   final Checklist? checklist;
-  final List<ChecklistSeed>? activeSeeds;
   List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
 
-  AppbarChecklistBlocStateLoaded(this.plant, this.checklist, this.activeSeeds, this.actions);
+  AppbarChecklistBlocStateLoaded(this.plant, this.checklist, this.actions);
 
   @override
-  List<Object?> get props => [plant, checklist, activeSeeds, actions];
+  List<Object?> get props => [plant, checklist, actions];
 }
 
 class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChecklistBlocState> {
   final Plant plant;
   Checklist? checklist;
-  List<ChecklistSeed>? activeSeeds;
-  List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
+  List<Tuple2<ChecklistSeed, ChecklistAction>> actions = [];
+
+  late StreamSubscription sub;
 
   AppbarChecklistBloc(this.plant) : super(AppbarChecklistBlocStateInit()) {
     add(AppbarChecklistBlocEventInit());
@@ -82,16 +83,17 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
     if (event is AppbarChecklistBlocEventInit) {
       try {
         checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
-      } catch (e) {}
-      activeSeeds = [];
+      } catch (e) {
+        yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
+      }
       actions = [];
-      activeSeeds!.forEach((as) {
-        List<ChecklistAction> acts = json.decode(as.actions);
-        acts.forEach((a) {
-          actions!.add(Tuple2(as, a));
-        });
-      });
-      yield AppbarChecklistBlocStateLoaded(this.plant, checklist, activeSeeds, actions);
+      List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(checklist!.id);
+      for (int i = 0; i < logs.length; ++i) {
+        Map<String, dynamic> action = json.decode(logs[i].action);
+        ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
+        actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
+      }
+      yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
     } else if (event is AppbarChecklistBlocEventCreate) {
       int checklistID = await RelDB.get().checklistsDAO.addChecklist(ChecklistsCompanion.insert(
             plant: this.plant.id,

@@ -54,7 +54,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             } else if (state is AppbarChecklistBlocStateLoaded) {
               if (state.checklist == null) {
                 body = _renderCreateChecklist(context, state);
-              } else if (state.activeSeeds!.length == 0) {
+              } else if (state.actions!.length == 0) {
                 body = _renderEmpty(context, state);
               } else {
                 body = _renderLoaded(context, state);
