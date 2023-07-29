@@ -139,7 +139,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     vertical: 16.0,
                   ),
                   child:
-                      Text('Today\'s Items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
+                      Text('Today\'s Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
                 ),
                 ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
                   return Padding(

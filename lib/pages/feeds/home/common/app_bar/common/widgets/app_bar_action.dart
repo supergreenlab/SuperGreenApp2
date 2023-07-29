@@ -28,6 +28,7 @@ class AppBarAction extends StatelessWidget {
   final Widget? content;
   final Function? action;
   final Widget? actionIcon;
+  final Widget? body;
   final bool center;
 
   final double height;
@@ -39,6 +40,7 @@ class AppBarAction extends StatelessWidget {
     required this.title,
     this.titleIcon,
     this.content,
+    this.body,
     this.action,
     this.actionIcon,
     this.height = 65,
@@ -118,6 +120,7 @@ class AppBarAction extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
               children: [
+                body ?? Container(),
                 renderContent(context),
               ],
             ),
