@@ -5358,6 +5358,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
   final String action;
   final bool checked;
   final bool skipped;
+  final DateTime date;
   final String? serverID;
   final bool synced;
   ChecklistLog(
@@ -5367,6 +5368,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       required this.action,
       required this.checked,
       required this.skipped,
+      required this.date,
       this.serverID,
       required this.synced});
   factory ChecklistLog.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -5384,6 +5386,8 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           .mapFromDatabaseResponse(data['${effectivePrefix}checked'])!,
       skipped: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}skipped'])!,
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
       serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
       synced: const BoolType()
@@ -5399,6 +5403,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
     map['action'] = Variable<String>(action);
     map['checked'] = Variable<bool>(checked);
     map['skipped'] = Variable<bool>(skipped);
+    map['date'] = Variable<DateTime>(date);
     if (!nullToAbsent || serverID != null) {
       map['server_i_d'] = Variable<String?>(serverID);
     }
@@ -5414,6 +5419,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       action: Value(action),
       checked: Value(checked),
       skipped: Value(skipped),
+      date: Value(date),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
@@ -5431,6 +5437,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       action: serializer.fromJson<String>(json['action']),
       checked: serializer.fromJson<bool>(json['checked']),
       skipped: serializer.fromJson<bool>(json['skipped']),
+      date: serializer.fromJson<DateTime>(json['date']),
       serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
@@ -5445,6 +5452,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       'action': serializer.toJson<String>(action),
       'checked': serializer.toJson<bool>(checked),
       'skipped': serializer.toJson<bool>(skipped),
+      'date': serializer.toJson<DateTime>(date),
       'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
@@ -5457,6 +5465,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           String? action,
           bool? checked,
           bool? skipped,
+          DateTime? date,
           String? serverID,
           bool? synced}) =>
       ChecklistLog(
@@ -5466,6 +5475,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
         action: action ?? this.action,
         checked: checked ?? this.checked,
         skipped: skipped ?? this.skipped,
+        date: date ?? this.date,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
       );
@@ -5478,6 +5488,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           ..write('action: $action, ')
           ..write('checked: $checked, ')
           ..write('skipped: $skipped, ')
+          ..write('date: $date, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -5485,8 +5496,8 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, checklistSeed, checklist, action, checked, skipped, serverID, synced);
+  int get hashCode => Object.hash(id, checklistSeed, checklist, action, checked,
+      skipped, date, serverID, synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5497,6 +5508,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           other.action == this.action &&
           other.checked == this.checked &&
           other.skipped == this.skipped &&
+          other.date == this.date &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
 }
@@ -5508,6 +5520,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
   final Value<String> action;
   final Value<bool> checked;
   final Value<bool> skipped;
+  final Value<DateTime> date;
   final Value<String?> serverID;
   final Value<bool> synced;
   const ChecklistLogsCompanion({
@@ -5517,6 +5530,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     this.action = const Value.absent(),
     this.checked = const Value.absent(),
     this.skipped = const Value.absent(),
+    this.date = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   });
@@ -5527,10 +5541,12 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     this.action = const Value.absent(),
     this.checked = const Value.absent(),
     this.skipped = const Value.absent(),
+    required DateTime date,
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   })  : checklistSeed = Value(checklistSeed),
-        checklist = Value(checklist);
+        checklist = Value(checklist),
+        date = Value(date);
   static Insertable<ChecklistLog> custom({
     Expression<int>? id,
     Expression<int>? checklistSeed,
@@ -5538,6 +5554,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     Expression<String>? action,
     Expression<bool>? checked,
     Expression<bool>? skipped,
+    Expression<DateTime>? date,
     Expression<String?>? serverID,
     Expression<bool>? synced,
   }) {
@@ -5548,6 +5565,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       if (action != null) 'action': action,
       if (checked != null) 'checked': checked,
       if (skipped != null) 'skipped': skipped,
+      if (date != null) 'date': date,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
     });
@@ -5560,6 +5578,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       Value<String>? action,
       Value<bool>? checked,
       Value<bool>? skipped,
+      Value<DateTime>? date,
       Value<String?>? serverID,
       Value<bool>? synced}) {
     return ChecklistLogsCompanion(
@@ -5569,6 +5588,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       action: action ?? this.action,
       checked: checked ?? this.checked,
       skipped: skipped ?? this.skipped,
+      date: date ?? this.date,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
@@ -5595,6 +5615,9 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     if (skipped.present) {
       map['skipped'] = Variable<bool>(skipped.value);
     }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
     if (serverID.present) {
       map['server_i_d'] = Variable<String?>(serverID.value);
     }
@@ -5613,6 +5636,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
           ..write('action: $action, ')
           ..write('checked: $checked, ')
           ..write('skipped: $skipped, ')
+          ..write('date: $date, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -5667,6 +5691,11 @@ class $ChecklistLogsTable extends ChecklistLogs
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (skipped IN (0, 1))',
       defaultValue: Constant(false));
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
+      'date', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
   @override
   late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
@@ -5691,6 +5720,7 @@ class $ChecklistLogsTable extends ChecklistLogs
         action,
         checked,
         skipped,
+        date,
         serverID,
         synced
       ];
@@ -5731,6 +5761,12 @@ class $ChecklistLogsTable extends ChecklistLogs
     if (data.containsKey('skipped')) {
       context.handle(_skippedMeta,
           skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta));
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,

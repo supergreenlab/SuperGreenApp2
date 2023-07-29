@@ -40,7 +40,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     return BlocListener<AppbarChecklistBloc, AppbarChecklistBlocState>(
       listener: (BuildContext context, AppbarChecklistBlocState state) {
         if (state is AppbarChecklistBlocStateCreated) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.checklist));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.checklist));
         }
       },
       child: BlocBuilder<AppbarChecklistBloc, AppbarChecklistBlocState>(
@@ -100,7 +100,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             title: 'Create checklist',
             onPressed: () {
               if (state.checklist != null) {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.checklist!));
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.checklist!));
               } else {
                 BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
               }
@@ -114,15 +114,15 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
   Widget _renderLoaded(BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return Column(
       children: [
-        _checklistButton(context, state),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          child: _checklistButton(context, state),
+        ),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
-              );
+              return ChecklistActionPage(plant: state.plant, checklistSeed: action.item1, checklistAction: action.item2);
             }).toList(),
           ),
         ),
@@ -133,7 +133,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
   Widget _checklistButton(BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.checklist!));
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.checklist!));
       },
       child: Row(
         children: [
@@ -144,61 +144,4 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
       ),
     );
   }
-
-  /*   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          child: AppBarAction(
-            icon: FeedEntryIcons[FE_WATER]!,
-            color: Color(0xFF506EBA),
-            title: 'LAST WATERING',
-            titleIcon: wateringAlert(state) ? Icon(Icons.warning, size: 20, color: Colors.red) : null,
-            content: AutoSizeText(
-              state.watering.length != 0
-                  ? DateRenderer.renderDuration(DateTime.now().difference(state.watering[0].date))
-                  : 'No watering yet',
-              maxLines: 1,
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w300,
-                  color: wateringAlert(state) ? Colors.orange : Colors.green),
-            ),
-            action: _onAction(
-                context,
-                ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.plant,
-                    pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
-                tipID: 'TIP_WATERING',
-                tipPaths: [
-                  't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
-                  't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
-                ]),
-            actionIcon: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
-          ),
-        ),
-        AppBarAction(
-          icon: FeedEntryIcons[FE_MEDIA]!,
-          color: Color(0xFF617682),
-          title: 'LAST GROWLOG',
-          titleIcon: mediaAlert(state) ? Icon(Icons.warning, size: 20, color: Colors.red) : null,
-          content: AutoSizeText(
-            state.media != null
-                ? DateRenderer.renderDuration(DateTime.now().difference(state.media!.date))
-                : 'No grow log yet',
-            maxLines: 1,
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.w300, color: mediaAlert(state) ? Colors.orange : Colors.green),
-          ),
-          action: _onAction(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                  plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state))),
-          actionIcon: SvgPicture.asset('assets/app_bar/icon_growlog.svg'),
-        ),
-      ],
-    );
-  } */
 }

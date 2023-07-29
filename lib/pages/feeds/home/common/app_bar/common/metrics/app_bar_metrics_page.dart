@@ -112,7 +112,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
     return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.only(top: 8.0),
           child: _renderMetrics(24, 56, 11, 453, 45),
         ),
         Container(

@@ -141,6 +141,8 @@ class ChecklistLogs extends Table {
   BoolColumn get checked => boolean().withDefault(Constant(false))();
   BoolColumn get skipped => boolean().withDefault(Constant(false))();
 
+  DateTimeColumn get date => dateTime()();
+
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
@@ -162,6 +164,7 @@ class ChecklistLogs extends Table {
     return ChecklistLogsCompanion(
       checklistSeed: Value(checklistSeed.id),
       checklist: Value(checklist.id),
+      date: Value(DateTime.parse(map['cat'] as String).toLocal()),
       checked: Value(map['checked']),
       skipped: Value(map['skipped']),
       action: Value(map['action']),
@@ -233,8 +236,12 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).get();
   }
 
-  Future<List<ChecklistLog>> getChecklistLogs(int checklistID) {
-    return (select(checklistLogs)..where((p) => p.checklist.equals(checklistID))).get();
+  Future<List<ChecklistLog>> getChecklistLogs(int checklistID, { int limit=0, int offset=0 }) {
+    var query = (select(checklistLogs)..where((p) => p.checklist.equals(checklistID))..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
+    if (limit != 0) {
+      query = query..limit(limit, offset: offset);
+    }
+    return query.get();
   }
 
   Stream<List<ChecklistLog>> watchChecklistLogs(int checklistID) {

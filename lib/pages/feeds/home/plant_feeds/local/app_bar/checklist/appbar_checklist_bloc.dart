@@ -51,12 +51,14 @@ class AppbarChecklistBlocStateInit extends AppbarChecklistBlocState {
 }
 
 class AppbarChecklistBlocStateCreated extends AppbarChecklistBlocState {
+  final Plant plant;
   final Checklist checklist;
 
-  AppbarChecklistBlocStateCreated(this.checklist);
+  AppbarChecklistBlocStateCreated(this.plant, this.checklist);
 
   @override
   List<Object> get props => [
+        plant,
         checklist,
       ];
 }
@@ -104,7 +106,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       } catch (e) {
         yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
       }
-      List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(checklist!.id);
+      List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(checklist!.id, limit: 2);
       actions = [];
       for (int i = 0; i < logs.length; ++i) {
         Map<String, dynamic> action = json.decode(logs[i].action);
@@ -118,7 +120,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
             synced: Value(false),
           ));
       checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
-      yield AppbarChecklistBlocStateCreated(checklist!);
+      yield AppbarChecklistBlocStateCreated(this.plant, checklist!);
     }
   }
 

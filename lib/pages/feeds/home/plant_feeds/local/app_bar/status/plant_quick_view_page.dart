@@ -27,7 +27,6 @@ import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/a
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
-import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantQuickViewPage extends StatelessWidget {

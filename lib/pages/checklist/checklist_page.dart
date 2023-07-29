@@ -144,7 +144,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
+                    child: ChecklistActionPage(plant: state.plant, checklistSeed: action.item1, checklistAction: action.item2),
                   );
                 }).toList(),
                 Container(height: 10.0,),
