@@ -29,7 +29,10 @@ class ChecklistActionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('${checklistSeed.title} ${checklistAction.type}');
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text('${checklistSeed.title} ${checklistAction.type}'),
+    );
 
     /*return AppBarAction(
         icon: FeedEntryIcons[FE_WATER]!,

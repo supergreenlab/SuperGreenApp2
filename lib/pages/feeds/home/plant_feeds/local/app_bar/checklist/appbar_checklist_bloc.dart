@@ -64,7 +64,7 @@ class AppbarChecklistBlocStateCreated extends AppbarChecklistBlocState {
 class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
   final Plant plant;
   final Checklist? checklist;
-  List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
+  final List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
 
   AppbarChecklistBlocStateLoaded(this.plant, this.checklist, this.actions);
 

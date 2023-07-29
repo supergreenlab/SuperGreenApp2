@@ -20,13 +20,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/items/checklist_item_page.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:tuple/tuple.dart';
 
 class ChecklistPage extends TraceableStatefulWidget {
   @override
@@ -122,6 +126,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
     return ListView(
       children: [
         _renderAutoChecklistPopulate(context, state),
+        ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
+          );
+        }).toList(),
         ...state.checklistSeeds.map((cks) {
           return ChecklistSeedItemPage(
             checklistSeed: cks,

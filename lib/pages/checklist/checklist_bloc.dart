@@ -17,11 +17,14 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
+import 'package:tuple/tuple.dart';
 
 abstract class ChecklistBlocEvent extends Equatable {}
 
@@ -30,13 +33,9 @@ class ChecklistBlocEventInit extends ChecklistBlocEvent {
   List<Object> get props => [];
 }
 
-class ChecklistBlocEventChecklistSeedsChanged extends ChecklistBlocEvent {
-  final List<ChecklistSeed> checklistSeeds;
-
-  ChecklistBlocEventChecklistSeedsChanged(this.checklistSeeds);
-
+class ChecklistBlocEventLoad extends ChecklistBlocEvent {
   @override
-  List<Object> get props => [checklistSeeds,];
+  List<Object> get props => [];
 }
 
 abstract class ChecklistBlocState extends Equatable {}
@@ -49,17 +48,23 @@ class ChecklistBlocStateInit extends ChecklistBlocState {
 class ChecklistBlocStateLoaded extends ChecklistBlocState {
   final Checklist checklist;
   final List<ChecklistSeed> checklistSeeds;
+  final List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
 
-  ChecklistBlocStateLoaded(this.checklist, this.checklistSeeds);
+  ChecklistBlocStateLoaded(this.checklist, this.checklistSeeds, this.actions);
 
   @override
-  List<Object> get props => [checklist, checklistSeeds,];
+  List<Object?> get props => [
+        checklist,
+        checklistSeeds,
+        actions,
+      ];
 }
 
 class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
   final MainNavigateToChecklist args;
 
-  late StreamSubscription sub;
+  late StreamSubscription subChecklistSeeds;
+  late StreamSubscription subLogs;
 
   ChecklistBloc(this.args) : super(ChecklistBlocStateInit()) {
     add(ChecklistBlocEventInit());
@@ -68,21 +73,28 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
   @override
   Stream<ChecklistBlocState> mapEventToState(ChecklistBlocEvent event) async* {
     if (event is ChecklistBlocEventInit) {
+      subChecklistSeeds = RelDB.get().checklistsDAO.watchChecklistSeeds(this.args.checklist.id).listen((e) {
+        add(ChecklistBlocEventLoad());
+      });
+      subLogs = RelDB.get().checklistsDAO.watchChecklistLogs(this.args.checklist.id).listen((e) {
+        add(ChecklistBlocEventLoad());
+      });
+    } else if (event is ChecklistBlocEventLoad) {
       List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(this.args.checklist.id);
-      sub = RelDB.get().checklistsDAO.watchChecklistSeeds(this.args.checklist.id).listen((onChecklistSeedsChanged));
-      yield ChecklistBlocStateLoaded(this.args.checklist, checklistSeeds);
-    } else if (event is ChecklistBlocEventChecklistSeedsChanged) {
-      yield ChecklistBlocStateLoaded(this.args.checklist, event.checklistSeeds);
+      List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(this.args.checklist.id);
+      List<Tuple2<ChecklistSeed, ChecklistAction>> actions = [];
+      for (int i = 0; i < logs.length; ++i) {
+        Map<String, dynamic> action = json.decode(logs[i].action);
+        ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
+        actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
+      }
+      yield ChecklistBlocStateLoaded(this.args.checklist, checklistSeeds, actions);
     }
-  }
-
-  void onChecklistSeedsChanged(List<ChecklistSeed> seeds) {
-    add(ChecklistBlocEventChecklistSeedsChanged(seeds));
   }
 
   @override
   Future<void> close() async {
-    await sub.cancel();
+    await subChecklistSeeds.cancel();
     return super.close();
   }
 }
