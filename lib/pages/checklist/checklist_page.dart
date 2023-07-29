@@ -128,32 +128,35 @@ class _ChecklistPageState extends State<ChecklistPage> {
       children: [
         _renderAutoChecklistPopulate(context, state),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0,),
           child: CreateChecklistSection(
-            title: 'Today\'s Items',
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 16.0,
+                  ),
+                  child:
+                      Text('Today\'s Items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
+                ),
+                ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
                   );
                 }).toList(),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CreateChecklistSection(
-            title: 'Today\'s Items',
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: state.checklistSeeds.map((cks) {
+                Container(height: 10.0,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 16.0,
+                  ),
+                  child:
+                      Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
+                ),
+                ...state.checklistSeeds.map((cks) {
                   return ChecklistSeedItemPage(
                     checklistSeed: cks,
                     onSelect: () {
@@ -162,7 +165,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     },
                   );
                 }).toList(),
-              ),
+                Container(height: 30.0,),
+              ]),
             ),
           ),
         ),

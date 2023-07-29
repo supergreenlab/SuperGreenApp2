@@ -20,11 +20,11 @@ import 'package:flutter/material.dart';
 
 class CreateChecklistSection extends StatelessWidget {
   final Widget? icon;
-  final String title;
+  final String? title;
   final Widget child;
   final void Function()? onClose;
 
-  const CreateChecklistSection({Key? key, required this.child, required this.title, this.onClose, this.icon})
+  const CreateChecklistSection({Key? key, required this.child, this.title, this.onClose, this.icon})
       : super(key: key);
 
   @override
@@ -35,16 +35,16 @@ class CreateChecklistSection extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5),
-              topRight: Radius.circular(5),
-              bottomLeft: Radius.circular(5),
-              bottomRight: Radius.circular(5)),
+              topLeft: Radius.circular(3),
+              topRight: Radius.circular(3),
+              bottomLeft: Radius.circular(3),
+              bottomRight: Radius.circular(3)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 4,
-              offset: Offset(0, 3), // changes position of shadow
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: Offset(0, 2), // changes position of shadow
             ),
           ],
         ),
@@ -53,7 +53,7 @@ class CreateChecklistSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                title == null ? Container() : Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     icon == null
@@ -68,7 +68,7 @@ class CreateChecklistSection extends StatelessWidget {
                           ),
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0, left: 8.0, bottom: 4.0),
-                      child: Text(title, style: TextStyle(color: Color(0xff757575))),
+                      child: Text(title!, style: TextStyle(color: Color(0xff757575))),
                     ),
                   ],
                 ),
