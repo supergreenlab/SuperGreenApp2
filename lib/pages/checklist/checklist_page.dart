@@ -66,6 +66,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               }
             }
             return Scaffold(
+              backgroundColor: Color(0xffEDEDED),
               appBar: SGLAppBar(
                 '🦜',
                 backgroundColor: Colors.deepPurple,
@@ -126,21 +127,45 @@ class _ChecklistPageState extends State<ChecklistPage> {
     return ListView(
       children: [
         _renderAutoChecklistPopulate(context, state),
-        ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
-          );
-        }).toList(),
-        ...state.checklistSeeds.map((cks) {
-          return ChecklistSeedItemPage(
-            checklistSeed: cks,
-            onSelect: () {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
-            },
-          );
-        }).toList(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CreateChecklistSection(
+            title: 'Today\'s Items',
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CreateChecklistSection(
+            title: 'Today\'s Items',
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: state.checklistSeeds.map((cks) {
+                  return ChecklistSeedItemPage(
+                    checklistSeed: cks,
+                    onSelect: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

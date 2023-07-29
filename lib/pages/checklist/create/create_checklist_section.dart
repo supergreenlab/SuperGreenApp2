@@ -22,9 +22,9 @@ class CreateChecklistSection extends StatelessWidget {
   final Widget? icon;
   final String title;
   final Widget child;
-  final void Function() onClose;
+  final void Function()? onClose;
 
-  const CreateChecklistSection({Key? key, required this.child, required this.title, required this.onClose, this.icon})
+  const CreateChecklistSection({Key? key, required this.child, required this.title, this.onClose, this.icon})
       : super(key: key);
 
   @override
@@ -72,7 +72,7 @@ class CreateChecklistSection extends StatelessWidget {
                     ),
                   ],
                 ),
-                InkWell(
+                onClose == null ? Container() : InkWell(
                   onTap: this.onClose,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0, right: 8.0),
