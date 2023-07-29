@@ -42,10 +42,10 @@ class ChecklistActionPage extends StatelessWidget {
       child: AppBarAction(
         icon: FeedEntryIcons[FE_WATER]!,
         color: Color(0xFF506EBA),
-        title: 'LAST WATERING',
+        title: checklistSeed.title,
         titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
         content: AutoSizeText(
-          'Action instructions',
+          'Water plant',
           maxLines: 1,
           style: TextStyle(
             fontSize: 22,
