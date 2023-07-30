@@ -26,7 +26,7 @@ class AppBarAction extends StatelessWidget {
   final String title;
   final Widget? titleIcon;
   final Widget? content;
-  final Function? action;
+  final Function()? action;
   final Widget? actionIcon;
   final Widget? body;
   final bool center;
@@ -50,11 +50,7 @@ class AppBarAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (action != null) {
-          action!();
-        }
-      },
+      onTap: action,
       child: Container(
         clipBehavior: Clip.hardEdge,
         height: height,

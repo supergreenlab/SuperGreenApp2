@@ -24,6 +24,7 @@ abstract class ChecklistCondition extends Equatable {
   final String type;
 
   bool get valid => !props.contains(null) && !props.contains('');
+  String get asSentence => '$type';
 
   ChecklistCondition({required this.type});
 

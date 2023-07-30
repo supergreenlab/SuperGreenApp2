@@ -23,6 +23,8 @@ import 'package:equatable/equatable.dart';
 abstract class ChecklistAction extends Equatable {
   final String type;
 
+  String get asSentence => '$type';
+
   ChecklistAction({required this.type});
 
   Map<String, dynamic> toMap() {

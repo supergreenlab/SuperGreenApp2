@@ -16,40 +16,98 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
-import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 
 class ChecklistItemPage extends StatelessWidget {
   final Function() onSelect;
   final ChecklistSeed checklistSeed;
 
-  const ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect}) : super(key: key);
+  late final List<ChecklistCondition> conditions;
+  late final List<ChecklistAction> actions;
+
+  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect}) : super(key: key) {
+    conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
+    actions = ChecklistAction.fromMapArray(json.decode(checklistSeed.actions));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: AppBarAction(
-        icon: FeedEntryIcons[FE_WATER]!,
-        color: Color(0xFF506EBA),
-        title: checklistSeed.title,
-        titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-        content: AutoSizeText(
-          'Water plant',
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w300,
-            color: Colors.green,
-          ),
+    return InkWell(
+      onTap: onSelect,
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(50),
+              spreadRadius: 1.0,
+              blurRadius: 2.0,
+              offset: Offset(2, 3),
+            )
+          ],
         ),
-        action: onSelect,
-        actionIcon: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
+        child: Column(
+          children: [
+            renderHeader(context),
+            renderBody(context),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget renderHeader(BuildContext context) {
+    return Container(
+      height: 65.0,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset('assets/checklist/icon_monitoring.svg'),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(checklistSeed.title),
+                  Text('PARASITS CHECK'),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget renderBody(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Conditions',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        ...conditions.map((c) {
+          return Text(c.asSentence);
+        }).toList(),
+        Text(
+          'Actions',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        ...actions.map((a) {
+          return Text(a.asSentence);
+        }),
+      ],
     );
   }
 }
