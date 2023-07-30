@@ -38,6 +38,7 @@ import 'package:super_green_app/pages/checklist/create/conditions/metric_conditi
 import 'package:super_green_app/pages/checklist/create/conditions/phase_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_category.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
@@ -53,6 +54,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  String? category;
 
   bool public = false;
   bool repeat = false;
@@ -70,7 +72,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
     return (conditions).firstWhereOrNull((c) => !c.valid) == null &&
         (actions).firstWhereOrNull((a) => !a.valid) == null &&
         _titleController.text != '' &&
-        _descriptionController.text != '';
+        _descriptionController.text != '' &&
+        category != null;
   }
 
   @override
@@ -81,6 +84,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
           setState(() {
             _titleController.text = state.checklistSeed.title.value;
             _descriptionController.text = state.checklistSeed.description.value;
+            category = state.checklistSeed.category.value;
 
             this.public = state.checklistSeed.public.value;
             this.repeat = state.checklistSeed.repeat.value;
@@ -232,6 +236,28 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Container(
+                height: 12.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text(
+                  'Checklist basic infos',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xff6A6A6A)),
+                ),
+              ),
+              Text(
+                'Category:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+              ),
+              ChecklistCategory(
+                category: category,
+                onChange: (c) {
+                  setState(() {
+                    category = c;
+                  });
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(

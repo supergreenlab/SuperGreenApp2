@@ -4799,6 +4799,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   final int checklist;
   final String title;
   final String description;
+  final String category;
   final bool public;
   final bool repeat;
   final bool active;
@@ -4812,6 +4813,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       required this.checklist,
       required this.title,
       required this.description,
+      required this.category,
       required this.public,
       required this.repeat,
       required this.active,
@@ -4831,6 +4833,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
       description: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
+      category: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}category'])!,
       public: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
       repeat: const BoolType()
@@ -4856,6 +4860,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     map['checklist'] = Variable<int>(checklist);
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
+    map['category'] = Variable<String>(category);
     map['public'] = Variable<bool>(public);
     map['repeat'] = Variable<bool>(repeat);
     map['active'] = Variable<bool>(active);
@@ -4877,6 +4882,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       checklist: Value(checklist),
       title: Value(title),
       description: Value(description),
+      category: Value(category),
       public: Value(public),
       repeat: Value(repeat),
       active: Value(active),
@@ -4900,6 +4906,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       checklist: serializer.fromJson<int>(json['checklist']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
+      category: serializer.fromJson<String>(json['category']),
       public: serializer.fromJson<bool>(json['public']),
       repeat: serializer.fromJson<bool>(json['repeat']),
       active: serializer.fromJson<bool>(json['active']),
@@ -4919,6 +4926,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       'checklist': serializer.toJson<int>(checklist),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
+      'category': serializer.toJson<String>(category),
       'public': serializer.toJson<bool>(public),
       'repeat': serializer.toJson<bool>(repeat),
       'active': serializer.toJson<bool>(active),
@@ -4935,6 +4943,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           int? checklist,
           String? title,
           String? description,
+          String? category,
           bool? public,
           bool? repeat,
           bool? active,
@@ -4948,6 +4957,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
         checklist: checklist ?? this.checklist,
         title: title ?? this.title,
         description: description ?? this.description,
+        category: category ?? this.category,
         public: public ?? this.public,
         repeat: repeat ?? this.repeat,
         active: active ?? this.active,
@@ -4964,6 +4974,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           ..write('checklist: $checklist, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
+          ..write('category: $category, ')
           ..write('public: $public, ')
           ..write('repeat: $repeat, ')
           ..write('active: $active, ')
@@ -4977,8 +4988,20 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   }
 
   @override
-  int get hashCode => Object.hash(id, checklist, title, description, public,
-      repeat, active, conditions, actions, checklistServerID, serverID, synced);
+  int get hashCode => Object.hash(
+      id,
+      checklist,
+      title,
+      description,
+      category,
+      public,
+      repeat,
+      active,
+      conditions,
+      actions,
+      checklistServerID,
+      serverID,
+      synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4987,6 +5010,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           other.checklist == this.checklist &&
           other.title == this.title &&
           other.description == this.description &&
+          other.category == this.category &&
           other.public == this.public &&
           other.repeat == this.repeat &&
           other.active == this.active &&
@@ -5002,6 +5026,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   final Value<int> checklist;
   final Value<String> title;
   final Value<String> description;
+  final Value<String> category;
   final Value<bool> public;
   final Value<bool> repeat;
   final Value<bool> active;
@@ -5015,6 +5040,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.checklist = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
+    this.category = const Value.absent(),
     this.public = const Value.absent(),
     this.repeat = const Value.absent(),
     this.active = const Value.absent(),
@@ -5029,6 +5055,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     required int checklist,
     this.title = const Value.absent(),
     this.description = const Value.absent(),
+    this.category = const Value.absent(),
     this.public = const Value.absent(),
     this.repeat = const Value.absent(),
     this.active = const Value.absent(),
@@ -5043,6 +5070,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     Expression<int>? checklist,
     Expression<String>? title,
     Expression<String>? description,
+    Expression<String>? category,
     Expression<bool>? public,
     Expression<bool>? repeat,
     Expression<bool>? active,
@@ -5057,6 +5085,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       if (checklist != null) 'checklist': checklist,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
+      if (category != null) 'category': category,
       if (public != null) 'public': public,
       if (repeat != null) 'repeat': repeat,
       if (active != null) 'active': active,
@@ -5073,6 +5102,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       Value<int>? checklist,
       Value<String>? title,
       Value<String>? description,
+      Value<String>? category,
       Value<bool>? public,
       Value<bool>? repeat,
       Value<bool>? active,
@@ -5086,6 +5116,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       checklist: checklist ?? this.checklist,
       title: title ?? this.title,
       description: description ?? this.description,
+      category: category ?? this.category,
       public: public ?? this.public,
       repeat: repeat ?? this.repeat,
       active: active ?? this.active,
@@ -5111,6 +5142,9 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
     if (public.present) {
       map['public'] = Variable<bool>(public.value);
@@ -5146,6 +5180,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
           ..write('checklist: $checklist, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
+          ..write('category: $category, ')
           ..write('public: $public, ')
           ..write('repeat: $repeat, ')
           ..write('active: $active, ')
@@ -5189,6 +5224,13 @@ class $ChecklistSeedsTable extends ChecklistSeeds
   @override
   late final GeneratedColumn<String?> description = GeneratedColumn<String?>(
       'description', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
+      'category', aliasedName, false,
       type: const StringType(),
       requiredDuringInsert: false,
       defaultValue: Constant(''));
@@ -5261,6 +5303,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
         checklist,
         title,
         description,
+        category,
         public,
         repeat,
         active,
@@ -5297,6 +5340,10 @@ class $ChecklistSeedsTable extends ChecklistSeeds
           _descriptionMeta,
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
     }
     if (data.containsKey('public')) {
       context.handle(_publicMeta,
