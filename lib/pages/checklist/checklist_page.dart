@@ -157,7 +157,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
                 ),
                 ...state.checklistSeeds.map((cks) {
-                  return ChecklistSeedItemPage(
+                  return ChecklistItemPage(
                     checklistSeed: cks,
                     onSelect: () {
                       BlocProvider.of<MainNavigatorBloc>(context)

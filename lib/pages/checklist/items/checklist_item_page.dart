@@ -23,11 +23,11 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 
-class ChecklistSeedItemPage extends StatelessWidget {
+class ChecklistItemPage extends StatelessWidget {
   final Function() onSelect;
   final ChecklistSeed checklistSeed;
 
-  const ChecklistSeedItemPage({Key? key, required this.checklistSeed, required this.onSelect}) : super(key: key);
+  const ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
