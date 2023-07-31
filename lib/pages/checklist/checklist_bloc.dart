@@ -47,14 +47,17 @@ class ChecklistBlocStateInit extends ChecklistBlocState {
 
 class ChecklistBlocStateLoaded extends ChecklistBlocState {
   final Plant plant;
+  final Box box;
   final Checklist checklist;
   final List<ChecklistSeed> checklistSeeds;
   final List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
 
-  ChecklistBlocStateLoaded(this.plant, this.checklist, this.checklistSeeds, this.actions);
+  ChecklistBlocStateLoaded(this.plant, this.box, this.checklist, this.checklistSeeds, this.actions);
 
   @override
   List<Object?> get props => [
+        plant,
+        box,
         checklist,
         checklistSeeds,
         actions,
@@ -89,12 +92,13 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
         ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
         actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
       }
-      yield ChecklistBlocStateLoaded(this.args.plant, this.args.checklist, checklistSeeds, actions);
+      yield ChecklistBlocStateLoaded(this.args.plant, this.args.box, this.args.checklist, checklistSeeds, actions);
     }
   }
 
   @override
   Future<void> close() async {
+    await subLogs.cancel();
     await subChecklistSeeds.cancel();
     return super.close();
   }

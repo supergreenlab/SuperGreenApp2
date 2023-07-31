@@ -40,7 +40,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     return BlocListener<AppbarChecklistBloc, AppbarChecklistBlocState>(
       listener: (BuildContext context, AppbarChecklistBlocState state) {
         if (state is AppbarChecklistBlocStateCreated) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.checklist));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.box, state.checklist));
         }
       },
       child: BlocBuilder<AppbarChecklistBloc, AppbarChecklistBlocState>(
@@ -100,7 +100,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             title: 'Create checklist',
             onPressed: () {
               if (state.checklist != null) {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.checklist!));
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
               } else {
                 BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
               }
@@ -122,7 +122,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: state.actions!.map<Widget>((Tuple2<ChecklistSeed, ChecklistAction> action) {
-              return ChecklistActionButton.getActionPage(state.plant, action.item1, action.item2);
+              return ChecklistActionButton.getActionPage(state.plant, state.box, action.item1, action.item2);
             }).toList(),
           ),
         ),
@@ -133,7 +133,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
   Widget _checklistButton(BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.checklist!));
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
       },
       child: Row(
         children: [

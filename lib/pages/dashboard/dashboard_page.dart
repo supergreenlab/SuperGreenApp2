@@ -268,7 +268,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _renderQuickView(BuildContext context, Plant plant, Box box) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(plant)),
+        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(plant, box)),
         BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(plant)),
       ],
       child: PlantQuickViewPage(),

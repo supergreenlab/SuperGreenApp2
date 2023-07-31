@@ -51,14 +51,15 @@ class PlantQuickViewBlocStateInit extends PlantQuickViewBlocState {
 
 class PlantQuickViewBlocStateLoaded extends PlantQuickViewBlocState {
   final Plant plant;
+  final Box box;
 
   final List<FeedEntry> watering;
   final FeedEntry? media;
 
-  PlantQuickViewBlocStateLoaded(this.plant, this.watering, this.media);
+  PlantQuickViewBlocStateLoaded(this.plant, this.box, this.watering, this.media);
 
   @override
-  List<Object?> get props => [this.plant, this.watering, this.media];
+  List<Object?> get props => [this.plant, this.box, this.watering, this.media];
 }
 
 class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickViewBlocState> {
@@ -72,7 +73,7 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
   late StreamSubscription wateringSub;
   late StreamSubscription mediaSub;
 
-  PlantQuickViewBloc(this.plant) : super(PlantQuickViewBlocStateInit(plant)) {
+  PlantQuickViewBloc(this.plant, this.box) : super(PlantQuickViewBlocStateInit(plant)) {
     add(PlantQuickViewBlocEventInit());
   }
 
@@ -84,7 +85,7 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
       media = await db.feedsDAO.getLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA');
       wateringSub = db.feedsDAO.watchFeedEntriesForFeedWithType(plant.feed, 'FE_WATER').listen(onWateringChange);
       mediaSub = db.feedsDAO.watchLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA').listen(onMediaChange);
-      yield PlantQuickViewBlocStateLoaded(plant, watering, media);
+      yield PlantQuickViewBlocStateLoaded(plant, box, watering, media);
     } else if (event is PlantQuickViewBlocEventLoaded) {
       yield event.state;
     }
@@ -92,12 +93,12 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
 
   void onWateringChange(List<FeedEntry> value) {
     watering = value;
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, watering, media)));
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, box, watering, media)));
   }
 
   void onMediaChange(FeedEntry? value) {
     media = value;
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, watering, media)));
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, box, watering, media)));
   }
 
   @override

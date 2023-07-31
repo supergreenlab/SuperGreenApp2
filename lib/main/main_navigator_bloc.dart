@@ -619,12 +619,13 @@ class MainNavigateToFollowsFeedEvent extends MainNavigatorEvent {
 
 class MainNavigateToChecklist extends MainNavigatorEvent {
   final Plant plant;
+  final Box box;
   final Checklist checklist;
 
-  MainNavigateToChecklist(this.plant, this.checklist);
+  MainNavigateToChecklist(this.plant, this.box, this.checklist);
 
   @override
-  List<Object> get props => [plant, checklist,];
+  List<Object> get props => [plant, box, checklist,];
 }
 
 class MainNavigateToCreateChecklist extends MainNavigatorEvent {

@@ -74,7 +74,7 @@ class PlantQuickViewPage extends StatelessWidget {
 
   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return BlocProvider(
-      create: (BuildContext context) => AppbarChecklistBloc(state.plant),
+      create: (BuildContext context) => AppbarChecklistBloc(state.plant, state.box),
       child: AppbarChecklistPage(),
     );
   }

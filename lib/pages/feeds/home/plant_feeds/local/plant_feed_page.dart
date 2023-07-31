@@ -882,7 +882,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   Widget _renderQuickView(BuildContext context, PlantFeedBlocStateLoaded state) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(state.plant)),
+        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(state.plant, state.box)),
         BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.plant)),
       ],
       child: PlantQuickViewPage(),

@@ -27,7 +27,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/check
 
 class ChecklistActionBuyProductButton extends ChecklistActionButton {
 
-  ChecklistActionBuyProductButton({required Plant plant, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction}) : super(plant: plant, checklistSeed: checklistSeed, checklistAction: checklistAction);
+  ChecklistActionBuyProductButton({required Plant plant, required Box box, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction}) : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
 
   @override
   Widget build(BuildContext context) {

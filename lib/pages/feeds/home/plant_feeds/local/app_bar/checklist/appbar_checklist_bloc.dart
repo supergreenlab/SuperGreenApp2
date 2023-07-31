@@ -52,37 +52,41 @@ class AppbarChecklistBlocStateInit extends AppbarChecklistBlocState {
 
 class AppbarChecklistBlocStateCreated extends AppbarChecklistBlocState {
   final Plant plant;
+  final Box box;
   final Checklist checklist;
 
-  AppbarChecklistBlocStateCreated(this.plant, this.checklist);
+  AppbarChecklistBlocStateCreated(this.plant, this.box, this.checklist);
 
   @override
   List<Object> get props => [
         plant,
+        box,
         checklist,
       ];
 }
 
 class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
   final Plant plant;
+  final Box box;
   final Checklist? checklist;
   final List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
 
-  AppbarChecklistBlocStateLoaded(this.plant, this.checklist, this.actions);
+  AppbarChecklistBlocStateLoaded(this.plant, this.box, this.checklist, this.actions);
 
   @override
-  List<Object?> get props => [plant, checklist, actions];
+  List<Object?> get props => [plant, box, checklist, actions];
 }
 
 class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChecklistBlocState> {
   final Plant plant;
+  final Box box;
   Checklist? checklist;
   List<Tuple2<ChecklistSeed, ChecklistAction>> actions = [];
 
   late StreamSubscription? subChecklist;
   late StreamSubscription subLogs;
 
-  AppbarChecklistBloc(this.plant) : super(AppbarChecklistBlocStateInit()) {
+  AppbarChecklistBloc(this.plant, this.box) : super(AppbarChecklistBlocStateInit()) {
     add(AppbarChecklistBlocEventInit());
   }
 
@@ -92,11 +96,12 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       try {
         checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
       } catch (e) {
-        yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
+        subChecklist = RelDB.get().checklistsDAO.watchChecklistForPlant(this.plant.id).listen((event) {
+          add(AppbarChecklistBlocEventoad());
+        });
+        yield AppbarChecklistBlocStateLoaded(this.plant, this.box, checklist, actions);
+        return;
       }
-      subChecklist = RelDB.get().checklistsDAO.watchChecklistForPlant(this.plant.id).listen((event) {
-        add(AppbarChecklistBlocEventoad());
-      });
       subLogs = RelDB.get().checklistsDAO.watchChecklistLogs(checklist!.id).listen((e) {
         add(AppbarChecklistBlocEventoad());
       });
@@ -104,7 +109,8 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       try {
         checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
       } catch (e) {
-        yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
+        yield AppbarChecklistBlocStateLoaded(this.plant, this.box, checklist, actions);
+        return;
       }
       List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(checklist!.id, limit: 2);
       actions = [];
@@ -113,14 +119,14 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
         ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
         actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
       }
-      yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
+      yield AppbarChecklistBlocStateLoaded(this.plant, this.box, checklist, actions);
     } else if (event is AppbarChecklistBlocEventCreate) {
       int checklistID = await RelDB.get().checklistsDAO.addChecklist(ChecklistsCompanion.insert(
             plant: this.plant.id,
             synced: Value(false),
           ));
       checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
-      yield AppbarChecklistBlocStateCreated(this.plant, checklist!);
+      yield AppbarChecklistBlocStateCreated(this.plant, this.box, checklist!);
     }
   }
 

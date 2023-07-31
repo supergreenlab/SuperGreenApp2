@@ -25,19 +25,20 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/check
 
 abstract class ChecklistActionButton extends StatelessWidget {
   final Plant plant;
+  final Box box;
   final ChecklistSeed checklistSeed;
   final ChecklistAction checklistAction;
 
-  const ChecklistActionButton({Key? key, required this.plant, required this.checklistSeed, required this.checklistAction}) : super(key: key);
+  const ChecklistActionButton({Key? key, required this.plant, required this.box, required this.checklistSeed, required this.checklistAction}) : super(key: key);
 
-  static Widget getActionPage(Plant plant, ChecklistSeed checklistSeed, ChecklistAction checklistAction) {
+  static Widget getActionPage(Plant plant, Box box, ChecklistSeed checklistSeed, ChecklistAction checklistAction) {
     switch (checklistAction.type) {
       case ChecklistActionWebpage.TYPE:
-        return ChecklistActionWebpageButton(plant: plant, checklistSeed: checklistSeed, checklistAction: checklistAction);
+        return ChecklistActionWebpageButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
       case ChecklistActionCreateCard.TYPE:
-        return ChecklistActionCreateCardButton(plant: plant, checklistSeed: checklistSeed, checklistAction: checklistAction);
+        return ChecklistActionCreateCardButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
       case ChecklistActionBuyProduct.TYPE:
-        return ChecklistActionBuyProductButton(plant: plant, checklistSeed: checklistSeed, checklistAction: checklistAction);
+        return ChecklistActionBuyProductButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
     }
     throw 'Uknown type ${checklistAction.type}';
   }
