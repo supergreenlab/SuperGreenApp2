@@ -50,7 +50,7 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w300,
-            color: Colors.green,
+            color: Color(0xff454545),
           ),
         ),
         action: () {},
