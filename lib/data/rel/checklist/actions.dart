@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 
 abstract class ChecklistAction extends Equatable {
   final String type;
@@ -137,7 +138,7 @@ class ChecklistActionCreateCard extends ChecklistAction {
   final String? entryType;
   final String? instructions;
 
-  String get asSentence => 'Create ${entryType!} diary entry.';
+  String get asSentence => 'Create ${FeedEntryName[entryType!]!} diary entry.';
 
   ChecklistActionCreateCard({this.entryType, this.instructions}) : super(type: TYPE);
 

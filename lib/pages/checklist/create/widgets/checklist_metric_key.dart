@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/assets/metrics.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistMetricKey extends StatelessWidget {
@@ -30,12 +31,12 @@ class ChecklistMetricKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tuple3<String, String, String>> choices = [
-      Tuple3('TEMP', 'assets/app_bar/icon_temperature.svg', 'Temperature'),
-      Tuple3('HUMI', 'assets/app_bar/icon_humidity.svg', 'Humidity'),
-      Tuple3('CO2', 'assets/app_bar/icon_co2.svg', 'CO2'),
-      Tuple3('VPD', 'assets/app_bar/icon_vpd.svg', 'VPD'),
-      Tuple3('WEIGHT', 'assets/app_bar/icon_weight.svg', 'Weight'),
-      Tuple3('WATERING_LEFT', 'assets/app_bar/icon_watering.svg', 'Watering left'),
+      Tuple3(TEMP, LabMetricIcons[TEMP]!, LabMetricNames[TEMP]!),
+      Tuple3(HUMI, LabMetricIcons[HUMI]!, LabMetricNames[HUMI]!),
+      Tuple3(CO2, LabMetricIcons[CO2]!, LabMetricNames[CO2]!),
+      Tuple3(VPD, LabMetricIcons[VPD]!, LabMetricNames[VPD]!),
+      Tuple3(WEIGHT, LabMetricIcons[WEIGHT]!, LabMetricNames[WEIGHT]!),
+      Tuple3(WATERING_LEFT, LabMetricIcons[WATERING_LEFT]!, LabMetricNames[WATERING_LEFT]!),
     ];
     return DropdownButton<String?>(
       hint: Text('Select metric'),

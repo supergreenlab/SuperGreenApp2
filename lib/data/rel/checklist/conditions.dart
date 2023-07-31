@@ -19,6 +19,8 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/data/assets/metrics.dart';
 
 abstract class ChecklistCondition extends Equatable {
   final String type;
@@ -92,7 +94,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
     if (!valid) {
       return super.asSentence;
     }
-    String str = 'If ${key!} is ';
+    String str = 'If ${LabMetricNames[key!]!} is ';
     if (inRange) {
       if (min != null && max != null) {
         double div = 1;
@@ -325,7 +327,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   final String durationUnit;
 
   String get asSentence {
-    String str = 'Trigger at ${date!.toString()}';
+    String str = 'Trigger at ${DateFormat.yMMMMEEEEd().format(date!)} at ${DateFormat.Hm().format(date!)}';
     if (repeat) {
       str += ' then repeat every ${repeatDuration!} $durationUnit.';
     }

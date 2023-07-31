@@ -67,7 +67,6 @@ class ChecklistItemPage extends StatelessWidget {
 
   Widget renderHeader(BuildContext context) {
     return Container(
-      height: 65.0,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -82,8 +81,11 @@ class ChecklistItemPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(checklistSeed.title),
-                  Text(checklistSeed.category),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text(checklistSeed.title, style: TextStyle(color: Color(0xff506EBA), fontSize: 18),),
+                  ),
+                  Text(checklistSeed.category, style: TextStyle(color: Color(0xff2D6A14)),),
                 ],
               ),
             ),
@@ -113,7 +115,7 @@ class ChecklistItemPage extends StatelessWidget {
           ...conditions.map((c) {
             return Padding(
               padding: const EdgeInsets.only(left: 8.0, bottom: 8.0,),
-              child: Text('• ' + c.asSentence),
+              child: Text((conditions.indexOf(c) != 0 ? 'AND ' : '') + c.asSentence),
             );
           }).toList(),
           Padding(
@@ -126,7 +128,7 @@ class ChecklistItemPage extends StatelessWidget {
           ...actions.map((a) {
             return Padding(
               padding: const EdgeInsets.only(left: 8.0, bottom: 8.0,),
-              child: Text('• ' + a.asSentence),
+              child: Text((actions.indexOf(a) != 0 ? 'AND ' : '') + a.asSentence),
             );
           }),
         ],
