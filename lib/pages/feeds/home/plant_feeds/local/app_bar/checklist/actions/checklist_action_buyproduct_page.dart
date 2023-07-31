@@ -25,6 +25,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChecklistActionBuyProductButton extends ChecklistActionButton {
   ChecklistActionBuyProductButton(
@@ -53,7 +54,9 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
             color: Color(0xff454545),
           ),
         ),
-        action: () {},
+        action: () {
+          launchUrl(url);
+        },
         actionIcon: SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),
       ),
     );
