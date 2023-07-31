@@ -45,7 +45,7 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
         color: Colors.teal,
         title: checklistSeed.title,
         content: AutoSizeText(
-          'Webpage',
+          url.host,
           maxLines: 1,
           style: TextStyle(
             fontSize: 22,

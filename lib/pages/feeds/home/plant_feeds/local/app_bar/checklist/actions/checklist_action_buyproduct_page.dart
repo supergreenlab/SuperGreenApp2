@@ -45,7 +45,7 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
         color: Color.fromARGB(255, 140, 98, 158),
         title: checklistSeed.title,
         content: AutoSizeText(
-          'Buy product',
+          url.host,
           maxLines: 1,
           style: TextStyle(
             fontSize: 22,
