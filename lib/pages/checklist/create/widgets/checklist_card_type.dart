@@ -67,7 +67,7 @@ class ChecklistCardType extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: SvgPicture.asset(FeedEntryIcons[c]!),
               ),
-              Text(FeedEntryName[c]!),
+              Text(FeedEntryNames[c]!),
             ],
           ),
         );

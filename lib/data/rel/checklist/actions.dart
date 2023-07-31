@@ -138,7 +138,7 @@ class ChecklistActionCreateCard extends ChecklistAction {
   final String? entryType;
   final String? instructions;
 
-  String get asSentence => 'Create ${FeedEntryName[entryType!]!} diary entry.';
+  String get asSentence => 'Create ${FeedEntryNames[entryType!]!} diary entry.';
 
   ChecklistActionCreateCard({this.entryType, this.instructions}) : super(type: TYPE);
 

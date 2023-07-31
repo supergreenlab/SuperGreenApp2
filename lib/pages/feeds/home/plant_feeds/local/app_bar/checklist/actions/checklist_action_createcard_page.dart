@@ -148,15 +148,15 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
         icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
-        color: Color(0xFF506EBA),
+        color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
         title: checklistSeed.title,
         content: AutoSizeText(
-          'Create card ${(checklistAction as ChecklistActionCreateCard).entryType}',
+          'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
           maxLines: 1,
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w300,
-            color: Colors.green,
+            color: Color(0xff454545),
           ),
         ),
         action: onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context),

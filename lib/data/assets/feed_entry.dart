@@ -17,6 +17,8 @@
  */
 
 // TODO move those as static fields in their rel_db classes
+import 'package:flutter/material.dart';
+
 const FE_MEDIA='FE_MEDIA';
 const FE_MEASURE='FE_MEASURE';
 const FE_TRANSPLANT='FE_TRANSPLANT';
@@ -61,7 +63,7 @@ const Map<String, String> FeedEntryIcons = {
   FE_TOWELIE_INFO: 'assets/feed_card/icon_towelie.png',
 };
 
-const Map<String, String> FeedEntryName = {
+const Map<String, String> FeedEntryNames = {
   FE_MEDIA: 'Media',
   FE_MEASURE: 'Measure',
   FE_TRANSPLANT: 'Transplant',
@@ -82,4 +84,27 @@ const Map<String, String> FeedEntryName = {
 
   FE_LIFE_EVENT: 'Life event',
   FE_TOWELIE_INFO: 'Towelie',
+};
+
+const Map<String, Color> FeedEntryColors = {
+  FE_MEDIA: Colors.blueGrey,
+  FE_MEASURE: Colors.blueGrey,
+  FE_TRANSPLANT: Colors.blueGrey,
+  FE_BENDING: Colors.blueGrey,
+  FE_FIMMING: Colors.blueGrey,
+  FE_TOPPING: Colors.blueGrey,
+  FE_DEFOLIATION: Colors.blueGrey,
+  FE_TIMELAPSE: Colors.blueGrey,
+  FE_NUTRIENT_MIX: Color(0xFF506EBA),
+  FE_WATER: Color(0xFF506EBA),
+  FE_LIGHT: Colors.blueGrey,
+  FE_VENTILATION: Colors.blueGrey,
+
+  FE_SCHEDULE: Colors.blueGrey,
+  FE_SCHEDULE_VEG: Colors.blueGrey,
+  FE_SCHEDULE_BLOOM: Colors.blueGrey,
+  FE_SCHEDULE_AUTO: Colors.blueGrey,
+
+  FE_LIFE_EVENT: Colors.blueGrey,
+  FE_TOWELIE_INFO: Colors.blueGrey,
 };
