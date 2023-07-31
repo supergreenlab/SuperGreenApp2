@@ -85,7 +85,40 @@ class ChecklistConditionMetric extends ChecklistCondition {
     if (daysInRow && nDaysInRow == null) {
       return false;
     }
-    return true;
+      return true;
+  }
+
+  String get asSentence {
+    if (!valid) {
+      return super.asSentence;
+    }
+    String str = 'If ${key!} is ';
+    if (inRange) {
+      if (min != null && max != null) {
+        double div = 1;
+        if (key == 'VPD') {
+          div = 10;
+        }
+        str += 'between ${min! / div} and ${max! / div} ';
+      } else if (min != null) {
+        str += 'above ${min!} ';
+      } else if (max != null) {
+        str += 'below ${max!} ';
+      }
+    } else {
+      if (min != null && max != null) {
+        str += 'out of the range ${min!} < ${max!} ';
+      } else if (min != null) {
+        str += 'below ${min!} ';
+      } else if (max != null) {
+        str += 'above ${max!} ';
+      }
+    }
+    str += 'for ${duration!} $durationUnit';
+    if (daysInRow && nDaysInRow != null) {
+      str += ' over ${nDaysInRow!} consecutive days.';
+    }
+    return str;
   }
 
   ChecklistConditionMetric({
@@ -175,6 +208,8 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   final int? duration;
   final String durationUnit;
 
+  String get asSentence => 'If last ${entryType!} diary entry is ${duration!} $durationUnit old.';
+
   ChecklistConditionAfterCard({
     this.entryType,
     this.duration,
@@ -229,6 +264,8 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   final String? phase;
   final int? duration;
   final String durationUnit;
+
+  String get asSentence => 'If plant is ${phase!} since ${duration!} $durationUnit.';
 
   ChecklistConditionAfterPhase({
     this.phase,
@@ -286,6 +323,14 @@ class ChecklistConditionTimer extends ChecklistCondition {
   final bool repeat;
   final int? repeatDuration;
   final String durationUnit;
+
+  String get asSentence {
+    String str = 'Trigger at ${date!.toLocal()}';
+    if (repeat) {
+      str += ' then repeat every ${repeatDuration!} $durationUnit.';
+    }
+    return str;
+  }
 
   bool get valid {
     if (date == null) {

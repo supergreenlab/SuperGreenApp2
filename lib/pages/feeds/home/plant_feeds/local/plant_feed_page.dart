@@ -31,7 +31,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';

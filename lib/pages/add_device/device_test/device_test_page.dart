@@ -28,7 +28,7 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_test/device_test_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';

@@ -24,7 +24,7 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/pages/feed_entries/feed_life_event/form/feed_life_event_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';

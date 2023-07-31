@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_action_condition_popup.dart';
 
@@ -32,7 +33,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
       children: [
         this.filteredValues.contains(ChecklistConditionTimer.TYPE) ? Container() : renderCondition(
             context,
-            'assets/checklist/icon_reminder.svg',
+            ChecklistConditionIcons[ChecklistConditionTimer.TYPE]!,
             'Time reminder',
             'Just a simple reminder, set a date and it will show up in your checklist at that date.',
             'Ex: In X days.', () {
@@ -40,15 +41,15 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
         }),
         renderCondition(
             context,
-            'assets/checklist/icon_monitoring.svg',
+            ChecklistConditionIcons[ChecklistConditionMetric.TYPE]!,
             'Metric monitoring',
             'This checklist item will show up in your checklist if a metric is in or out of a given range.',
             'Ex: When temperature is >X° for 3 days.', () {
-          onAdd(ChecklistConditionMetric());
+          onAdd(ChecklistConditionMetric(nDaysInRow: 4,));
         }),
         this.filteredValues.contains(ChecklistConditionAfterCard.TYPE) ? Container() : renderCondition(
             context,
-            'assets/checklist/icon_diary.svg',
+            ChecklistConditionIcons[ChecklistConditionAfterCard.TYPE]!,
             'After a diary entry is created',
             'Choose a diary entry type and set a duration after which this checklist entry will show up in your checklist.',
             'Ex: 5 days after last watering card', () {
@@ -56,7 +57,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
         }),
         this.filteredValues.contains(ChecklistConditionAfterPhase.TYPE) ? Container() : renderCondition(
             context,
-            'assets/checklist/icon_phase.svg',
+            ChecklistConditionIcons[ChecklistConditionAfterPhase.TYPE]!,
             'Plant phase',
             'Select a phase and a duration. This checklist item will show up on time in your checklist.',
             'Ex: after 2 weeks into bloom, start the next seeds', () {

@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistCardType extends StatelessWidget {

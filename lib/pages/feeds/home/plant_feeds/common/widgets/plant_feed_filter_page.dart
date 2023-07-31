@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 
 import 'icon_checkbox.dart';

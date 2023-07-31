@@ -30,7 +30,7 @@ import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart'
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 import 'package:super_green_app/widgets/item_loading.dart';
 

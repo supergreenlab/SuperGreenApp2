@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistCategory extends StatelessWidget {
@@ -29,12 +30,12 @@ class ChecklistCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tuple3> choices = [
-      Tuple3('FEEDING', 'Feeding', 'assets/checklist/icon_watering.svg'),
-      Tuple3('PESTS', 'Pest/fungus/parasits control', 'assets/checklist/icon_pests.svg'),
-      Tuple3('TRAINING', 'Plant care and training', 'assets/checklist/icon_training.svg'),
-      Tuple3('ENVIRONMENT', 'Environment', 'assets/checklist/icon_environment.svg'),
-      Tuple3('SUPPLY', 'Supply', 'assets/checklist/icon_supply.svg'),
-      Tuple3('OTHER', 'Other', 'assets/checklist/icon_other.svg'),
+      Tuple3(CH_FEEDING, ChecklistCategoryNames[CH_FEEDING], ChecklistCategoryIcons[CH_FEEDING]),
+      Tuple3(CH_PESTS, ChecklistCategoryNames[CH_PESTS], ChecklistCategoryIcons[CH_PESTS]),
+      Tuple3(CH_TRAINING, ChecklistCategoryNames[CH_TRAINING], ChecklistCategoryIcons[CH_TRAINING]),
+      Tuple3(CH_ENVIRONMENT, ChecklistCategoryNames[CH_ENVIRONMENT], ChecklistCategoryIcons[CH_ENVIRONMENT]),
+      Tuple3(CH_SUPPLY, ChecklistCategoryNames[CH_SUPPLY], ChecklistCategoryIcons[CH_SUPPLY]),
+      Tuple3(CH_OTHER, ChecklistCategoryNames[CH_OTHER], ChecklistCategoryIcons[CH_OTHER]),
     ];
 
     return DropdownButton<String>(

@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';

@@ -111,6 +111,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                 ChecklistSeedsCompanion cks = state.checklistSeed.copyWith(
                   title: drift.Value(_titleController.text),
                   description: drift.Value(_descriptionController.text),
+                  category: drift.Value(category!),
                   public: drift.Value(public),
                   repeat: drift.Value(repeat),
                   conditions: drift.Value(json.encode(conditions.map((c) => c.toMap()).toList())),

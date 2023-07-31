@@ -157,12 +157,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
                 ),
                 ...state.checklistSeeds.map((cks) {
-                  return ChecklistItemPage(
-                    checklistSeed: cks,
-                    onSelect: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ChecklistItemPage(
+                      checklistSeed: cks,
+                      onSelect: () {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
+                      },
+                    ),
                   );
                 }).toList(),
                 Container(height: 30.0,),

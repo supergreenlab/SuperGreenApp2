@@ -21,6 +21,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -70,7 +71,10 @@ class ChecklistItemPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SvgPicture.asset('assets/checklist/icon_monitoring.svg'),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: SvgPicture.asset(ChecklistCategoryIcons[checklistSeed.category]!, width: 32, height: 32,),
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -79,10 +83,14 @@ class ChecklistItemPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(checklistSeed.title),
-                  Text('PARASITS CHECK'),
+                  Text(checklistSeed.category),
                 ],
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, right: 16.0,),
+            child: Icon(Icons.settings, color: Color(0xff606060),),
           ),
         ],
       ),
@@ -90,24 +98,39 @@ class ChecklistItemPage extends StatelessWidget {
   }
 
   Widget renderBody(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Conditions',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        ...conditions.map((c) {
-          return Text(c.asSentence);
-        }).toList(),
-        Text(
-          'Actions',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        ...actions.map((a) {
-          return Text(a.asSentence);
-        }),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              'Conditions',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ...conditions.map((c) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0,),
+              child: Text('• ' + c.asSentence),
+            );
+          }).toList(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              'Actions',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ...actions.map((a) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0,),
+              child: Text('• ' + a.asSentence),
+            );
+          }),
+        ],
+      ),
     );
   }
 }

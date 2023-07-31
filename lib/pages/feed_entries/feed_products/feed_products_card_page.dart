@@ -22,7 +22,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';

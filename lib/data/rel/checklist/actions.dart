@@ -68,6 +68,8 @@ class ChecklistActionWebpage extends ChecklistAction {
   final String? url;
   final String? instructions;
 
+  String get asSentence => 'Open webpage at ${url!}';
+
   ChecklistActionWebpage({this.url, this.instructions}) : super(type: TYPE);
 
   bool get valid {
@@ -133,6 +135,8 @@ class ChecklistActionCreateCard extends ChecklistAction {
   final String? entryType;
   final String? instructions;
 
+  String get asSentence => 'Create ${entryType!} diary entry.';
+
   ChecklistActionCreateCard({this.entryType, this.instructions}) : super(type: TYPE);
 
   @override
@@ -175,6 +179,8 @@ class ChecklistActionBuyProduct extends ChecklistAction {
   final String? name;
   final String? url;
   final String? instructions;
+
+  String get asSentence => 'Get a ${name!} at ${url!}';
 
   ChecklistActionBuyProduct({this.name, this.url, this.instructions}) : super(type: TYPE);
 
