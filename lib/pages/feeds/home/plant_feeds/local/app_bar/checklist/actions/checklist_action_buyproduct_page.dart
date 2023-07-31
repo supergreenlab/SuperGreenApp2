@@ -16,13 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:html';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
-import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
@@ -38,11 +36,13 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
 
   @override
   Widget build(BuildContext context) {
+    Uri url = Uri.parse((checklistAction as ChecklistActionBuyProduct).url!);
+    String imagePath = '${url.replace(path: 'favicon.png').toString()}';
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
-        icon: FeedEntryIcons[FE_WATER]!,
-        color: Color(0xFF506EBA),
+        iconWidget: Image.network(imagePath, width: 40, height: 40, fit: BoxFit.contain, errorBuilder: (BuildContext context, Object o, StackTrace? trace) => SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),),
+        color: Color.fromARGB(255, 140, 98, 158),
         title: checklistSeed.title,
         content: AutoSizeText(
           'Buy product',

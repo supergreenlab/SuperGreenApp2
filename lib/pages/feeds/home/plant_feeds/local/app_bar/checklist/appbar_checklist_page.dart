@@ -119,11 +119,15 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
           child: _checklistButton(context, state),
         ),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: state.actions!.map<Widget>((Tuple2<ChecklistSeed, ChecklistAction> action) {
-              return ChecklistActionButton.getActionPage(state.plant, state.box, action.item1, action.item2);
-            }).toList(),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: state.actions!.map<Widget>((Tuple2<ChecklistSeed, ChecklistAction> action) {
+                return ChecklistActionButton.getActionPage(state.plant, state.box, action.item1, action.item2);
+              }).toList(),
+            ),
           ),
         ),
       ],

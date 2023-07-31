@@ -18,11 +18,13 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:super_green_app/data/assets/feed_entry.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChecklistActionWebpageButton extends ChecklistActionButton {
   ChecklistActionWebpageButton(
@@ -34,13 +36,13 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
 
   @override
   Widget build(BuildContext context) {
-    Uri url = Uri.parse((checklistAction as ChecklistActionBuyProduct).url!);
-    String imagePath = '${url.replace(path: 'favicon.ico').toString()}';
+    Uri url = Uri.parse((checklistAction as ChecklistActionWebpage).url!);
+    String imagePath = '${url.replace(path: 'favicon.png').toString()}';
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
-        icon: FeedEntryIcons[FE_WATER]!,
-        color: Color(0xFF506EBA),
+        iconWidget: Image.network(imagePath, width: 40, height: 40, fit: BoxFit.contain, errorBuilder: (BuildContext context, Object o, StackTrace? trace) => SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),),
+        color: Colors.teal,
         title: checklistSeed.title,
         content: AutoSizeText(
           'Webpage',
@@ -51,8 +53,10 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
             color: Colors.green,
           ),
         ),
-        action: () {},
-        actionIcon: Image.network(imagePath),
+        action: () {
+          launchUrl(url);
+        },
+        actionIcon: SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
       ),
     );
   }

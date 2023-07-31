@@ -21,7 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarAction extends StatelessWidget {
-  final String icon;
+  final String? icon;
+  final Widget? iconWidget;
   final Color color;
   final String title;
   final Widget? titleIcon;
@@ -35,7 +36,8 @@ class AppBarAction extends StatelessWidget {
 
   const AppBarAction({
     Key? key,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.color,
     required this.title,
     this.titleIcon,
@@ -92,7 +94,7 @@ class AppBarAction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(iconSize / 2),
                   color: Colors.white,
                 ),
-                child: SvgPicture.asset(icon, width: iconSize, height: iconSize, fit: BoxFit.contain)),
+                child: this.iconWidget ?? SvgPicture.asset(this.icon!, width: iconSize, height: iconSize, fit: BoxFit.contain)),
           ),
         ],
       ),
