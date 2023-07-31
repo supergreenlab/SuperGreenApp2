@@ -84,7 +84,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
           setState(() {
             _titleController.text = state.checklistSeed.title.value;
             _descriptionController.text = state.checklistSeed.description.value;
-            category = state.checklistSeed.category.value;
+            category = state.checklistSeed.category.value == '' ? null : state.checklistSeed.category.value;
 
             this.public = state.checklistSeed.public.value;
             this.repeat = state.checklistSeed.repeat.value;

@@ -92,11 +92,11 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       try {
         checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
       } catch (e) {
-        subChecklist = RelDB.get().checklistsDAO.watchChecklistForPlant(this.plant.id).listen((event) {
-          add(AppbarChecklistBlocEventoad());
-        });
         yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
       }
+      subChecklist = RelDB.get().checklistsDAO.watchChecklistForPlant(this.plant.id).listen((event) {
+        add(AppbarChecklistBlocEventoad());
+      });
       subLogs = RelDB.get().checklistsDAO.watchChecklistLogs(checklist!.id).listen((e) {
         add(AppbarChecklistBlocEventoad());
       });

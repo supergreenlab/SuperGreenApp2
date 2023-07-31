@@ -63,6 +63,7 @@ class _DiaryActionPageState extends State<DiaryActionPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ChecklistCardType(
+          creatableCards: true,
           onChange: (String entryType) {
             widget.onUpdate(widget.action.copyWith(entryType: entryType));
           },

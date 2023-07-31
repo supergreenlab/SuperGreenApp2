@@ -18,7 +18,6 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
@@ -31,27 +30,14 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/check
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class ChecklistActionCreateCardButton extends ChecklistActionButton {
-
-  ChecklistActionCreateCardButton({required Plant plant, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction}) : super(plant: plant, checklistSeed: checklistSeed, checklistAction: checklistAction);
+  ChecklistActionCreateCardButton(
+      {required Plant plant, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction})
+      : super(plant: plant, checklistSeed: checklistSeed, checklistAction: checklistAction);
 
   @override
   Widget build(BuildContext context) {
-        return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: AppBarAction(
-        icon: FeedEntryIcons[FE_WATER]!,
-        color: Color(0xFF506EBA),
-        title: checklistSeed.title,
-        content: AutoSizeText(
-          'Create card',
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w300,
-            color: Colors.green,
-          ),
-        ),
-        action: _onAction(
+    Map<String, void Function() Function(BuildContext)> onActions = {
+      FE_MEDIA: (BuildContext context) => _onAction(
             context,
             ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
                 pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
@@ -60,6 +46,151 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
               't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
               't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
             ]),
+      FE_MEASURE: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_TRANSPLANT: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_BENDING: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_FIMMING: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_TOPPING: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_DEFOLIATION: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_TIMELAPSE: (BuildContext context) {return (){};},
+      FE_NUTRIENT_MIX: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_WATER: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_LIGHT: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_VENTILATION: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_SCHEDULE: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_SCHEDULE_VEG: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_SCHEDULE_BLOOM: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+      FE_SCHEDULE_AUTO: (BuildContext context) => _onAction(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+            tipID: 'TIP_WATERING',
+            tipPaths: [
+              't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+            ]),
+    };
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: AppBarAction(
+        icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
+        color: Color(0xFF506EBA),
+        title: checklistSeed.title,
+        content: AutoSizeText(
+          'Create card ${(checklistAction as ChecklistActionCreateCard).entryType}',
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w300,
+            color: Colors.green,
+          ),
+        ),
+        action: onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context),
         actionIcon: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
       ),
     );
@@ -86,5 +217,4 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       }
     };
   }
-
 }

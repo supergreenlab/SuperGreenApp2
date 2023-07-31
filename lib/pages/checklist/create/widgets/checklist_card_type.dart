@@ -22,11 +22,12 @@ import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistCardType extends StatelessWidget {
-
+  final bool creatableCards;
   final String? cardType;
   final Function(String type) onChange;
 
-  const ChecklistCardType({Key? key, required this.onChange, required this.cardType}) : super(key: key);
+  const ChecklistCardType({Key? key, required this.onChange, required this.cardType, this.creatableCards = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,9 @@ class ChecklistCardType extends StatelessWidget {
       FE_SCHEDULE_BLOOM,
       FE_SCHEDULE_AUTO,
     ];
+    if (creatableCards) {
+      choices = choices.where((element) => element != FE_TIMELAPSE).toList();
+    }
     return DropdownButton<String?>(
       hint: Text('Select card type'),
       value: cardType,
