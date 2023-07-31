@@ -160,7 +160,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           ),
         ),
         action: onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context),
-        actionIcon: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
+        actionIcon: SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
       ),
     );
   }

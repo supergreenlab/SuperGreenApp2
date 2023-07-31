@@ -108,3 +108,26 @@ const Map<String, Color> FeedEntryColors = {
   FE_LIFE_EVENT: Colors.blueGrey,
   FE_TOWELIE_INFO: Colors.blueGrey,
 };
+
+const Map<String, String> FeedEntryActionIcons = {
+  FE_MEDIA: 'assets/app_bar/icon_growlog.svg',
+  FE_MEASURE: 'assets/app_bar/icon_growlog.svg',
+  FE_TRANSPLANT: 'assets/app_bar/icon_growlog.svg',
+  FE_BENDING: 'assets/app_bar/icon_growlog.svg',
+  FE_FIMMING: 'assets/app_bar/icon_growlog.svg',
+  FE_TOPPING: 'assets/app_bar/icon_growlog.svg',
+  FE_DEFOLIATION: 'assets/app_bar/icon_growlog.svg',
+  FE_TIMELAPSE: 'assets/app_bar/icon_growlog.svg',
+  FE_NUTRIENT_MIX: 'assets/app_bar/icon_watering.svg',
+  FE_WATER: 'assets/app_bar/icon_watering.svg',
+  FE_LIGHT: 'assets/app_bar/icon_growlog.svg',
+  FE_VENTILATION: 'assets/app_bar/icon_growlog.svg',
+  
+  FE_SCHEDULE: 'assets/app_bar/icon_growlog.svg',
+  FE_SCHEDULE_VEG: 'assets/app_bar/icon_growlog.svg',
+  FE_SCHEDULE_BLOOM: 'assets/app_bar/icon_growlog.svg',
+  FE_SCHEDULE_AUTO: 'assets/app_bar/icon_growlog.svg',
+
+  FE_LIFE_EVENT: 'assets/app_bar/icon_growlog.svg',
+  FE_TOWELIE_INFO: 'assets/app_bar/icon_growlog.svg',
+};
