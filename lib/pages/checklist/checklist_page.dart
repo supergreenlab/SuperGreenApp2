@@ -136,14 +136,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8.0,
-                    vertical: 16.0,
+                    vertical: 24.0,
                   ),
                   child:
                       Text('Today\'s Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
                 ),
                 ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0,),
                     child: ChecklistActionPage(plant: state.plant, checklistSeed: action.item1, checklistAction: action.item2),
                   );
                 }).toList(),
@@ -158,7 +158,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 ),
                 ...state.checklistSeeds.map((cks) {
                   return Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: ChecklistItemPage(
                       checklistSeed: cks,
                       onSelect: () {

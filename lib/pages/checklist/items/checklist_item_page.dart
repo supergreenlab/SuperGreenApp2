@@ -49,9 +49,9 @@ class ChecklistItemPage extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(50),
-              spreadRadius: 1.0,
+              spreadRadius: 2.0,
               blurRadius: 2.0,
-              offset: Offset(2, 3),
+              offset: Offset(1, 1),
             )
           ],
         ),
@@ -72,7 +72,7 @@ class ChecklistItemPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: SvgPicture.asset(ChecklistCategoryIcons[checklistSeed.category]!, width: 32, height: 32,),
           ),
           Expanded(

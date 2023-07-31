@@ -325,7 +325,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   final String durationUnit;
 
   String get asSentence {
-    String str = 'Trigger at ${date!.toLocal()}';
+    String str = 'Trigger at ${date!.toString()}';
     if (repeat) {
       str += ' then repeat every ${repeatDuration!} $durationUnit.';
     }

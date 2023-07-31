@@ -60,9 +60,9 @@ class AppBarAction extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(50),
-              spreadRadius: 1.0,
+              spreadRadius: 2.0,
               blurRadius: 2.0,
-              offset: Offset(2, 3),
+              offset: Offset(1, 1),
             )
           ],
         ),

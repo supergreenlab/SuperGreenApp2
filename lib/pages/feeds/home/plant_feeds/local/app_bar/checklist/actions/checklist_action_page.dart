@@ -43,7 +43,6 @@ class ChecklistActionPage extends StatelessWidget {
         icon: FeedEntryIcons[FE_WATER]!,
         color: Color(0xFF506EBA),
         title: checklistSeed.title,
-        titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
         content: AutoSizeText(
           'Water plant',
           maxLines: 1,

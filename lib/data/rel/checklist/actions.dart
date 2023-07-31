@@ -24,6 +24,7 @@ abstract class ChecklistAction extends Equatable {
   final String type;
 
   String get asSentence => '$type';
+  String get statusString => '';
 
   ChecklistAction({required this.type});
 
@@ -69,6 +70,7 @@ class ChecklistActionWebpage extends ChecklistAction {
   final String? instructions;
 
   String get asSentence => 'Open webpage at ${url!}';
+  String get statusString => '';
 
   ChecklistActionWebpage({this.url, this.instructions}) : super(type: TYPE);
 
