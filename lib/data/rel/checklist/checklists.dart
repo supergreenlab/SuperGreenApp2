@@ -189,7 +189,11 @@ class ChecklistLogs extends Table {
   Checklists,
   ChecklistSeeds,
   ChecklistLogs,
-])
+], queries: {
+  'getNLogs': '''
+    select count(*) from checklist_logs
+  ''',
+})
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   ChecklistsDAO(RelDB db) : super(db);
 
@@ -289,5 +293,9 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future deleteChecklistLog(ChecklistLog checklistLog) {
     return delete(checklistLogs).delete(checklistLog);
+  }
+
+  Future<int> getNPendingLogs() {
+    return getNLogs().getSingle();
   }
 }

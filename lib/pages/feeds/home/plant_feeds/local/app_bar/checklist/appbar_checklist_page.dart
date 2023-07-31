@@ -142,8 +142,11 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
       child: Row(
         children: [
           Expanded(child: Container()),
-          SvgPicture.asset('assets/checklist/icon_checklist.svg'),
-          Text('OPEN CHECKLIST', style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
+          ),
+          Text('OPEN CHECKLIST (${state.nPendingLogs})', style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
         ],
       ),
     );
