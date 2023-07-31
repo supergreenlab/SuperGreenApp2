@@ -18,7 +18,6 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
@@ -26,12 +25,18 @@ import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/a
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 
 class ChecklistActionWebpageButton extends ChecklistActionButton {
-
-  ChecklistActionWebpageButton({required Plant plant, required Box box, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction}) : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
+  ChecklistActionWebpageButton(
+      {required Plant plant,
+      required Box box,
+      required ChecklistSeed checklistSeed,
+      required ChecklistAction checklistAction})
+      : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
 
   @override
   Widget build(BuildContext context) {
-        return Padding(
+    Uri url = Uri.parse((checklistAction as ChecklistActionBuyProduct).url!);
+    String imagePath = '${url.replace(path: 'favicon.ico').toString()}';
+    return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
         icon: FeedEntryIcons[FE_WATER]!,
@@ -47,9 +52,8 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
           ),
         ),
         action: () {},
-        actionIcon: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
+        actionIcon: Image.network(imagePath),
       ),
     );
   }
-
 }

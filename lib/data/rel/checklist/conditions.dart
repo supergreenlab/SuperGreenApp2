@@ -327,7 +327,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   final String durationUnit;
 
   String get asSentence {
-    String str = 'Trigger at ${DateFormat.yMMMMEEEEd().format(date!)} at ${DateFormat.Hm().format(date!)}';
+    String str = 'Trigger on ${DateFormat.yMMMMEEEEd().format(date!)} at ${DateFormat.Hm().format(date!)}';
     if (repeat) {
       str += ' then repeat every ${repeatDuration!} $durationUnit.';
     }
