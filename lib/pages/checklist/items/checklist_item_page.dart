@@ -70,10 +70,14 @@ class ChecklistItemPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: SvgPicture.asset(
-              ChecklistCategoryIcons[checklistSeed.category]!,
+            child: SizedBox(
               width: 32,
               height: 32,
+              child: SvgPicture.asset(
+                ChecklistCategoryIcons[checklistSeed.category]!,
+                width: 32,
+                height: 32,
+              ),
             ),
           ),
           Expanded(
