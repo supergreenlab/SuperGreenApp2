@@ -34,8 +34,10 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       {required Plant plant,
       required Box box,
       required ChecklistSeed checklistSeed,
-      required ChecklistAction checklistAction})
-      : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
+      required ChecklistAction checklistAction,
+      required Function() onCheck,
+      required Function() onSkip})
+      : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +152,8 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
         icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
         color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
         title: checklistSeed.title,
+        onCheck: onCheck,
+        onSkip: onSkip,
         content: AutoSizeText(
           'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
           maxLines: 1,

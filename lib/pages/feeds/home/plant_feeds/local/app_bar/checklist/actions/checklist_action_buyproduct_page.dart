@@ -33,8 +33,10 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
       {required Plant plant,
       required Box box,
       required ChecklistSeed checklistSeed,
-      required ChecklistAction checklistAction})
-      : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
+      required ChecklistAction checklistAction,
+      required Function() onCheck,
+      required Function() onSkip})
+      : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,8 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
         iconWidget: FaviconImage(url: (checklistAction as ChecklistActionBuyProduct).url!, alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),),
         color: Color.fromARGB(255, 140, 98, 158),
         title: checklistSeed.title,
+        onCheck: onCheck,
+        onSkip: onSkip,
         content: AutoSizeText(
           url.host,
           maxLines: 1,

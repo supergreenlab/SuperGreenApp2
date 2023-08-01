@@ -21,6 +21,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -39,6 +40,26 @@ class AppbarChecklistBlocEventoad extends AppbarChecklistBlocEvent {
 }
 
 class AppbarChecklistBlocEventCreate extends AppbarChecklistBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class AppbarChecklistBlocEventCheckChecklistLog extends AppbarChecklistBlocEvent {
+
+  final ChecklistLog checklistLog;
+
+  AppbarChecklistBlocEventCheckChecklistLog(this.checklistLog);
+
+  @override
+  List<Object> get props => [];
+}
+
+class AppbarChecklistBlocEventSkipChecklistLog extends AppbarChecklistBlocEvent {
+
+  final ChecklistLog checklistLog;
+
+  AppbarChecklistBlocEventSkipChecklistLog(this.checklistLog);
+
   @override
   List<Object> get props => [];
 }
@@ -70,7 +91,7 @@ class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
   final Box box;
   final Checklist? checklist;
   final int nPendingLogs;
-  final List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
+  final List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>>? actions;
 
   AppbarChecklistBlocStateLoaded(this.plant, this.box, this.checklist, this.nPendingLogs, this.actions);
 
@@ -82,7 +103,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
   final Plant plant;
   final Box box;
   Checklist? checklist;
-  List<Tuple2<ChecklistSeed, ChecklistAction>> actions = [];
+  List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>> actions = [];
 
   StreamSubscription? subChecklist;
   late StreamSubscription subLogs;
@@ -117,7 +138,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       for (int i = 0; i < logs.length; ++i) {
         Map<String, dynamic> action = json.decode(logs[i].action);
         ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
-        actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
+        actions.add(Tuple3(checklistSeed, ChecklistAction.fromMap(action), logs[i]));
       }
       int nPendingLogs = await RelDB.get().checklistsDAO.getNPendingLogs();
       yield AppbarChecklistBlocStateLoaded(this.plant, this.box, checklist, nPendingLogs, actions);
@@ -128,6 +149,10 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
           ));
       checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
       yield AppbarChecklistBlocStateCreated(this.plant, this.box, checklist!);
+    } else if (event is AppbarChecklistBlocEventSkipChecklistLog) {
+      await ChecklistHelper.skippedChecklistLog(event.checklistLog);
+    } else if (event is AppbarChecklistBlocEventCheckChecklistLog) {
+      await ChecklistHelper.checkChecklistLog(event.checklistLog);
     }
   }
 

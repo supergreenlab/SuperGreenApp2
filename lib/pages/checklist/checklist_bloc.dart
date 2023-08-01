@@ -49,6 +49,26 @@ class ChecklistBlocEventDeleteChecklistSeed extends ChecklistBlocEvent {
   List<Object> get props => [checklistSeed];
 }
 
+class ChecklistBlocEventCheckChecklistLog extends ChecklistBlocEvent {
+
+  final ChecklistLog checklistLog;
+
+  ChecklistBlocEventCheckChecklistLog(this.checklistLog);
+
+  @override
+  List<Object> get props => [checklistLog];
+}
+
+class ChecklistBlocEventSkipChecklistLog extends ChecklistBlocEvent {
+
+  final ChecklistLog checklistLog;
+
+  ChecklistBlocEventSkipChecklistLog(this.checklistLog);
+
+  @override
+  List<Object> get props => [checklistLog];
+}
+
 abstract class ChecklistBlocState extends Equatable {}
 
 class ChecklistBlocStateInit extends ChecklistBlocState {
@@ -61,7 +81,7 @@ class ChecklistBlocStateLoaded extends ChecklistBlocState {
   final Box box;
   final Checklist checklist;
   final List<ChecklistSeed> checklistSeeds;
-  final List<Tuple2<ChecklistSeed, ChecklistAction>>? actions;
+  final List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>>? actions;
 
   ChecklistBlocStateLoaded(this.plant, this.box, this.checklist, this.checklistSeeds, this.actions);
 
@@ -97,15 +117,19 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
     } else if (event is ChecklistBlocEventLoad) {
       List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(this.args.checklist.id);
       List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(this.args.checklist.id);
-      List<Tuple2<ChecklistSeed, ChecklistAction>> actions = [];
+      List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>> actions = [];
       for (int i = 0; i < logs.length; ++i) {
         Map<String, dynamic> action = json.decode(logs[i].action);
         ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
-        actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
+        actions.add(Tuple3(checklistSeed, ChecklistAction.fromMap(action), logs[i]));
       }
       yield ChecklistBlocStateLoaded(this.args.plant, this.args.box, this.args.checklist, checklistSeeds, actions);
     } else if (event is ChecklistBlocEventDeleteChecklistSeed) {
       await ChecklistHelper.deleteChecklistSeed(event.checklistSeed);
+    } else if (event is ChecklistBlocEventSkipChecklistLog) {
+      await ChecklistHelper.skippedChecklistLog(event.checklistLog);
+    } else if (event is ChecklistBlocEventCheckChecklistLog) {
+      await ChecklistHelper.checkChecklistLog(event.checklistLog);
     }
   }
 

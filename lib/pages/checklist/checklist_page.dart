@@ -144,14 +144,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   child:
                       Text('Today\'s Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
                 ),
-                ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
+                ...state.actions!.map((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
                   return Padding(
                     padding: const EdgeInsets.only(
                       bottom: 4.0,
                       left: 8.0,
                       right: 8.0,
                     ),
-                    child: ChecklistActionButton.getActionPage(state.plant, state.box, action.item1, action.item2),
+                    child: ChecklistActionButton.getActionPage(plant: state.plant, box: state.box, checklistSeed: action.item1, checklistAction: action.item2, onCheck: () {
+                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCheckChecklistLog(action.item3));
+                    }, onSkip: () {
+                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
+                    }),
                   );
                 }).toList(),
                 Container(
@@ -174,8 +178,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                             .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
                       },
                       onDelete: () {
-                        BlocProvider.of<ChecklistBloc>(context)
-                            .add(ChecklistBlocEventDeleteChecklistSeed(cks));
+                        _deleteChecklistSeed(context, cks);
                       },
                     ),
                   );
@@ -242,5 +245,34 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ),
       ),
     );
+  }
+
+  void _deleteChecklistSeed(BuildContext context, ChecklistSeed checklistSeed) async {
+    bool? confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete item "${checklistSeed.title}"?'),
+            content: Text('This can\'t be reverted. Continue?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm ?? false) {
+      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventDeleteChecklistSeed(checklistSeed));
+    }
   }
 }

@@ -29,16 +29,19 @@ abstract class ChecklistActionButton extends StatelessWidget {
   final ChecklistSeed checklistSeed;
   final ChecklistAction checklistAction;
 
-  const ChecklistActionButton({Key? key, required this.plant, required this.box, required this.checklistSeed, required this.checklistAction}) : super(key: key);
+  final Function() onCheck;
+  final Function() onSkip;
 
-  static Widget getActionPage(Plant plant, Box box, ChecklistSeed checklistSeed, ChecklistAction checklistAction) {
+  const ChecklistActionButton({Key? key, required this.plant, required this.box, required this.checklistSeed, required this.checklistAction, required this.onCheck, required this.onSkip}) : super(key: key);
+
+  static Widget getActionPage({required Plant plant, required Box box, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction, required Function() onCheck, required Function() onSkip}) {
     switch (checklistAction.type) {
       case ChecklistActionWebpage.TYPE:
-        return ChecklistActionWebpageButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
+        return ChecklistActionWebpageButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
       case ChecklistActionCreateCard.TYPE:
-        return ChecklistActionCreateCardButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
+        return ChecklistActionCreateCardButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
       case ChecklistActionBuyProduct.TYPE:
-        return ChecklistActionBuyProductButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction);
+        return ChecklistActionBuyProductButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
     }
     throw 'Uknown type ${checklistAction.type}';
   }

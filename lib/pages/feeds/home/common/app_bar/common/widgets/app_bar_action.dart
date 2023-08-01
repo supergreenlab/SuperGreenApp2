@@ -33,6 +33,9 @@ class AppBarAction extends StatelessWidget {
   final Widget? body;
   final bool center;
 
+  final Function()? onCheck;
+  final Function()? onSkip;
+
   final double height;
 
   const AppBarAction({
@@ -48,64 +51,70 @@ class AppBarAction extends StatelessWidget {
     this.actionIcon,
     this.height = 65,
     this.center = false,
+    this.onCheck,
+    this.onSkip,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void Function(BuildContext context) doNothing = (BuildContext context) {
-
-    };
-    return Slidable(
-
-      // The end action pane is the one at the right or the bottom side.
-      endActionPane: ActionPane(
-        motion: ScrollMotion(),
-        children: [
-          SlidableAction(
-            // An action can be bigger than the others.
-            onPressed: doNothing,
-            backgroundColor: Color(0xFF7BC043),
-            foregroundColor: Colors.white,
-            icon: Icons.done,
-            label: 'Done',
-          ),
-          SlidableAction(
-            onPressed: doNothing,
-            backgroundColor: Color(0xFF0392CF),
-            foregroundColor: Colors.white,
-            icon: Icons.skip_next,
-            label: 'Skip',
-          ),
-        ],
-      ),
-
-      child: InkWell(
-        onTap: action,
-        child: Container(
-          clipBehavior: Clip.hardEdge,
-          height: height,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(50),
-                spreadRadius: 2.0,
-                blurRadius: 2.0,
-                offset: Offset(1, 1),
-              )
-            ],
-          ),
-          child: Row(
-            children: [
-              renderIcon(context),
-              Expanded(child: renderBody(context)),
-              actionIcon != null ? renderButton(context) : Container(),
-            ],
-          ),
+    Widget body = InkWell(
+      onTap: action,
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(50),
+              spreadRadius: 2.0,
+              blurRadius: 2.0,
+              offset: Offset(1, 1),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            renderIcon(context),
+            Expanded(child: renderBody(context)),
+            actionIcon != null ? renderButton(context) : Container(),
+          ],
         ),
       ),
     );
+    if (onCheck != null && onSkip != null) {
+      return Slidable(
+        // The end action pane is the one at the right or the bottom side.
+        endActionPane: ActionPane(
+          motion: ScrollMotion(),
+          children: [
+            SlidableAction(
+              // An action can be bigger than the others.
+              onPressed: (context) {
+                onCheck!();
+              },
+              backgroundColor: Color(0xFF7BC043),
+              foregroundColor: Colors.white,
+              icon: Icons.done,
+              label: 'Done',
+            ),
+            SlidableAction(
+              onPressed: (context) {
+                onSkip!();
+              },
+              backgroundColor: Color(0xFF0392CF),
+              foregroundColor: Colors.white,
+              icon: Icons.skip_next,
+              label: 'Skip',
+            ),
+          ],
+        ),
+
+        child: body,
+      );
+    }
+    return body;
   }
 
   Widget renderIcon(BuildContext context) {

@@ -48,7 +48,15 @@ class ChecklistHelper {
     }
   }
 
-    static Future deleteChecklistLog(ChecklistLog checklistLog) async {
-      await RelDB.get().checklistsDAO.deleteChecklistLog(checklistLog);
-    }
+  static Future deleteChecklistLog(ChecklistLog checklistLog) async {
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true).toCompanion(true));
+  }
+
+  static Future checkChecklistLog(ChecklistLog checklistLog) async {
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(checked: true).toCompanion(true));
+  }
+
+  static Future skippedChecklistLog(ChecklistLog checklistLog) async {
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true).toCompanion(true));
+  }
 }

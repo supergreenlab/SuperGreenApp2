@@ -124,8 +124,12 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: state.actions!.map<Widget>((Tuple2<ChecklistSeed, ChecklistAction> action) {
-                return ChecklistActionButton.getActionPage(state.plant, state.box, action.item1, action.item2);
+              children: state.actions!.map<Widget>((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
+                return ChecklistActionButton.getActionPage(plant: state.plant, box: state.box, checklistSeed: action.item1, checklistAction: action.item2, onCheck: () {
+
+                }, onSkip: () {
+
+                });
               }).toList(),
             ),
           ),

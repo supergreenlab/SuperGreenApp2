@@ -249,7 +249,7 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future<List<ChecklistLog>> getChecklistLogs(int checklistID, {int limit = 0, int offset = 0}) {
     var query = (select(checklistLogs)
-      ..where((p) => p.checklist.equals(checklistID))
+      ..where((p) => p.checklist.equals(checklistID) & p.checked.equals(false) & p.skipped.equals(false))
       ..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
     if (limit != 0) {
       query = query..limit(limit, offset: offset);
