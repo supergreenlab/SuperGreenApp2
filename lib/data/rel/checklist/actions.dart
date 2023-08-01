@@ -70,7 +70,7 @@ class ChecklistActionWebpage extends ChecklistAction {
   final String? url;
   final String? instructions;
 
-  String get asSentence => 'Open webpage at ${url!}';
+  String get asSentence => 'Open webpage at ${Uri.parse(url!).host}';
   String get statusString => '';
 
   ChecklistActionWebpage({this.url, this.instructions}) : super(type: TYPE);
@@ -183,7 +183,7 @@ class ChecklistActionBuyProduct extends ChecklistAction {
   final String? url;
   final String? instructions;
 
-  String get asSentence => 'Get a ${name!} at ${url!}';
+  String get asSentence => 'Get a ${name!} at ${Uri.parse(url!).host}';
 
   ChecklistActionBuyProduct({this.name, this.url, this.instructions}) : super(type: TYPE);
 

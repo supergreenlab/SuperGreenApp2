@@ -24,6 +24,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
+import 'package:super_green_app/widgets/favicon.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChecklistActionWebpageButton extends ChecklistActionButton {
@@ -37,11 +38,10 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
   @override
   Widget build(BuildContext context) {
     Uri url = Uri.parse((checklistAction as ChecklistActionWebpage).url!);
-    String imagePath = '${url.replace(path: 'favicon.png').toString()}';
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
-        iconWidget: Image.network(imagePath, width: 40, height: 40, fit: BoxFit.contain, errorBuilder: (BuildContext context, Object o, StackTrace? trace) => SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),),
+        iconWidget: FaviconImage(url: (checklistAction as ChecklistActionWebpage).url!, alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),),
         color: Colors.teal,
         title: checklistSeed.title,
         content: AutoSizeText(

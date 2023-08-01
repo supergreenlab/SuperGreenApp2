@@ -184,4 +184,17 @@ class AppDB {
   bool isCloseAutoChecklist(int checklistID) {
     return _miscDB.get('$checklistID.close', defaultValue: false);
   }
+
+  // Warning: this is never flushed, only used to cache things like favicon paths or any short strings
+  void setCachedString(String key, String value) {
+    _miscDB.put('cache.$key', value);
+  }
+
+  String? getCachedString(String key) {
+    return _miscDB.get('cache.$key', defaultValue: null);
+  }
+
+  void deleteCacheString(String key) {
+    _miscDB.delete('cache.$key');
+  }
 }
