@@ -360,7 +360,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${checklistSeeds.length}'));
+      add(SyncerBlocEventSyncing(true, 'checklist seed: ${i + 1}/${checklistSeeds.length}'));
       ChecklistSeedsCompanion checklistSeedsCompanion = checklistSeeds[i];
       ChecklistSeed? exists;
       try {
@@ -421,7 +421,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       try {
         exists = await RelDB.get().checklistsDAO.getChecklistLogForServerID(checklistLogsCompanion.serverID.value!);
       } catch (e) {}
-      if (checklistLogsCompanion is DeletedChecklistsCompanion) {
+      if (checklistLogsCompanion is DeletedChecklistLogsCompanion) {
         if (exists != null) {
           await ChecklistHelper.deleteChecklistLog(exists);
         }

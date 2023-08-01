@@ -37,6 +37,10 @@ class Checklists extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<ChecklistsCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedChecklistsCompanion(Value(map['id'] as String));
+    }
+
     Plant plant;
     try {
       plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
@@ -60,11 +64,11 @@ class Checklists extends Table {
 }
 
 class DeletedChecklistSeedsCompanion extends ChecklistSeedsCompanion {
-  DeletedChecklistSeedsCompanion(serverID) : super(serverID: serverID);
+  DeletedChecklistSeedsCompanion(serverID, checklistServerID) : super(serverID: serverID, checklistServerID: checklistServerID);
 }
 
 class SkipChecklistSeedsCompanion extends ChecklistSeedsCompanion {
-  SkipChecklistSeedsCompanion(serverID) : super(serverID: serverID);
+  SkipChecklistSeedsCompanion(serverID, checklistServerID) : super(serverID: serverID, checklistServerID: checklistServerID);
 }
 
 class ChecklistSeeds extends Table {
@@ -78,8 +82,6 @@ class ChecklistSeeds extends Table {
   BoolColumn get public => boolean().withDefault(Constant(false))();
   BoolColumn get repeat => boolean().withDefault(Constant(false))();
 
-  BoolColumn get active => boolean().withDefault(Constant(false))();
-
   TextColumn get conditions => text().withDefault(Constant('{}'))();
   TextColumn get actions => text().withDefault(Constant('{}'))();
 
@@ -89,11 +91,14 @@ class ChecklistSeeds extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<ChecklistSeedsCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedChecklistSeedsCompanion(Value(map['id'] as String), Value(map['checklistID'] as String));
+    }
     Checklist checklist;
     try {
       checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(map['checklistID']);
     } catch (e) {
-      return SkipChecklistSeedsCompanion(Value(map['id'] as String));
+      return SkipChecklistSeedsCompanion(Value(map['id'] as String), Value(map['checklistID'] as String));
     }
     return ChecklistSeedsCompanion(
       checklist: Value(checklist.id),
@@ -150,6 +155,10 @@ class ChecklistLogs extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<ChecklistLogsCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true || map['checked'] || map['skipped']) {
+      return DeletedChecklistLogsCompanion(Value(map['id'] as String));
+    }
+
     Checklist checklist;
     try {
       checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(map['checklistID']);
@@ -191,7 +200,7 @@ class ChecklistLogs extends Table {
   ChecklistLogs,
 ], queries: {
   'getNLogs': '''
-    select count(*) from checklist_logs
+    select count(*) from checklist_logs where checked=false and skipped=false
   ''',
 })
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {

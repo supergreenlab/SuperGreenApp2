@@ -49,6 +49,9 @@ class ChecklistHelper {
   }
 
   static Future deleteChecklistLog(ChecklistLog checklistLog) async {
+    if (checklistLog.checked || checklistLog.skipped) {
+      return;
+    }
     await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
   }
 
