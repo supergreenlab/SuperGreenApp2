@@ -118,7 +118,7 @@ class ChecklistAPI {
 
   Future syncChecklistLog(ChecklistLog checklistLog) async {
     Map<String, dynamic> obj = await ChecklistLogs.toMap(checklistLog);
-    String? serverID = await BackendAPI().postPut('/checklistLog', obj);
+    String? serverID = await BackendAPI().postPut('/checklistlog', obj);
 
     ChecklistLogsCompanion checklistLogsCompanion = ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
     if (serverID != null) {
