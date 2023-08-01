@@ -127,7 +127,7 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
     } else if (event is ChecklistBlocEventDeleteChecklistSeed) {
       await ChecklistHelper.deleteChecklistSeed(event.checklistSeed);
     } else if (event is ChecklistBlocEventSkipChecklistLog) {
-      await ChecklistHelper.skippedChecklistLog(event.checklistLog);
+      await ChecklistHelper.skipChecklistLog(event.checklistLog);
     } else if (event is ChecklistBlocEventCheckChecklistLog) {
       await ChecklistHelper.checkChecklistLog(event.checklistLog);
     }

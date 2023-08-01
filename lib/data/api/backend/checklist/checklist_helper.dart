@@ -49,14 +49,14 @@ class ChecklistHelper {
   }
 
   static Future deleteChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true).toCompanion(true));
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
   }
 
   static Future checkChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(checked: true).toCompanion(true));
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(checked: true, synced: false).toCompanion(true));
   }
 
-  static Future skippedChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true).toCompanion(true));
+  static Future skipChecklistLog(ChecklistLog checklistLog) async {
+    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
   }
 }

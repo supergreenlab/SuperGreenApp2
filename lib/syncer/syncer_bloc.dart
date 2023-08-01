@@ -410,7 +410,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncInChecklistLogs() async {
-    List<ChecklistLogsCompanion> checklistLogs = await BackendAPI().checklistAPI.unsyncedChecklistLogs();
+    List<ChecklistLogsCompanion> checklistLogs = await BackendAPI().checklistAPI.unsyncedChecklistLog();
     for (int i = 0; i < checklistLogs.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';

@@ -127,18 +127,7 @@ class ChecklistAPI {
     await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion);
   }
 
-  Future syncChecklistLogs(ChecklistLog checklistLog) async {
-    Map<String, dynamic> obj = await ChecklistLogs.toMap(checklistLog);
-    String? serverID = await BackendAPI().postPut('/checklistLog', obj);
-
-    ChecklistLogsCompanion checklistLogsCompanion = ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
-    if (serverID != null) {
-      checklistLogsCompanion = checklistLogsCompanion.copyWith(serverID: Value(serverID));
-    }
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion);
-  }
-
-  Future<List<ChecklistLogsCompanion>> unsyncedChecklistLogs() async {
+  Future<List<ChecklistLogsCompanion>> unsyncedChecklistLog() async {
     Map<String, dynamic> syncData = await UserEndHelper.unsynced("ChecklistLogs");
     List<dynamic> maps = syncData['items'];
     List<ChecklistLogsCompanion> results = [];

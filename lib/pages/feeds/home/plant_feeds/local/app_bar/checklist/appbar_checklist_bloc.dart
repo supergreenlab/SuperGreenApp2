@@ -150,7 +150,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
       yield AppbarChecklistBlocStateCreated(this.plant, this.box, checklist!);
     } else if (event is AppbarChecklistBlocEventSkipChecklistLog) {
-      await ChecklistHelper.skippedChecklistLog(event.checklistLog);
+      await ChecklistHelper.skipChecklistLog(event.checklistLog);
     } else if (event is AppbarChecklistBlocEventCheckChecklistLog) {
       await ChecklistHelper.checkChecklistLog(event.checklistLog);
     }

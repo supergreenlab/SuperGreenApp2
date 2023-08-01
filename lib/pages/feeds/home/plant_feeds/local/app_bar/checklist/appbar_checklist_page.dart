@@ -126,9 +126,9 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: state.actions!.map<Widget>((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
                 return ChecklistActionButton.getActionPage(plant: state.plant, box: state.box, checklistSeed: action.item1, checklistAction: action.item2, onCheck: () {
-
+                  BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));
                 }, onSkip: () {
-
+                  BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventSkipChecklistLog(action.item3));
                 });
               }).toList(),
             ),
