@@ -137,7 +137,7 @@ class ChecklistItemPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
+          checklistSeed.description == '' ? Container() : Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(checklistSeed.description),
           ),
