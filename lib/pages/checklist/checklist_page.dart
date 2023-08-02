@@ -173,8 +173,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
               child: Column(
                 children: [
                   _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', () => null),
+                  SvgPicture.asset('assets/checklist/line_separator.svg'),
                   _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', () => null),
+                  SvgPicture.asset('assets/checklist/line_separator.svg'),
                   _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () => null),
+                  SvgPicture.asset('assets/checklist/line_separator.svg'),
                   _renderCreateMenuItem(context, 'assets/checklist/icon_custom.svg', 'Custom checklist seed', () {
                     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist));
                     setState(() {
@@ -231,7 +234,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 child: GreenButton(
                   title: 'Create new item',
                   onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist));
+                    setState(() {
+                      showCreateMenu = true;
+                    });
                   },
                 ),
               ),
