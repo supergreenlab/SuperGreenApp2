@@ -75,7 +75,6 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
     return (conditions).firstWhereOrNull((c) => !c.valid) == null &&
         (actions).firstWhereOrNull((a) => !a.valid) == null &&
         _titleController.text != '' &&
-        _descriptionController.text != '' &&
         category != null;
   }
 
