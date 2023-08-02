@@ -17,6 +17,7 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -60,10 +61,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
   bool repeat = false;
 
   final List<ChecklistCondition> conditions = [];
+  final List<ChecklistCondition> exitConditions = [];
   final List<ChecklistAction> actions = [];
 
   bool showNewAction = false;
   bool showNewCondition = false;
+  bool showNewExitCondition = false;
 
   bool get valid {
     if (conditions.length == 0 || actions.length == 0) {
@@ -90,6 +93,9 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             this.repeat = state.checklistSeed.repeat.value;
 
             this.conditions.addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions.value)));
+            this
+                .exitConditions
+                .addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.exitConditions.value)));
             this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
           });
         } else if (state is CreateChecklistBlocStateCreated) {
@@ -115,6 +121,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   public: drift.Value(public),
                   repeat: drift.Value(repeat),
                   conditions: drift.Value(json.encode(conditions.map((c) => c.toMap()).toList())),
+                  exitConditions: drift.Value(json.encode(exitConditions.map((c) => c.toMap()).toList())),
                   actions: drift.Value(json.encode(actions.map((a) => a.toMap()).toList())),
                 );
                 BlocProvider.of<CreateChecklistBloc>(context).add(CreateChecklistBlocEventSave(cks));
@@ -176,7 +183,22 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
           height: 10,
         ),
         _renderInfos(context, state),
-        _renderConditions(context, state),
+        _renderConditions(
+            context,
+            'Conditions',
+            'Configure the conditions for this checklist item to show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the temperature reaches a given value”',
+            '+ ADD CONDITION',
+            conditions, () {
+          showNewCondition = true;
+        }),
+        _renderConditions(
+            context,
+            'Exit Conditions (optional)',
+            'Configure the eixt conditions for this checklist item to NOT show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the plant reaches a given phase”',
+            '+ ADD EXIT CONDITION',
+            exitConditions, () {
+          showNewExitCondition = true;
+        }),
         _renderActions(context, state),
         Container(
           height: 60,
@@ -203,23 +225,30 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
           ),
         ],
       );
-    } else if (showNewCondition) {
+    } else if (showNewCondition || showNewExitCondition) {
       body = Stack(
         children: [
           body,
           ChecklistConditionsSelector(
             onAdd: (ChecklistCondition c) {
               setState(() {
+                if (showNewCondition) {
+                  conditions.add(c);
+                } else if (showNewExitCondition) {
+                  exitConditions.add(c);
+                }
                 showNewCondition = false;
-                conditions.add(c);
+                showNewExitCondition = false;
               });
             },
             onClose: () {
               setState(() {
                 showNewCondition = false;
+                showNewExitCondition = false;
               });
             },
-            filteredValues: conditions.map((a) => a.type).toList(),
+            filteredValues:
+                showNewCondition ? conditions.map((a) => a.type).toList() : exitConditions.map((a) => a.type).toList(),
           ),
         ],
       );
@@ -311,7 +340,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
     );
   }
 
-  Widget _renderConditions(BuildContext context, CreateChecklistBlocStateLoaded state) {
+  Widget _renderConditions(BuildContext context, String title, String instructions, String buttonText,
+      List<ChecklistCondition> conditions, void Function() onNewCondition) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
@@ -324,7 +354,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  'Conditions',
+                  title,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
@@ -337,8 +367,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                       child: MarkdownBody(
                         fitContent: true,
                         shrinkWrap: true,
-                        data:
-                            'Configure the conditions for this checklist item to show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the temperature reaches a given value”',
+                        data: instructions,
                         styleSheet: MarkdownStyleSheet(
                             p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
                       ),
@@ -383,14 +412,14 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                 }
                 return Container();
               }),
-              _renderAddButton(context, '+ ADD CONDITION', () {
+              _renderAddButton(context, buttonText, () {
                 setState(() {
                   FocusScopeNode currentFocus = FocusScope.of(context);
 
                   if (!currentFocus.hasPrimaryFocus) {
                     currentFocus.unfocus();
                   }
-                  showNewCondition = true;
+                  onNewCondition();
                 });
               }),
             ],

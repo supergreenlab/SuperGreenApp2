@@ -83,6 +83,7 @@ class ChecklistSeeds extends Table {
   BoolColumn get repeat => boolean().withDefault(Constant(false))();
 
   TextColumn get conditions => text().withDefault(Constant('{}'))();
+  TextColumn get exitConditions => text().withDefault(Constant('{}'))();
   TextColumn get actions => text().withDefault(Constant('{}'))();
 
   TextColumn get checklistServerID => text().withLength(min: 36, max: 36).nullable()();
@@ -108,6 +109,7 @@ class ChecklistSeeds extends Table {
       description: Value(map['description']),
       category: Value(map['category']),
       conditions: Value(map['conditions']),
+      exitConditions: Value(map['exitConditions']),
       actions: Value(map['actions']),
       serverID: Value(map['id'] as String),
       checklistServerID: Value(map['checklistID'] as String),
@@ -126,6 +128,7 @@ class ChecklistSeeds extends Table {
       'description': checklistSeed.description,
       'category': checklistSeed.category,
       'conditions': checklistSeed.conditions,
+      'exitConditions': checklistSeed.exitConditions,
       'actions': checklistSeed.actions,
     };
   }
