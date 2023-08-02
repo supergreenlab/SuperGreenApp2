@@ -198,8 +198,8 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
           Expanded(
             child: ChecklistDuration(
               hideUnit: true,
-              duration: widget.condition.duration,
-              unit: widget.condition.durationUnit,
+              duration: widget.condition.nDaysInRow,
+              unit: 'DAYS',
               onUpdate: (int? duration, String? unit) {
                 widget.onUpdate(widget.condition.copyWith(
                   nDaysInRow: duration,

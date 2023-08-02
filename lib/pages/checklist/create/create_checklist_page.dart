@@ -194,7 +194,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
         _renderConditions(
             context,
             'Exit Conditions (optional)',
-            'Configure the eixt conditions for this checklist item to NOT show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the plant reaches a given phase”',
+            'Configure the exit conditions for this checklist item to NOT show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the plant reaches a given phase”',
             '+ ADD EXIT CONDITION',
             exitConditions, () {
           showNewExitCondition = true;
