@@ -82,9 +82,9 @@ class ChecklistSeeds extends Table {
   BoolColumn get public => boolean().withDefault(Constant(false))();
   BoolColumn get repeat => boolean().withDefault(Constant(false))();
 
-  TextColumn get conditions => text().withDefault(Constant('{}'))();
-  TextColumn get exitConditions => text().withDefault(Constant('{}'))();
-  TextColumn get actions => text().withDefault(Constant('{}'))();
+  TextColumn get conditions => text().withDefault(Constant('[]'))();
+  TextColumn get exitConditions => text().withDefault(Constant('[]'))();
+  TextColumn get actions => text().withDefault(Constant('[]'))();
 
   TextColumn get checklistServerID => text().withLength(min: 36, max: 36).nullable()();
 

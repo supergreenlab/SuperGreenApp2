@@ -497,7 +497,6 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               _renderAddButton(context, '+ ADD ACTION', () {
                 setState(() {
                   FocusScopeNode currentFocus = FocusScope.of(context);
-
                   if (!currentFocus.hasPrimaryFocus) {
                     currentFocus.unfocus();
                   }
