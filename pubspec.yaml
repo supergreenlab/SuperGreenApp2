@@ -19,7 +19,6 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  dotted_border:
   flutter_portal:
   flutter_slidable:
   cached_network_image:

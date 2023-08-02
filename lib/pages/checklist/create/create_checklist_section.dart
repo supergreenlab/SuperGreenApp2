@@ -34,11 +34,7 @@ class CreateChecklistSection extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(3),
-              topRight: Radius.circular(3),
-              bottomLeft: Radius.circular(3),
-              bottomRight: Radius.circular(3)),
+          borderRadius: BorderRadius.all(Radius.circular(3)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
