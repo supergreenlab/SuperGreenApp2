@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_portal/flutter_portal.dart';
@@ -33,6 +35,42 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:tuple/tuple.dart';
+
+class AppearAnimated extends StatefulWidget {
+  final bool visible;
+  final Widget child;
+
+  const AppearAnimated({Key? key, required this.child, required this.visible}) : super(key: key);
+
+  @override
+  State<AppearAnimated> createState() => _AppearAnimatedState();
+}
+
+class _AppearAnimatedState extends State<AppearAnimated> {
+  bool visible = false;
+
+  @override
+  void initState() {
+    Timer(Duration(milliseconds: 1), () {
+      setState(() {
+        visible = true;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: visible && widget.visible ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 150),
+      child: Material(
+        borderRadius: BorderRadius.all(Radius.circular(7)),
+        child: widget.child,
+      ),
+    );
+  }
+}
 
 class ChecklistPage extends TraceableStatefulWidget {
   @override
@@ -79,7 +117,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     ? [
                         IconButton(
                           icon: PortalTarget(
-                            closeDuration: Duration(milliseconds: 250),
+                            closeDuration: Duration(milliseconds: 150),
                             visible: showCreateMenu,
                             anchor: const Aligned(
                               follower: Alignment.topRight,
@@ -107,11 +145,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderCreateMenu(BuildContext context, ChecklistBlocStateLoaded state) {
-    return AnimatedOpacity(
-      opacity: showCreateMenu ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 250),
-      child: Material(
-        borderRadius: BorderRadius.all(Radius.circular(7)),
+    return AppearAnimated(
+        visible: showCreateMenu,
         child: TapRegion(
           onTapOutside: (PointerDownEvent e) {
             setState(() {
@@ -150,9 +185,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _renderCreateMenuItem(BuildContext context, String icon, String title, Function() onTap) {
