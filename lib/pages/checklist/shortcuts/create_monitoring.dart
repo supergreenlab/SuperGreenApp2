@@ -47,6 +47,7 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
             });
           },
           hideTitle: true,
+          noBorder: true,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

@@ -42,6 +42,10 @@ class ChecklistActionsSelector extends CreateChecklistActionConditionPopup {
             'Buy a product to complete the checklist entry.', 'Ex: Buy insecticidal soap', () {
           onAdd(ChecklistActionBuyProduct());
         }),
+        renderCondition(context, ChecklistActionIcons[ChecklistActionMessage.TYPE]!, 'Show a message',
+            'Just display a simple title+instructions message notification', 'Ex: Apply insecticidal soap.', () {
+          onAdd(ChecklistActionMessage());
+        }),
       ],
     );
   }

@@ -50,6 +50,7 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
             });
           },
           hideTitle: true,
+          noBorder: true,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

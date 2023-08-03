@@ -59,6 +59,7 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
             });
           },
           hideTitle: true,
+          noBorder: true,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

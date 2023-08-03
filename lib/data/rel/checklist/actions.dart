@@ -58,6 +58,8 @@ abstract class ChecklistAction extends Equatable {
         return ChecklistActionCreateCard.fromMap(params);
       case 'buy_product':
         return ChecklistActionBuyProduct.fromMap(params);
+      case 'message':
+        return ChecklistActionMessage.fromMap(params);
       default:
         throw UnimplementedError('Action type $type is not implemented');
     }
@@ -243,6 +245,50 @@ class ChecklistActionBuyProduct extends ChecklistAction {
     return ChecklistActionBuyProduct(
       name: name ?? this.name,
       url: url ?? this.url,
+      instructions: instructions ?? this.instructions,
+    );
+  }
+}
+
+class ChecklistActionMessage extends ChecklistAction {
+  static const String TYPE = 'message';
+
+  final String? title;
+  final String? instructions;
+
+  String get asSentence => 'Show message: ${title!}';
+
+  ChecklistActionMessage({this.title, this.instructions}) : super(type: TYPE);
+
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = super.toMap();
+    var params = {
+      'title': this.title,
+      'instructions': this.instructions,
+    };
+    map.addAll({
+      'type': type,
+      'params': json.encode(params),
+    });
+    return map;
+  }
+
+  List<Object?> get props => [...super.props, title];
+
+  static ChecklistActionMessage fromMap(Map<String, dynamic> map) {
+    return ChecklistActionMessage(
+      title: map['title'],
+      instructions: map['instructions'],
+    );
+  }
+
+  ChecklistActionMessage copyWith({
+    String? title,
+    String? instructions,
+  }) {
+    return ChecklistActionMessage(
+      title: title ?? this.title,
       instructions: instructions ?? this.instructions,
     );
   }

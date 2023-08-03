@@ -31,9 +31,10 @@ class MetricConditionPage extends StatefulWidget {
   final void Function(ChecklistCondition) onUpdate;
   final void Function()? onClose;
   final bool hideTitle;
+  final bool noBorder;
 
   const MetricConditionPage(
-      {Key? key, this.onClose, required this.condition, required this.onUpdate, this.hideTitle = false})
+      {Key? key, this.onClose, required this.condition, required this.onUpdate, this.hideTitle = false, this.noBorder = false,})
       : super(key: key);
 
   @override
@@ -56,6 +57,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
   Widget build(BuildContext context) {
     return CreateChecklistSection(
       hideTitle: widget.hideTitle,
+      noBorder: widget.noBorder,
       icon: SvgPicture.asset('assets/checklist/icon_monitoring.svg'),
       onClose: this.widget.onClose,
       title: 'Metric monitoring',

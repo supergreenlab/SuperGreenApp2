@@ -27,7 +27,7 @@ class CreateChecklistSection extends StatelessWidget {
   final bool hideTitle;
 
   const CreateChecklistSection(
-      {Key? key, required this.child, this.title, this.onClose, this.icon, this.noBorder = true, this.hideTitle=false})
+      {Key? key, required this.child, this.title, this.onClose, this.icon, this.noBorder = false, this.hideTitle=false})
       : super(key: key);
 
   @override

@@ -71,11 +71,7 @@ abstract class CreateChecklistActionConditionPopup extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5),
-              topRight: Radius.circular(5),
-              bottomLeft: Radius.circular(5),
-              bottomRight: Radius.circular(5)),
+          borderRadius: BorderRadius.all(Radius.circular(5)),
           border: Border(
             top: BorderSide(color: Color(0xFFdedede)),
             left: BorderSide(color: Color(0xFFdedede)),

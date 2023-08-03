@@ -30,4 +30,5 @@ const Map<String, String> ChecklistActionIcons = {
   ChecklistActionWebpage.TYPE: 'assets/checklist/icon_webpage.svg',
   ChecklistActionCreateCard.TYPE: 'assets/checklist/icon_create_diary.svg',
   ChecklistActionBuyProduct.TYPE: 'assets/checklist/icon_buy_product.svg',
+  ChecklistActionMessage.TYPE: 'assets/checklist/icon_message.svg',
 };
