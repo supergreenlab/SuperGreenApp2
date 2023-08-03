@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateMonitoring extends StatefulWidget {
   @override
@@ -37,7 +38,18 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
           setState(() {
             this.condition = condition;
           });
-        })
+        }, hideTitle: true,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GreenButton(
+              title: 'Create',
+              onPressed: () {
+
+              },
+            ),
+          ],
+        ),
       ],
     );
   }

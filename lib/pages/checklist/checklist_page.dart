@@ -202,6 +202,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () {
+                    setState(() {
+                      showCreateMonitoring = false;
+                      showCreateTimeReminder = false;
+
+                      showCreateWateringReminder = true;
+                      showCreateMenu = false;
+                    });
+                  }),
+                  SvgPicture.asset('assets/checklist/line_separator.svg'),
                   _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', () {
                     setState(() {
                       showCreateWateringReminder = false;
@@ -218,16 +228,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       showCreateTimeReminder = false;
 
                       showCreateMonitoring = true;
-                      showCreateMenu = false;
-                    });
-                  }),
-                  SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () {
-                    setState(() {
-                      showCreateMonitoring = false;
-                      showCreateTimeReminder = false;
-
-                      showCreateWateringReminder = true;
                       showCreateMenu = false;
                     });
                   }),
@@ -391,17 +391,26 @@ class _ChecklistPageState extends State<ChecklistPage> {
     Widget popupBody = Container();
     if (showCreateTimeReminder) {
       popupBody = Column(children: [
-        _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
+        Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
+        ),
         CreateTimerReminder(),
       ]);
     } else if (showCreateMonitoring) {
       popupBody = Column(children: [
-        _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Time reminder', null),
+        Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', null),
+        ),
         CreateMonitoring(),
       ]);
     } else if (showCreateWateringReminder) {
       popupBody = Column(children: [
-        _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Time reminder', null),
+        Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', null),
+        ),
         CreateWateringReminder(),
       ]);
     }

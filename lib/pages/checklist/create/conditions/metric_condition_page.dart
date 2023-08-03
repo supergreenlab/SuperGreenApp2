@@ -30,8 +30,10 @@ class MetricConditionPage extends StatefulWidget {
 
   final void Function(ChecklistCondition) onUpdate;
   final void Function()? onClose;
+  final bool hideTitle;
 
-  const MetricConditionPage({Key? key, this.onClose, required this.condition, required this.onUpdate})
+  const MetricConditionPage(
+      {Key? key, this.onClose, required this.condition, required this.onUpdate, this.hideTitle = false})
       : super(key: key);
 
   @override
@@ -46,13 +48,14 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
   void initState() {
     _minController.text = widget.condition.min == null ? '' : widget.condition.min.toString();
     _maxController.text = widget.condition.max == null ? '' : widget.condition.max.toString();
-    
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      hideTitle: widget.hideTitle,
       icon: SvgPicture.asset('assets/checklist/icon_monitoring.svg'),
       onClose: this.widget.onClose,
       title: 'Metric monitoring',
@@ -103,8 +106,8 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
         CheckboxLabel(
             text: 'Trigger this condition when the temperature is IN this range.',
             onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
-              inRange: p0!,
-            )),
+                  inRange: p0!,
+                )),
             value: widget.condition.inRange),
       ],
     );
@@ -157,7 +160,6 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                         max: double.parse(value),
                       ));
                     },
-                  
                   ),
                 ),
               ],
@@ -193,23 +195,25 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
           },
         ),
       ),
-      !widget.condition.daysInRow ? Container() : Row(
-        children: [
-          Expanded(
-            child: ChecklistDuration(
-              hideUnit: true,
-              duration: widget.condition.nDaysInRow,
-              unit: 'DAYS',
-              onUpdate: (int? duration, String? unit) {
-                widget.onUpdate(widget.condition.copyWith(
-                  nDaysInRow: duration,
-                ));
-              },
+      !widget.condition.daysInRow
+          ? Container()
+          : Row(
+              children: [
+                Expanded(
+                  child: ChecklistDuration(
+                    hideUnit: true,
+                    duration: widget.condition.nDaysInRow,
+                    unit: 'DAYS',
+                    onUpdate: (int? duration, String? unit) {
+                      widget.onUpdate(widget.condition.copyWith(
+                        nDaysInRow: duration,
+                      ));
+                    },
+                  ),
+                ),
+                Expanded(child: Text('Days')),
+              ],
             ),
-          ),
-          Expanded(child: Text('Days')),
-        ],
-      ),
     ]);
   }
 }

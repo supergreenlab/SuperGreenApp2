@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateWateringReminder extends StatefulWidget {
   @override
@@ -26,18 +27,35 @@ class CreateWateringReminder extends StatefulWidget {
 }
 
 class _CreateWateringReminderState extends State<CreateWateringReminder> {
-
-  ChecklistCondition condition = ChecklistConditionTimer(date: DateTime.now().add(Duration(days: 1)),);
+  ChecklistCondition condition = ChecklistConditionTimer(
+    date: DateTime.now().add(Duration(days: 1)),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TimerConditionPage(condition: condition as ChecklistConditionTimer, onUpdate: (ChecklistCondition condition) {
-          setState(() {
-            this.condition = condition;
-          });
-        })
+        TimerConditionPage(
+          condition: condition as ChecklistConditionTimer,
+          onUpdate: (ChecklistCondition condition) {
+            setState(() {
+              this.condition = condition;
+            });
+          },
+          hideTitle: true,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GreenButton(
+                title: 'Create',
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
