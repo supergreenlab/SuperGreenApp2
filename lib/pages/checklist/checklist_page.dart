@@ -395,7 +395,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
         ),
-        CreateTimerReminder(checklist: state.checklist,),
+        CreateTimerReminder(
+          checklist: state.checklist,
+          onClose: () {
+            setState(() {
+              showCreateWateringReminder = false;
+              showCreateMonitoring = false;
+              showCreateTimeReminder = false;
+            });
+          },
+        ),
       ]);
     } else if (showCreateMonitoring) {
       popupBody = Column(children: [
@@ -403,7 +412,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', null),
         ),
-        CreateMonitoring(checklist: state.checklist,),
+        CreateMonitoring(
+          checklist: state.checklist,
+          onClose: () {
+            setState(() {
+              showCreateWateringReminder = false;
+              showCreateMonitoring = false;
+              showCreateTimeReminder = false;
+            });
+          },
+        ),
       ]);
     } else if (showCreateWateringReminder) {
       popupBody = Column(children: [
@@ -411,7 +429,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', null),
         ),
-        CreateWateringReminder(checklist: state.checklist,),
+        CreateWateringReminder(
+          checklist: state.checklist,
+          onClose: () {
+            setState(() {
+              showCreateWateringReminder = false;
+              showCreateMonitoring = false;
+              showCreateTimeReminder = false;
+            });
+          },
+        ),
       ]);
     }
     return Column(

@@ -23,28 +23,31 @@ import 'package:super_green_app/pages/checklist/create/conditions/metric_conditi
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateMonitoring extends StatefulWidget {
+  final Checklist checklist;
+  final Function() onClose;
 
-    final Checklist checklist;
+  const CreateMonitoring({Key? key, required this.checklist, required this.onClose}) : super(key: key);
 
-  const CreateMonitoring({Key? key, required this.checklist}) : super(key: key);
-    
   @override
   State<CreateMonitoring> createState() => _CreateMonitoringState();
 }
 
 class _CreateMonitoringState extends State<CreateMonitoring> {
-
   ChecklistCondition condition = ChecklistConditionMetric();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MetricConditionPage(condition: condition as ChecklistConditionMetric, onUpdate: (ChecklistCondition condition) {
-          setState(() {
-            this.condition = condition;
-          });
-        }, hideTitle: true,),
+        MetricConditionPage(
+          condition: condition as ChecklistConditionMetric,
+          onUpdate: (ChecklistCondition condition) {
+            setState(() {
+              this.condition = condition;
+            });
+          },
+          hideTitle: true,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -52,7 +55,9 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: () {},
+                onPressed: () {
+                  widget.onClose();
+                },
               ),
             ),
           ],

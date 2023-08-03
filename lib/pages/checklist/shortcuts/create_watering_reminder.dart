@@ -19,6 +19,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -28,9 +30,10 @@ import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateWateringReminder extends StatefulWidget {
 
+  final Function() onClose;
   final Checklist checklist;
 
-  const CreateWateringReminder({Key? key, required this.checklist}) : super(key: key);
+  const CreateWateringReminder({Key? key, required this.checklist, required this.onClose}) : super(key: key);
 
   @override
   State<CreateWateringReminder> createState() => _CreateWateringReminderState();
@@ -43,6 +46,9 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
 
   @override
   Widget build(BuildContext context) {
+    ChecklistActionCreateCard action = ChecklistActionCreateCard(
+      entryType: FE_WATER,
+    );
     return Column(
       children: [
         TimerConditionPage(
@@ -67,8 +73,15 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
                       checklist: 1,
                       title: drift.Value('Water plant reminder'),
                       category: drift.Value(CH_FEEDING),
+                      public: drift.Value(false),
+                      repeat: drift.Value(false),
+                      conditions: drift.Value('[${condition.toJSON()}]'),
+                      exitConditions: drift.Value('[]'),
+                      actions: drift.Value('[${action.toJSON()}]'),
+                      synced: drift.Value(false),
                     )
                   ));
+                  widget.onClose();
                 },
               ),
             ),

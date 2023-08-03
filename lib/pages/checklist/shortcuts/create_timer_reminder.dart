@@ -24,9 +24,10 @@ import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateTimerReminder extends StatefulWidget {
 
+  final Function() onClose;
   final Checklist checklist;
 
-  const CreateTimerReminder({Key? key, required this.checklist}) : super(key: key);
+  const CreateTimerReminder({Key? key, required this.checklist, required this.onClose}) : super(key: key);
   
   @override
   State<CreateTimerReminder> createState() => _CreateTimerReminderState();
@@ -57,7 +58,9 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: () {},
+                onPressed: () {
+                  widget.onClose();
+                },
               ),
             ),
           ],
