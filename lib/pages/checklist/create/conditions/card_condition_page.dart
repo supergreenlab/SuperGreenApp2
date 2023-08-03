@@ -37,7 +37,7 @@ class CardConditionPage extends StatelessWidget {
     return CreateChecklistSection(
       icon: SvgPicture.asset('assets/checklist/icon_diary.svg'),
       onClose: onClose,
-      title: 'Card condition',
+      title: 'After a diary entry is created',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

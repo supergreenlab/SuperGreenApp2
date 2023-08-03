@@ -30,6 +30,9 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/items/checklist_item_page.dart';
+import 'package:super_green_app/pages/checklist/shortcuts/create_monitoring.dart';
+import 'package:super_green_app/pages/checklist/shortcuts/create_timer_reminder.dart';
+import 'package:super_green_app/pages/checklist/shortcuts/create_watering_reminder.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -81,6 +84,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
   bool showAutoChecklist = true;
   bool showCreateMenu = false;
 
+  bool showCreateTimeReminder = false;
+  bool showCreateMonitoring = false;
+  bool showCreateWateringReminder = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChecklistBloc, ChecklistBlocState>(
@@ -104,6 +111,24 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 body = _renderLoaded(context, state);
               } else {
                 body = _renderEmpty(context, state);
+              }
+              if (showCreateTimeReminder || showCreateMonitoring || showCreateWateringReminder) {
+                body = Stack(
+                  children: [
+                    body,
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          showCreateWateringReminder = false;
+                          showCreateMonitoring = false;
+                          showCreateTimeReminder = false;
+                        });
+                      },
+                      child: Container(color: Color(0x45ffffff)),
+                    ),
+                    _renderCreatePopup(context, state),
+                  ],
+                );
               }
             }
             return Scaffold(
@@ -171,12 +196,37 @@ class _ChecklistPageState extends State<ChecklistPage> {
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', () => null),
+                  _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', () {
+                    setState(() {
+                      showCreateWateringReminder = false;
+                      showCreateMonitoring = false;
+
+                      showCreateTimeReminder = true;
+                      showCreateMenu = false;
+                    });
+                  }),
                   SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', () => null),
+                  _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', () {
+                    setState(() {
+                      showCreateWateringReminder = false;
+                      showCreateTimeReminder = false;
+
+                      showCreateMonitoring = true;
+                      showCreateMenu = false;
+                    });
+                  }),
                   SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () => null),
+                  _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () {
+                    setState(() {
+                      showCreateMonitoring = false;
+                      showCreateTimeReminder = false;
+
+                      showCreateWateringReminder = true;
+                      showCreateMenu = false;
+                    });
+                  }),
                   SvgPicture.asset('assets/checklist/line_separator.svg'),
                   _renderCreateMenuItem(context, 'assets/checklist/icon_custom.svg', 'Custom checklist seed', () {
                     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist));
@@ -318,6 +368,44 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   height: 30.0,
                 ),
               ]),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _renderCreatePopup(BuildContext context, ChecklistBlocStateLoaded state) {
+    Widget popupBody = Container();
+    if (showCreateTimeReminder) {
+      popupBody = CreateTimerReminder();
+    } else if (showCreateMonitoring) {
+      popupBody = CreateMonitoring();
+    } else if (showCreateWateringReminder) {
+      popupBody = CreateWateringReminder();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Container(
+            width: 350,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 3,
+                  offset: Offset(0, 2), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: popupBody,
             ),
           ),
         ),

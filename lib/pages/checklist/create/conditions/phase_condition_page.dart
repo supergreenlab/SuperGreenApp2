@@ -37,7 +37,7 @@ class PhaseConditionPage extends StatelessWidget {
     return CreateChecklistSection(
       icon: SvgPicture.asset('assets/checklist/icon_phase.svg'),
       onClose: onClose,
-      title: 'Phase condition',
+      title: 'When the plant reaches a phase',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

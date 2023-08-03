@@ -28,9 +28,9 @@ class TimerConditionPage extends StatelessWidget {
   final ChecklistConditionTimer condition;
 
   final void Function(ChecklistCondition) onUpdate;
-  final void Function() onClose;
+  final void Function()? onClose;
 
-  const TimerConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate})
+  const TimerConditionPage({Key? key, this.onClose, required this.condition, required this.onUpdate})
       : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class TimerConditionPage extends StatelessWidget {
     return CreateChecklistSection(
       icon: SvgPicture.asset('assets/checklist/icon_reminder.svg'),
       onClose: onClose,
-      title: 'Timer condition',
+      title: 'At a given time',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -61,7 +61,7 @@ class TimerConditionPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: CheckboxLabel(
-            text: 'Repeat timer condition',
+            text: 'Repeat timer',
             onChanged: (p0) => onUpdate(condition.copyWith(
               repeat: p0!,
             )),

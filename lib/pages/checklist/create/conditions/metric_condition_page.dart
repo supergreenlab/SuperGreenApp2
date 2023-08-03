@@ -29,9 +29,9 @@ class MetricConditionPage extends StatefulWidget {
   final ChecklistConditionMetric condition;
 
   final void Function(ChecklistCondition) onUpdate;
-  final void Function() onClose;
+  final void Function()? onClose;
 
-  const MetricConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate})
+  const MetricConditionPage({Key? key, this.onClose, required this.condition, required this.onUpdate})
       : super(key: key);
 
   @override
@@ -55,7 +55,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
     return CreateChecklistSection(
       icon: SvgPicture.asset('assets/checklist/icon_monitoring.svg'),
       onClose: this.widget.onClose,
-      title: 'Metric condition',
+      title: 'Metric monitoring',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
