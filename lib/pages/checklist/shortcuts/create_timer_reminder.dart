@@ -16,10 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/actions/message_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -72,6 +76,19 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
               child: GreenButton(
                 title: 'Create',
                 onPressed: () {
+                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCreate(
+                    ChecklistSeedsCompanion.insert(
+                      checklist: 1,
+                      title: drift.Value('Reminder'),
+                      category: drift.Value(CH_OTHER),
+                      public: drift.Value(false),
+                      repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
+                      conditions: drift.Value('[${condition.toJSON()}]'),
+                      exitConditions: drift.Value('[]'),
+                      actions: drift.Value('[${action.toJSON()}]'),
+                      synced: drift.Value(false),
+                    )
+                  ));
                   widget.onClose();
                 },
               ),

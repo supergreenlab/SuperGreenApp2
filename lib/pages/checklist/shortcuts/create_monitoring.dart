@@ -16,9 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
+import 'package:super_green_app/pages/checklist/create/actions/message_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
@@ -34,6 +40,7 @@ class CreateMonitoring extends StatefulWidget {
 
 class _CreateMonitoringState extends State<CreateMonitoring> {
   ChecklistCondition condition = ChecklistConditionMetric();
+  ChecklistAction action = ChecklistActionMessage();
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +56,16 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
           hideTitle: true,
           noBorder: true,
         ),
+        MessageActionPage(
+          action: action as ChecklistActionMessage,
+          onUpdate: (ChecklistAction action) {
+            setState(() {
+              this.action = action;
+            });
+          },
+          hideTitle: true,
+          noBorder: true,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -57,6 +74,19 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
               child: GreenButton(
                 title: 'Create',
                 onPressed: () {
+                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCreate(
+                    ChecklistSeedsCompanion.insert(
+                      checklist: 1,
+                      title: drift.Value('Reminder'),
+                      category: drift.Value(CH_ENVIRONMENT),
+                      public: drift.Value(false),
+                      repeat: drift.Value(true),
+                      conditions: drift.Value('[${condition.toJSON()}]'),
+                      exitConditions: drift.Value('[]'),
+                      actions: drift.Value('[${action.toJSON()}]'),
+                      synced: drift.Value(false),
+                    )
+                  ));
                   widget.onClose();
                 },
               ),
