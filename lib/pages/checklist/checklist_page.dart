@@ -157,6 +157,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                           onPressed: () {
                             setState(() {
                               showCreateMenu = !showCreateMenu;
+
+                              showCreateWateringReminder = false;
+                              showCreateMonitoring = false;
+                              showCreateTimeReminder = false;
                             });
                           },
                         ),
@@ -241,26 +245,30 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ));
   }
 
-  Widget _renderCreateMenuItem(BuildContext context, String icon, String title, Function() onTap) {
+  Widget _renderCreateMenuItem(BuildContext context, String icon, String title, Function()? onTap) {
+    Widget body = Row(
+      children: [
+        SizedBox(
+          width: 50,
+          height: 32,
+          child: SvgPicture.asset(
+            icon,
+            width: 24,
+            height: 24,
+          ),
+        ),
+        Expanded(child: Text(title)),
+        onTap == null ? Container() : SvgPicture.asset('assets/checklist/icon_menu_add.svg'),
+      ],
+    );
+    if (onTap == null) {
+      return body;
+    }
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 50,
-              height: 32,
-              child: SvgPicture.asset(
-                icon,
-                width: 24,
-                height: 24,
-              ),
-            ),
-            Expanded(child: Text(title)),
-            SvgPicture.asset('assets/checklist/icon_menu_add.svg'),
-          ],
-        ),
+        child: body,
       ),
     );
   }
@@ -286,6 +294,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   onPressed: () {
                     setState(() {
                       showCreateMenu = true;
+
+                      showCreateWateringReminder = false;
+                      showCreateMonitoring = false;
+                      showCreateTimeReminder = false;
                     });
                   },
                 ),
@@ -378,15 +390,23 @@ class _ChecklistPageState extends State<ChecklistPage> {
   Widget _renderCreatePopup(BuildContext context, ChecklistBlocStateLoaded state) {
     Widget popupBody = Container();
     if (showCreateTimeReminder) {
-      popupBody = CreateTimerReminder();
+      popupBody = Column(children: [
+        _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
+        CreateTimerReminder(),
+      ]);
     } else if (showCreateMonitoring) {
-      popupBody = CreateMonitoring();
+      popupBody = Column(children: [
+        _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Time reminder', null),
+        CreateMonitoring(),
+      ]);
     } else if (showCreateWateringReminder) {
-      popupBody = CreateWateringReminder();
+      popupBody = Column(children: [
+        _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Time reminder', null),
+        CreateWateringReminder(),
+      ]);
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
           child: Container(

@@ -29,13 +29,15 @@ class TimerConditionPage extends StatelessWidget {
 
   final void Function(ChecklistCondition) onUpdate;
   final void Function()? onClose;
+  final bool hideTitle;
 
-  const TimerConditionPage({Key? key, this.onClose, required this.condition, required this.onUpdate})
+  const TimerConditionPage({Key? key, this.onClose, required this.condition, required this.onUpdate, this.hideTitle=false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      hideTitle: hideTitle,
       icon: SvgPicture.asset('assets/checklist/icon_reminder.svg'),
       onClose: onClose,
       title: 'At a given time',

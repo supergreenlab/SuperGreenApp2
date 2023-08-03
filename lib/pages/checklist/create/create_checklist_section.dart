@@ -24,9 +24,10 @@ class CreateChecklistSection extends StatelessWidget {
   final Widget child;
   final void Function()? onClose;
   final bool noBorder;
+  final bool hideTitle;
 
   const CreateChecklistSection(
-      {Key? key, required this.child, this.title, this.onClose, this.icon, this.noBorder = true})
+      {Key? key, required this.child, this.title, this.onClose, this.icon, this.noBorder = true, this.hideTitle=false})
       : super(key: key);
 
   @override
@@ -54,7 +55,7 @@ class CreateChecklistSection extends StatelessWidget {
         decoration: decoration,
         child: Column(
           children: [
-            Row(
+            hideTitle ? Container() : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 title == null

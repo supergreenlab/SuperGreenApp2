@@ -37,7 +37,7 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
           setState(() {
             this.condition = condition;
           });
-        })
+        }, hideTitle: true,)
       ],
     );
   }
