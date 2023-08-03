@@ -395,7 +395,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
         ),
-        CreateTimerReminder(),
+        CreateTimerReminder(checklist: state.checklist,),
       ]);
     } else if (showCreateMonitoring) {
       popupBody = Column(children: [
@@ -403,7 +403,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', null),
         ),
-        CreateMonitoring(),
+        CreateMonitoring(checklist: state.checklist,),
       ]);
     } else if (showCreateWateringReminder) {
       popupBody = Column(children: [
@@ -411,7 +411,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', null),
         ),
-        CreateWateringReminder(),
+        CreateWateringReminder(checklist: state.checklist,),
       ]);
     }
     return Column(

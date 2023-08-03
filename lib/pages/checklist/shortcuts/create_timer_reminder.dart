@@ -18,10 +18,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateTimerReminder extends StatefulWidget {
+
+  final Checklist checklist;
+
+  const CreateTimerReminder({Key? key, required this.checklist}) : super(key: key);
+  
   @override
   State<CreateTimerReminder> createState() => _CreateTimerReminderState();
 }
@@ -47,9 +53,12 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            GreenButton(
-              title: 'Create',
-              onPressed: () {},
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GreenButton(
+                title: 'Create',
+                onPressed: () {},
+              ),
             ),
           ],
         ),

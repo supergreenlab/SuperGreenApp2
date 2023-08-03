@@ -18,10 +18,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateMonitoring extends StatefulWidget {
+
+    final Checklist checklist;
+
+  const CreateMonitoring({Key? key, required this.checklist}) : super(key: key);
+    
   @override
   State<CreateMonitoring> createState() => _CreateMonitoringState();
 }
@@ -42,11 +48,12 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            GreenButton(
-              title: 'Create',
-              onPressed: () {
-
-              },
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GreenButton(
+                title: 'Create',
+                onPressed: () {},
+              ),
             ),
           ],
         ),

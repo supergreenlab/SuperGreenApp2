@@ -16,12 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateWateringReminder extends StatefulWidget {
+
+  final Checklist checklist;
+
+  const CreateWateringReminder({Key? key, required this.checklist}) : super(key: key);
+
   @override
   State<CreateWateringReminder> createState() => _CreateWateringReminderState();
 }
@@ -51,7 +61,15 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: () {},
+                onPressed: () {
+                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCreate(
+                    ChecklistSeedsCompanion.insert(
+                      checklist: 1,
+                      title: drift.Value('Water plant reminder'),
+                      category: drift.Value(CH_FEEDING),
+                    )
+                  ));
+                },
               ),
             ),
           ],
