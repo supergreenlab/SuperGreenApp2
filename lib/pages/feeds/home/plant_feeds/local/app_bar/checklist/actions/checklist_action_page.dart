@@ -21,6 +21,7 @@ import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_buyproduct_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_createcard_page.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_message.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_webpage_page.dart';
 
 abstract class ChecklistActionButton extends StatelessWidget {
@@ -42,6 +43,8 @@ abstract class ChecklistActionButton extends StatelessWidget {
         return ChecklistActionCreateCardButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
       case ChecklistActionBuyProduct.TYPE:
         return ChecklistActionBuyProductButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
+      case ChecklistActionMessage.TYPE:
+        return ChecklistActionMessageButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
     }
     throw 'Uknown type ${checklistAction.type}';
   }
