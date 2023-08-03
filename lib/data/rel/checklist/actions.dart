@@ -258,6 +258,13 @@ class ChecklistActionMessage extends ChecklistAction {
 
   String get asSentence => 'Show message: ${title!}';
 
+  bool get valid {
+    if (title == null) {
+      return false;
+    }
+    return true;
+  }
+
   ChecklistActionMessage({this.title, this.instructions}) : super(type: TYPE);
 
   @override

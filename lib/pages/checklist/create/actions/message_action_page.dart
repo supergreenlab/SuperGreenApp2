@@ -23,13 +23,15 @@ import 'package:super_green_app/pages/checklist/create/create_checklist_section.
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class MessageActionPage extends StatefulWidget {
-
   final ChecklistActionMessage action;
 
   final void Function(ChecklistAction) onUpdate;
-  final void Function() onClose;
+  final void Function()? onClose;
 
-  MessageActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
+  final bool hideTitle;
+  final bool noBorder;
+
+  MessageActionPage({Key? key, this.onClose, required this.action, required this.onUpdate, this.hideTitle=false, this.noBorder=false}) : super(key: key);
 
   @override
   State<MessageActionPage> createState() => _MessageActionPageState();
@@ -49,9 +51,11 @@ class _MessageActionPageState extends State<MessageActionPage> {
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      hideTitle: widget.hideTitle,
+      noBorder: widget.noBorder,
       icon: SvgPicture.asset('assets/checklist/icon_message.svg'),
       onClose: widget.onClose,
-      title: 'Open web page',
+      title: 'Write message',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _renderURLField(context),
@@ -63,7 +67,9 @@ class _MessageActionPageState extends State<MessageActionPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Action title'),
+        Text('Notification title',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+          ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(

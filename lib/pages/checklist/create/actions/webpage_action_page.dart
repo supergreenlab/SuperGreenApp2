@@ -63,7 +63,9 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Enter URL of webpage to open:'),
+        Text('Enter URL of webpage to open:',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+          ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(

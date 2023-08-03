@@ -17,18 +17,19 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/checklist/create/actions/message_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateTimerReminder extends StatefulWidget {
-
   final Function() onClose;
   final Checklist checklist;
 
   const CreateTimerReminder({Key? key, required this.checklist, required this.onClose}) : super(key: key);
-  
+
   @override
   State<CreateTimerReminder> createState() => _CreateTimerReminderState();
 }
@@ -37,6 +38,7 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
   ChecklistCondition condition = ChecklistConditionTimer(
     date: DateTime.now().add(Duration(days: 1)),
   );
+  ChecklistAction action = ChecklistActionMessage();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,16 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
           onUpdate: (ChecklistCondition condition) {
             setState(() {
               this.condition = condition;
+            });
+          },
+          hideTitle: true,
+          noBorder: true,
+        ),
+        MessageActionPage(
+          action: action as ChecklistActionMessage,
+          onUpdate: (ChecklistAction action) {
+            setState(() {
+              this.action = action;
             });
           },
           hideTitle: true,

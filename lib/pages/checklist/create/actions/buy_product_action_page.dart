@@ -65,7 +65,9 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Name of the product:'),
+        Text('Name of the product:',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+          ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
