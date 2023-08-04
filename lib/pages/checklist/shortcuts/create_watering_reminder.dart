@@ -68,7 +68,7 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: () {
+                onPressed: condition.valid == false || action.valid == false ? null : () {
                   BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCreate(
                     ChecklistSeedsCompanion.insert(
                       checklist: 1,

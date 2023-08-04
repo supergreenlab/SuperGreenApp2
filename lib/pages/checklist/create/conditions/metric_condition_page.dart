@@ -100,13 +100,13 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
     return Column(
       children: [
         CheckboxLabel(
-            text: 'Trigger this condition when the temperature is OUT of this range.',
+            text: 'Trigger this condition when the value is OUT of this range.',
             onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
                   inRange: !(p0!),
                 )),
             value: !(widget.condition.inRange)),
         CheckboxLabel(
-            text: 'Trigger this condition when the temperature is IN this range.',
+            text: 'Trigger this condition when the value is IN this range.',
             onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
                   inRange: p0!,
                 )),

@@ -46,25 +46,31 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MetricConditionPage(
-          condition: condition as ChecklistConditionMetric,
-          onUpdate: (ChecklistCondition condition) {
-            setState(() {
-              this.condition = condition;
-            });
-          },
-          hideTitle: true,
-          noBorder: true,
-        ),
-        MessageActionPage(
-          action: action as ChecklistActionMessage,
-          onUpdate: (ChecklistAction action) {
-            setState(() {
-              this.action = action;
-            });
-          },
-          hideTitle: true,
-          noBorder: true,
+        Expanded(
+          child: ListView(
+            children: [
+              MetricConditionPage(
+                condition: condition as ChecklistConditionMetric,
+                onUpdate: (ChecklistCondition condition) {
+                  setState(() {
+                    this.condition = condition;
+                  });
+                },
+                hideTitle: true,
+                noBorder: true,
+              ),
+              MessageActionPage(
+                action: action as ChecklistActionMessage,
+                onUpdate: (ChecklistAction action) {
+                  setState(() {
+                    this.action = action;
+                  });
+                },
+                hideTitle: true,
+                noBorder: true,
+              ),
+            ],
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -73,22 +79,23 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: () {
-                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCreate(
-                    ChecklistSeedsCompanion.insert(
-                      checklist: 1,
-                      title: drift.Value('Reminder'),
-                      category: drift.Value(CH_ENVIRONMENT),
-                      public: drift.Value(false),
-                      repeat: drift.Value(true),
-                      conditions: drift.Value('[${condition.toJSON()}]'),
-                      exitConditions: drift.Value('[]'),
-                      actions: drift.Value('[${action.toJSON()}]'),
-                      synced: drift.Value(false),
-                    )
-                  ));
-                  widget.onClose();
-                },
+                onPressed: condition.valid == false || action.valid == false
+                    ? null
+                    : () {
+                        BlocProvider.of<ChecklistBloc>(context)
+                            .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
+                          checklist: 1,
+                          title: drift.Value('Reminder'),
+                          category: drift.Value(CH_ENVIRONMENT),
+                          public: drift.Value(false),
+                          repeat: drift.Value(true),
+                          conditions: drift.Value('[${condition.toJSON()}]'),
+                          exitConditions: drift.Value('[]'),
+                          actions: drift.Value('[${action.toJSON()}]'),
+                          synced: drift.Value(false),
+                        )));
+                        widget.onClose();
+                      },
               ),
             ),
           ],

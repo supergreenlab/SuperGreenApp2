@@ -389,6 +389,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   Widget _renderCreatePopup(BuildContext context, ChecklistBlocStateLoaded state) {
     Widget popupBody = Container();
+    double? height;
     if (showCreateTimeReminder) {
       popupBody = Column(children: [
         Padding(
@@ -407,20 +408,23 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ),
       ]);
     } else if (showCreateMonitoring) {
+      height = MediaQuery.of(context).size.height-MediaQuery.of(context).viewInsets.bottom - 150;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', null),
         ),
-        CreateMonitoring(
-          checklist: state.checklist,
-          onClose: () {
-            setState(() {
-              showCreateWateringReminder = false;
-              showCreateMonitoring = false;
-              showCreateTimeReminder = false;
-            });
-          },
+        Expanded(
+          child: CreateMonitoring(
+            checklist: state.checklist,
+            onClose: () {
+              setState(() {
+                showCreateWateringReminder = false;
+                showCreateMonitoring = false;
+                showCreateTimeReminder = false;
+              });
+            },
+          ),
         ),
       ]);
     } else if (showCreateWateringReminder) {
@@ -447,6 +451,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
         Center(
           child: Container(
             width: 350,
+            height: height,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(5)),
