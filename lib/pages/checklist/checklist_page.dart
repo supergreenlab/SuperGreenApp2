@@ -391,20 +391,23 @@ class _ChecklistPageState extends State<ChecklistPage> {
     Widget popupBody = Container();
     double? height;
     if (showCreateTimeReminder) {
+      height = MediaQuery.of(context).size.height-MediaQuery.of(context).viewInsets.bottom - 200;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
           child: _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
         ),
-        CreateTimerReminder(
-          checklist: state.checklist,
-          onClose: () {
-            setState(() {
-              showCreateWateringReminder = false;
-              showCreateMonitoring = false;
-              showCreateTimeReminder = false;
-            });
-          },
+        Expanded(
+          child: CreateTimerReminder(
+            checklist: state.checklist,
+            onClose: () {
+              setState(() {
+                showCreateWateringReminder = false;
+                showCreateMonitoring = false;
+                showCreateTimeReminder = false;
+              });
+            },
+          ),
         ),
       ]);
     } else if (showCreateMonitoring) {
