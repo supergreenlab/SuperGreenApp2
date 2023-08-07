@@ -244,7 +244,7 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
           yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataChecklistSeedTriggered) {
-        yield NotificationsBlocStateNotification(event.notificationData);
+        // yield NotificationsBlocStateNotification(event.notificationData);
         try {
           Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
           Checklist checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(notificationData.checklistID);
