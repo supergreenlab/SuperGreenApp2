@@ -5256,7 +5256,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
       'conditions', aliasedName, false,
       type: const StringType(),
       requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
+      defaultValue: Constant('[]'));
   final VerificationMeta _exitConditionsMeta =
       const VerificationMeta('exitConditions');
   @override
@@ -5264,14 +5264,14 @@ class $ChecklistSeedsTable extends ChecklistSeeds
       'exit_conditions', aliasedName, false,
       type: const StringType(),
       requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
+      defaultValue: Constant('[]'));
   final VerificationMeta _actionsMeta = const VerificationMeta('actions');
   @override
   late final GeneratedColumn<String?> actions = GeneratedColumn<String?>(
       'actions', aliasedName, false,
       type: const StringType(),
       requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
+      defaultValue: Constant('[]'));
   final VerificationMeta _checklistServerIDMeta =
       const VerificationMeta('checklistServerID');
   @override

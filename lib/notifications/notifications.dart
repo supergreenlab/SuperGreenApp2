@@ -250,26 +250,30 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
           Checklist checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(notificationData.checklistID);
           ChecklistSeed checklistSeed = await RelDB.get()
               .checklistsDAO
-              .getChecklistSeedForServerIDs(notificationData.checklistID, notificationData.checklistSeedID);
+              .getChecklistSeedForServerIDs(notificationData.checklistSeedID, notificationData.checklistID);
           ChecklistLogsCompanion checklistLog = await ChecklistLogs.fromMap(json.decode(notificationData.checklistLog));
 
           // Maybe use syncer_bloc directly?
           ChecklistLog? exists;
           try {
             exists = await RelDB.get().checklistsDAO.getChecklistLogForServerID(checklistLog.serverID.value!);
-          } catch (e) {}
+          } catch (e) {
+            print(e);
+          }
           if (exists != null) {
             await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(id: Value(exists.id)));
-            checklistLog = checklistLog.copyWith(id: Value(exists.id));
+            checklistLog = checklistLog.copyWith(id: Value(exists.id), synced: Value(true),);
           } else {
             int id = await RelDB.get().checklistsDAO.addChecklistLog(checklistLog);
-            checklistLog = checklistLog.copyWith(id: Value(id));
+            checklistLog = checklistLog.copyWith(id: Value(id), synced: Value(true),);
           }
 
           AppDB().setLastPlant(plant.id);
           yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
               plant: plant, checklist: checklist, checklistSeed: checklistSeed, checklistLog: checklistLog));
-        } catch (e) {}
+        } catch (e) {
+          print(e);
+        }
       }
     } else if (event is NotificationsBlocEventReminder) {
       await localNotifications.reminderNotification(

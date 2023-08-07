@@ -203,7 +203,7 @@ class ChecklistLogs extends Table {
   ChecklistLogs,
 ], queries: {
   'getNLogs': '''
-    select count(*) from checklist_logs where checked=false and skipped=false
+    select count(*) from checklist_logs where checked=false and skipped=false and checklist=?
   ''',
 })
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
@@ -313,7 +313,7 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return delete(checklistLogs).delete(checklistLog);
   }
 
-  Future<int> getNPendingLogs() {
-    return getNLogs().getSingle();
+  Future<int> getNPendingLogs(Checklist checklist) {
+    return getNLogs(checklist.id).getSingle();
   }
 }
