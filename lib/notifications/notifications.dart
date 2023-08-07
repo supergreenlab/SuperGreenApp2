@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -239,6 +242,33 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
           Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
           yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+        } catch (e) {}
+      } else if (notificationData is NotificationDataChecklistSeedTriggered) {
+        yield NotificationsBlocStateNotification(event.notificationData);
+        try {
+          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+          Checklist checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(notificationData.checklistID);
+          ChecklistSeed checklistSeed = await RelDB.get()
+              .checklistsDAO
+              .getChecklistSeedForServerIDs(notificationData.checklistID, notificationData.checklistSeedID);
+          ChecklistLogsCompanion checklistLog = await ChecklistLogs.fromMap(json.decode(notificationData.checklistLog));
+
+          // Maybe use syncer_bloc directly?
+          ChecklistLog? exists;
+          try {
+            exists = await RelDB.get().checklistsDAO.getChecklistLogForServerID(checklistLog.serverID.value!);
+          } catch (e) {}
+          if (exists != null) {
+            await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(id: Value(exists.id)));
+            checklistLog = checklistLog.copyWith(id: Value(exists.id));
+          } else {
+            int id = await RelDB.get().checklistsDAO.addChecklistLog(checklistLog);
+            checklistLog = checklistLog.copyWith(id: Value(id));
+          }
+
+          AppDB().setLastPlant(plant.id);
+          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
+              plant: plant, checklist: checklist, checklistSeed: checklistSeed, checklistLog: checklistLog));
         } catch (e) {}
       }
     } else if (event is NotificationsBlocEventReminder) {

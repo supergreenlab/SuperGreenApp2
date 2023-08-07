@@ -44,10 +44,14 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   final String? commentID;
   final String? replyTo;
 
-  MainNavigateToHomeEvent({this.plant, this.feedEntry, this.commentID, this.replyTo});
+  final Checklist? checklist;
+  final ChecklistSeed? checklistSeed;
+  final ChecklistLogsCompanion? checklistLog;
+
+  MainNavigateToHomeEvent({this.plant, this.feedEntry, this.commentID, this.replyTo, this.checklist, this.checklistSeed, this.checklistLog,});
 
   @override
-  List<Object?> get props => [plant, feedEntry, commentID, replyTo];
+  List<Object?> get props => [plant, feedEntry, commentID, replyTo, checklistSeed, checklistLog,];
 }
 
 class MainNavigateToCreatePlantEvent extends MainNavigatorEvent {

@@ -22,6 +22,8 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/checklist/checklists.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 enum NotificationDataType {
   PLANT_COMMENT,
@@ -35,6 +37,7 @@ enum NotificationDataType {
   DEVICE_UNREACHABLE,
   LIVECAM_UNREACHABLE,
   NEW_TIMELAPSE,
+  CHECKLIST_SEED_TRIGGERED,
 }
 
 abstract class NotificationData extends Equatable {
@@ -76,6 +79,8 @@ abstract class NotificationData extends Equatable {
         return NotificationDataLivecamUnreachable.fromMap(data);
       case NotificationDataType.NEW_TIMELAPSE:
         return NotificationDataNewTimelapse.fromMap(data);
+      case NotificationDataType.CHECKLIST_SEED_TRIGGERED:
+        return NotificationDataChecklistSeedTriggered.fromMap(data);
       default:
         try {
           throw 'Unknown type ${data['type']}';
@@ -300,4 +305,33 @@ class NotificationDataNewTimelapse extends NotificationData {
   NotificationDataNewTimelapse.fromMap(Map<String, dynamic> data) : super(data: data);
 
   String get plantID => data['plantID'];
+}
+
+class NotificationDataChecklistSeedTriggered extends NotificationData {
+  NotificationDataChecklistSeedTriggered(
+      {int? id,
+      String? title,
+      String? body,
+      required String plantID,
+      required String checklistID,
+      required CommentType checklistSeedID,
+      required String checklistLog,})
+      : super(
+          id: id,
+          data: {
+            'plantID': plantID,
+            'checklistID': checklistID,
+            'checklistSeedID': checklistSeedID,
+            'checklistLog': checklistLog,
+          },
+          type: NotificationDataType.CHECKLIST_SEED_TRIGGERED,
+          title: title,
+          body: body,
+        );
+  NotificationDataChecklistSeedTriggered.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+  String get checklistID => data['checklistID'];
+  String get checklistSeedID => data['checklistSeedID'];
+  String get checklistLog => data['checklistLog'];
 }
