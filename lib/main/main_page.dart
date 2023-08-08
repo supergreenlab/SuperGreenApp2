@@ -24,7 +24,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+<<<<<<< HEAD
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+=======
+import 'package:flutter_portal/flutter_portal.dart';
+>>>>>>> cb37878b (wip)
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
@@ -240,6 +244,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -275,10 +280,47 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                   child: wrapPinLock(
                     wrapSyncIndicator(
                       TowelieHelper.wrapWidget(
+=======
+    return Portal(
+      child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+    
+            if (!currentFocus.hasPrimaryFocus) {
+              FocusManager.instance.primaryFocus!.unfocus();
+            }
+          },
+          child: wrapListeners(MaterialApp(
+            useInheritedMediaQuery: true,
+            //navigatorObservers: [_analyticsObserver,],
+            localizationsDelegates: [
+              const SGLLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en'),
+              const Locale('es'),
+              const Locale('fr'),
+            ],
+            navigatorKey: widget._navigatorKey,
+            onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context)!.title,
+            onGenerateRoute: (settings) => CupertinoPageRoute(
+                settings: settings,
+                builder: (context) {
+                  if (lastRouteContext != null) {
+                    lastRouteContextsStack.addLast(lastRouteContext!);
+                  }
+                  lastRouteContext = context;
+                  return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+                    child: wrapSyncIndicator(TowelieHelper.wrapWidget(
+>>>>>>> cb37878b (wip)
                         settings,
                         context,
                         _onGenerateRoute(context, settings, onPop: () {
                           lastRouteContext = lastRouteContextsStack.removeLast();
+<<<<<<< HEAD
                         }),
                       ),
                     ),
@@ -294,6 +336,19 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           ),
         ),
       ),
+=======
+                        }))),
+                  );
+                }),
+            theme: ThemeData(
+              fontFamily: 'Roboto',
+            ),
+            home: BlocProvider<AppInitBloc>(
+              create: (context) => AppInitBloc(),
+              child: AppInitPage(),
+            ),
+          ))),
+>>>>>>> cb37878b (wip)
     );
   }
 

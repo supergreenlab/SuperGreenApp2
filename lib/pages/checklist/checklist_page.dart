@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_portal/flutter_portal.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
@@ -39,6 +41,7 @@ class ChecklistPage extends TraceableStatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
   bool showAutoChecklist = true;
+  bool showCreateMenu = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +78,22 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 actions: state is ChecklistBlocStateLoaded
                     ? [
                         IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                          icon: PortalTarget(
+                            visible: showCreateMenu,
+                            anchor: const Aligned(
+                              follower: Alignment.topRight,
+                              target: Alignment.bottomCenter,
+                            ),
+                            portalFollower: _renderCreateMenu(context, state),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
                           ),
                           onPressed: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToCreateChecklist(state.checklist));
+                            setState(() {
+                              showCreateMenu = !showCreateMenu;
+                            });
                           },
                         ),
                       ]
@@ -90,6 +102,69 @@ class _ChecklistPageState extends State<ChecklistPage> {
               body: body,
             );
           }),
+    );
+  }
+
+  Widget _renderCreateMenu(BuildContext context, ChecklistBlocStateLoaded state) {
+    return Material(
+      borderRadius: BorderRadius.all(Radius.circular(7)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: Offset(0, 2), // changes position of shadow
+            ),
+          ],
+        ),
+        width: 300,
+        height: 250,
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            children: [
+              _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', () => null),
+              _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', () => null),
+              _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () => null),
+              _renderCreateMenuItem(context, 'assets/checklist/icon_custom.svg', 'Custom checklist seed', () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                                .add(MainNavigateToCreateChecklist(state.checklist));
+                setState(() {
+                  showCreateMenu = false;
+                });
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _renderCreateMenuItem(BuildContext context, String icon, String title, Function() onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 50,
+              height: 32,
+              child: SvgPicture.asset(
+                icon,
+                width: 24,
+                height: 24,
+              ),
+            ),
+            Expanded(child: Text(title)),
+            SvgPicture.asset('assets/checklist/icon_menu_add.svg'),
+          ],
+        ),
+      ),
     );
   }
 
@@ -151,11 +226,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       left: 8.0,
                       right: 8.0,
                     ),
-                    child: ChecklistActionButton.getActionPage(plant: state.plant, box: state.box, checklistSeed: action.item1, checklistAction: action.item2, onCheck: () {
-                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCheckChecklistLog(action.item3));
-                    }, onSkip: () {
-                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
-                    }),
+                    child: ChecklistActionButton.getActionPage(
+                        plant: state.plant,
+                        box: state.box,
+                        checklistSeed: action.item1,
+                        checklistAction: action.item2,
+                        onCheck: () {
+                          BlocProvider.of<ChecklistBloc>(context)
+                              .add(ChecklistBlocEventCheckChecklistLog(action.item3));
+                        },
+                        onSkip: () {
+                          BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
+                        }),
                   );
                 }).toList(),
                 Container(
