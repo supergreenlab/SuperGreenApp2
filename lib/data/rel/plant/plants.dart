@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -214,7 +214,7 @@ class Timelapses extends Table {
   }
 }
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   Plants,
   Boxes,
   ChartCaches,

@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
-part 'checklist.g.dart';
+part 'checklists.g.dart';
 
 class Checklists extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get plant => integer()();
-
-  TextColumn get settings => text().withDefault(Constant('{}'))();
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
@@ -50,4 +49,12 @@ class ChecklistSeeds extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+}
+
+@DriftAccessor(tables: [
+  Checklists,
+  ChecklistSeeds,
+])
+class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
+  ChecklistsDAO(RelDB db) : super(db);
 }

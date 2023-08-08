@@ -31,8 +31,7 @@ class Device extends DataClass implements Insertable<Device> {
       this.config,
       this.serverID,
       required this.synced});
-  factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Device.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Device(
       id: const IntType()
@@ -101,7 +100,7 @@ class Device extends DataClass implements Insertable<Device> {
 
   factory Device.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Device(
       id: serializer.fromJson<int>(json['id']),
       identifier: serializer.fromJson<String>(json['identifier']),
@@ -118,7 +117,7 @@ class Device extends DataClass implements Insertable<Device> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'identifier': serializer.toJson<String>(identifier),
@@ -525,7 +524,7 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Device map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Device.fromData(data, attachedDatabase,
+    return Device.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -547,8 +546,7 @@ class Module extends DataClass implements Insertable<Module> {
       required this.name,
       required this.isArray,
       required this.arrayLen});
-  factory Module.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Module.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Module(
       id: const IntType()
@@ -586,7 +584,7 @@ class Module extends DataClass implements Insertable<Module> {
 
   factory Module.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Module(
       id: serializer.fromJson<int>(json['id']),
       device: serializer.fromJson<int>(json['device']),
@@ -597,7 +595,7 @@ class Module extends DataClass implements Insertable<Module> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'device': serializer.toJson<int>(device),
@@ -811,7 +809,7 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Module map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Module.fromData(data, attachedDatabase,
+    return Module.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -837,8 +835,7 @@ class Param extends DataClass implements Insertable<Param> {
       required this.type,
       this.svalue,
       this.ivalue});
-  factory Param.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Param.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Param(
       id: const IntType()
@@ -890,7 +887,7 @@ class Param extends DataClass implements Insertable<Param> {
 
   factory Param.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Param(
       id: serializer.fromJson<int>(json['id']),
       device: serializer.fromJson<int>(json['device']),
@@ -903,7 +900,7 @@ class Param extends DataClass implements Insertable<Param> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'device': serializer.toJson<int>(device),
@@ -1174,7 +1171,7 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Param map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Param.fromData(data, attachedDatabase,
+    return Param.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1206,8 +1203,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       required this.settings,
       this.serverID,
       required this.synced});
-  factory Plant.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Plant.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Plant(
       id: const IntType()
@@ -1269,7 +1265,7 @@ class Plant extends DataClass implements Insertable<Plant> {
 
   factory Plant.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Plant(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
@@ -1285,7 +1281,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
@@ -1642,7 +1638,7 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Plant map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Plant.fromData(data, attachedDatabase,
+    return Plant.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1670,8 +1666,7 @@ class Box extends DataClass implements Insertable<Box> {
       required this.settings,
       this.serverID,
       required this.synced});
-  factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Box.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Box(
       id: const IntType()
@@ -1734,7 +1729,7 @@ class Box extends DataClass implements Insertable<Box> {
 
   factory Box.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Box(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int?>(json['feed']),
@@ -1748,7 +1743,7 @@ class Box extends DataClass implements Insertable<Box> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int?>(feed),
@@ -2040,7 +2035,7 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Box map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Box.fromData(data, attachedDatabase,
+    return Box.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -2062,8 +2057,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
       required this.name,
       required this.date,
       required this.values});
-  factory ChartCache.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory ChartCache.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return ChartCache(
       id: const IntType()
@@ -2101,7 +2095,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
 
   factory ChartCache.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return ChartCache(
       id: serializer.fromJson<int>(json['id']),
       box: serializer.fromJson<int>(json['box']),
@@ -2112,7 +2106,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'box': serializer.toJson<int>(box),
@@ -2324,7 +2318,7 @@ class $ChartCachesTable extends ChartCaches
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ChartCache map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ChartCache.fromData(data, attachedDatabase,
+    return ChartCache.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -2364,8 +2358,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       this.uploadName,
       this.serverID,
       required this.synced});
-  factory Timelapse.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Timelapse.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Timelapse(
       id: const IntType()
@@ -2469,7 +2462,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
 
   factory Timelapse.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Timelapse(
       id: serializer.fromJson<int>(json['id']),
       plant: serializer.fromJson<int>(json['plant']),
@@ -2489,7 +2482,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'plant': serializer.toJson<int>(plant),
@@ -2992,7 +2985,7 @@ class $TimelapsesTable extends Timelapses
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Timelapse map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Timelapse.fromData(data, attachedDatabase,
+    return Timelapse.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3014,8 +3007,7 @@ class Feed extends DataClass implements Insertable<Feed> {
       required this.isNewsFeed,
       this.serverID,
       required this.synced});
-  factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Feed.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Feed(
       id: const IntType()
@@ -3057,7 +3049,7 @@ class Feed extends DataClass implements Insertable<Feed> {
 
   factory Feed.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Feed(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
@@ -3068,7 +3060,7 @@ class Feed extends DataClass implements Insertable<Feed> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
@@ -3287,7 +3279,7 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Feed map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Feed.fromData(data, attachedDatabase,
+    return Feed.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3315,8 +3307,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       required this.params,
       this.serverID,
       required this.synced});
-  factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory FeedEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return FeedEntry(
       id: const IntType()
@@ -3370,7 +3361,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
 
   factory FeedEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return FeedEntry(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
@@ -3384,7 +3375,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
@@ -3686,7 +3677,7 @@ class $FeedEntriesTable extends FeedEntries
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FeedEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FeedEntry.fromData(data, attachedDatabase,
+    return FeedEntry.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3706,9 +3697,7 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
       required this.feed,
       required this.type,
       required this.params});
-  factory FeedEntryDraft.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory FeedEntryDraft.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return FeedEntryDraft(
       id: const IntType()
@@ -3742,7 +3731,7 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
 
   factory FeedEntryDraft.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return FeedEntryDraft(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
@@ -3752,7 +3741,7 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
@@ -3936,7 +3925,7 @@ class $FeedEntryDraftsTable extends FeedEntryDrafts
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FeedEntryDraft map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FeedEntryDraft.fromData(data, attachedDatabase,
+    return FeedEntryDraft.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -3964,8 +3953,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       required this.params,
       this.serverID,
       required this.synced});
-  factory FeedMedia.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory FeedMedia.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return FeedMedia(
       id: const IntType()
@@ -4019,7 +4007,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
 
   factory FeedMedia.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return FeedMedia(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
@@ -4033,7 +4021,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
@@ -4335,7 +4323,7 @@ class $FeedMediasTable extends FeedMedias
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FeedMedia map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FeedMedia.fromData(data, attachedDatabase,
+    return FeedMedia.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -4350,8 +4338,7 @@ class Delete extends DataClass implements Insertable<Delete> {
   final String serverID;
   final String type;
   Delete({required this.id, required this.serverID, required this.type});
-  factory Delete.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Delete.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Delete(
       id: const IntType()
@@ -4381,7 +4368,7 @@ class Delete extends DataClass implements Insertable<Delete> {
 
   factory Delete.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Delete(
       id: serializer.fromJson<int>(json['id']),
       serverID: serializer.fromJson<String>(json['serverID']),
@@ -4390,7 +4377,7 @@ class Delete extends DataClass implements Insertable<Delete> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'serverID': serializer.toJson<String>(serverID),
@@ -4547,13 +4534,740 @@ class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Delete map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Delete.fromData(data, attachedDatabase,
+    return Delete.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $DeletesTable createAlias(String alias) {
     return $DeletesTable(attachedDatabase, alias);
+  }
+}
+
+class Checklist extends DataClass implements Insertable<Checklist> {
+  final int id;
+  final int plant;
+  final String? serverID;
+  final bool synced;
+  Checklist(
+      {required this.id,
+      required this.plant,
+      this.serverID,
+      required this.synced});
+  factory Checklist.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return Checklist(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      plant: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}plant'])!,
+      serverID: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['plant'] = Variable<int>(plant);
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String?>(serverID);
+    }
+    map['synced'] = Variable<bool>(synced);
+    return map;
+  }
+
+  ChecklistsCompanion toCompanion(bool nullToAbsent) {
+    return ChecklistsCompanion(
+      id: Value(id),
+      plant: Value(plant),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced: Value(synced),
+    );
+  }
+
+  factory Checklist.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Checklist(
+      id: serializer.fromJson<int>(json['id']),
+      plant: serializer.fromJson<int>(json['plant']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'plant': serializer.toJson<int>(plant),
+      'serverID': serializer.toJson<String?>(serverID),
+      'synced': serializer.toJson<bool>(synced),
+    };
+  }
+
+  Checklist copyWith({int? id, int? plant, String? serverID, bool? synced}) =>
+      Checklist(
+        id: id ?? this.id,
+        plant: plant ?? this.plant,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Checklist(')
+          ..write('id: $id, ')
+          ..write('plant: $plant, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, plant, serverID, synced);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Checklist &&
+          other.id == this.id &&
+          other.plant == this.plant &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
+}
+
+class ChecklistsCompanion extends UpdateCompanion<Checklist> {
+  final Value<int> id;
+  final Value<int> plant;
+  final Value<String?> serverID;
+  final Value<bool> synced;
+  const ChecklistsCompanion({
+    this.id = const Value.absent(),
+    this.plant = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  });
+  ChecklistsCompanion.insert({
+    this.id = const Value.absent(),
+    required int plant,
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  }) : plant = Value(plant);
+  static Insertable<Checklist> custom({
+    Expression<int>? id,
+    Expression<int>? plant,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (plant != null) 'plant': plant,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
+  ChecklistsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? plant,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
+    return ChecklistsCompanion(
+      id: id ?? this.id,
+      plant: plant ?? this.plant,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (plant.present) {
+      map['plant'] = Variable<int>(plant.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String?>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistsCompanion(')
+          ..write('id: $id, ')
+          ..write('plant: $plant, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChecklistsTable extends Checklists
+    with TableInfo<$ChecklistsTable, Checklist> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChecklistsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _plantMeta = const VerificationMeta('plant');
+  @override
+  late final GeneratedColumn<int?> plant = GeneratedColumn<int?>(
+      'plant', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: const StringType(),
+      requiredDuringInsert: false);
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  @override
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [id, plant, serverID, synced];
+  @override
+  String get aliasedName => _alias ?? 'checklists';
+  @override
+  String get actualTableName => 'checklists';
+  @override
+  VerificationContext validateIntegrity(Insertable<Checklist> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('plant')) {
+      context.handle(
+          _plantMeta, plant.isAcceptableOrUnknown(data['plant']!, _plantMeta));
+    } else if (isInserting) {
+      context.missing(_plantMeta);
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Checklist map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Checklist.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ChecklistsTable createAlias(String alias) {
+    return $ChecklistsTable(attachedDatabase, alias);
+  }
+}
+
+class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
+  final int id;
+  final int checklist;
+  final bool public;
+  final bool repeat;
+  final String title;
+  final String description;
+  final String conditions;
+  final String actions;
+  final String? serverID;
+  final bool synced;
+  ChecklistSeed(
+      {required this.id,
+      required this.checklist,
+      required this.public,
+      required this.repeat,
+      required this.title,
+      required this.description,
+      required this.conditions,
+      required this.actions,
+      this.serverID,
+      required this.synced});
+  factory ChecklistSeed.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ChecklistSeed(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      checklist: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
+      public: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
+      repeat: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}repeat'])!,
+      title: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
+      description: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
+      conditions: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}conditions'])!,
+      actions: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}actions'])!,
+      serverID: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['checklist'] = Variable<int>(checklist);
+    map['public'] = Variable<bool>(public);
+    map['repeat'] = Variable<bool>(repeat);
+    map['title'] = Variable<String>(title);
+    map['description'] = Variable<String>(description);
+    map['conditions'] = Variable<String>(conditions);
+    map['actions'] = Variable<String>(actions);
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String?>(serverID);
+    }
+    map['synced'] = Variable<bool>(synced);
+    return map;
+  }
+
+  ChecklistSeedsCompanion toCompanion(bool nullToAbsent) {
+    return ChecklistSeedsCompanion(
+      id: Value(id),
+      checklist: Value(checklist),
+      public: Value(public),
+      repeat: Value(repeat),
+      title: Value(title),
+      description: Value(description),
+      conditions: Value(conditions),
+      actions: Value(actions),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced: Value(synced),
+    );
+  }
+
+  factory ChecklistSeed.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChecklistSeed(
+      id: serializer.fromJson<int>(json['id']),
+      checklist: serializer.fromJson<int>(json['checklist']),
+      public: serializer.fromJson<bool>(json['public']),
+      repeat: serializer.fromJson<bool>(json['repeat']),
+      title: serializer.fromJson<String>(json['title']),
+      description: serializer.fromJson<String>(json['description']),
+      conditions: serializer.fromJson<String>(json['conditions']),
+      actions: serializer.fromJson<String>(json['actions']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'checklist': serializer.toJson<int>(checklist),
+      'public': serializer.toJson<bool>(public),
+      'repeat': serializer.toJson<bool>(repeat),
+      'title': serializer.toJson<String>(title),
+      'description': serializer.toJson<String>(description),
+      'conditions': serializer.toJson<String>(conditions),
+      'actions': serializer.toJson<String>(actions),
+      'serverID': serializer.toJson<String?>(serverID),
+      'synced': serializer.toJson<bool>(synced),
+    };
+  }
+
+  ChecklistSeed copyWith(
+          {int? id,
+          int? checklist,
+          bool? public,
+          bool? repeat,
+          String? title,
+          String? description,
+          String? conditions,
+          String? actions,
+          String? serverID,
+          bool? synced}) =>
+      ChecklistSeed(
+        id: id ?? this.id,
+        checklist: checklist ?? this.checklist,
+        public: public ?? this.public,
+        repeat: repeat ?? this.repeat,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        conditions: conditions ?? this.conditions,
+        actions: actions ?? this.actions,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistSeed(')
+          ..write('id: $id, ')
+          ..write('checklist: $checklist, ')
+          ..write('public: $public, ')
+          ..write('repeat: $repeat, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('conditions: $conditions, ')
+          ..write('actions: $actions, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, checklist, public, repeat, title,
+      description, conditions, actions, serverID, synced);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChecklistSeed &&
+          other.id == this.id &&
+          other.checklist == this.checklist &&
+          other.public == this.public &&
+          other.repeat == this.repeat &&
+          other.title == this.title &&
+          other.description == this.description &&
+          other.conditions == this.conditions &&
+          other.actions == this.actions &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
+}
+
+class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
+  final Value<int> id;
+  final Value<int> checklist;
+  final Value<bool> public;
+  final Value<bool> repeat;
+  final Value<String> title;
+  final Value<String> description;
+  final Value<String> conditions;
+  final Value<String> actions;
+  final Value<String?> serverID;
+  final Value<bool> synced;
+  const ChecklistSeedsCompanion({
+    this.id = const Value.absent(),
+    this.checklist = const Value.absent(),
+    this.public = const Value.absent(),
+    this.repeat = const Value.absent(),
+    this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.conditions = const Value.absent(),
+    this.actions = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  });
+  ChecklistSeedsCompanion.insert({
+    this.id = const Value.absent(),
+    required int checklist,
+    this.public = const Value.absent(),
+    this.repeat = const Value.absent(),
+    this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.conditions = const Value.absent(),
+    this.actions = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  }) : checklist = Value(checklist);
+  static Insertable<ChecklistSeed> custom({
+    Expression<int>? id,
+    Expression<int>? checklist,
+    Expression<bool>? public,
+    Expression<bool>? repeat,
+    Expression<String>? title,
+    Expression<String>? description,
+    Expression<String>? conditions,
+    Expression<String>? actions,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (checklist != null) 'checklist': checklist,
+      if (public != null) 'public': public,
+      if (repeat != null) 'repeat': repeat,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (conditions != null) 'conditions': conditions,
+      if (actions != null) 'actions': actions,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
+  ChecklistSeedsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? checklist,
+      Value<bool>? public,
+      Value<bool>? repeat,
+      Value<String>? title,
+      Value<String>? description,
+      Value<String>? conditions,
+      Value<String>? actions,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
+    return ChecklistSeedsCompanion(
+      id: id ?? this.id,
+      checklist: checklist ?? this.checklist,
+      public: public ?? this.public,
+      repeat: repeat ?? this.repeat,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      conditions: conditions ?? this.conditions,
+      actions: actions ?? this.actions,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (checklist.present) {
+      map['checklist'] = Variable<int>(checklist.value);
+    }
+    if (public.present) {
+      map['public'] = Variable<bool>(public.value);
+    }
+    if (repeat.present) {
+      map['repeat'] = Variable<bool>(repeat.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (conditions.present) {
+      map['conditions'] = Variable<String>(conditions.value);
+    }
+    if (actions.present) {
+      map['actions'] = Variable<String>(actions.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String?>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistSeedsCompanion(')
+          ..write('id: $id, ')
+          ..write('checklist: $checklist, ')
+          ..write('public: $public, ')
+          ..write('repeat: $repeat, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('conditions: $conditions, ')
+          ..write('actions: $actions, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChecklistSeedsTable extends ChecklistSeeds
+    with TableInfo<$ChecklistSeedsTable, ChecklistSeed> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChecklistSeedsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _checklistMeta = const VerificationMeta('checklist');
+  @override
+  late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
+      'checklist', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _publicMeta = const VerificationMeta('public');
+  @override
+  late final GeneratedColumn<bool?> public = GeneratedColumn<bool?>(
+      'public', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (public IN (0, 1))',
+      defaultValue: Constant(false));
+  final VerificationMeta _repeatMeta = const VerificationMeta('repeat');
+  @override
+  late final GeneratedColumn<bool?> repeat = GeneratedColumn<bool?>(
+      'repeat', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (repeat IN (0, 1))',
+      defaultValue: Constant(false));
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
+      'title', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  final VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String?> description = GeneratedColumn<String?>(
+      'description', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  final VerificationMeta _conditionsMeta = const VerificationMeta('conditions');
+  @override
+  late final GeneratedColumn<String?> conditions = GeneratedColumn<String?>(
+      'conditions', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
+  final VerificationMeta _actionsMeta = const VerificationMeta('actions');
+  @override
+  late final GeneratedColumn<String?> actions = GeneratedColumn<String?>(
+      'actions', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: const StringType(),
+      requiredDuringInsert: false);
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  @override
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        checklist,
+        public,
+        repeat,
+        title,
+        description,
+        conditions,
+        actions,
+        serverID,
+        synced
+      ];
+  @override
+  String get aliasedName => _alias ?? 'checklist_seeds';
+  @override
+  String get actualTableName => 'checklist_seeds';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChecklistSeed> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('checklist')) {
+      context.handle(_checklistMeta,
+          checklist.isAcceptableOrUnknown(data['checklist']!, _checklistMeta));
+    } else if (isInserting) {
+      context.missing(_checklistMeta);
+    }
+    if (data.containsKey('public')) {
+      context.handle(_publicMeta,
+          public.isAcceptableOrUnknown(data['public']!, _publicMeta));
+    }
+    if (data.containsKey('repeat')) {
+      context.handle(_repeatMeta,
+          repeat.isAcceptableOrUnknown(data['repeat']!, _repeatMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('conditions')) {
+      context.handle(
+          _conditionsMeta,
+          conditions.isAcceptableOrUnknown(
+              data['conditions']!, _conditionsMeta));
+    }
+    if (data.containsKey('actions')) {
+      context.handle(_actionsMeta,
+          actions.isAcceptableOrUnknown(data['actions']!, _actionsMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChecklistSeed map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ChecklistSeed.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ChecklistSeedsTable createAlias(String alias) {
+    return $ChecklistSeedsTable(attachedDatabase, alias);
   }
 }
 
@@ -4572,6 +5286,8 @@ abstract class _$RelDB extends GeneratedDatabase {
       $FeedEntryDraftsTable(this);
   late final $FeedMediasTable feedMedias = $FeedMediasTable(this);
   late final $DeletesTable deletes = $DeletesTable(this);
+  late final $ChecklistsTable checklists = $ChecklistsTable(this);
+  late final $ChecklistSeedsTable checklistSeeds = $ChecklistSeedsTable(this);
   late final DevicesDAO devicesDAO = DevicesDAO(this as RelDB);
   late final PlantsDAO plantsDAO = PlantsDAO(this as RelDB);
   late final FeedsDAO feedsDAO = FeedsDAO(this as RelDB);
@@ -4591,6 +5307,8 @@ abstract class _$RelDB extends GeneratedDatabase {
         feedEntries,
         feedEntryDrafts,
         feedMedias,
-        deletes
+        deletes,
+        checklists,
+        checklistSeeds
       ];
 }

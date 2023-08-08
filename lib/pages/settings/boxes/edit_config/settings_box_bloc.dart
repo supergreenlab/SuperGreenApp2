@@ -18,7 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/misc/bloc.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';

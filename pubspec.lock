@@ -402,7 +402,7 @@ packages:
     source: hosted
     version: "4.1.0"
   drift:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: drift
       sha256: "43ae515270f38ffe47702dc920c04d415894bcc6ebdf3e2b6a292cb207ed8cb7"
@@ -410,7 +410,7 @@ packages:
     source: hosted
     version: "1.7.1"
   drift_dev:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: drift_dev
       sha256: "7d51538da971823a158236823cfb299731f720cd55078c6a478bfa4effb69275"
@@ -844,6 +844,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  intl_translation:
+    dependency: "direct main"
+    description:
+      name: intl_translation
+      sha256: "492d4838bb5d75d4e764e8c1a1bb6d05667df14611ba7e9f37dd0f99c8bc3bf7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.0"
   io:
     dependency: transitive
     description:
@@ -932,22 +940,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  moor:
-    dependency: "direct main"
-    description:
-      name: moor
-      sha256: "3c9500ebb0996592480728a5480e020c881110597416b9f3c6f72e57212bd78c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.6.1+1"
-  moor_generator:
-    dependency: "direct dev"
-    description:
-      name: moor_generator
-      sha256: "511df4d32bc6150456024592e4839fb868eda96b49d8c3515e30781eec6bc31d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.6.0+1"
   multicast_dns:
     dependency: "direct main"
     description:

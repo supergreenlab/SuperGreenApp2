@@ -18,7 +18,7 @@
 
 import 'dart:io';
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';

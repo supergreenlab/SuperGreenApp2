@@ -43,7 +43,7 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler:
-  moor:
+  drift: ^1.0.0
   sqlite3_flutter_libs:
   path_provider:
   path:
@@ -95,6 +95,7 @@ dependencies:
   package_info:
   shared_preferences:
   flutter_screen_lock: ^9.0.1
+  intl_translation:
 
 # dependency_overrides:
   # analyzer: 0.39.14
@@ -102,7 +103,7 @@ dependencies:
 
 dev_dependencies:
   hive_generator:
-  moor_generator:
+  drift_dev: ^1.0.0
   build_runner:
   flutter_test:
     sdk: flutter

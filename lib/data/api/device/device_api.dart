@@ -22,7 +22,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';

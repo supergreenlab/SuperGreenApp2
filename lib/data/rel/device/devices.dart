@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'devices.g.dart';
@@ -86,7 +86,7 @@ class Params extends Table {
   IntColumn get ivalue => integer().nullable()();
 }
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   Devices,
   Modules,
   Params

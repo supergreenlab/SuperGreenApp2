@@ -19,7 +19,7 @@
 import 'dart:io';
 
 import 'package:event_bus/event_bus.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';

@@ -20,14 +20,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:moor/ffi.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/native.dart';
+import 'package:drift/drift.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/api/backend/plants/timelapse/dropbox.dart';
 import 'package:super_green_app/data/api/backend/plants/timelapse/timelapse_settings.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/data/rel/common/deletes.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
@@ -43,11 +44,11 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return VmDatabase(file);
+    return NativeDatabase(file);
   });
 }
 
-@UseMoor(tables: [
+@DriftDatabase(tables: [
   Devices,
   Modules,
   Params,
@@ -60,6 +61,8 @@ LazyDatabase _openConnection() {
   FeedEntryDrafts,
   FeedMedias,
   Deletes,
+  Checklists,
+  ChecklistSeeds,
 ], daos: [
   DevicesDAO,
   PlantsDAO,
@@ -76,7 +79,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 15;
+  int get schemaVersion => 16;
 
   void reconnect() {
     _instance = RelDB();
@@ -129,6 +132,9 @@ class RelDB extends _$RelDB {
       await m.addColumn(plants, plants.alerts);
     } else if (fromVersion == 14) {
       await m.addColumn(devices, devices.config);
+    } else if (fromVersion == 15) {
+      await m.createTable(checklists);
+      await m.createTable(checklistSeeds);
     }
   }
 
