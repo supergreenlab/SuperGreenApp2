@@ -27,40 +27,38 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistItemPage extends StatelessWidget {
   final Function() onSelect;
+  final Function() onDelete;
   final ChecklistSeed checklistSeed;
 
   late final List<ChecklistCondition> conditions;
   late final List<ChecklistAction> actions;
 
-  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect}) : super(key: key) {
+  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect, required this.onDelete}) : super(key: key) {
     conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
     actions = ChecklistAction.fromMapArray(json.decode(checklistSeed.actions));
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onSelect,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(50),
-              spreadRadius: 2.0,
-              blurRadius: 2.0,
-              offset: Offset(1, 1),
-            )
-          ],
-        ),
-        child: Column(
-          children: [
-            renderHeader(context),
-            renderBody(context),
-          ],
-        ),
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(50),
+            spreadRadius: 2.0,
+            blurRadius: 2.0,
+            offset: Offset(1, 1),
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          renderHeader(context),
+          renderBody(context),
+        ],
       ),
     );
   }
@@ -72,7 +70,11 @@ class ChecklistItemPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: SvgPicture.asset(ChecklistCategoryIcons[checklistSeed.category]!, width: 32, height: 32,),
+            child: SvgPicture.asset(
+              ChecklistCategoryIcons[checklistSeed.category]!,
+              width: 32,
+              height: 32,
+            ),
           ),
           Expanded(
             child: Padding(
@@ -83,17 +85,43 @@ class ChecklistItemPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Text(checklistSeed.title, style: TextStyle(color: Color(0xff506EBA), fontSize: 18),),
+                    child: Text(
+                      checklistSeed.title,
+                      style: TextStyle(color: Color(0xff506EBA), fontSize: 18),
+                    ),
                   ),
-                  Text(checklistSeed.category, style: TextStyle(color: Color(0xff2D6A14)),),
+                  Text(
+                    checklistSeed.category,
+                    style: TextStyle(color: Color(0xff2D6A14)),
+                  ),
                 ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0, right: 16.0,),
-            child: Icon(Icons.settings, color: Color(0xff606060),),
-          ),
+          InkWell(
+              onTap: onDelete,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 4.0,
+                  right: 16.0,
+                ),
+                child: Icon(
+                  Icons.delete,
+                  color: Color(0xff606060),
+                ),
+              )),
+          InkWell(
+              onTap: onSelect,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 4.0,
+                  right: 16.0,
+                ),
+                child: Icon(
+                  Icons.settings,
+                  color: Color(0xff606060),
+                ),
+              )),
         ],
       ),
     );
@@ -118,7 +146,10 @@ class ChecklistItemPage extends StatelessWidget {
           ),
           ...conditions.map((c) {
             return Padding(
-              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0,),
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                bottom: 8.0,
+              ),
               child: Text((conditions.indexOf(c) != 0 ? 'AND ' : '') + c.asSentence),
             );
           }).toList(),
@@ -131,7 +162,10 @@ class ChecklistItemPage extends StatelessWidget {
           ),
           ...actions.map((a) {
             return Padding(
-              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0,),
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                bottom: 8.0,
+              ),
               child: Text((actions.indexOf(a) != 0 ? 'AND ' : '') + a.asSentence),
             );
           }),

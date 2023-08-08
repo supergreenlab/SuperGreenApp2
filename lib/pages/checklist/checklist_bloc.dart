@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -36,6 +37,16 @@ class ChecklistBlocEventInit extends ChecklistBlocEvent {
 class ChecklistBlocEventLoad extends ChecklistBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class ChecklistBlocEventDeleteChecklistSeed extends ChecklistBlocEvent {
+
+  final ChecklistSeed checklistSeed;
+
+  ChecklistBlocEventDeleteChecklistSeed(this.checklistSeed);
+
+  @override
+  List<Object> get props => [checklistSeed];
 }
 
 abstract class ChecklistBlocState extends Equatable {}
@@ -93,6 +104,8 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
         actions.add(Tuple2(checklistSeed, ChecklistAction.fromMap(action)));
       }
       yield ChecklistBlocStateLoaded(this.args.plant, this.args.box, this.args.checklist, checklistSeeds, actions);
+    } else if (event is ChecklistBlocEventDeleteChecklistSeed) {
+      await ChecklistHelper.deleteChecklistSeed(event.checklistSeed);
     }
   }
 

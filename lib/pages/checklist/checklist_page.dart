@@ -128,7 +128,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
       children: [
         _renderAutoChecklistPopulate(context, state),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0,),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 0,
+          ),
           child: CreateChecklistSection(
             child: Padding(
               padding: const EdgeInsets.all(4.0),
@@ -143,18 +146,23 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 ),
                 ...state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0,),
+                    padding: const EdgeInsets.only(
+                      bottom: 4.0,
+                      left: 8.0,
+                      right: 8.0,
+                    ),
                     child: ChecklistActionButton.getActionPage(state.plant, state.box, action.item1, action.item2),
                   );
                 }).toList(),
-                Container(height: 10.0,),
+                Container(
+                  height: 10.0,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8.0,
                     vertical: 16.0,
                   ),
-                  child:
-                      Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
+                  child: Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
                 ),
                 ...state.checklistSeeds.map((cks) {
                   return Padding(
@@ -165,10 +173,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
                       },
+                      onDelete: () {
+                        BlocProvider.of<ChecklistBloc>(context)
+                            .add(ChecklistBlocEventDeleteChecklistSeed(cks));
+                      },
                     ),
                   );
                 }).toList(),
-                Container(height: 30.0,),
+                Container(
+                  height: 30.0,
+                ),
               ]),
             ),
           ),
@@ -179,7 +193,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
     if (!showAutoChecklist) {
-      return Container();
+      return Container(
+        height: 12.0,
+      );
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),

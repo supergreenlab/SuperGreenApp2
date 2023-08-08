@@ -18,6 +18,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarAction extends StatelessWidget {
@@ -51,29 +52,57 @@ class AppBarAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: action,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(50),
-              spreadRadius: 2.0,
-              blurRadius: 2.0,
-              offset: Offset(1, 1),
-            )
-          ],
-        ),
-        child: Row(
-          children: [
-            renderIcon(context),
-            Expanded(child: renderBody(context)),
-            actionIcon != null ? renderButton(context) : Container(),
-          ],
+    void Function(BuildContext context) doNothing = (BuildContext context) {
+
+    };
+    return Slidable(
+
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            // An action can be bigger than the others.
+            onPressed: doNothing,
+            backgroundColor: Color(0xFF7BC043),
+            foregroundColor: Colors.white,
+            icon: Icons.done,
+            label: 'Done',
+          ),
+          SlidableAction(
+            onPressed: doNothing,
+            backgroundColor: Color(0xFF0392CF),
+            foregroundColor: Colors.white,
+            icon: Icons.skip_next,
+            label: 'Skip',
+          ),
+        ],
+      ),
+
+      child: InkWell(
+        onTap: action,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          height: height,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(50),
+                spreadRadius: 2.0,
+                blurRadius: 2.0,
+                offset: Offset(1, 1),
+              )
+            ],
+          ),
+          child: Row(
+            children: [
+              renderIcon(context),
+              Expanded(child: renderBody(context)),
+              actionIcon != null ? renderButton(context) : Container(),
+            ],
+          ),
         ),
       ),
     );
@@ -94,7 +123,8 @@ class AppBarAction extends StatelessWidget {
                   borderRadius: BorderRadius.circular(iconSize / 2),
                   color: Colors.white,
                 ),
-                child: this.iconWidget ?? SvgPicture.asset(this.icon!, width: iconSize, height: iconSize, fit: BoxFit.contain)),
+                child: this.iconWidget ??
+                    SvgPicture.asset(this.icon!, width: iconSize, height: iconSize, fit: BoxFit.contain)),
           ),
         ],
       ),

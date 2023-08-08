@@ -41,6 +41,11 @@ class ChecklistHelper {
           .deletesDAO
           .addDelete(DeletesCompanion(serverID: Value(checklistSeed.serverID!), type: Value('checklistseeds')));
     }
+
+    List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getChecklistLogsForChecklistSeed(checklistSeed);
+    for (ChecklistLog checklistLog in checklistLogs) {
+      await ChecklistHelper.deleteChecklistLog(checklistLog);
+    }
   }
 
     static Future deleteChecklistLog(ChecklistLog checklistLog) async {

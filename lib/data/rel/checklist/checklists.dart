@@ -229,6 +229,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklistLogs)..where((cks) => cks.serverID.equals(serverID))).getSingle();
   }
 
+  Future<List<ChecklistLog>> getChecklistLogsForChecklistSeed(ChecklistSeed checklistSeed) {
+    return (select(checklistLogs)..where((cks) => cks.checklistSeed.equals(checklistSeed.id))).get();
+  }
+
   Future<Checklist> getChecklistForServerID(String serverID) {
     return (select(checklists)..where((cks) => cks.serverID.equals(serverID))).getSingle();
   }
@@ -243,8 +247,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).get();
   }
 
-  Future<List<ChecklistLog>> getChecklistLogs(int checklistID, { int limit=0, int offset=0 }) {
-    var query = (select(checklistLogs)..where((p) => p.checklist.equals(checklistID))..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
+  Future<List<ChecklistLog>> getChecklistLogs(int checklistID, {int limit = 0, int offset = 0}) {
+    var query = (select(checklistLogs)
+      ..where((p) => p.checklist.equals(checklistID))
+      ..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
     if (limit != 0) {
       query = query..limit(limit, offset: offset);
     }
