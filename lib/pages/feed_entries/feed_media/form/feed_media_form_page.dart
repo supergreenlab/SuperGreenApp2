@@ -198,7 +198,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           } else if (state is FeedMediaFormBlocStateCurrentDraft) {
             draft = state.draft;
           } else if (state is FeedMediaFormBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(

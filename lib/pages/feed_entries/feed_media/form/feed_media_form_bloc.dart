@@ -71,7 +71,7 @@ class FeedMediaFormBlocState extends Equatable {
   FeedMediaFormBlocState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FeedMediaFormBlocStateLoadingDraft extends FeedMediaFormBlocState {
@@ -114,10 +114,13 @@ class FeedMediaFormBlocStateLoading extends FeedMediaFormBlocState {
 }
 
 class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
-  FeedMediaFormBlocStateDone();
+
+  final FeedEntry? feedEntry;
+
+  FeedMediaFormBlocStateDone(this.feedEntry);
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [feedEntry];
 }
 
 class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
@@ -174,7 +177,8 @@ class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaForm
         await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft!.draftID!);
       }
 
-      yield FeedMediaFormBlocStateDone();
+      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      yield FeedMediaFormBlocStateDone(feedEntry);
     }
   }
 }
