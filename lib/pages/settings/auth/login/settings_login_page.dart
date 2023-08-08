@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 import 'package:super_green_app/pages/settings/auth/login/settings_login_bloc.dart';
@@ -182,7 +183,7 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
           });
     } else {
       BlocProvider.of<SettingsLoginBloc>(context).add(
-          SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text, "SKIP_CAPTCHA"));
+          SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text, Config.skipCaptchaToken));
     }
   }
 

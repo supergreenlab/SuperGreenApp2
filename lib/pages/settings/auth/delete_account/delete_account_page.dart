@@ -20,6 +20,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 import 'package:super_green_app/pages/settings/auth/delete_account/delete_account_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -244,7 +245,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
           });
     } else {
       BlocProvider.of<DeleteAccountBloc>(context)
-          .add(DeleteAccountBlocEventDelete(nickname.text, password.text, "SKIP_CAPTCHA", deleteLocalData));
+          .add(DeleteAccountBlocEventDelete(nickname.text, password.text, Config.skipCaptchaToken, deleteLocalData));
     }
   }
 }

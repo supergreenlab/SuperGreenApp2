@@ -82,14 +82,17 @@ class _TipPageState extends State<TipPage> {
               backgroundColor: Colors.teal,
               titleColor: Colors.white,
               iconColor: Colors.white,
+              fontSize: 18.0,
             ),
-            body: Column(
-              children: <Widget>[
-                Expanded(
-                  child: AnimatedSwitcher(duration: Duration(microseconds: 200), child: body),
-                ),
-                _renderBottomBar(context, state),
-              ],
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: AnimatedSwitcher(duration: Duration(microseconds: 200), child: body),
+                  ),
+                  _renderBottomBar(context, state),
+                ],
+              ),
             ),
           );
         });
