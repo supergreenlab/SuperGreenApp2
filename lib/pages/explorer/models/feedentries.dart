@@ -17,6 +17,7 @@
  */
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
@@ -112,6 +113,14 @@ class PublicFeedEntry extends Equatable {
       commentDate: map['commentDate'] == null ? null : DateTime.parse(map['commentDate'] as String),
       likeDate: map['likeDate'] == null ? null : DateTime.parse(map['likeDate'] as String),
       thumbnailPath: map['thumbnailPath']);
+
+  int get commentLength {
+    return comment?.length ?? 0;
+  }
+
+  String? get commentTruncated {
+    return comment?.replaceRange(min(120, commentLength), commentLength, '...');
+  }
 
   @override
   List<Object?> get props => [
