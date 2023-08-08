@@ -22,6 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_bloc.dart';
@@ -40,7 +41,8 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     return BlocListener<AppbarChecklistBloc, AppbarChecklistBlocState>(
       listener: (BuildContext context, AppbarChecklistBlocState state) {
         if (state is AppbarChecklistBlocStateCreated) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.box, state.checklist));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToChecklist(state.plant, state.box, state.checklist));
         }
       },
       child: BlocBuilder<AppbarChecklistBloc, AppbarChecklistBlocState>(
@@ -99,8 +101,8 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
           child: GreenButton(
             title: 'Create checklist',
             onPressed: () {
-              if (state.checklist != null) {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
+              if (state.requiresLogin) {
+                _login(context);
               } else {
                 BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
               }
@@ -124,11 +126,19 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: state.actions!.map<Widget>((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
-                return ChecklistActionButton.getActionPage(plant: state.plant, box: state.box, checklistSeed: action.item1, checklistAction: action.item2, onCheck: () {
-                  BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));
-                }, onSkip: () {
-                  BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventSkipChecklistLog(action.item3));
-                });
+                return ChecklistActionButton.getActionPage(
+                    plant: state.plant,
+                    box: state.box,
+                    checklistSeed: action.item1,
+                    checklistAction: action.item2,
+                    onCheck: () {
+                      BlocProvider.of<AppbarChecklistBloc>(context)
+                          .add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));
+                    },
+                    onSkip: () {
+                      BlocProvider.of<AppbarChecklistBloc>(context)
+                          .add(AppbarChecklistBlocEventSkipChecklistLog(action.item3));
+                    });
               }).toList(),
             ),
           ),
@@ -140,7 +150,8 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
   Widget _checklistButton(BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
       },
       child: Row(
         children: [
@@ -149,9 +160,45 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
           ),
-          Text('OPEN CHECKLIST (${state.nPendingLogs})', style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+          Text('OPEN CHECKLIST (${state.nPendingLogs})',
+              style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
         ],
       ),
     );
+  }
+
+  void _login(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Please login'),
+            content: Text('The checklist feature requires a SGL account to work for you when you\'re not there:)'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(CommonL10N.cancel),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text(CommonL10N.loginCreateAccount),
+              ),
+            ],
+          );
+        });
+    if (confirm ?? false) {
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+        bool done = await future;
+        if (done == true) {
+          BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventInit());
+          BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
+        }
+      }));
+    }
   }
 }
