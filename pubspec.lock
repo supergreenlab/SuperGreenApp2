@@ -683,6 +683,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.12"
+  flutter_screen_lock:
+    dependency: "direct main"
+    description:
+      name: flutter_screen_lock
+      sha256: "1d86191e67f8c2f09349c2d2929b6d019db213f012d577ad3b85935d22b13207"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.1"
   flutter_speed_dial:
     dependency: "direct main"
     description:

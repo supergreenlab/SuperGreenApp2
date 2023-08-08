@@ -44,4 +44,6 @@ class AppData {
   bool notificationOnStartAsked = false;
   @HiveField(10)
   List<String>? filters = [];
+  @HiveField(11)
+  String? pinLock;
 }

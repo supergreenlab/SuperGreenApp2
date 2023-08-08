@@ -94,6 +94,7 @@ dependencies:
   cupertino_icons:
   package_info:
   shared_preferences:
+  flutter_screen_lock: ^9.0.1
 
 # dependency_overrides:
   # analyzer: 0.39.14

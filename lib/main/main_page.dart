@@ -24,6 +24,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
@@ -31,6 +32,7 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/screen_lock.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_page.dart';
@@ -161,6 +163,7 @@ import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewe
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
+import 'package:super_green_app/pin_lock/pin_lock_bloc.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -199,11 +202,37 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   bool _showingNotificationRequest = false;
   bool _showingDeviceAuth = false;
   Queue<BuildContext> lastRouteContextsStack = Queue<BuildContext>();
   BuildContext? lastRouteContext;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.resumed:
+        BlocProvider.of<PinLockBloc>(context).add(PinLockBlocEventShow());
+        break;
+
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -239,12 +268,17 @@ class _MainPageState extends State<MainPage> {
                 lastRouteContext = context;
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
-                  child: wrapSyncIndicator(TowelieHelper.wrapWidget(
-                      settings,
-                      context,
-                      _onGenerateRoute(context, settings, onPop: () {
-                        lastRouteContext = lastRouteContextsStack.removeLast();
-                      }))),
+                  child: wrapPinLock(
+                    wrapSyncIndicator(
+                      TowelieHelper.wrapWidget(
+                        settings,
+                        context,
+                        _onGenerateRoute(context, settings, onPop: () {
+                          lastRouteContext = lastRouteContextsStack.removeLast();
+                        }),
+                      ),
+                    ),
+                  ),
                 );
               }),
           theme: ThemeData(
@@ -254,11 +288,16 @@ class _MainPageState extends State<MainPage> {
             create: (context) => AppInitBloc(),
             child: AppInitPage(),
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   Widget wrapListeners(Widget body) {
-    return BlocListener<NotificationsBloc, NotificationsBlocState>(
+    return BlocListener<PinLockBloc, PinLockBlocState>(
+      listener: (BuildContext context, PinLockBlocState state) {
+      },
+      child: BlocListener<NotificationsBloc, NotificationsBlocState>(
         listener: (BuildContext context, NotificationsBlocState state) {
           if (state is NotificationsBlocStateMainNavigation) {
             BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
@@ -270,27 +309,53 @@ class _MainPageState extends State<MainPage> {
           }
         },
         child: BlocListener<TowelieBloc, TowelieBlocState>(
+          listener: (BuildContext context, state) {
+            if (state is TowelieBlocStateMainNavigation) {
+              BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
+            } else if (state is TowelieBlocStateLocalNotification) {
+              BlocProvider.of<NotificationsBloc>(context).add(state.localNotificationBlocEventReminder);
+            }
+          },
+          child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
             listener: (BuildContext context, state) {
-              if (state is TowelieBlocStateMainNavigation) {
+              if (state is DeepLinkBlocStateMainNavigation) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
-              } else if (state is TowelieBlocStateLocalNotification) {
-                BlocProvider.of<NotificationsBloc>(context).add(state.localNotificationBlocEventReminder);
               }
             },
-            child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
-              listener: (BuildContext context, state) {
-                if (state is DeepLinkBlocStateMainNavigation) {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
+            child: BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+              listener: (BuildContext context, DeviceDaemonBlocState state) {
+                if (state is DeviceDaemonBlocStateRequiresLogin) {
+                  _promptDeviceAuth(lastRouteContext!, state.device);
                 }
               },
-              child: BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-                  listener: (BuildContext context, DeviceDaemonBlocState state) {
-                    if (state is DeviceDaemonBlocStateRequiresLogin) {
-                      _promptDeviceAuth(lastRouteContext!, state.device);
-                    }
-                  },
-                  child: body),
-            )));
+              child: body,
+            ),
+          ),
+        )
+      ),
+    );
+  }
+
+  Widget wrapPinLock(Widget body) {
+    return BlocBuilder<PinLockBloc, PinLockBlocState>(
+      builder: (BuildContext context, PinLockBlocState state) {
+        if (state is PinLockBlocStateShow) {
+          return ScreenLock(
+            correctString: state.pinLock,
+            config: screenLockConfig,
+            title: const Text('Please enter PIN'),
+            keyPadConfig: screenLockKeyPadConfig,
+            onUnlocked: () {
+              BlocProvider.of<PinLockBloc>(context).add(PinLockBlocEventSuccess());
+            },
+          );
+        } else if (state is PinLockBlocStateSuccess) {
+          return body;
+        }
+
+        return body;
+      },
+    );
   }
 
   Widget wrapSyncIndicator(Widget body) {
@@ -301,7 +366,7 @@ class _MainPageState extends State<MainPage> {
           // SafeAre does not seem to work
           double height = 50;
           if (Platform.isIOS) {
-            height = 60;
+            height = 70;
           }
           content.add(Positioned(
               left: 0,

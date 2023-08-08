@@ -31,23 +31,39 @@ class SettingsBlocEventSetFreedomUnit extends SettingsBlocEvent {
   List<Object> get props => [freedomUnits];
 }
 
-class SettingsBlocState extends Equatable {
-  final bool freedomUnits;
+class SettingsBlocEventSetPinLock extends SettingsBlocEvent {
+  final String pinLock;
 
-  SettingsBlocState(this.freedomUnits);
+  SettingsBlocEventSetPinLock(this.pinLock);
 
   @override
-  List<Object> get props => [freedomUnits];
+  List<Object> get props => [pinLock];
+}
+
+class SettingsBlocState extends Equatable {
+  final bool freedomUnits;
+  final String pinLock;
+
+  SettingsBlocState(this.freedomUnits, this.pinLock);
+
+  @override
+  List<Object> get props => [freedomUnits, pinLock];
 }
 
 class SettingsBloc extends LegacyBloc<SettingsBlocEvent, SettingsBlocState> {
-  SettingsBloc() : super(SettingsBlocState(AppDB().getAppData().freedomUnits));
+  SettingsBloc() : super(SettingsBlocState(
+    AppDB().getAppData().freedomUnits,
+    AppDB().getAppData().pinLock ?? '',
+  ));
 
   @override
   Stream<SettingsBlocState> mapEventToState(SettingsBlocEvent event) async* {
     if (event is SettingsBlocEventSetFreedomUnit) {
       AppDB().setFreedomUnits(event.freedomUnits);
-      yield SettingsBlocState(event.freedomUnits);
+      yield SettingsBlocState(event.freedomUnits, state.pinLock);
+    } else if (event is SettingsBlocEventSetPinLock) {
+      AppDB().setPinLock(event.pinLock);
+      yield SettingsBlocState(state.freedomUnits, event.pinLock);
     }
   }
 }

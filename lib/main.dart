@@ -30,6 +30,7 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
 import 'package:super_green_app/notifications/notifications.dart';
+import 'package:super_green_app/pin_lock/pin_lock_bloc.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
@@ -67,6 +68,7 @@ void main() async {
       );
 
       runApp(MultiBlocProvider(providers: <BlocProvider>[
+        BlocProvider<PinLockBloc>(create: (context) => PinLockBloc()),
         BlocProvider<MainNavigatorBloc>(create: (context) => MainNavigatorBloc(navigatorKey)),
         BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
         BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
