@@ -81,7 +81,11 @@ class PinLockBloc extends LegacyBloc<PinLockBlocEvent, PinLockBlocState> {
         yield PinLockBlocStateSuccess();
       }
     } else if (event is PinLockBlocEventShow) {
-      yield PinLockBlocStateShow(AppDB().pinLock);
+      if (_db.hasPinLock()) {
+        yield PinLockBlocStateShow(AppDB().pinLock);
+      } else {
+        yield PinLockBlocStateSuccess();
+      }
     } else if (event is PinLockBlocEventSuccess) {
       yield PinLockBlocStateSuccess();
     }
