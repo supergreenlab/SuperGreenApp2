@@ -92,10 +92,12 @@ class FeedScheduleFormBlocStateLoading extends FeedScheduleFormBlocState {
 }
 
 class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
-  FeedScheduleFormBlocStateDone();
+  final FeedEntry? feedEntry;
+
+  FeedScheduleFormBlocStateDone(this.feedEntry);
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [feedEntry];
 }
 
 class FeedScheduleFormBloc extends LegacyBloc<FeedScheduleFormBlocEvent, FeedScheduleFormBlocState> {
@@ -154,6 +156,7 @@ class FeedScheduleFormBloc extends LegacyBloc<FeedScheduleFormBlocEvent, FeedSch
       BoxSettings boxSettings = BoxSettings.fromJSON(box.settings).copyWith(schedule: schedule, schedules: schedules);
       await db.plantsDAO
           .updateBox(BoxesCompanion(id: Value(box.id), synced: Value(false), settings: Value(boxSettings.toJSON())));
+      FeedEntry? feedEntry;
       if (schedule == 'BLOOM') {
         List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
         for (int i = 0; i < plants.length; ++i) {
@@ -161,15 +164,18 @@ class FeedScheduleFormBloc extends LegacyBloc<FeedScheduleFormBlocEvent, FeedSch
           if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
             continue;
           }
-          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+          int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
             type: 'FE_SCHEDULE',
             feed: plants[i].feed,
             date: DateTime.now(),
             params: Value(FeedScheduleParams(schedule, schedules, initialSchedule, initialSchedules).toJSON()),
           ));
+          if (i == 0) {
+            feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+          }
         }
       }
-      yield FeedScheduleFormBlocStateDone();
+      yield FeedScheduleFormBlocStateDone(feedEntry);
     }
   }
 }

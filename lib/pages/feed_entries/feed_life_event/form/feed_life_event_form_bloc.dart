@@ -62,7 +62,12 @@ class FeedLifeEventFormBlocStateLoaded extends FeedLifeEventFormBlocState {
 }
 
 class FeedLifeEventFormBlocStateDone extends FeedLifeEventFormBlocState {
-  FeedLifeEventFormBlocStateDone(PlantPhases phase) : super(phase);
+  final FeedEntry? feedEntry;
+
+  FeedLifeEventFormBlocStateDone(PlantPhases phase, this.feedEntry) : super(phase);
+
+  @override
+  List<Object?> get props => [...super.props, feedEntry];
 }
 
 class FeedLifeEventFormBloc extends LegacyBloc<FeedLifeEventFormBlocEvent, FeedLifeEventFormBlocState> {
@@ -79,8 +84,8 @@ class FeedLifeEventFormBloc extends LegacyBloc<FeedLifeEventFormBlocEvent, FeedL
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
       yield FeedLifeEventFormBlocStateLoaded(_args.phase, plantSettings.dateForPhase(_args.phase));
     } else if (event is FeedLifeEventFormBlocEventSetDate) {
-      await PlantHelper.updatePlantPhase(_args.plant, _args.phase, event.date);
-      yield FeedLifeEventFormBlocStateDone(_args.phase);
+      FeedEntry? feedEntry = await PlantHelper.updatePlantPhase(_args.plant, _args.phase, event.date);
+      yield FeedLifeEventFormBlocStateDone(_args.phase, feedEntry);
     }
   }
 }

@@ -284,8 +284,14 @@ class FeedVentilationFormBlocStateLoading extends FeedVentilationFormBlocState {
 }
 
 class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
+  final FeedEntry? feedEntry;
+
+  FeedVentilationFormBlocStateDone(this.feedEntry);
+
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [
+        feedEntry,
+      ];
 }
 
 class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
@@ -341,8 +347,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
 
       yield loadedState();
     } else if (event is FeedVentilationFormBlocEventCreate) {
-      yield* saveParamsController();
-      yield FeedVentilationFormBlocStateDone();
+      yield* saveParamsController(sendDone: true);
     } else if (event is FeedVentilationFormBlocEventCancelEvent) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
@@ -353,7 +358,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       try {
         await cancelParams();
       } catch (e) {}
-      yield FeedVentilationFormBlocStateDone();
+      yield FeedVentilationFormBlocStateDone(null);
     } else if (event is FeedVentilationFormBlocBlowerModeEvent) {
       if (event.savePrevious) {
         yield* saveParamsController();
@@ -408,7 +413,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     this.add(FeedVentilationFormBlocEventUpdate());
   }
 
-  Stream<FeedVentilationFormBlocState> saveParamsController() async* {
+  Stream<FeedVentilationFormBlocState> saveParamsController({bool sendDone = false}) async* {
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(args.box.id);
     if (box.device == null) {
@@ -416,17 +421,24 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     }
     yield FeedVentilationFormBlocStateLoading('Saving..');
     List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
+    FeedEntry? feedEntry;
     for (int i = 0; i < plants.length; ++i) {
       PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
       if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
         continue;
       }
-      await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',
         feed: plants[i].feed,
         date: DateTime.now(),
         params: Value(paramsController.toCardParams().toJSON()),
       ));
+      if (i == 0) {
+        feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      }
+    }
+    if (sendDone) {
+      yield FeedVentilationFormBlocStateDone(feedEntry);
     }
   }
 

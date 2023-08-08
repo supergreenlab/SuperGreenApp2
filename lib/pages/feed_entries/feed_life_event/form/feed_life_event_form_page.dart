@@ -137,7 +137,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             date = state.date ?? DateTime.now();
           });
         } else if (state is FeedLifeEventFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
         }
       },
       child: BlocBuilder<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(

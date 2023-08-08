@@ -56,14 +56,16 @@ class PlantHelper {
     }
   }
 
-  static Future updatePlantPhase(Plant plant, PlantPhases phase, DateTime date) async {
-    plant = await RelDB.get().plantsDAO.getPlant(plant.id);
+  static Future<FeedEntry?> updatePlantPhase(Plant plant, PlantPhases phase, DateTime date) async {
+    final db = RelDB.get();
+    plant = await db.plantsDAO.getPlant(plant.id);
 
-    List<FeedEntry> lifeEvents = await RelDB.get().feedsDAO.getFeedEntriesForFeedWithType(plant.feed, 'FE_LIFE_EVENT');
+    List<FeedEntry> lifeEvents = await db.feedsDAO.getFeedEntriesForFeedWithType(plant.feed, 'FE_LIFE_EVENT');
     FeedEntry? lifeEvent = lifeEvents.firstWhereOrNull((fe) {
       FeedLifeEventParams params = FeedLifeEventParams.fromJSON(fe.params);
       return params.phase == phase;
     });
+    FeedEntry? feedEntry;
     if (lifeEvent == null) {
       FeedLifeEventParams params = FeedLifeEventParams(phase);
       FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion.insert(
@@ -72,7 +74,8 @@ class PlantHelper {
         type: 'FE_LIFE_EVENT',
         params: Value(params.toJSON()),
       );
-      await FeedEntryHelper.addFeedEntry(lifeEventCompanion);
+      int feedEntryID = await FeedEntryHelper.addFeedEntry(lifeEventCompanion);
+      feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
     } else {
       FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion(
         id: Value(lifeEvent.id),
@@ -80,6 +83,7 @@ class PlantHelper {
         synced: Value(false),
       );
       await FeedEntryHelper.updateFeedEntry(lifeEventCompanion);
+      feedEntry = lifeEvent;
     }
 
     PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
@@ -89,6 +93,7 @@ class PlantHelper {
       settings: Value(plantSettings.toJSON()),
       synced: Value(false),
     );
-    await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+    await db.plantsDAO.updatePlant(plantsCompanion);
+    return feedEntry;
   }
 }

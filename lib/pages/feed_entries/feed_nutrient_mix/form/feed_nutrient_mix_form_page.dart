@@ -350,7 +350,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             }
           });
         } else if (state is FeedNutrientMixFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
         }
       },
       child: BlocBuilder<FeedNutrientMixFormBloc, FeedNutrientMixFormBlocState>(

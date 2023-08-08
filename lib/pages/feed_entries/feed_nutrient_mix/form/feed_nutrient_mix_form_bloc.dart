@@ -105,10 +105,12 @@ class FeedNutrientMixFormBlocStateLoading extends FeedNutrientMixFormBlocState {
 }
 
 class FeedNutrientMixFormBlocStateDone extends FeedNutrientMixFormBlocState {
-  FeedNutrientMixFormBlocStateDone();
+  final FeedEntry? feedEntry;
+
+  FeedNutrientMixFormBlocStateDone(this.feedEntry);
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [feedEntry];
 }
 
 class FeedNutrientMixFormBloc extends LegacyBloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
@@ -166,9 +168,12 @@ class FeedNutrientMixFormBloc extends LegacyBloc<FeedNutrientMixFormBlocEvent, F
       yield FeedNutrientMixFormBlocStateLoaded(nPlants, plant, event.products, lastNutrientMixParams);
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
-      for (Plant plant in event.plants) {
+      final db = RelDB.get();
+      FeedEntry? feedEntry;
+      for (int i = 0; i < event.plants.length; ++i) {
+        Plant plant = event.plants[i];
         await addProductsToPlant(plant, event.nutrientProducts);
-        await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+        int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_NUTRIENT_MIX',
           feed: plant.feed,
           date: event.date,
@@ -185,8 +190,11 @@ class FeedNutrientMixFormBloc extends LegacyBloc<FeedNutrientMixFormBlocEvent, F
                   basedOn: event.baseNutrientMixParams?.name)
               .toJSON()),
         ));
+        if (i == 0) {
+          feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+        }
       }
-      yield FeedNutrientMixFormBlocStateDone();
+      yield FeedNutrientMixFormBlocStateDone(feedEntry);
     }
   }
 

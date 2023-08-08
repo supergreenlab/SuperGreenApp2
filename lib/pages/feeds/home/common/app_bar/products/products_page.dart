@@ -155,7 +155,7 @@ class _ProductsPageState extends State<ProductsPage> {
       ]);
     }
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,

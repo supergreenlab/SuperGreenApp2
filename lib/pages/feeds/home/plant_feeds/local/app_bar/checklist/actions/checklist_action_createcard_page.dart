@@ -187,6 +187,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       dynamic feedEntry = await future;
       if (feedEntry != null && feedEntry is FeedEntry) {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(plant, feedEntry));
+        onCheck();
       }
     };
   }

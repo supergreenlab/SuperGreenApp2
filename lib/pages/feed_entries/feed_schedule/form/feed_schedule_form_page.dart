@@ -90,7 +90,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
             });
           }
         } else if (state is FeedScheduleFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
         }
       },
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
