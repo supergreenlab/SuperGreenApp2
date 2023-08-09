@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 
 class Fullscreen extends StatelessWidget {
-  final String title;
+  final String? title;
   final String? subtitle;
   final Widget child;
   final bool childFirst;
@@ -41,13 +41,14 @@ class Fullscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> titles = [
+    List<Widget> titles = [];
+    if (title != null) {
       Text(
-        title,
+        title!,
         style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor ?? Color(0xff565656)),
         textAlign: TextAlign.center,
-      )
-    ];
+      );
+    }
     if (subtitle != null) {
       titles.add(Text(
         subtitle!,

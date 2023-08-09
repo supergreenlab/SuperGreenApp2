@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 
 class FullscreenLoading extends StatelessWidget {
-  final String title;
+  final String? title;
   final double? percent;
   final Color? textColor;
   final String? circleText;

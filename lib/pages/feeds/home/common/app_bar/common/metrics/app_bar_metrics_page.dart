@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -79,12 +81,20 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   bool showRightArrow = true;
   bool showLeftArrow = false;
 
+  int loadingDots = 0;
+  late Timer dotTimer;
+
   @override
   void initState() {
     scrollController.addListener(() {
       setState(() {
         showLeftArrow = scrollController.position.pixels > scrollController.position.minScrollExtent;
         showRightArrow = scrollController.position.pixels < scrollController.position.maxScrollExtent;
+      });
+    });
+    dotTimer = Timer.periodic(new Duration(milliseconds: 500), (timer) {
+      setState(() {
+        loadingDots++;
       });
     });
     super.initState();
@@ -94,7 +104,9 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   Widget build(BuildContext context) {
     return BlocListener<AppBarMetricsBloc, AppBarMetricsBlocState>(
         listener: (BuildContext context, AppBarMetricsBlocState state) {
-          if (state is AppBarMetricsBlocStateLoaded) {}
+          if (state is AppBarMetricsBlocStateLoaded) {
+            dotTimer.cancel();
+          }
         },
         child: BlocBuilder<AppBarMetricsBloc, AppBarMetricsBlocState>(
             bloc: BlocProvider.of<AppBarMetricsBloc>(context),
@@ -138,7 +150,32 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   }
 
   Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
-    return Container(height: 35, child: FullscreenLoading());
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: _renderMetrics(24, 56, 11, 453, 45),
+        ),
+        Container(
+          color: Colors.white.withAlpha(220),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Loading metrics${List.generate(loadingDots % 4, (index) => '.').join('')}',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Color(0xff909090),
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
