@@ -55,6 +55,13 @@ class SyncerBlocEventSyncing extends SyncerBlocEvent {
   List<Object> get props => [syncing, text];
 }
 
+class SyncerBlocEventForceSyncChecklists extends SyncerBlocEvent {
+  SyncerBlocEventForceSyncChecklists();
+
+  @override
+  List<Object> get props => [];
+}
+
 abstract class SyncerBlocState extends Equatable {}
 
 class SyncerBlocStateInit extends SyncerBlocState {
@@ -73,6 +80,8 @@ class SyncerBlocStateSyncing extends SyncerBlocState {
 }
 
 class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
+  static late SyncerBloc instance;
+
   late StreamSubscription<ConnectivityResult> _connectivity;
 
   Timer? _timerOut;
@@ -127,6 +136,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       });
     } else if (event is SyncerBlocEventSyncing) {
       yield SyncerBlocStateSyncing(event.syncing, event.text);
+    } else if (event is SyncerBlocEventForceSyncChecklists) {
+      this._forceSyncChecklists();
     }
   }
 
@@ -448,6 +459,12 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncOutBoxes();
     await _syncOutPlants();
     await _syncOutTimelapses();
+    await _syncOutChecklists();
+    await _syncOutChecklistSeeds();
+    await _syncOutChecklistLogs();
+  }
+
+  Future _forceSyncChecklists() async {
     await _syncOutChecklists();
     await _syncOutChecklistSeeds();
     await _syncOutChecklistLogs();

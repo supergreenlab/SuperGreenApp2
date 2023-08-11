@@ -237,7 +237,7 @@ class FeedProductsCardPage extends StatelessWidget {
       child: Text(button.title.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context)
-            .add(TowelieBlocEventButtonPressed(button.params, feed: state.feedID, feedEntry: state.feedEntryID));
+            .add(TowelieBlocEventButtonPressed(context, button.params, feed: state.feedID, feedEntry: state.feedEntryID));
       },
     );
   }

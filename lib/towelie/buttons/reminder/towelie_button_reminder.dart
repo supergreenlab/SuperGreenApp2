@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
@@ -27,6 +28,7 @@ import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/notifications/model.dart';
 import 'package:super_green_app/notifications/notifications.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 
@@ -93,5 +95,6 @@ class TowelieButtonReminder extends TowelieButton {
       synced: Value(false),
     );
     await RelDB.get().checklistsDAO.addChecklistSeed(reminder);
+    BlocProvider.of<SyncerBloc>(event.context).add(SyncerBlocEventForceSyncChecklists());
   }
 }

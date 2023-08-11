@@ -103,7 +103,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             onPressed: () {
-              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(button));
+              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(context, button));
               _prepareHide();
             },
             child: Text(button['title'].toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12))));

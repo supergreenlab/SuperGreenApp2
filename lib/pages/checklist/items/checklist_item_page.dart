@@ -33,7 +33,8 @@ class ChecklistItemPage extends StatelessWidget {
   late final List<ChecklistCondition> conditions;
   late final List<ChecklistAction> actions;
 
-  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect, required this.onDelete}) : super(key: key) {
+  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect, required this.onDelete})
+      : super(key: key) {
     conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
     actions = ChecklistAction.fromMapArray(json.decode(checklistSeed.actions));
   }
@@ -94,9 +95,20 @@ class ChecklistItemPage extends StatelessWidget {
                       style: TextStyle(color: Color(0xff506EBA), fontSize: 18),
                     ),
                   ),
-                  Text(
-                    checklistSeed.category,
-                    style: TextStyle(color: Color(0xff2D6A14)),
+                  Row(
+                    children: [
+                      Text(
+                        checklistSeed.category,
+                        style: TextStyle(color: Color(0xff2D6A14)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          checklistSeed.synced ? "Synced" : "Not synced",
+                          style: TextStyle(color: checklistSeed.synced ? Color(0xff2D6A14) : Color.fromARGB(255, 150, 40, 58), fontSize: 10,),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -137,10 +149,12 @@ class ChecklistItemPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          checklistSeed.description == '' ? Container() : Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(checklistSeed.description),
-          ),
+          checklistSeed.description == ''
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(checklistSeed.description),
+                ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(

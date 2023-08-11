@@ -125,13 +125,14 @@ class TowelieBlocEventTrigger extends TowelieBlocEvent {
 class TowelieBlocEventButtonPressed extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final Map<String, dynamic> params;
+  final BuildContext context;
   final dynamic feed;
   final dynamic feedEntry;
 
-  TowelieBlocEventButtonPressed(this.params, {this.feed, this.feedEntry});
+  TowelieBlocEventButtonPressed(this.context, this.params, {this.feed, this.feedEntry});
 
   @override
-  List<Object> get props => [rand, params, feed, feedEntry];
+  List<Object> get props => [rand, context, params, feed, feedEntry];
 }
 
 class TowelieBlocState extends Equatable {
