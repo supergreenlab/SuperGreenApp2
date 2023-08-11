@@ -26,6 +26,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/actions/message_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateMonitoring extends StatefulWidget {
@@ -94,6 +95,9 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
                           actions: drift.Value('[${action.toJSON()}]'),
                           synced: drift.Value(false),
                         )));
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventForceSyncChecklists());
+                        });
                         widget.onClose();
                       },
               ),

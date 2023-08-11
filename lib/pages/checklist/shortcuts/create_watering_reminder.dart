@@ -26,10 +26,10 @@ import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class CreateWateringReminder extends StatefulWidget {
-
   final Function() onClose;
   final Checklist checklist;
 
@@ -68,22 +68,26 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: condition.valid == false || action.valid == false ? null : () {
-                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCreate(
-                    ChecklistSeedsCompanion.insert(
-                      checklist: 1,
-                      title: drift.Value('Water plant reminder'),
-                      category: drift.Value(CH_FEEDING),
-                      public: drift.Value(false),
-                      repeat: drift.Value(false),
-                      conditions: drift.Value('[${condition.toJSON()}]'),
-                      exitConditions: drift.Value('[]'),
-                      actions: drift.Value('[${action.toJSON()}]'),
-                      synced: drift.Value(false),
-                    )
-                  ));
-                  widget.onClose();
-                },
+                onPressed: condition.valid == false || action.valid == false
+                    ? null
+                    : () {
+                        BlocProvider.of<ChecklistBloc>(context)
+                            .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
+                          checklist: 1,
+                          title: drift.Value('Water plant reminder'),
+                          category: drift.Value(CH_FEEDING),
+                          public: drift.Value(false),
+                          repeat: drift.Value(false),
+                          conditions: drift.Value('[${condition.toJSON()}]'),
+                          exitConditions: drift.Value('[]'),
+                          actions: drift.Value('[${action.toJSON()}]'),
+                          synced: drift.Value(false),
+                        )));
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventForceSyncChecklists());
+                        });
+                        widget.onClose();
+                      },
               ),
             ),
           ],
