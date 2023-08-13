@@ -73,7 +73,7 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
                     : () {
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
-                          checklist: 1,
+                          checklist: widget.checklist.id,
                           title: drift.Value('Water plant reminder'),
                           category: drift.Value(CH_FEEDING),
                           public: drift.Value(false),

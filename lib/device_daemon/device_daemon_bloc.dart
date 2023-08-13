@@ -132,7 +132,7 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
           if (identifier != null) {
             await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
             Logger.throwError("Wrong identifier for device ${device.name}",
-                data: {"device": device, "identifier": identifier});
+                data: {"identifier": identifier});
           } else {
             throw 'Couldn\'t connect to device';
           }
@@ -165,7 +165,7 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
             } else {
               if (identifier != null) {
                 Logger.throwError("Wrong identifier for device ${device.name}",
-                    data: {"device": device, "identifier": identifier}, fwdThrow: true);
+                    data: {"identifier": identifier}, fwdThrow: true);
               } else {
                 throw 'Couldn\'t connect to device';
               }

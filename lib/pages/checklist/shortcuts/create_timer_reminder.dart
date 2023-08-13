@@ -87,7 +87,7 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
                     : () {
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
-                          checklist: 1,
+                          checklist: widget.checklist.id,
                           title: drift.Value('Reminder'),
                           category: drift.Value(CH_OTHER),
                           public: drift.Value(false),

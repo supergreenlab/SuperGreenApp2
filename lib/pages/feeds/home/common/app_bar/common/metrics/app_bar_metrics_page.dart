@@ -101,6 +101,12 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   }
 
   @override
+  void dispose() {
+    dotTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<AppBarMetricsBloc, AppBarMetricsBlocState>(
         listener: (BuildContext context, AppBarMetricsBlocState state) {
