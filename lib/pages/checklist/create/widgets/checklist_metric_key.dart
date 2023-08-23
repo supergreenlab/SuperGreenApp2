@@ -30,13 +30,13 @@ class ChecklistMetricKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Tuple3<String, String, String>> choices = [
-      Tuple3(TEMP, LabMetricIcons[TEMP]!, LabMetricNames[TEMP]!),
-      Tuple3(HUMI, LabMetricIcons[HUMI]!, LabMetricNames[HUMI]!),
-      Tuple3(CO2, LabMetricIcons[CO2]!, LabMetricNames[CO2]!),
-      Tuple3(VPD, LabMetricIcons[VPD]!, LabMetricNames[VPD]!),
-      Tuple3(WEIGHT, LabMetricIcons[WEIGHT]!, LabMetricNames[WEIGHT]!),
-      Tuple3(WATERING_LEFT, LabMetricIcons[WATERING_LEFT]!, LabMetricNames[WATERING_LEFT]!),
+    List<String> choices = [
+      TEMP,
+      HUMI,
+      CO2,
+      VPD,
+      WEIGHT,
+      WATERING_LEFT,
     ];
     return DropdownButton<String?>(
       hint: Text('Select metric'),
@@ -46,14 +46,14 @@ class ChecklistMetricKey extends StatelessWidget {
       },
       items: choices.map<DropdownMenuItem<String>>((c) {
         return DropdownMenuItem<String>(
-          value: c.item1,
+          value: c,
           child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: SvgPicture.asset(c.item2),
+                child: SvgPicture.asset(LabMetricIcons[c]!),
               ),
-              Text(c.item3),
+              Text(LabMetricNames[c]!),
             ],
           ),
         );
