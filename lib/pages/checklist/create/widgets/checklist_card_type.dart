@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
-import 'package:tuple/tuple.dart';
 
 class ChecklistCardType extends StatelessWidget {
   final bool creatableCards;
@@ -32,18 +31,18 @@ class ChecklistCardType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> choices = [
+      FE_WATER,
+      FE_LIGHT,
+      FE_VENTILATION,
       FE_MEDIA,
       FE_MEASURE,
+      FE_NUTRIENT_MIX,
       FE_TRANSPLANT,
       FE_BENDING,
       FE_FIMMING,
       FE_TOPPING,
       FE_DEFOLIATION,
       FE_TIMELAPSE,
-      FE_NUTRIENT_MIX,
-      FE_WATER,
-      FE_LIGHT,
-      FE_VENTILATION,
       FE_SCHEDULE,
       FE_SCHEDULE_VEG,
       FE_SCHEDULE_BLOOM,
