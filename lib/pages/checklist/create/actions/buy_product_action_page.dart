@@ -66,8 +66,7 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Name of the product:',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
-          ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A))),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
@@ -82,7 +81,8 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
             },
           ),
         ),
-        Text('Enter URL of webpage to open:'),
+        Text('Enter URL of webpage to open:',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A))),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
