@@ -25,6 +25,8 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
+import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -36,11 +38,58 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       required ChecklistSeed checklistSeed,
       required ChecklistAction checklistAction,
       required Function() onCheck,
-      required Function() onSkip})
-      : super(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip);
+      required Function() onSkip,
+      required bool summarize})
+      : super(
+            plant: plant,
+            box: box,
+            checklistSeed: checklistSeed,
+            checklistAction: checklistAction,
+            onCheck: onCheck,
+            onSkip: onSkip,
+            summarize: summarize);
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: AppBarAction(
+        icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
+        color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
+        title: checklistSeed.title,
+        onCheck: onCheck,
+        onSkip: onSkip,
+        content: AutoSizeText(
+          'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w300,
+            color: Color(0xff454545),
+          ),
+        ),
+        action: getAction(context),
+        actionIcon: SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
+      ),
+    );
+  }
+
+  void Function() getAction(BuildContext context) {
+    if (this.summarize) {
+      return () {
+        showModalBottomSheet<bool>(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext c) {
+            return BlocProvider<ChecklistActionPopupBloc>(
+              create: (BuildContext context) =>
+                  ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed, this.checklistAction),
+              child: ChecklistActionPopupPage(),
+            );
+          },
+        );
+      };
+    }
     Map<String, void Function() Function(BuildContext)> onActions = {
       FE_MEDIA: (BuildContext context) => _onAction(
             context,
@@ -133,40 +182,23 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           tipID: 'TIP_BLOOM',
           tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
       FE_SCHEDULE_VEG: (BuildContext context) => _onAction(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),),
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          ),
       FE_SCHEDULE_BLOOM: (BuildContext context) => _onAction(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),),
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          ),
       FE_SCHEDULE_AUTO: (BuildContext context) => _onAction(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),),
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          ),
     };
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: AppBarAction(
-        icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
-        color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
-        title: checklistSeed.title,
-        onCheck: onCheck,
-        onSkip: onSkip,
-        content: AutoSizeText(
-          'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w300,
-            color: Color(0xff454545),
-          ),
-        ),
-        action: onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context),
-        actionIcon: SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
-      ),
-    );
+    return onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context);
   }
 
   // TODO DRY this with plant_feed_page
