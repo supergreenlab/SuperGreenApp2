@@ -137,6 +137,9 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
   }
 
   void forceRefresh() async {
+    if (metrics == null) {
+      return;
+    }
     await metrics!.refreshParams(device!);
   }
 

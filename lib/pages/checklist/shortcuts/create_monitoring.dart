@@ -88,7 +88,7 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
                           checklist: widget.checklist.id,
                           title: drift.Value('Reminder'),
                           category: drift.Value(CH_ENVIRONMENT),
-                          fast: drift.Value(((this.action as ChecklistActionMessage).instructions?.length ?? 0) != 0),
+                          fast: drift.Value(((this.action as ChecklistActionMessage).instructions?.length ?? 0) == 0),
                           public: drift.Value(false),
                           repeat: drift.Value(true),
                           conditions: drift.Value('[${condition.toJSON()}]'),

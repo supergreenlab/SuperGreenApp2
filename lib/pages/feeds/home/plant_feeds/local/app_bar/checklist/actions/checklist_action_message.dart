@@ -70,6 +70,7 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
             await showModalBottomSheet<bool>(
               context: context,
               isScrollControlled: true,
+              backgroundColor: Colors.transparent,
               builder: (BuildContext c) {
                 return BlocProvider<ChecklistActionPopupBloc>(
                   create: (BuildContext context) =>
