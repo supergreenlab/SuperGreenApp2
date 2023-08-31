@@ -37,8 +37,8 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       required Box box,
       required ChecklistSeed checklistSeed,
       required ChecklistAction checklistAction,
-      required Function() onCheck,
-      required Function() onSkip,
+      required Function()? onCheck,
+      required Function()? onSkip,
       required bool summarize})
       : super(
             plant: plant,
@@ -54,6 +54,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
+        shadowed: summarize,
         icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
         color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
         title: checklistSeed.title,
@@ -69,13 +70,13 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           ),
         ),
         action: getAction(context),
-        actionIcon: SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
+        actionIcon: !summarize ? null : SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
       ),
     );
   }
 
   void Function() getAction(BuildContext context) {
-    if (this.summarize) {
+    if (this.summarize && !this.checklistSeed.fast) {
       return () {
         showModalBottomSheet<bool>(
           context: context,
@@ -220,7 +221,9 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       dynamic feedEntry = await future;
       if (feedEntry != null && feedEntry is FeedEntry) {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(plant, feedEntry));
-        onCheck();
+        if (onCheck != null) {
+          onCheck!();
+        }
       }
     };
   }

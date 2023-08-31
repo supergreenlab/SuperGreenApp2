@@ -36,8 +36,8 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
       required Box box,
       required ChecklistSeed checklistSeed,
       required ChecklistAction checklistAction,
-      required Function() onCheck,
-      required Function() onSkip,
+      required Function()? onCheck,
+      required Function()? onSkip,
       required bool summarize})
       : super(
             plant: plant,
@@ -54,6 +54,7 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
+        shadowed: summarize,
         iconWidget: FaviconImage(
           url: (checklistAction as ChecklistActionWebpage).url!,
           alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
@@ -72,7 +73,7 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
           ),
         ),
         action: () async {
-          if (this.summarize) {
+          if (this.summarize && !this.checklistSeed.fast) {
             await showModalBottomSheet<bool>(
               context: context,
               isScrollControlled: true,
@@ -89,7 +90,7 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
             launchUrl(url);
           }
         },
-        actionIcon: SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
+        actionIcon: !summarize ? null : SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
       ),
     );
   }

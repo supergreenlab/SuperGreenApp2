@@ -34,8 +34,8 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
       required Box box,
       required ChecklistSeed checklistSeed,
       required ChecklistAction checklistAction,
-      required Function() onCheck,
-      required Function() onSkip,
+      required Function()? onCheck,
+      required Function()? onSkip,
       required bool summarize})
       : super(
             plant: plant,
@@ -51,6 +51,7 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
+        shadowed: summarize,
         icon: ChecklistActionIcons[ChecklistActionMessage.TYPE]!,
         color: Colors.teal,
         title: (checklistAction as ChecklistActionMessage).title ?? checklistSeed.title,
@@ -66,7 +67,7 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
           ),
         ),
         action: () async {
-          if (this.summarize) {
+          if (this.summarize && !this.checklistSeed.fast) {
             await showModalBottomSheet<bool>(
               context: context,
               isScrollControlled: true,
@@ -81,7 +82,7 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
             );
           }
         },
-        actionIcon: SvgPicture.asset(ChecklistActionIcons[ChecklistActionMessage.TYPE]!),
+        actionIcon: !summarize ? null : SvgPicture.asset(ChecklistActionIcons[ChecklistActionMessage.TYPE]!),
       ),
     );
   }

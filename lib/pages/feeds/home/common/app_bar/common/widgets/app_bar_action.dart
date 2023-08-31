@@ -32,6 +32,7 @@ class AppBarAction extends StatelessWidget {
   final Widget? actionIcon;
   final Widget? body;
   final bool center;
+  final bool shadowed;
 
   final Function()? onCheck;
   final Function()? onSkip;
@@ -51,6 +52,7 @@ class AppBarAction extends StatelessWidget {
     this.actionIcon,
     this.height = 65,
     this.center = false,
+    this.shadowed = true,
     this.onCheck,
     this.onSkip,
   }) : super(key: key);
@@ -60,9 +62,9 @@ class AppBarAction extends StatelessWidget {
     Widget body = InkWell(
       onTap: action,
       child: Container(
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: !shadowed ? Clip.none : Clip.hardEdge,
         height: height,
-        decoration: BoxDecoration(
+        decoration: !shadowed ? null : BoxDecoration(
           borderRadius: BorderRadius.circular(4),
           color: Colors.white,
           boxShadow: [
@@ -118,6 +120,9 @@ class AppBarAction extends StatelessWidget {
   }
 
   Widget renderIcon(BuildContext context) {
+    if (this.icon == null && this.iconWidget == null) {
+      return Container();
+    }
     const iconSize = 40.0;
     return Container(
       color: color,

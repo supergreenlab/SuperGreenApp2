@@ -131,7 +131,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
                     box: state.box,
                     checklistSeed: action.item1,
                     checklistAction: action.item2,
-                    summarize: !action.item1.fast,
+                    summarize: true,
                     onCheck: () {
                       BlocProvider.of<AppbarChecklistBloc>(context)
                           .add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));

@@ -342,7 +342,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         box: state.box,
                         checklistSeed: action.item1,
                         checklistAction: action.item2,
-                        summarize: !action.item1.fast,
+                        summarize: true,
                         onCheck: () {
                           BlocProvider.of<ChecklistBloc>(context)
                               .add(ChecklistBlocEventCheckChecklistLog(action.item3));

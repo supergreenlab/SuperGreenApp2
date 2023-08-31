@@ -64,6 +64,10 @@ abstract class ChecklistAction extends Equatable {
         throw UnimplementedError('Action type $type is not implemented');
     }
   }
+
+  static ChecklistAction fromJSON(String jsonStr) {
+    return ChecklistAction.fromMap(json.decode(jsonStr));
+  }
 }
 
 class ChecklistActionWebpage extends ChecklistAction {
