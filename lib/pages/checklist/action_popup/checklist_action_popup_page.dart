@@ -147,18 +147,12 @@ class ChecklistActionPopupPage extends StatelessWidget {
         loop: false,
         itemBuilder: (BuildContext context, int index) {
           ChecklistLog log = state.checklistLogs[index];
-          return Container(
-            child: Column(
-              children: [
-                ChecklistActionButton.getActionPage(
-                  plant: state.plant,
-                  box: state.box,
-                  checklistSeed: state.checklistSeed,
-                  checklistAction: ChecklistAction.fromJSON(log.action),
-                  summarize: false,
-                ),
-              ],
-            ),
+          return ChecklistActionButton.getActionPage(
+            plant: state.plant,
+            box: state.box,
+            checklistSeed: state.checklistSeed,
+            checklistAction: ChecklistAction.fromJSON(log.action),
+            summarize: false,
           );
         },
       ),

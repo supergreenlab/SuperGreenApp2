@@ -30,9 +30,9 @@ class AppBarAction extends StatelessWidget {
   final Widget? content;
   final Function()? action;
   final Widget? actionIcon;
-  final Widget? body;
   final bool center;
   final bool shadowed;
+  final Widget? child;
 
   final Function()? onCheck;
   final Function()? onSkip;
@@ -47,7 +47,6 @@ class AppBarAction extends StatelessWidget {
     required this.title,
     this.titleIcon,
     this.content,
-    this.body,
     this.action,
     this.actionIcon,
     this.height = 65,
@@ -55,6 +54,7 @@ class AppBarAction extends StatelessWidget {
     this.shadowed = true,
     this.onCheck,
     this.onSkip,
+    this.child,
   }) : super(key: key);
 
   @override
@@ -64,18 +64,20 @@ class AppBarAction extends StatelessWidget {
       child: Container(
         clipBehavior: !shadowed ? Clip.none : Clip.hardEdge,
         height: height,
-        decoration: !shadowed ? null : BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(50),
-              spreadRadius: 2.0,
-              blurRadius: 2.0,
-              offset: Offset(1, 1),
-            )
-          ],
-        ),
+        decoration: !shadowed
+            ? null
+            : BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(50),
+                    spreadRadius: 2.0,
+                    blurRadius: 2.0,
+                    offset: Offset(1, 1),
+                  )
+                ],
+              ),
         child: Row(
           children: [
             renderIcon(context),
@@ -85,6 +87,15 @@ class AppBarAction extends StatelessWidget {
         ),
       ),
     );
+    if (this.child != null) {
+      body = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          body,
+          Expanded(child: this.child!),
+        ],
+      );
+    }
     if (onCheck != null && onSkip != null) {
       return Slidable(
         // The end action pane is the one at the right or the bottom side.
@@ -162,8 +173,7 @@ class AppBarAction extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
               children: [
-                body ?? Container(),
-                renderContent(context),
+                content ?? Container(),
               ],
             ),
           )
@@ -188,9 +198,5 @@ class AppBarAction extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  Widget renderContent(BuildContext context) {
-    return content ?? Container();
   }
 }

@@ -19,6 +19,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -29,6 +30,7 @@ import 'package:super_green_app/pages/checklist/action_popup/checklist_action_po
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/widgets/checklist_log_button_bar.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class ChecklistActionCreateCardButton extends ChecklistActionButton {
@@ -60,6 +62,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
         title: checklistSeed.title,
         onCheck: onCheck,
         onSkip: onSkip,
+        child: summarize ? null : _renderBody(context),
         content: AutoSizeText(
           'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
           maxLines: 1,
@@ -70,7 +73,9 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           ),
         ),
         action: getAction(context),
-        actionIcon: !summarize ? null : SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
+        actionIcon: !summarize
+            ? null
+            : SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
       ),
     );
   }
@@ -201,6 +206,24 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
     };
 
     return onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context);
+  }
+
+  Widget _renderBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: MarkdownBody(
+              data: (checklistAction as ChecklistActionMessage).instructions ?? '',
+              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
+          ),
+          ChecklistLogButtonBottomBar(),
+        ],
+      ),
+    );
   }
 
   // TODO DRY this with plant_feed_page
