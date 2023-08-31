@@ -47,7 +47,7 @@ class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent,
   @override
   Stream<ChecklistActionPopupBlocState> mapEventToState(ChecklistActionPopupBlocEvent event) async* {
     if (event is ChecklistActionPopupBlocEventInit) {
-
+      yield ChecklistActionPopupBlocStateLoaded();
     }
   }
 }

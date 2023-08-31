@@ -41,17 +41,18 @@ import 'package:super_green_app/pages/checklist/create/conditions/phase_conditio
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_category.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class CreateChecklistPage extends TraceableStatefulWidget {
+class CreateChecklistSeedPage extends TraceableStatefulWidget {
   @override
-  _CreateChecklistPageState createState() => _CreateChecklistPageState();
+  _CreateChecklistSeedPageState createState() => _CreateChecklistSeedPageState();
 }
 
-class _CreateChecklistPageState extends State<CreateChecklistPage> {
+class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
   final GlobalKey listKey = GlobalKey();
 
   final TextEditingController _titleController = TextEditingController();
@@ -125,6 +126,10 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   actions: drift.Value(json.encode(actions.map((a) => a.toMap()).toList())),
                 );
                 BlocProvider.of<CreateChecklistBloc>(context).add(CreateChecklistBlocEventSave(cks));
+                SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  syncerBloc.add(SyncerBlocEventForceSyncChecklists());
+                });
               };
             }
             return WillPopScope(

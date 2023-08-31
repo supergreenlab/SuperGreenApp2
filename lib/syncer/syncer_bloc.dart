@@ -18,6 +18,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
@@ -56,10 +57,12 @@ class SyncerBlocEventSyncing extends SyncerBlocEvent {
 }
 
 class SyncerBlocEventForceSyncChecklists extends SyncerBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
   SyncerBlocEventForceSyncChecklists();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [rand,];
 }
 
 abstract class SyncerBlocState extends Equatable {}

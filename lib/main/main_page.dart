@@ -766,7 +766,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           providers: [
             BlocProvider(create: (context) => CreateChecklistBloc(settings.arguments as MainNavigateToCreateChecklist)),
           ],
-          child: addOnPopCallBack(CreateChecklistPage(), onPop),
+          child: addOnPopCallBack(CreateChecklistSeedPage(), onPop),
         );
     }
     return Text(MainPage.mainNavigatorUnknownRoute);

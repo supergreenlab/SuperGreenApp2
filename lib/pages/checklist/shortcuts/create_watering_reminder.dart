@@ -83,8 +83,9 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
                           actions: drift.Value('[${action.toJSON()}]'),
                           synced: drift.Value(false),
                         )));
-                        Future.delayed(const Duration(milliseconds: 500), () {
-                          BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventForceSyncChecklists());
+                        SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
+                        Future.delayed(const Duration(milliseconds: 200), () {
+                          syncerBloc.add(SyncerBlocEventForceSyncChecklists());
                         });
                         widget.onClose();
                       },
