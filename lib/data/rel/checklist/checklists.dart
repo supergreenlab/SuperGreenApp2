@@ -79,6 +79,7 @@ class ChecklistSeeds extends Table {
   TextColumn get description => text().withDefault(Constant(''))();
   TextColumn get category => text().withDefault(Constant(''))();
 
+  BoolColumn get fast => boolean().withDefault(Constant(false))();
   BoolColumn get public => boolean().withDefault(Constant(false))();
   BoolColumn get repeat => boolean().withDefault(Constant(false))();
 
@@ -103,6 +104,7 @@ class ChecklistSeeds extends Table {
     }
     return ChecklistSeedsCompanion(
       checklist: Value(checklist.id),
+      fast: Value(map['fast']),
       public: Value(map['public']),
       repeat: Value(map['repeat']),
       title: Value(map['title']),
@@ -122,6 +124,7 @@ class ChecklistSeeds extends Table {
     return {
       'id': checklistSeed.serverID,
       'checklistID': checklist.serverID,
+      'fast': checklistSeed.fast, 
       'public': checklistSeed.public,
       'repeat': checklistSeed.repeat,
       'title': checklistSeed.title,

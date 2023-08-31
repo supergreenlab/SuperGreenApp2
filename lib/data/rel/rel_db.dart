@@ -81,7 +81,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 16;
+  int get schemaVersion => 17;
 
   void reconnect() {
     _instance = RelDB();
@@ -138,6 +138,8 @@ class RelDB extends _$RelDB {
       await m.createTable(checklists);
       await m.createTable(checklistSeeds);
       await m.createTable(checklistLogs);
+    } else if (fromVersion == 16) {
+      await m.addColumn(checklists, checklistSeeds.fast);
     }
   }
 

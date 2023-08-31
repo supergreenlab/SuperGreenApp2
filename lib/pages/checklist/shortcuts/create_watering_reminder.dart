@@ -76,6 +76,7 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
                           checklist: widget.checklist.id,
                           title: drift.Value('Water plant reminder'),
                           category: drift.Value(CH_FEEDING),
+                          fast: drift.Value(true),
                           public: drift.Value(false),
                           repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
                           conditions: drift.Value('[${condition.toJSON()}]'),

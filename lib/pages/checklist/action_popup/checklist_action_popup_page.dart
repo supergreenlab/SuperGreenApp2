@@ -17,35 +17,92 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/rel/checklist/categories.dart';
+import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ChecklistActionPopupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      decoration: BoxDecoration(
-        color: Color(0x10000000),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 24),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
+    return BlocBuilder<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
+      builder: (BuildContext context, ChecklistActionPopupBlocState state) {
+        if (state is ChecklistActionPopupBlocStateInit) {
+          return InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: FullscreenLoading(),
+          );
+        }
+
+        return InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0x10000000),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 24),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text('pouet'),
-                ),),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  Widget _renderBody(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+    return Column(
+      children: [
+        _renderTitle(context, state),
+      ],
+    );
+  }
+
+  Widget _renderTitle(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            SvgPicture.asset(ChecklistCategoryNames[state.checklistSeed.category]!),
+            Text(state.checklistSeed.title),
+          ],
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+            child: Icon(Icons.close),
+          ),
+        ),
+      ],
     );
   }
 }

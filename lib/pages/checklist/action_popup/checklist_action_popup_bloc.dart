@@ -30,9 +30,20 @@ class ChecklistActionPopupBlocEventInit extends ChecklistActionPopupBlocEvent {
 
 abstract class ChecklistActionPopupBlocState extends Equatable {}
 
-class ChecklistActionPopupBlocStateLoaded extends ChecklistActionPopupBlocState {
+class ChecklistActionPopupBlocStateInit extends ChecklistActionPopupBlocState {
   @override
   List<Object?> get props => [];
+}
+
+class ChecklistActionPopupBlocStateLoaded extends ChecklistActionPopupBlocState {
+  final ChecklistSeed checklistSeed;
+  final ChecklistAction checklistAction;
+  final List<ChecklistLog> checklistLogs;
+
+  ChecklistActionPopupBlocStateLoaded(this.checklistSeed, this.checklistAction, this.checklistLogs);
+
+  @override
+  List<Object?> get props => [checklistSeed, checklistAction, checklistLogs];
 }
 
 class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent, ChecklistActionPopupBlocState> {
@@ -42,12 +53,15 @@ class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent,
   final ChecklistSeed checklistSeed;
   final ChecklistAction checklistAction;
 
-  ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed, this.checklistAction) : super(ChecklistActionPopupBlocStateLoaded());
+  ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed, this.checklistAction) : super(ChecklistActionPopupBlocStateInit()) {
+    add(ChecklistActionPopupBlocEventInit());
+  }
 
   @override
   Stream<ChecklistActionPopupBlocState> mapEventToState(ChecklistActionPopupBlocEvent event) async* {
     if (event is ChecklistActionPopupBlocEventInit) {
-      yield ChecklistActionPopupBlocStateLoaded();
+      List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getChecklistLogsForChecklistSeed(this.checklistSeed);
+      yield ChecklistActionPopupBlocStateLoaded(checklistSeed, checklistAction, checklistLogs);
     }
   }
 }

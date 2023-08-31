@@ -4800,6 +4800,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   final String title;
   final String description;
   final String category;
+  final bool fast;
   final bool public;
   final bool repeat;
   final String conditions;
@@ -4814,6 +4815,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       required this.title,
       required this.description,
       required this.category,
+      required this.fast,
       required this.public,
       required this.repeat,
       required this.conditions,
@@ -4835,6 +4837,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
       category: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}category'])!,
+      fast: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}fast'])!,
       public: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
       repeat: const BoolType()
@@ -4861,6 +4865,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
     map['category'] = Variable<String>(category);
+    map['fast'] = Variable<bool>(fast);
     map['public'] = Variable<bool>(public);
     map['repeat'] = Variable<bool>(repeat);
     map['conditions'] = Variable<String>(conditions);
@@ -4883,6 +4888,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       title: Value(title),
       description: Value(description),
       category: Value(category),
+      fast: Value(fast),
       public: Value(public),
       repeat: Value(repeat),
       conditions: Value(conditions),
@@ -4907,6 +4913,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
       category: serializer.fromJson<String>(json['category']),
+      fast: serializer.fromJson<bool>(json['fast']),
       public: serializer.fromJson<bool>(json['public']),
       repeat: serializer.fromJson<bool>(json['repeat']),
       conditions: serializer.fromJson<String>(json['conditions']),
@@ -4927,6 +4934,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
       'category': serializer.toJson<String>(category),
+      'fast': serializer.toJson<bool>(fast),
       'public': serializer.toJson<bool>(public),
       'repeat': serializer.toJson<bool>(repeat),
       'conditions': serializer.toJson<String>(conditions),
@@ -4944,6 +4952,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           String? title,
           String? description,
           String? category,
+          bool? fast,
           bool? public,
           bool? repeat,
           String? conditions,
@@ -4958,6 +4967,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
         title: title ?? this.title,
         description: description ?? this.description,
         category: category ?? this.category,
+        fast: fast ?? this.fast,
         public: public ?? this.public,
         repeat: repeat ?? this.repeat,
         conditions: conditions ?? this.conditions,
@@ -4975,6 +4985,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('category: $category, ')
+          ..write('fast: $fast, ')
           ..write('public: $public, ')
           ..write('repeat: $repeat, ')
           ..write('conditions: $conditions, ')
@@ -4994,6 +5005,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       title,
       description,
       category,
+      fast,
       public,
       repeat,
       conditions,
@@ -5011,6 +5023,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           other.title == this.title &&
           other.description == this.description &&
           other.category == this.category &&
+          other.fast == this.fast &&
           other.public == this.public &&
           other.repeat == this.repeat &&
           other.conditions == this.conditions &&
@@ -5027,6 +5040,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   final Value<String> title;
   final Value<String> description;
   final Value<String> category;
+  final Value<bool> fast;
   final Value<bool> public;
   final Value<bool> repeat;
   final Value<String> conditions;
@@ -5041,6 +5055,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.category = const Value.absent(),
+    this.fast = const Value.absent(),
     this.public = const Value.absent(),
     this.repeat = const Value.absent(),
     this.conditions = const Value.absent(),
@@ -5056,6 +5071,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.category = const Value.absent(),
+    this.fast = const Value.absent(),
     this.public = const Value.absent(),
     this.repeat = const Value.absent(),
     this.conditions = const Value.absent(),
@@ -5071,6 +5087,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     Expression<String>? title,
     Expression<String>? description,
     Expression<String>? category,
+    Expression<bool>? fast,
     Expression<bool>? public,
     Expression<bool>? repeat,
     Expression<String>? conditions,
@@ -5086,6 +5103,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       if (title != null) 'title': title,
       if (description != null) 'description': description,
       if (category != null) 'category': category,
+      if (fast != null) 'fast': fast,
       if (public != null) 'public': public,
       if (repeat != null) 'repeat': repeat,
       if (conditions != null) 'conditions': conditions,
@@ -5103,6 +5121,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       Value<String>? title,
       Value<String>? description,
       Value<String>? category,
+      Value<bool>? fast,
       Value<bool>? public,
       Value<bool>? repeat,
       Value<String>? conditions,
@@ -5117,6 +5136,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       title: title ?? this.title,
       description: description ?? this.description,
       category: category ?? this.category,
+      fast: fast ?? this.fast,
       public: public ?? this.public,
       repeat: repeat ?? this.repeat,
       conditions: conditions ?? this.conditions,
@@ -5145,6 +5165,9 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     }
     if (category.present) {
       map['category'] = Variable<String>(category.value);
+    }
+    if (fast.present) {
+      map['fast'] = Variable<bool>(fast.value);
     }
     if (public.present) {
       map['public'] = Variable<bool>(public.value);
@@ -5181,6 +5204,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('category: $category, ')
+          ..write('fast: $fast, ')
           ..write('public: $public, ')
           ..write('repeat: $repeat, ')
           ..write('conditions: $conditions, ')
@@ -5234,6 +5258,14 @@ class $ChecklistSeedsTable extends ChecklistSeeds
       type: const StringType(),
       requiredDuringInsert: false,
       defaultValue: Constant(''));
+  final VerificationMeta _fastMeta = const VerificationMeta('fast');
+  @override
+  late final GeneratedColumn<bool?> fast = GeneratedColumn<bool?>(
+      'fast', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (fast IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _publicMeta = const VerificationMeta('public');
   @override
   late final GeneratedColumn<bool?> public = GeneratedColumn<bool?>(
@@ -5304,6 +5336,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
         title,
         description,
         category,
+        fast,
         public,
         repeat,
         conditions,
@@ -5344,6 +5377,10 @@ class $ChecklistSeedsTable extends ChecklistSeeds
     if (data.containsKey('category')) {
       context.handle(_categoryMeta,
           category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
+    if (data.containsKey('fast')) {
+      context.handle(
+          _fastMeta, fast.isAcceptableOrUnknown(data['fast']!, _fastMeta));
     }
     if (data.containsKey('public')) {
       context.handle(_publicMeta,
