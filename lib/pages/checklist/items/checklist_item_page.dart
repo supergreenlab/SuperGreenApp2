@@ -155,13 +155,21 @@ class ChecklistItemPage extends StatelessWidget {
         children: [
           checklistSeed.description == ''
               ? Container()
-              : SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: MarkdownBody(
-                  data: checklistSeed.description,
-                  styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Colors.black, fontSize: 12),
-                    h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+              : Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 200,
+                  ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: MarkdownBody(
+                      data: checklistSeed.description,
+                      styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Colors.black, fontSize: 12),
+                        h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
               ),
