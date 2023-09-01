@@ -39,8 +39,8 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       required Box box,
       required ChecklistSeed checklistSeed,
       required ChecklistAction checklistAction,
-      required Function()? onCheck,
-      required Function()? onSkip,
+      required Function() onCheck,
+      required Function() onSkip,
       required bool summarize})
       : super(
             plant: plant,
@@ -60,8 +60,8 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
         icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
         color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
         title: checklistSeed.title,
-        onCheck: onCheck,
-        onSkip: onSkip,
+        onCheck: !summarize ? null : onCheck,
+        onSkip: !summarize ? null : onSkip,
         child: summarize ? null : _renderBody(context),
         content: AutoSizeText(
           'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
@@ -217,10 +217,16 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           Expanded(
             child: MarkdownBody(
               data: (checklistAction as ChecklistActionMessage).instructions ?? '',
-              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 12),
+                h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
-          ChecklistLogButtonBottomBar(),
+          ChecklistLogButtonBottomBar(
+            onCheck: this.onCheck,
+            onSkip: this.onSkip,
+          ),
         ],
       ),
     );
@@ -244,9 +250,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
       dynamic feedEntry = await future;
       if (feedEntry != null && feedEntry is FeedEntry) {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(plant, feedEntry));
-        if (onCheck != null) {
-          onCheck!();
-        }
+        onCheck();
       }
     };
   }

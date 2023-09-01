@@ -392,7 +392,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     Widget popupBody = Container();
     double? height;
     if (showCreateTimeReminder) {
-      height = MediaQuery.of(context).size.height-MediaQuery.of(context).viewInsets.bottom - 200;
+      height = MediaQuery.of(context).size.height-MediaQuery.of(context).viewInsets.bottom - 150;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),

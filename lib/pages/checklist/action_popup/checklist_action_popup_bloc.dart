@@ -17,6 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -26,6 +27,24 @@ abstract class ChecklistActionPopupBlocEvent extends Equatable {}
 class ChecklistActionPopupBlocEventInit extends ChecklistActionPopupBlocEvent {
   @override
   List<Object?> get props => [];
+}
+
+class ChecklistActionPopupBlocEventCheckChecklistLog extends ChecklistActionPopupBlocEvent {
+  final ChecklistLog checklistLog;
+
+  ChecklistActionPopupBlocEventCheckChecklistLog(this.checklistLog);
+
+  @override
+  List<Object> get props => [];
+}
+
+class ChecklistActionPopupBlocEventSkipChecklistLog extends ChecklistActionPopupBlocEvent {
+  final ChecklistLog checklistLog;
+
+  ChecklistActionPopupBlocEventSkipChecklistLog(this.checklistLog);
+
+  @override
+  List<Object> get props => [];
 }
 
 abstract class ChecklistActionPopupBlocState extends Equatable {}
@@ -64,6 +83,10 @@ class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent,
     if (event is ChecklistActionPopupBlocEventInit) {
       List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getChecklistLogsForChecklistSeed(this.checklistSeed);
       yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistAction, checklistLogs);
+    } else if (event is ChecklistActionPopupBlocEventSkipChecklistLog) {
+      await ChecklistHelper.skipChecklistLog(event.checklistLog);
+    } else if (event is ChecklistActionPopupBlocEventCheckChecklistLog) {
+      await ChecklistHelper.checkChecklistLog(event.checklistLog);
     }
   }
 }

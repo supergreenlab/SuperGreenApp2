@@ -21,21 +21,27 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/red_button.dart';
 
 class ChecklistLogButtonBottomBar extends StatelessWidget {
+
+  final Function() onCheck;
+  final Function() onSkip;
+
+  const ChecklistLogButtonBottomBar({Key? key, required this.onCheck, required this.onSkip}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           RedButton(
-            onPressed: () {},
+            onPressed: this.onSkip,
             title: 'Skip',
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: GreenButton(
-              onPressed: () {},
+              onPressed: this.onCheck,
               title: 'Check',
             ),
           ),

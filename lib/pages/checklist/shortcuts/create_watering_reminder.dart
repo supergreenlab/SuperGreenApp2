@@ -71,10 +71,22 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
                 onPressed: condition.valid == false || action.valid == false
                     ? null
                     : () {
+                        String description = '''
+# When to water
+
+Make sure your soil is dry before watering, best way to check that is to check the dryness of the first inch of soil, if it's not dry, wait a few more days, and if you can, try to lift the pot manually, a dry soil is noticeably lightweight.
+
+![Pic](https://vivosun.com/wp-content/uploads/2022/03/How-often-to-Water-Cannabis.jpg)
+
+## How to water
+
+When watering, make sure the soil is totally watered, which means you need to pour water until the run-off fills the plant, then let the soil absorb the run-off. Add more water in the plate until the soil does not absorb anymore, then remove the remaining water from the plate.
+                        ''';
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
                           title: drift.Value('Water plant reminder'),
+                          description: drift.Value(description),
                           category: drift.Value(CH_FEEDING),
                           fast: drift.Value(true),
                           public: drift.Value(false),

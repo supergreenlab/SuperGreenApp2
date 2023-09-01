@@ -23,6 +23,8 @@ import 'package:super_green_app/pages/checklist/create/create_checklist_section.
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class MessageActionPage extends StatefulWidget {
+  final double textHeight;
+
   final ChecklistActionMessage action;
 
   final void Function(ChecklistAction) onUpdate;
@@ -31,7 +33,7 @@ class MessageActionPage extends StatefulWidget {
   final bool hideTitle;
   final bool noBorder;
 
-  MessageActionPage({Key? key, this.onClose, required this.action, required this.onUpdate, this.hideTitle=false, this.noBorder=false}) : super(key: key);
+  MessageActionPage({Key? key, this.onClose, required this.action, required this.onUpdate, this.hideTitle=false, this.noBorder=false, this.textHeight=150}) : super(key: key);
 
   @override
   State<MessageActionPage> createState() => _MessageActionPageState();
@@ -94,7 +96,7 @@ class _MessageActionPageState extends State<MessageActionPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
-            height: 150,
+            height: widget.textHeight,
             child: FeedFormTextarea(
               placeholder: '...',
               noPadding: true,

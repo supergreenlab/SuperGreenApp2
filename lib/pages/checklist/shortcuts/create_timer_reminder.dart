@@ -63,6 +63,7 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
                 noBorder: true,
               ),
               MessageActionPage(
+                textHeight: 200,
                 action: action as ChecklistActionMessage,
                 onUpdate: (ChecklistAction action) {
                   setState(() {

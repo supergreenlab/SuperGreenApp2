@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';
@@ -105,7 +106,10 @@ class ChecklistItemPage extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
                           checklistSeed.synced ? "Synced" : "Not synced",
-                          style: TextStyle(color: checklistSeed.synced ? Color(0xff2D6A14) : Color.fromARGB(255, 150, 40, 58), fontSize: 10,),
+                          style: TextStyle(
+                            color: checklistSeed.synced ? Color(0xff2D6A14) : Color.fromARGB(255, 150, 40, 58),
+                            fontSize: 10,
+                          ),
                         ),
                       ),
                     ],
@@ -151,10 +155,16 @@ class ChecklistItemPage extends StatelessWidget {
         children: [
           checklistSeed.description == ''
               ? Container()
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(checklistSeed.description),
+              : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: MarkdownBody(
+                  data: checklistSeed.description,
+                  styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 12),
+                    h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
                 ),
+              ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(

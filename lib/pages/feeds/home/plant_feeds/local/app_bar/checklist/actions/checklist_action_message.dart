@@ -29,8 +29,6 @@ import 'package:super_green_app/pages/checklist/action_popup/checklist_action_po
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/widgets/checklist_log_button_bar.dart';
-import 'package:super_green_app/widgets/green_button.dart';
-import 'package:super_green_app/widgets/red_button.dart';
 
 class ChecklistActionMessageButton extends ChecklistActionButton {
   ChecklistActionMessageButton(
@@ -38,8 +36,8 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
       required Box box,
       required ChecklistSeed checklistSeed,
       required ChecklistAction checklistAction,
-      required Function()? onCheck,
-      required Function()? onSkip,
+      required Function() onCheck,
+      required Function() onSkip,
       required bool summarize})
       : super(
             plant: plant,
@@ -59,8 +57,8 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
         icon: ChecklistActionIcons[ChecklistActionMessage.TYPE]!,
         color: Colors.teal,
         title: (checklistAction as ChecklistActionMessage).title ?? checklistSeed.title,
-        onCheck: onCheck,
-        onSkip: onSkip,
+        onCheck: !summarize ? null : onCheck,
+        onSkip: !summarize ? null : onSkip,
         child: summarize ? null : _renderBody(context),
         content: AutoSizeText(
           (checklistAction as ChecklistActionMessage).instructions ?? 'Slide to check',
@@ -99,12 +97,20 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: MarkdownBody(
-              data: (checklistAction as ChecklistActionMessage).instructions ?? '',
-              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            child: SingleChildScrollView(
+              child: MarkdownBody(
+                data: (checklistAction as ChecklistActionMessage).instructions ?? '',
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 12),
+                  h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
-          ChecklistLogButtonBottomBar(),
+          ChecklistLogButtonBottomBar(
+            onCheck: this.onCheck,
+            onSkip: this.onSkip,
+          ),
         ],
       ),
     );
