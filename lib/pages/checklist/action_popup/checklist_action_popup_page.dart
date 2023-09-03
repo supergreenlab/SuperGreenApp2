@@ -128,17 +128,15 @@ class ChecklistActionPopupPage extends StatelessWidget {
       height: 350,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            MarkdownBody(
-              data: state.checklistSeed.description,
-              styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 12),
-                h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-              ),
+        child: SingleChildScrollView(
+          child: MarkdownBody(
+            data: state.checklistSeed.description,
+            styleSheet: MarkdownStyleSheet(
+              p: TextStyle(color: Colors.black, fontSize: 12),
+              h1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+              h2: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -146,7 +144,7 @@ class ChecklistActionPopupPage extends StatelessWidget {
 
   Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     return SizedBox(
-      height: 250,
+      height: 350,
       child: Swiper(
         itemCount: state.checklistLogs.length,
         pagination: SwiperPagination(

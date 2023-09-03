@@ -46,9 +46,6 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
 
   @override
   Widget build(BuildContext context) {
-    ChecklistActionCreateCard action = ChecklistActionCreateCard(
-      entryType: FE_WATER,
-    );
     return Column(
       children: [
         TimerConditionPage(
@@ -68,10 +65,10 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
               padding: const EdgeInsets.only(right: 8.0),
               child: GreenButton(
                 title: 'Create',
-                onPressed: condition.valid == false || action.valid == false
+                onPressed: condition.valid == false
                     ? null
                     : () {
-                        String description = '''
+                        String instructions = '''
 # When to water
 
 Make sure your soil is dry before watering, best way to check that is to check the dryness of the first inch of soil, if it's not dry, wait a few more days, and if you can, try to lift the pot manually, a dry soil is noticeably lightweight.
@@ -82,13 +79,16 @@ Make sure your soil is dry before watering, best way to check that is to check t
 
 When watering, make sure the soil is totally watered, which means you need to pour water until the run-off fills the plant, then let the soil absorb the run-off. Add more water in the plate until the soil does not absorb anymore, then remove the remaining water from the plate.
                         ''';
+                        ChecklistActionCreateCard action = ChecklistActionCreateCard(
+                          entryType: FE_WATER,
+                          instructions: instructions,
+                        );
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
                           title: drift.Value('Water plant reminder'),
-                          description: drift.Value(description),
                           category: drift.Value(CH_FEEDING),
-                          fast: drift.Value(true),
+                          fast: drift.Value(false),
                           public: drift.Value(false),
                           repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
                           conditions: drift.Value('[${condition.toJSON()}]'),

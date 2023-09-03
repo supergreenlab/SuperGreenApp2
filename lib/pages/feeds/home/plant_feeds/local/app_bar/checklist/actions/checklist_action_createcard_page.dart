@@ -73,9 +73,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           ),
         ),
         action: getAction(context),
-        actionIcon: !summarize
-            ? null
-            : SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
+        actionIcon: SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
       ),
     );
   }
@@ -215,11 +213,13 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: MarkdownBody(
-              data: (checklistAction as ChecklistActionMessage).instructions ?? '',
-              styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 12),
-                h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+            child: SingleChildScrollView(
+              child: MarkdownBody(
+                data: (checklistAction as ChecklistActionCreateCard).instructions ?? '',
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 12),
+                  h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
