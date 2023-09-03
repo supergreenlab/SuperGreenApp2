@@ -59,11 +59,26 @@ class AppBarAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget bodyContent = Row(
+      children: [
+        renderIcon(context),
+        Expanded(child: renderBody(context)),
+        actionIcon != null ? renderButton(context) : Container(),
+      ],
+    );
+    if (this.child != null) {
+      bodyContent = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          bodyContent,
+          this.child!,
+        ],
+      );
+    }
     Widget body = InkWell(
       onTap: action,
       child: Container(
         clipBehavior: !shadowed ? Clip.none : Clip.hardEdge,
-        height: height,
         decoration: !shadowed
             ? null
             : BoxDecoration(
@@ -78,50 +93,37 @@ class AppBarAction extends StatelessWidget {
                   )
                 ],
               ),
-        child: Row(
-          children: [
-            renderIcon(context),
-            Expanded(child: renderBody(context)),
-            actionIcon != null ? renderButton(context) : Container(),
-          ],
-        ),
+        child: bodyContent,
       ),
     );
-    if (this.child != null) {
-      body = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          body,
-          Expanded(child: this.child!),
-        ],
-      );
-    }
+
     if (onCheck != null && onSkip != null) {
+      List<Widget> items = [
+        SlidableAction(
+          // An action can be bigger than the others.
+          onPressed: (context) {
+            onCheck!();
+          },
+          backgroundColor: Color(0xFF7BC043),
+          foregroundColor: Colors.white,
+          icon: Icons.done,
+          label: 'Done',
+        ),
+        SlidableAction(
+          onPressed: (context) {
+            onSkip!();
+          },
+          backgroundColor: Color(0xFF0392CF),
+          foregroundColor: Colors.white,
+          icon: Icons.skip_next,
+          label: 'Skip',
+        ),
+      ];
       return Slidable(
         // The end action pane is the one at the right or the bottom side.
         endActionPane: ActionPane(
           motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-              // An action can be bigger than the others.
-              onPressed: (context) {
-                onCheck!();
-              },
-              backgroundColor: Color(0xFF7BC043),
-              foregroundColor: Colors.white,
-              icon: Icons.done,
-              label: 'Done',
-            ),
-            SlidableAction(
-              onPressed: (context) {
-                onSkip!();
-              },
-              backgroundColor: Color(0xFF0392CF),
-              foregroundColor: Colors.white,
-              icon: Icons.skip_next,
-              label: 'Skip',
-            ),
-          ],
+          children: items,
         ),
 
         child: body,
@@ -168,14 +170,12 @@ class AppBarAction extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           top,
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
-              children: [
-                content ?? Container(),
-              ],
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
+            children: [
+              content ?? Container(),
+            ],
           )
         ],
       ),

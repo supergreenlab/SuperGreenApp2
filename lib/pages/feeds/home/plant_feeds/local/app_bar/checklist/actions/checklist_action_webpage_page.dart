@@ -56,7 +56,6 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
-        shadowed: summarize,
         iconWidget: FaviconImage(
           url: (checklistAction as ChecklistActionWebpage).url!,
           alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
@@ -104,13 +103,11 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: MarkdownBody(
-              data: (checklistAction as ChecklistActionMessage).instructions ?? '',
-              styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 12),
-                h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-              ),
+          MarkdownBody(
+            data: (checklistAction as ChecklistActionMessage).instructions ?? '',
+            styleSheet: MarkdownStyleSheet(
+              p: TextStyle(color: Colors.black, fontSize: 12),
+              h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
             ),
           ),
           ChecklistLogButtonBottomBar(

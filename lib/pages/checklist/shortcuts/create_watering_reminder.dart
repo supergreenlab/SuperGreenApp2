@@ -81,12 +81,12 @@ When watering, make sure the soil is totally watered, which means you need to po
                         ''';
                         ChecklistActionCreateCard action = ChecklistActionCreateCard(
                           entryType: FE_WATER,
-                          instructions: instructions,
                         );
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
                           title: drift.Value('Water plant reminder'),
+                          description: drift.Value(instructions),
                           category: drift.Value(CH_FEEDING),
                           fast: drift.Value(false),
                           public: drift.Value(false),

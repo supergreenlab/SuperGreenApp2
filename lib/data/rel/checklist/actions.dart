@@ -26,6 +26,7 @@ abstract class ChecklistAction extends Equatable {
 
   String get asSentence => '$type';
   String get statusString => '';
+  bool get hasBody => false;
 
   ChecklistAction({required this.type});
 
@@ -78,6 +79,7 @@ class ChecklistActionWebpage extends ChecklistAction {
 
   String get asSentence => 'Open webpage at ${Uri.parse(url!).host}';
   String get statusString => '';
+  bool get hasBody => (instructions ?? '').length > 0;
 
   ChecklistActionWebpage({this.url, this.instructions}) : super(type: TYPE);
 
@@ -145,6 +147,7 @@ class ChecklistActionCreateCard extends ChecklistAction {
   final String? instructions;
 
   String get asSentence => 'Create ${FeedEntryNames[entryType!]!} diary entry.';
+  bool get hasBody => (instructions ?? '').length > 0;
 
   ChecklistActionCreateCard({this.entryType, this.instructions}) : super(type: TYPE);
 
@@ -190,6 +193,7 @@ class ChecklistActionBuyProduct extends ChecklistAction {
   final String? instructions;
 
   String get asSentence => 'Get a ${name!} at ${Uri.parse(url!).host}';
+  bool get hasBody => (instructions ?? '').length > 0;
 
   ChecklistActionBuyProduct({this.name, this.url, this.instructions}) : super(type: TYPE);
 
@@ -261,6 +265,7 @@ class ChecklistActionMessage extends ChecklistAction {
   final String? instructions;
 
   String get asSentence => 'Show message: ${title!}';
+  bool get hasBody => (instructions ?? '').length > 0;
 
   bool get valid {
     if (title == null) {

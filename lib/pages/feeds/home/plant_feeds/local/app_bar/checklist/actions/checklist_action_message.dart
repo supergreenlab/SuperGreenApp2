@@ -53,7 +53,6 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
-        shadowed: summarize,
         icon: ChecklistActionIcons[ChecklistActionMessage.TYPE]!,
         color: Colors.teal,
         title: (checklistAction as ChecklistActionMessage).title ?? checklistSeed.title,
@@ -96,14 +95,12 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: MarkdownBody(
-                data: (checklistAction as ChecklistActionMessage).instructions ?? '',
-                styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 12),
-                  h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                ),
+          SingleChildScrollView(
+            child: MarkdownBody(
+              data: (checklistAction as ChecklistActionMessage).instructions ?? '',
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 12),
+                h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
               ),
             ),
           ),

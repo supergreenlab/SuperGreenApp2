@@ -46,6 +46,7 @@ class ChecklistActionPopupPage extends StatelessWidget {
           decoration: BoxDecoration(
             color: Color(0x10000000),
           ),
+          clipBehavior: Clip.hardEdge,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,20 +69,23 @@ class ChecklistActionPopupPage extends StatelessWidget {
   }
 
   Widget _renderBody(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _renderTitle(context, state),
-        _renderChecklistSeed(context, state),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Actions",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _renderTitle(context, state),
+          _renderChecklistSeed(context, state),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Actions",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+            ),
           ),
-        ),
-        _renderActions(context, state),
-      ],
+          _renderActions(context, state),
+        ],
+      ),
     );
   }
 
@@ -124,41 +128,33 @@ class ChecklistActionPopupPage extends StatelessWidget {
     if (state.checklistSeed.description.length == 0) {
       return Container();
     }
-    return SizedBox(
-      height: 350,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: MarkdownBody(
-            data: state.checklistSeed.description,
-            styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.black, fontSize: 12),
-              h1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
-              h2: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MarkdownBody(
+        data: state.checklistSeed.description,
+        styleSheet: MarkdownStyleSheet(
+          p: TextStyle(color: Colors.black, fontSize: 12),
+          h1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+          h2: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 
   Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
-    return SizedBox(
-      height: 350,
-      child: Swiper(
-        itemCount: state.checklistLogs.length,
-        pagination: SwiperPagination(
-          builder: new DotSwiperPaginationBuilder(color: Color(0xffdedede), activeColor: Color(0xff3bb30b)),
-        ),
-        loop: false,
-        itemBuilder: (BuildContext context, int index) {
-          ChecklistLog log = state.checklistLogs[index];
-          return ChecklistActionButton.getActionPage(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: state.checklistLogs.map<Widget>((log) {
+        ChecklistAction action = ChecklistAction.fromJSON(log.action);
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ChecklistActionButton.getActionPage(
               plant: state.plant,
               box: state.box,
               checklistSeed: state.checklistSeed,
-              checklistAction: ChecklistAction.fromJSON(log.action),
-              summarize: false,
+              checklistAction: action,
+              summarize: !action.hasBody,
               onCheck: () {
                 BlocProvider.of<ChecklistActionPopupBloc>(context)
                     .add(ChecklistActionPopupBlocEventCheckChecklistLog(log));
@@ -168,9 +164,9 @@ class ChecklistActionPopupPage extends StatelessWidget {
                 BlocProvider.of<ChecklistActionPopupBloc>(context)
                     .add(ChecklistActionPopupBlocEventSkipChecklistLog(log));
                 Navigator.pop(context);
-              });
-        },
-      ),
+              }),
+        );
+      }).toList(),
     );
   }
 }

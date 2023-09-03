@@ -56,7 +56,6 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: AppBarAction(
-        shadowed: summarize,
         icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
         color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
         title: checklistSeed.title,
@@ -206,20 +205,19 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
     return onActions[(checklistAction as ChecklistActionCreateCard).entryType]!(context);
   }
 
-  Widget _renderBody(BuildContext context) {
+  Widget? _renderBody(BuildContext context) {
+    String instructions = (checklistAction as ChecklistActionCreateCard).instructions ?? '';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: MarkdownBody(
-                data: (checklistAction as ChecklistActionCreateCard).instructions ?? '',
-                styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 12),
-                  h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                ),
+          SingleChildScrollView(
+            child: MarkdownBody(
+              data: instructions,
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 12),
+                h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
               ),
             ),
           ),
