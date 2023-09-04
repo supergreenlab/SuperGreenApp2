@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/checklist/collections/checklist_collection_bloc.dart';
+import 'package:super_green_app/pages/checklist/collections/checklist_collections_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ChecklistCollectionsPage extends StatelessWidget {
