@@ -196,7 +196,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ],
             ),
             width: 300,
-            height: 250,
+            height: 310,
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
@@ -237,6 +237,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     setState(() {
                       showCreateMenu = false;
                     });
+                  }),
+                  SvgPicture.asset('assets/checklist/line_separator.svg'),
+                  _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.plant));
                   }),
                 ],
               ),

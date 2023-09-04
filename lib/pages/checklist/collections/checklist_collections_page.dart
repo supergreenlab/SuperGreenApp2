@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/checklist/collections/checklist_collections_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ChecklistCollectionsPage extends StatelessWidget {
@@ -26,16 +27,20 @@ class ChecklistCollectionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChecklistCollectionsBloc, ChecklistCollectionsBlocState>(
       builder: (BuildContext context, ChecklistCollectionsBlocState state) {
-        if (state is ChecklistCollectionsBlocStateInit) {
-          return FullscreenLoading();
+        Widget body = FullscreenLoading();
+        if (state is ChecklistCollectionsBlocStateLoaded) {
+          body = Text('pouet');
         }
 
-        return Container(
-          decoration: BoxDecoration(
-            color: Color(0x10000000),
+        return Scaffold(
+          backgroundColor: Color(0xffEDEDED),
+          appBar: SGLAppBar(
+            '🦜',
+            backgroundColor: Colors.deepPurple,
+            titleColor: Colors.yellow,
+            iconColor: Colors.white,
           ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
+          body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -46,7 +51,7 @@ class ChecklistCollectionsPage extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
-                  child: Text('pouet'),
+                  child: body,
                 ),
               ),
             ],

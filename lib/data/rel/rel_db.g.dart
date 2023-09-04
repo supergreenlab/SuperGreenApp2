@@ -5883,7 +5883,15 @@ class ChecklistCollection extends DataClass
     implements Insertable<ChecklistCollection> {
   final int id;
   final String? serverID;
-  ChecklistCollection({required this.id, this.serverID});
+  final String title;
+  final String description;
+  final String category;
+  ChecklistCollection(
+      {required this.id,
+      this.serverID,
+      required this.title,
+      required this.description,
+      required this.category});
   factory ChecklistCollection.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -5892,6 +5900,12 @@ class ChecklistCollection extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      title: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
+      description: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
+      category: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}category'])!,
     );
   }
   @override
@@ -5901,6 +5915,9 @@ class ChecklistCollection extends DataClass
     if (!nullToAbsent || serverID != null) {
       map['server_i_d'] = Variable<String?>(serverID);
     }
+    map['title'] = Variable<String>(title);
+    map['description'] = Variable<String>(description);
+    map['category'] = Variable<String>(category);
     return map;
   }
 
@@ -5910,6 +5927,9 @@ class ChecklistCollection extends DataClass
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
+      title: Value(title),
+      description: Value(description),
+      category: Value(category),
     );
   }
 
@@ -5919,6 +5939,9 @@ class ChecklistCollection extends DataClass
     return ChecklistCollection(
       id: serializer.fromJson<int>(json['id']),
       serverID: serializer.fromJson<String?>(json['serverID']),
+      title: serializer.fromJson<String>(json['title']),
+      description: serializer.fromJson<String>(json['description']),
+      category: serializer.fromJson<String>(json['category']),
     );
   }
   @override
@@ -5927,60 +5950,99 @@ class ChecklistCollection extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'serverID': serializer.toJson<String?>(serverID),
+      'title': serializer.toJson<String>(title),
+      'description': serializer.toJson<String>(description),
+      'category': serializer.toJson<String>(category),
     };
   }
 
-  ChecklistCollection copyWith({int? id, String? serverID}) =>
+  ChecklistCollection copyWith(
+          {int? id,
+          String? serverID,
+          String? title,
+          String? description,
+          String? category}) =>
       ChecklistCollection(
         id: id ?? this.id,
         serverID: serverID ?? this.serverID,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        category: category ?? this.category,
       );
   @override
   String toString() {
     return (StringBuffer('ChecklistCollection(')
           ..write('id: $id, ')
-          ..write('serverID: $serverID')
+          ..write('serverID: $serverID, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('category: $category')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, serverID);
+  int get hashCode => Object.hash(id, serverID, title, description, category);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChecklistCollection &&
           other.id == this.id &&
-          other.serverID == this.serverID);
+          other.serverID == this.serverID &&
+          other.title == this.title &&
+          other.description == this.description &&
+          other.category == this.category);
 }
 
 class ChecklistCollectionsCompanion
     extends UpdateCompanion<ChecklistCollection> {
   final Value<int> id;
   final Value<String?> serverID;
+  final Value<String> title;
+  final Value<String> description;
+  final Value<String> category;
   const ChecklistCollectionsCompanion({
     this.id = const Value.absent(),
     this.serverID = const Value.absent(),
+    this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.category = const Value.absent(),
   });
   ChecklistCollectionsCompanion.insert({
     this.id = const Value.absent(),
     this.serverID = const Value.absent(),
+    this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.category = const Value.absent(),
   });
   static Insertable<ChecklistCollection> custom({
     Expression<int>? id,
     Expression<String?>? serverID,
+    Expression<String>? title,
+    Expression<String>? description,
+    Expression<String>? category,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (serverID != null) 'server_i_d': serverID,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (category != null) 'category': category,
     });
   }
 
   ChecklistCollectionsCompanion copyWith(
-      {Value<int>? id, Value<String?>? serverID}) {
+      {Value<int>? id,
+      Value<String?>? serverID,
+      Value<String>? title,
+      Value<String>? description,
+      Value<String>? category}) {
     return ChecklistCollectionsCompanion(
       id: id ?? this.id,
       serverID: serverID ?? this.serverID,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      category: category ?? this.category,
     );
   }
 
@@ -5993,6 +6055,15 @@ class ChecklistCollectionsCompanion
     if (serverID.present) {
       map['server_i_d'] = Variable<String?>(serverID.value);
     }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
     return map;
   }
 
@@ -6000,7 +6071,10 @@ class ChecklistCollectionsCompanion
   String toString() {
     return (StringBuffer('ChecklistCollectionsCompanion(')
           ..write('id: $id, ')
-          ..write('serverID: $serverID')
+          ..write('serverID: $serverID, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('category: $category')
           ..write(')'))
         .toString();
   }
@@ -6027,8 +6101,31 @@ class $ChecklistCollectionsTable extends ChecklistCollections
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
       type: const StringType(),
       requiredDuringInsert: false);
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  List<GeneratedColumn> get $columns => [id, serverID];
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
+      'title', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  final VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String?> description = GeneratedColumn<String?>(
+      'description', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
+      'category', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, serverID, title, description, category];
   @override
   String get aliasedName => _alias ?? 'checklist_collections';
   @override
@@ -6045,6 +6142,20 @@ class $ChecklistCollectionsTable extends ChecklistCollections
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
           serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
     }
     return context;
   }

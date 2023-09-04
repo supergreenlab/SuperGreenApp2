@@ -26,9 +26,16 @@ class ChecklistCollections extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
 
+  TextColumn get title => text().withDefault(Constant(''))();
+  TextColumn get description => text().withDefault(Constant(''))();
+  TextColumn get category => text().withDefault(Constant(''))();
+
   static Future<ChecklistCollectionsCompanion> fromMap(Map<String, dynamic> map) async {
     return ChecklistCollectionsCompanion(
       serverID: Value(map['id']),
+      title: Value(map['title']),
+      description: Value(map['description']),
+      category: Value(map['category']),
     );
   }
 }

@@ -47,12 +47,13 @@ class ChecklistAPI {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
-    Map<String, dynamic> maps = JsonDecoder().convert(resp.body)['checklistcollections'];
+    Map<String, dynamic> result = JsonDecoder().convert(resp.body);
     List<ChecklistCollectionsCompanion> results = [];
+    List<dynamic> maps = result['checklistcollections']; 
     for (int i = 0; i < maps.length; ++i) {
       try {
         ChecklistCollectionsCompanion fe = await ChecklistCollections.fromMap(maps[i]);
-        results.add(fe);
+        results.add(fe);  
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
       }
