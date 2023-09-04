@@ -4797,6 +4797,7 @@ class $ChecklistsTable extends Checklists
 class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   final int id;
   final int checklist;
+  final int? collection;
   final String title;
   final String description;
   final String category;
@@ -4812,6 +4813,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   ChecklistSeed(
       {required this.id,
       required this.checklist,
+      this.collection,
       required this.title,
       required this.description,
       required this.category,
@@ -4831,6 +4833,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       checklist: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
+      collection: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}collection']),
       title: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
       description: const StringType()
@@ -4862,6 +4866,9 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['checklist'] = Variable<int>(checklist);
+    if (!nullToAbsent || collection != null) {
+      map['collection'] = Variable<int?>(collection);
+    }
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
     map['category'] = Variable<String>(category);
@@ -4885,6 +4892,9 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     return ChecklistSeedsCompanion(
       id: Value(id),
       checklist: Value(checklist),
+      collection: collection == null && nullToAbsent
+          ? const Value.absent()
+          : Value(collection),
       title: Value(title),
       description: Value(description),
       category: Value(category),
@@ -4910,6 +4920,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     return ChecklistSeed(
       id: serializer.fromJson<int>(json['id']),
       checklist: serializer.fromJson<int>(json['checklist']),
+      collection: serializer.fromJson<int?>(json['collection']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
       category: serializer.fromJson<String>(json['category']),
@@ -4931,6 +4942,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'checklist': serializer.toJson<int>(checklist),
+      'collection': serializer.toJson<int?>(collection),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
       'category': serializer.toJson<String>(category),
@@ -4949,6 +4961,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   ChecklistSeed copyWith(
           {int? id,
           int? checklist,
+          int? collection,
           String? title,
           String? description,
           String? category,
@@ -4964,6 +4977,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       ChecklistSeed(
         id: id ?? this.id,
         checklist: checklist ?? this.checklist,
+        collection: collection ?? this.collection,
         title: title ?? this.title,
         description: description ?? this.description,
         category: category ?? this.category,
@@ -4982,6 +4996,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     return (StringBuffer('ChecklistSeed(')
           ..write('id: $id, ')
           ..write('checklist: $checklist, ')
+          ..write('collection: $collection, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('category: $category, ')
@@ -5002,6 +5017,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   int get hashCode => Object.hash(
       id,
       checklist,
+      collection,
       title,
       description,
       category,
@@ -5020,6 +5036,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       (other is ChecklistSeed &&
           other.id == this.id &&
           other.checklist == this.checklist &&
+          other.collection == this.collection &&
           other.title == this.title &&
           other.description == this.description &&
           other.category == this.category &&
@@ -5037,6 +5054,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
 class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   final Value<int> id;
   final Value<int> checklist;
+  final Value<int?> collection;
   final Value<String> title;
   final Value<String> description;
   final Value<String> category;
@@ -5052,6 +5070,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   const ChecklistSeedsCompanion({
     this.id = const Value.absent(),
     this.checklist = const Value.absent(),
+    this.collection = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.category = const Value.absent(),
@@ -5068,6 +5087,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   ChecklistSeedsCompanion.insert({
     this.id = const Value.absent(),
     required int checklist,
+    this.collection = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.category = const Value.absent(),
@@ -5084,6 +5104,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   static Insertable<ChecklistSeed> custom({
     Expression<int>? id,
     Expression<int>? checklist,
+    Expression<int?>? collection,
     Expression<String>? title,
     Expression<String>? description,
     Expression<String>? category,
@@ -5100,6 +5121,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (checklist != null) 'checklist': checklist,
+      if (collection != null) 'collection': collection,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
       if (category != null) 'category': category,
@@ -5118,6 +5140,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   ChecklistSeedsCompanion copyWith(
       {Value<int>? id,
       Value<int>? checklist,
+      Value<int?>? collection,
       Value<String>? title,
       Value<String>? description,
       Value<String>? category,
@@ -5133,6 +5156,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     return ChecklistSeedsCompanion(
       id: id ?? this.id,
       checklist: checklist ?? this.checklist,
+      collection: collection ?? this.collection,
       title: title ?? this.title,
       description: description ?? this.description,
       category: category ?? this.category,
@@ -5156,6 +5180,9 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     }
     if (checklist.present) {
       map['checklist'] = Variable<int>(checklist.value);
+    }
+    if (collection.present) {
+      map['collection'] = Variable<int?>(collection.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -5201,6 +5228,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     return (StringBuffer('ChecklistSeedsCompanion(')
           ..write('id: $id, ')
           ..write('checklist: $checklist, ')
+          ..write('collection: $collection, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('category: $category, ')
@@ -5236,6 +5264,11 @@ class $ChecklistSeedsTable extends ChecklistSeeds
   late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
       'checklist', aliasedName, false,
       type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _collectionMeta = const VerificationMeta('collection');
+  @override
+  late final GeneratedColumn<int?> collection = GeneratedColumn<int?>(
+      'collection', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
@@ -5333,6 +5366,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
   List<GeneratedColumn> get $columns => [
         id,
         checklist,
+        collection,
         title,
         description,
         category,
@@ -5363,6 +5397,12 @@ class $ChecklistSeedsTable extends ChecklistSeeds
           checklist.isAcceptableOrUnknown(data['checklist']!, _checklistMeta));
     } else if (isInserting) {
       context.missing(_checklistMeta);
+    }
+    if (data.containsKey('collection')) {
+      context.handle(
+          _collectionMeta,
+          collection.isAcceptableOrUnknown(
+              data['collection']!, _collectionMeta));
     }
     if (data.containsKey('title')) {
       context.handle(

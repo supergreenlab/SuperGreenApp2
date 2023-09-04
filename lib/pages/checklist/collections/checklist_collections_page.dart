@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/pages/checklist/collections/checklist_collections_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -29,7 +30,7 @@ class ChecklistCollectionsPage extends StatelessWidget {
       builder: (BuildContext context, ChecklistCollectionsBlocState state) {
         Widget body = FullscreenLoading();
         if (state is ChecklistCollectionsBlocStateLoaded) {
-          body = Text('pouet');
+          body = _renderLoaded(context, state);
         }
 
         return Scaffold(
@@ -40,24 +41,43 @@ class ChecklistCollectionsPage extends StatelessWidget {
             titleColor: Colors.yellow,
             iconColor: Colors.white,
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          body: body,
+        );
+      },
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, ChecklistCollectionsBlocStateLoaded state) {
+    return ListView(
+      children: state.collections.map<Widget>((c) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 24),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Text(c.category.value),
                   ),
-                  child: body,
+                  Text(c.title.value),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: MarkdownBody(
+                  data: c.description.value,
+                  styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 12),
+                    h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
           ),
         );
-      },
+      }).toList(),
     );
   }
 }

@@ -93,6 +93,7 @@ class SkipChecklistSeedsCompanion extends ChecklistSeedsCompanion {
 class ChecklistSeeds extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get checklist => integer()();
+  IntColumn get collection => integer().nullable()();
 
   TextColumn get title => text().withDefault(Constant(''))();
   TextColumn get description => text().withDefault(Constant(''))();
