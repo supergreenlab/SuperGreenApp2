@@ -5879,6 +5879,190 @@ class $ChecklistLogsTable extends ChecklistLogs
   }
 }
 
+class ChecklistCollection extends DataClass
+    implements Insertable<ChecklistCollection> {
+  final int id;
+  final String? serverID;
+  ChecklistCollection({required this.id, this.serverID});
+  factory ChecklistCollection.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ChecklistCollection(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      serverID: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String?>(serverID);
+    }
+    return map;
+  }
+
+  ChecklistCollectionsCompanion toCompanion(bool nullToAbsent) {
+    return ChecklistCollectionsCompanion(
+      id: Value(id),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+    );
+  }
+
+  factory ChecklistCollection.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChecklistCollection(
+      id: serializer.fromJson<int>(json['id']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'serverID': serializer.toJson<String?>(serverID),
+    };
+  }
+
+  ChecklistCollection copyWith({int? id, String? serverID}) =>
+      ChecklistCollection(
+        id: id ?? this.id,
+        serverID: serverID ?? this.serverID,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistCollection(')
+          ..write('id: $id, ')
+          ..write('serverID: $serverID')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, serverID);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChecklistCollection &&
+          other.id == this.id &&
+          other.serverID == this.serverID);
+}
+
+class ChecklistCollectionsCompanion
+    extends UpdateCompanion<ChecklistCollection> {
+  final Value<int> id;
+  final Value<String?> serverID;
+  const ChecklistCollectionsCompanion({
+    this.id = const Value.absent(),
+    this.serverID = const Value.absent(),
+  });
+  ChecklistCollectionsCompanion.insert({
+    this.id = const Value.absent(),
+    this.serverID = const Value.absent(),
+  });
+  static Insertable<ChecklistCollection> custom({
+    Expression<int>? id,
+    Expression<String?>? serverID,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (serverID != null) 'server_i_d': serverID,
+    });
+  }
+
+  ChecklistCollectionsCompanion copyWith(
+      {Value<int>? id, Value<String?>? serverID}) {
+    return ChecklistCollectionsCompanion(
+      id: id ?? this.id,
+      serverID: serverID ?? this.serverID,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String?>(serverID.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChecklistCollectionsCompanion(')
+          ..write('id: $id, ')
+          ..write('serverID: $serverID')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ChecklistCollectionsTable extends ChecklistCollections
+    with TableInfo<$ChecklistCollectionsTable, ChecklistCollection> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChecklistCollectionsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: const StringType(),
+      requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, serverID];
+  @override
+  String get aliasedName => _alias ?? 'checklist_collections';
+  @override
+  String get actualTableName => 'checklist_collections';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ChecklistCollection> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChecklistCollection map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ChecklistCollection.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ChecklistCollectionsTable createAlias(String alias) {
+    return $ChecklistCollectionsTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$RelDB extends GeneratedDatabase {
   _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $DevicesTable devices = $DevicesTable(this);
@@ -5897,6 +6081,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   late final $ChecklistsTable checklists = $ChecklistsTable(this);
   late final $ChecklistSeedsTable checklistSeeds = $ChecklistSeedsTable(this);
   late final $ChecklistLogsTable checklistLogs = $ChecklistLogsTable(this);
+  late final $ChecklistCollectionsTable checklistCollections =
+      $ChecklistCollectionsTable(this);
   late final DevicesDAO devicesDAO = DevicesDAO(this as RelDB);
   late final PlantsDAO plantsDAO = PlantsDAO(this as RelDB);
   late final FeedsDAO feedsDAO = FeedsDAO(this as RelDB);
@@ -5920,6 +6106,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         deletes,
         checklists,
         checklistSeeds,
-        checklistLogs
+        checklistLogs,
+        checklistCollections
       ];
 }

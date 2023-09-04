@@ -394,19 +394,19 @@ class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
   List<Object> get props => [id, image];
 }
 
-class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
+class MainNavigateToTimelapseViewer extends MainNavigatorEvent {
   final Plant plant;
 
-  MainNavigateToTimelapseViewer(this.plant, {pushAsReplacement = false}) : super(pushAsReplacement);
+  MainNavigateToTimelapseViewer(this.plant) : super();
 
   @override
   List<Object> get props => [plant];
 }
 
-class MainNavigateToQRCodeViewer extends MainNavigateToFeedFormEvent {
+class MainNavigateToQRCodeViewer extends MainNavigatorEvent {
   final Plant plant;
 
-  MainNavigateToQRCodeViewer(this.plant, {pushAsReplacement = false}) : super(pushAsReplacement);
+  MainNavigateToQRCodeViewer(this.plant) : super();
 
   @override
   List<Object> get props => [plant];
@@ -642,6 +642,15 @@ class MainNavigateToCreateChecklist extends MainNavigatorEvent {
   List<Object?> get props => [checklist, checklistSeed,];
 }
 
+class MainNavigateToChecklistCollections extends MainNavigatorEvent {
+  final Plant plant;
+
+  MainNavigateToChecklistCollections(this.plant);
+
+  @override
+  List<Object?> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -763,9 +772,9 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToFullscreenPicture) {
       future = _navigatorKey.currentState!.pushNamed('/picture', arguments: event);
     } else if (event is MainNavigateToTimelapseViewer) {
-      future = _pushOrReplace('/timelapse/viewer', event);
+      future = _navigatorKey.currentState!.pushNamed('/timelapse/viewer', arguments: event);
     } else if (event is MainNavigateToQRCodeViewer) {
-      future = _pushOrReplace('/qrcode/viewer', event);
+      future = _navigatorKey.currentState!.pushNamed('/qrcode/viewer', arguments: event);
     } else if (event is MainNavigateToSettingsAuth) {
       future = _navigatorKey.currentState!.pushNamed('/settings/auth', arguments: event);
     } else if (event is MainNavigateToSettingsLogin) {
@@ -818,6 +827,8 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/checklist', arguments: event);
     } else if (event is MainNavigateToCreateChecklist) {
       future = _navigatorKey.currentState!.pushNamed('/checklist/create', arguments: event);
+    } else if (event is MainNavigateToChecklistCollections) {
+      future = _navigatorKey.currentState!.pushNamed('/checklist/collections', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn!(future);

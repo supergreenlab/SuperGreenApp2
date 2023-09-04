@@ -41,16 +41,30 @@ class ChecklistAPI {
     return Checklists.fromMap(checklistMap);
   }
 
-  Future<ChecklistSeedsCompanion> getSeeds() async {
-    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/seeds'), headers: {
+  Future<List<ChecklistCollectionsCompanion>> getChecklistCollections() async {
+    Response resp =
+        await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklistcollections'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
-    if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('/seeds failed with error: ${resp.body}', fwdThrow: true);
+    Map<String, dynamic> maps = JsonDecoder().convert(resp.body)['checklistcollections'];
+    List<ChecklistCollectionsCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      try {
+        ChecklistCollectionsCompanion fe = await ChecklistCollections.fromMap(maps[i]);
+        results.add(fe);
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
-    Map<String, dynamic> checklistMap = JsonDecoder().convert(resp.body);
-    return ChecklistSeeds.fromMap(checklistMap);
+    return results;
+  }
+
+  Future subscribeCollection(String collectionID, String plantID) async {
+    await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$plantID'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+    });
   }
 
   Future syncChecklistSeed(ChecklistSeed checklistSeed) async {
@@ -120,7 +134,8 @@ class ChecklistAPI {
     Map<String, dynamic> obj = await ChecklistLogs.toMap(checklistLog);
     String? serverID = await BackendAPI().postPut('/checklistlog', obj);
 
-    ChecklistLogsCompanion checklistLogsCompanion = ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
+    ChecklistLogsCompanion checklistLogsCompanion =
+        ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
     if (serverID != null) {
       checklistLogsCompanion = checklistLogsCompanion.copyWith(serverID: Value(serverID));
     }

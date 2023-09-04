@@ -64,6 +64,7 @@ LazyDatabase _openConnection() {
   Checklists,
   ChecklistSeeds,
   ChecklistLogs,
+  ChecklistCollections,
 ], daos: [
   DevicesDAO,
   PlantsDAO,

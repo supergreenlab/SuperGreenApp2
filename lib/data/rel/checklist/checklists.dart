@@ -21,6 +21,18 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'checklists.g.dart';
 
+class ChecklistCollections extends Table {
+  IntColumn get id => integer().autoIncrement()();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+
+  static Future<ChecklistCollectionsCompanion> fromMap(Map<String, dynamic> map) async {
+    return ChecklistCollectionsCompanion(
+      serverID: Value(map['id']),
+    );
+  }
+}
+
 class DeletedChecklistsCompanion extends ChecklistsCompanion {
   DeletedChecklistsCompanion(serverID) : super(serverID: serverID);
 }
@@ -204,6 +216,7 @@ class ChecklistLogs extends Table {
   Checklists,
   ChecklistSeeds,
   ChecklistLogs,
+  ChecklistCollections,
 ], queries: {
   'getNLogs': '''
     select count(*) from checklist_logs where checked=false and skipped=false and checklist=?

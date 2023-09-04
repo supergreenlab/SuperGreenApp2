@@ -10,6 +10,8 @@ mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
   $ChecklistsTable get checklists => attachedDatabase.checklists;
   $ChecklistSeedsTable get checklistSeeds => attachedDatabase.checklistSeeds;
   $ChecklistLogsTable get checklistLogs => attachedDatabase.checklistLogs;
+  $ChecklistCollectionsTable get checklistCollections =>
+      attachedDatabase.checklistCollections;
   Selectable<int> getNLogs(int var1) {
     return customSelect(
         'select count(*) from checklist_logs where checked=false and skipped=false and checklist=?',
