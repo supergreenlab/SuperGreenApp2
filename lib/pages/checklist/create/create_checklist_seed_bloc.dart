@@ -22,56 +22,56 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
-abstract class CreateChecklistBlocEvent extends Equatable {}
+abstract class CreateChecklistSeedBlocEvent extends Equatable {}
 
-class CreateChecklistBlocEventInit extends CreateChecklistBlocEvent {
+class CreateChecklistBlocEventInit extends CreateChecklistSeedBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class CreateChecklistBlocEventSave extends CreateChecklistBlocEvent {
+class CreateChecklistSeedBlocEventSave extends CreateChecklistSeedBlocEvent {
 
   final ChecklistSeedsCompanion checklistSeed;
 
-  CreateChecklistBlocEventSave(this.checklistSeed);
+  CreateChecklistSeedBlocEventSave(this.checklistSeed);
 
   @override
   List<Object> get props => [checklistSeed];
 }
 
-abstract class CreateChecklistBlocState extends Equatable {}
+abstract class CreateChecklistSeedBlocState extends Equatable {}
 
-class CreateChecklistBlocStateInit extends CreateChecklistBlocState {
+class CreateChecklistSeedBlocStateInit extends CreateChecklistSeedBlocState {
   @override
   List<Object> get props => [];
 }
 
-class CreateChecklistBlocStateLoaded extends CreateChecklistBlocState {
+class CreateChecklistSeedBlocStateLoaded extends CreateChecklistSeedBlocState {
   final Checklist checklist;
   final ChecklistSeedsCompanion checklistSeed;
 
-  CreateChecklistBlocStateLoaded(this.checklist, this.checklistSeed);
+  CreateChecklistSeedBlocStateLoaded(this.checklist, this.checklistSeed);
 
   @override
   List<Object> get props => [checklist];
 }
 
-class CreateChecklistBlocStateCreated extends CreateChecklistBlocState {
+class CreateChecklistSeedBlocStateCreated extends CreateChecklistSeedBlocState {
   @override
   List<Object> get props => [];
 }
 
-class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChecklistBlocState> {
+class CreateChecklistSeedBloc extends LegacyBloc<CreateChecklistSeedBlocEvent, CreateChecklistSeedBlocState> {
 
   final MainNavigateToCreateChecklist args;
   late final ChecklistSeedsCompanion checklistSeed;
 
-  CreateChecklistBloc(this.args) : super(CreateChecklistBlocStateInit()) {
+  CreateChecklistSeedBloc(this.args) : super(CreateChecklistSeedBlocStateInit()) {
     add(CreateChecklistBlocEventInit());
   }
 
   @override
-  Stream<CreateChecklistBlocState> mapEventToState(CreateChecklistBlocEvent event) async* {
+  Stream<CreateChecklistSeedBlocState> mapEventToState(CreateChecklistSeedBlocEvent event) async* {
     if (event is CreateChecklistBlocEventInit) {
       if (args.checklistSeed == null) {
         checklistSeed = ChecklistSeedsCompanion.insert(
@@ -89,15 +89,15 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
       } else {
         checklistSeed = args.checklistSeed!.toCompanion(false);
       }
-      yield CreateChecklistBlocStateLoaded(this.args.checklist, checklistSeed);
-    } else if (event is CreateChecklistBlocEventSave) {
+      yield CreateChecklistSeedBlocStateLoaded(this.args.checklist, checklistSeed);
+    } else if (event is CreateChecklistSeedBlocEventSave) {
       if (event.checklistSeed.id.present) {
         await RelDB.get().checklistsDAO.updateChecklistSeed(event.checklistSeed.copyWith(synced: Value(false)));
       } else {
         Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
         await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed.copyWith(checklistServerID: Value(checklist.serverID),));
       }
-      yield CreateChecklistBlocStateCreated();
+      yield CreateChecklistSeedBlocStateCreated();
     }
   }
 }

@@ -19,45 +19,46 @@
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
-abstract class ChecklistCollectionBlocEvent extends Equatable {}
+abstract class ChecklistCollectionsBlocEvent extends Equatable {}
 
-class ChecklistCollectionBlocEventInit extends ChecklistCollectionBlocEvent {
+class ChecklistCollectionsBlocEventInit extends ChecklistCollectionsBlocEvent {
   @override
   List<Object?> get props => [];
 }
 
-abstract class ChecklistCollectionBlocState extends Equatable {}
+abstract class ChecklistCollectionsBlocState extends Equatable {}
 
-class ChecklistCollectionBlocStateInit extends ChecklistCollectionBlocState {
+class ChecklistCollectionsBlocStateInit extends ChecklistCollectionsBlocState {
   @override
   List<Object?> get props => [];
 }
 
-class ChecklistCollectionBlocStateLoaded extends ChecklistCollectionBlocState {
+class ChecklistCollectionsBlocStateLoaded extends ChecklistCollectionsBlocState {
 
   final List<ChecklistCollectionsCompanion> collections;
 
-  ChecklistCollectionBlocStateLoaded(this.collections);
+  ChecklistCollectionsBlocStateLoaded(this.collections);
 
   @override
   List<Object?> get props => [collections];
 }
 
-class ChecklistCollectionBloc extends LegacyBloc<ChecklistCollectionBlocEvent, ChecklistCollectionBlocState> {
+class ChecklistCollectionsBloc extends LegacyBloc<ChecklistCollectionsBlocEvent, ChecklistCollectionsBlocState> {
 
-  final Plant plant;
+  final MainNavigateToChecklistCollections args;
 
-  ChecklistCollectionBloc(this.plant) : super(ChecklistCollectionBlocStateInit()) {
-    add(ChecklistCollectionBlocEventInit());
+  ChecklistCollectionsBloc(this.args) : super(ChecklistCollectionsBlocStateInit()) {
+    add(ChecklistCollectionsBlocEventInit());
   }
 
   @override
-  Stream<ChecklistCollectionBlocState> mapEventToState(ChecklistCollectionBlocEvent event) async* {
-    if (event is ChecklistCollectionBlocEventInit) {
+  Stream<ChecklistCollectionsBlocState> mapEventToState(ChecklistCollectionsBlocEvent event) async* {
+    if (event is ChecklistCollectionsBlocEventInit) {
       List<ChecklistCollectionsCompanion> collections = await BackendAPI().checklistAPI.getChecklistCollections();
-      yield ChecklistCollectionBlocStateLoaded(collections);
+      yield ChecklistCollectionsBlocStateLoaded(collections);
     }
   }
 }

@@ -71,8 +71,10 @@ import 'package:super_green_app/pages/bookmarks/bookmarks_bloc.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_page.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/checklist_page.dart';
-import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
-import 'package:super_green_app/pages/checklist/create/create_checklist_page.dart';
+import 'package:super_green_app/pages/checklist/collections/checklist_collection_bloc.dart';
+import 'package:super_green_app/pages/checklist/collections/checklist_collection_page.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_seed_bloc.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_seed_page.dart';
 import 'package:super_green_app/pages/explorer/follows/follows_feed_bloc.dart';
 import 'package:super_green_app/pages/explorer/follows/follows_feed_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
@@ -764,9 +766,16 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       case '/checklist/create':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => CreateChecklistBloc(settings.arguments as MainNavigateToCreateChecklist)),
+            BlocProvider(create: (context) => CreateChecklistSeedBloc(settings.arguments as MainNavigateToCreateChecklist)),
           ],
           child: addOnPopCallBack(CreateChecklistSeedPage(), onPop),
+        );
+      case '/checklist/collections':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => ChecklistCollectionsBloc(settings.arguments as MainNavigateToChecklistCollections)),
+          ],
+          child: addOnPopCallBack(ChecklistCollectionsPage(), onPop),
         );
     }
     return Text(MainPage.mainNavigatorUnknownRoute);

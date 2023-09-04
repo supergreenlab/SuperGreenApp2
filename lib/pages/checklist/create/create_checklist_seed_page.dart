@@ -39,7 +39,7 @@ import 'package:super_green_app/pages/checklist/create/conditions/card_condition
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/phase_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
-import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_seed_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_category.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -82,9 +82,9 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateChecklistBloc, CreateChecklistBlocState>(
-      listener: (BuildContext context, CreateChecklistBlocState state) {
-        if (state is CreateChecklistBlocStateLoaded) {
+    return BlocListener<CreateChecklistSeedBloc, CreateChecklistSeedBlocState>(
+      listener: (BuildContext context, CreateChecklistSeedBlocState state) {
+        if (state is CreateChecklistSeedBlocStateLoaded) {
           setState(() {
             _titleController.text = state.checklistSeed.title.value;
             _descriptionController.text = state.checklistSeed.description.value;
@@ -99,20 +99,20 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 .addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.exitConditions.value)));
             this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
           });
-        } else if (state is CreateChecklistBlocStateCreated) {
+        } else if (state is CreateChecklistSeedBlocStateCreated) {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
         }
       },
-      child: BlocBuilder<CreateChecklistBloc, CreateChecklistBlocState>(
-          bloc: BlocProvider.of<CreateChecklistBloc>(context),
+      child: BlocBuilder<CreateChecklistSeedBloc, CreateChecklistSeedBlocState>(
+          bloc: BlocProvider.of<CreateChecklistSeedBloc>(context),
           builder: (context, state) {
             Widget body = FullscreenLoading(
               title: 'Loading..',
             );
             Function() onSave = () {};
-            if (state is CreateChecklistBlocStateInit) {
+            if (state is CreateChecklistSeedBlocStateInit) {
               body = FullscreenLoading();
-            } else if (state is CreateChecklistBlocStateLoaded) {
+            } else if (state is CreateChecklistSeedBlocStateLoaded) {
               body = _renderLoaded(context, state);
               onSave = () {
                 ChecklistSeedsCompanion cks = state.checklistSeed.copyWith(
@@ -125,7 +125,7 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                   exitConditions: drift.Value(json.encode(exitConditions.map((c) => c.toMap()).toList())),
                   actions: drift.Value(json.encode(actions.map((a) => a.toMap()).toList())),
                 );
-                BlocProvider.of<CreateChecklistBloc>(context).add(CreateChecklistBlocEventSave(cks));
+                BlocProvider.of<CreateChecklistSeedBloc>(context).add(CreateChecklistSeedBlocEventSave(cks));
                 SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
                 Future.delayed(const Duration(milliseconds: 200), () {
                   syncerBloc.add(SyncerBlocEventForceSyncChecklists());
@@ -180,7 +180,7 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, CreateChecklistBlocStateLoaded state) {
+  Widget _renderLoaded(BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
     Widget body = ListView(
       key: listKey,
       children: [
@@ -261,7 +261,7 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     return body;
   }
 
-  Widget _renderInfos(BuildContext context, CreateChecklistBlocStateLoaded state) {
+  Widget _renderInfos(BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
@@ -434,7 +434,7 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     );
   }
 
-  Widget _renderActions(BuildContext context, CreateChecklistBlocStateLoaded state) {
+  Widget _renderActions(BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(

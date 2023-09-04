@@ -21,12 +21,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/checklist/collections/checklist_collection_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class ChecklistCollectionPage extends StatelessWidget {
+class ChecklistCollectionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChecklistCollectionBloc, ChecklistCollectionBlocState>(
-      builder: (BuildContext context, ChecklistCollectionBlocState state) {
-        if (state is ChecklistCollectionBlocStateInit) {
+    return BlocBuilder<ChecklistCollectionsBloc, ChecklistCollectionsBlocState>(
+      builder: (BuildContext context, ChecklistCollectionsBlocState state) {
+        if (state is ChecklistCollectionsBlocStateInit) {
           return FullscreenLoading();
         }
 
