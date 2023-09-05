@@ -48,8 +48,8 @@ class ChecklistCollectionsPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, ChecklistCollectionsBlocStateLoaded state) {
-    return ListView(
-      children: state.collections.map<Widget>((c) {
+    return ListView(children: [
+      ...state.collections.map<Widget>((c) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -78,6 +78,7 @@ class ChecklistCollectionsPage extends StatelessWidget {
           ),
         );
       }).toList(),
-    );
+      Text('More to come soon (hopefully)'),
+    ]);
   }
 }

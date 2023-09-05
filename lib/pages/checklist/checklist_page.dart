@@ -196,7 +196,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ],
             ),
             width: 300,
-            height: 310,
+            height: 250,
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
@@ -238,10 +238,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       showCreateMenu = false;
                     });
                   }),
-                  SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.plant));
-                  }),
+                  // SvgPicture.asset('assets/checklist/line_separator.svg'),
+                  // _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
+                  //   BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.plant));
+                  // }),
                 ],
               ),
             ),
@@ -507,7 +507,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: SizedBox(width: 24, height: 32, child: Checkbox(value: false, onChanged: (bool? value) {})),
+                    child: SizedBox(width: 24, height: 32, child: Checkbox(value: false, onChanged: (bool? value) {
+                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
+                    })),
                   ),
                   Text('Activate auto checklist?',
                       style: TextStyle(

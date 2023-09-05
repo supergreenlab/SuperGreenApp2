@@ -21,6 +21,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -78,6 +79,11 @@ class ChecklistBlocEventCreate extends ChecklistBlocEvent {
 
   @override
   List<Object> get props => [checklistSeed];
+}
+
+class ChecklistBlocEventAutoChecklist extends ChecklistBlocEvent {
+  @override
+  List<Object> get props => [];
 }
 
 abstract class ChecklistBlocState extends Equatable {}
@@ -144,6 +150,8 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
     } else if (event is ChecklistBlocEventCreate) {
       Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
       await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed.copyWith(checklistServerID: Value(checklist.serverID),));
+    } else if (event is ChecklistBlocEventAutoChecklist) {
+      await BackendAPI().checklistAPI.subscribeCollection('', args.checklist.serverID!);
     }
   }
 
