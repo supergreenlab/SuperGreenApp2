@@ -79,8 +79,12 @@ Make sure your soil is dry before watering, best way to check that is to check t
 
 When watering, make sure the soil is totally watered, which means you need to pour water until the run-off fills the plant, then let the soil absorb the run-off. Add more water in the plate until the soil does not absorb anymore, then remove the remaining water from the plate.
                         ''';
-                        ChecklistActionCreateCard action = ChecklistActionCreateCard(
+                        ChecklistActionCreateCard waterAction = ChecklistActionCreateCard(
                           entryType: FE_WATER,
+                        );
+                        ChecklistActionCreateCard mediaAction = ChecklistActionCreateCard(
+                          entryType: FE_MEDIA,
+                          instructions: 'Take a pic of your plant before the watering to see the difference.',
                         );
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
@@ -93,7 +97,7 @@ When watering, make sure the soil is totally watered, which means you need to po
                           repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
                           conditions: drift.Value('[${condition.toJSON()}]'),
                           exitConditions: drift.Value('[]'),
-                          actions: drift.Value('[${action.toJSON()}]'),
+                          actions: drift.Value('[${mediaAction.toJSON()}, ${waterAction.toJSON()}]'),
                           synced: drift.Value(false),
                         )));
                         SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);

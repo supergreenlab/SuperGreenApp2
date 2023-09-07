@@ -42,6 +42,7 @@ class ChecklistCardType extends StatelessWidget {
       FE_FIMMING,
       FE_TOPPING,
       FE_DEFOLIATION,
+      FE_LIFE_EVENT,
       FE_TIMELAPSE,
       FE_SCHEDULE,
       FE_SCHEDULE_VEG,
