@@ -77,7 +77,7 @@ class ChecklistAPI {
   Future subscribeCollection(String collectionID, String checklistID) async {
     await BackendAPI()
         .apiClient
-        .post(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$checklistID'), headers: {
+        .post(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$checklistID/true'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });

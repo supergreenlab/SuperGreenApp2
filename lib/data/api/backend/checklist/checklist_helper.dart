@@ -18,6 +18,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistHelper {
@@ -76,10 +77,14 @@ class ChecklistHelper {
       await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, collectionID);
       return;
     } catch (e) {
-      ChecklistCollectionsCompanion collection = await BackendAPI().checklistAPI.getChecklistCollection(collectionID);
-      collection = collection.copyWith(checklist: Value(checklist.id));
-      await BackendAPI().checklistAPI.subscribeCollection(collectionID, checklist.serverID!);
-      await RelDB.get().checklistsDAO.addChecklistCollection(collection);
+      try {
+        ChecklistCollectionsCompanion collection = await BackendAPI().checklistAPI.getChecklistCollection(collectionID);
+        collection = collection.copyWith(checklist: Value(checklist.id));
+        await BackendAPI().checklistAPI.subscribeCollection(collectionID, checklist.serverID!);
+        await RelDB.get().checklistsDAO.addChecklistCollection(collection);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
     }
   }
 }
