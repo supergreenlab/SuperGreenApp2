@@ -4808,6 +4808,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   final String exitConditions;
   final String actions;
   final String? checklistServerID;
+  final String? checklistCollectionServerID;
   final String? serverID;
   final bool synced;
   ChecklistSeed(
@@ -4824,6 +4825,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       required this.exitConditions,
       required this.actions,
       this.checklistServerID,
+      this.checklistCollectionServerID,
       this.serverID,
       required this.synced});
   factory ChecklistSeed.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -4855,6 +4857,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           .mapFromDatabaseResponse(data['${effectivePrefix}actions'])!,
       checklistServerID: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}checklist_server_i_d']),
+      checklistCollectionServerID: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}checklist_collection_server_i_d']),
       serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
       synced: const BoolType()
@@ -4880,6 +4884,10 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     map['actions'] = Variable<String>(actions);
     if (!nullToAbsent || checklistServerID != null) {
       map['checklist_server_i_d'] = Variable<String?>(checklistServerID);
+    }
+    if (!nullToAbsent || checklistCollectionServerID != null) {
+      map['checklist_collection_server_i_d'] =
+          Variable<String?>(checklistCollectionServerID);
     }
     if (!nullToAbsent || serverID != null) {
       map['server_i_d'] = Variable<String?>(serverID);
@@ -4907,6 +4915,10 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       checklistServerID: checklistServerID == null && nullToAbsent
           ? const Value.absent()
           : Value(checklistServerID),
+      checklistCollectionServerID:
+          checklistCollectionServerID == null && nullToAbsent
+              ? const Value.absent()
+              : Value(checklistCollectionServerID),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
@@ -4932,6 +4944,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       actions: serializer.fromJson<String>(json['actions']),
       checklistServerID:
           serializer.fromJson<String?>(json['checklistServerID']),
+      checklistCollectionServerID:
+          serializer.fromJson<String?>(json['checklistCollectionServerID']),
       serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
@@ -4953,6 +4967,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       'exitConditions': serializer.toJson<String>(exitConditions),
       'actions': serializer.toJson<String>(actions),
       'checklistServerID': serializer.toJson<String?>(checklistServerID),
+      'checklistCollectionServerID':
+          serializer.toJson<String?>(checklistCollectionServerID),
       'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
@@ -4972,6 +4988,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           String? exitConditions,
           String? actions,
           String? checklistServerID,
+          String? checklistCollectionServerID,
           String? serverID,
           bool? synced}) =>
       ChecklistSeed(
@@ -4988,6 +5005,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
         exitConditions: exitConditions ?? this.exitConditions,
         actions: actions ?? this.actions,
         checklistServerID: checklistServerID ?? this.checklistServerID,
+        checklistCollectionServerID:
+            checklistCollectionServerID ?? this.checklistCollectionServerID,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
       );
@@ -5007,6 +5026,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           ..write('exitConditions: $exitConditions, ')
           ..write('actions: $actions, ')
           ..write('checklistServerID: $checklistServerID, ')
+          ..write('checklistCollectionServerID: $checklistCollectionServerID, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -5028,6 +5048,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       exitConditions,
       actions,
       checklistServerID,
+      checklistCollectionServerID,
       serverID,
       synced);
   @override
@@ -5047,6 +5068,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           other.exitConditions == this.exitConditions &&
           other.actions == this.actions &&
           other.checklistServerID == this.checklistServerID &&
+          other.checklistCollectionServerID ==
+              this.checklistCollectionServerID &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
 }
@@ -5065,6 +5088,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   final Value<String> exitConditions;
   final Value<String> actions;
   final Value<String?> checklistServerID;
+  final Value<String?> checklistCollectionServerID;
   final Value<String?> serverID;
   final Value<bool> synced;
   const ChecklistSeedsCompanion({
@@ -5081,6 +5105,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.exitConditions = const Value.absent(),
     this.actions = const Value.absent(),
     this.checklistServerID = const Value.absent(),
+    this.checklistCollectionServerID = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   });
@@ -5098,6 +5123,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.exitConditions = const Value.absent(),
     this.actions = const Value.absent(),
     this.checklistServerID = const Value.absent(),
+    this.checklistCollectionServerID = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : checklist = Value(checklist);
@@ -5115,6 +5141,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     Expression<String>? exitConditions,
     Expression<String>? actions,
     Expression<String?>? checklistServerID,
+    Expression<String?>? checklistCollectionServerID,
     Expression<String?>? serverID,
     Expression<bool>? synced,
   }) {
@@ -5132,6 +5159,8 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       if (exitConditions != null) 'exit_conditions': exitConditions,
       if (actions != null) 'actions': actions,
       if (checklistServerID != null) 'checklist_server_i_d': checklistServerID,
+      if (checklistCollectionServerID != null)
+        'checklist_collection_server_i_d': checklistCollectionServerID,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
     });
@@ -5151,6 +5180,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       Value<String>? exitConditions,
       Value<String>? actions,
       Value<String?>? checklistServerID,
+      Value<String?>? checklistCollectionServerID,
       Value<String?>? serverID,
       Value<bool>? synced}) {
     return ChecklistSeedsCompanion(
@@ -5167,6 +5197,8 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       exitConditions: exitConditions ?? this.exitConditions,
       actions: actions ?? this.actions,
       checklistServerID: checklistServerID ?? this.checklistServerID,
+      checklistCollectionServerID:
+          checklistCollectionServerID ?? this.checklistCollectionServerID,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
@@ -5214,6 +5246,10 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     if (checklistServerID.present) {
       map['checklist_server_i_d'] = Variable<String?>(checklistServerID.value);
     }
+    if (checklistCollectionServerID.present) {
+      map['checklist_collection_server_i_d'] =
+          Variable<String?>(checklistCollectionServerID.value);
+    }
     if (serverID.present) {
       map['server_i_d'] = Variable<String?>(serverID.value);
     }
@@ -5239,6 +5275,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
           ..write('exitConditions: $exitConditions, ')
           ..write('actions: $actions, ')
           ..write('checklistServerID: $checklistServerID, ')
+          ..write('checklistCollectionServerID: $checklistCollectionServerID, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -5346,6 +5383,16 @@ class $ChecklistSeedsTable extends ChecklistSeeds
               minTextLength: 36, maxTextLength: 36),
           type: const StringType(),
           requiredDuringInsert: false);
+  final VerificationMeta _checklistCollectionServerIDMeta =
+      const VerificationMeta('checklistCollectionServerID');
+  @override
+  late final GeneratedColumn<String?> checklistCollectionServerID =
+      GeneratedColumn<String?>(
+          'checklist_collection_server_i_d', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 36, maxTextLength: 36),
+          type: const StringType(),
+          requiredDuringInsert: false);
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
   @override
   late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
@@ -5377,6 +5424,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
         exitConditions,
         actions,
         checklistServerID,
+        checklistCollectionServerID,
         serverID,
         synced
       ];
@@ -5451,6 +5499,13 @@ class $ChecklistSeedsTable extends ChecklistSeeds
           _checklistServerIDMeta,
           checklistServerID.isAcceptableOrUnknown(
               data['checklist_server_i_d']!, _checklistServerIDMeta));
+    }
+    if (data.containsKey('checklist_collection_server_i_d')) {
+      context.handle(
+          _checklistCollectionServerIDMeta,
+          checklistCollectionServerID.isAcceptableOrUnknown(
+              data['checklist_collection_server_i_d']!,
+              _checklistCollectionServerIDMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
@@ -5922,12 +5977,14 @@ class $ChecklistLogsTable extends ChecklistLogs
 class ChecklistCollection extends DataClass
     implements Insertable<ChecklistCollection> {
   final int id;
+  final int checklist;
   final String? serverID;
   final String title;
   final String description;
   final String category;
   ChecklistCollection(
       {required this.id,
+      required this.checklist,
       this.serverID,
       required this.title,
       required this.description,
@@ -5938,6 +5995,8 @@ class ChecklistCollection extends DataClass
     return ChecklistCollection(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      checklist: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
       serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
       title: const StringType()
@@ -5952,6 +6011,7 @@ class ChecklistCollection extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['checklist'] = Variable<int>(checklist);
     if (!nullToAbsent || serverID != null) {
       map['server_i_d'] = Variable<String?>(serverID);
     }
@@ -5964,6 +6024,7 @@ class ChecklistCollection extends DataClass
   ChecklistCollectionsCompanion toCompanion(bool nullToAbsent) {
     return ChecklistCollectionsCompanion(
       id: Value(id),
+      checklist: Value(checklist),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
@@ -5978,6 +6039,7 @@ class ChecklistCollection extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ChecklistCollection(
       id: serializer.fromJson<int>(json['id']),
+      checklist: serializer.fromJson<int>(json['checklist']),
       serverID: serializer.fromJson<String?>(json['serverID']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
@@ -5989,6 +6051,7 @@ class ChecklistCollection extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'checklist': serializer.toJson<int>(checklist),
       'serverID': serializer.toJson<String?>(serverID),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
@@ -5998,12 +6061,14 @@ class ChecklistCollection extends DataClass
 
   ChecklistCollection copyWith(
           {int? id,
+          int? checklist,
           String? serverID,
           String? title,
           String? description,
           String? category}) =>
       ChecklistCollection(
         id: id ?? this.id,
+        checklist: checklist ?? this.checklist,
         serverID: serverID ?? this.serverID,
         title: title ?? this.title,
         description: description ?? this.description,
@@ -6013,6 +6078,7 @@ class ChecklistCollection extends DataClass
   String toString() {
     return (StringBuffer('ChecklistCollection(')
           ..write('id: $id, ')
+          ..write('checklist: $checklist, ')
           ..write('serverID: $serverID, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
@@ -6022,12 +6088,14 @@ class ChecklistCollection extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, serverID, title, description, category);
+  int get hashCode =>
+      Object.hash(id, checklist, serverID, title, description, category);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChecklistCollection &&
           other.id == this.id &&
+          other.checklist == this.checklist &&
           other.serverID == this.serverID &&
           other.title == this.title &&
           other.description == this.description &&
@@ -6037,12 +6105,14 @@ class ChecklistCollection extends DataClass
 class ChecklistCollectionsCompanion
     extends UpdateCompanion<ChecklistCollection> {
   final Value<int> id;
+  final Value<int> checklist;
   final Value<String?> serverID;
   final Value<String> title;
   final Value<String> description;
   final Value<String> category;
   const ChecklistCollectionsCompanion({
     this.id = const Value.absent(),
+    this.checklist = const Value.absent(),
     this.serverID = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
@@ -6050,13 +6120,15 @@ class ChecklistCollectionsCompanion
   });
   ChecklistCollectionsCompanion.insert({
     this.id = const Value.absent(),
+    required int checklist,
     this.serverID = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.category = const Value.absent(),
-  });
+  }) : checklist = Value(checklist);
   static Insertable<ChecklistCollection> custom({
     Expression<int>? id,
+    Expression<int>? checklist,
     Expression<String?>? serverID,
     Expression<String>? title,
     Expression<String>? description,
@@ -6064,6 +6136,7 @@ class ChecklistCollectionsCompanion
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (checklist != null) 'checklist': checklist,
       if (serverID != null) 'server_i_d': serverID,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
@@ -6073,12 +6146,14 @@ class ChecklistCollectionsCompanion
 
   ChecklistCollectionsCompanion copyWith(
       {Value<int>? id,
+      Value<int>? checklist,
       Value<String?>? serverID,
       Value<String>? title,
       Value<String>? description,
       Value<String>? category}) {
     return ChecklistCollectionsCompanion(
       id: id ?? this.id,
+      checklist: checklist ?? this.checklist,
       serverID: serverID ?? this.serverID,
       title: title ?? this.title,
       description: description ?? this.description,
@@ -6091,6 +6166,9 @@ class ChecklistCollectionsCompanion
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (checklist.present) {
+      map['checklist'] = Variable<int>(checklist.value);
     }
     if (serverID.present) {
       map['server_i_d'] = Variable<String?>(serverID.value);
@@ -6111,6 +6189,7 @@ class ChecklistCollectionsCompanion
   String toString() {
     return (StringBuffer('ChecklistCollectionsCompanion(')
           ..write('id: $id, ')
+          ..write('checklist: $checklist, ')
           ..write('serverID: $serverID, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
@@ -6133,6 +6212,11 @@ class $ChecklistCollectionsTable extends ChecklistCollections
       type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _checklistMeta = const VerificationMeta('checklist');
+  @override
+  late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
+      'checklist', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
   @override
   late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
@@ -6165,7 +6249,7 @@ class $ChecklistCollectionsTable extends ChecklistCollections
       defaultValue: Constant(''));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, serverID, title, description, category];
+      [id, checklist, serverID, title, description, category];
   @override
   String get aliasedName => _alias ?? 'checklist_collections';
   @override
@@ -6178,6 +6262,12 @@ class $ChecklistCollectionsTable extends ChecklistCollections
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('checklist')) {
+      context.handle(_checklistMeta,
+          checklist.isAcceptableOrUnknown(data['checklist']!, _checklistMeta));
+    } else if (isInserting) {
+      context.missing(_checklistMeta);
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,

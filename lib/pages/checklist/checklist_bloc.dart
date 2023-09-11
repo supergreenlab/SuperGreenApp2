@@ -151,7 +151,7 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
       Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
       await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed.copyWith(checklistServerID: Value(checklist.serverID),));
     } else if (event is ChecklistBlocEventAutoChecklist) {
-      await BackendAPI().checklistAPI.subscribeCollection('', args.checklist.serverID!);
+      await ChecklistHelper.subscribeCollection(BackendAPI().checklistCollectionTheBasics, args.checklist);
     }
   }
 

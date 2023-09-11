@@ -142,6 +142,7 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 16) {
       await m.addColumn(checklists, checklistSeeds.fast);
       await m.addColumn(checklistSeeds, checklistSeeds.collection);
+      await m.addColumn(checklistSeeds, checklistSeeds.checklistCollectionServerID);
       await m.createTable(checklistCollections);
     }
   }

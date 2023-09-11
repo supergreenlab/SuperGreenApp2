@@ -17,6 +17,7 @@
  */
 
 import 'package:drift/drift.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistHelper {
@@ -52,14 +53,33 @@ class ChecklistHelper {
     if (checklistLog.checked || checklistLog.skipped) {
       return;
     }
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
+    await RelDB.get()
+        .checklistsDAO
+        .updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
   }
 
   static Future checkChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(checked: true, synced: false).toCompanion(true));
+    await RelDB.get()
+        .checklistsDAO
+        .updateChecklistLog(checklistLog.copyWith(checked: true, synced: false).toCompanion(true));
   }
 
   static Future skipChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get().checklistsDAO.updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
+    await RelDB.get()
+        .checklistsDAO
+        .updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
+  }
+
+  static Future subscribeCollection(String collectionID, Checklist checklist) async {
+    try {
+      // If exists.
+      await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, collectionID);
+      return;
+    } catch (e) {
+      ChecklistCollectionsCompanion collection = await BackendAPI().checklistAPI.getChecklistCollection(collectionID);
+      collection = collection.copyWith(checklist: Value(checklist.id));
+      await BackendAPI().checklistAPI.subscribeCollection(collectionID, checklist.serverID!);
+      await RelDB.get().checklistsDAO.addChecklistCollection(collection);
+    }
   }
 }

@@ -62,7 +62,9 @@ class SyncerBlocEventForceSyncChecklists extends SyncerBlocEvent {
   SyncerBlocEventForceSyncChecklists();
 
   @override
-  List<Object> get props => [rand,];
+  List<Object> get props => [
+        rand,
+      ];
 }
 
 abstract class SyncerBlocState extends Equatable {}
@@ -390,6 +392,20 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().checklistsDAO.addChecklistSeed(checklistSeedsCompanion);
+        }
+        if (checklistSeedsCompanion.checklistCollectionServerID.value != null) {
+          Checklist checklist =
+              await RelDB().checklistsDAO.getChecklistForServerID(checklistSeedsCompanion.checklistServerID.value!);
+          try {
+            // If exists.
+            await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, checklistSeedsCompanion.checklistCollectionServerID.value!);
+            return;
+          } catch (e) {
+            ChecklistCollectionsCompanion collection =
+                await BackendAPI().checklistAPI.getChecklistCollection(checklistSeedsCompanion.checklistCollectionServerID.value!);
+            collection = collection.copyWith(checklist: Value(checklist.id));
+            await RelDB.get().checklistsDAO.addChecklistCollection(collection);
+          }
         }
       }
       await UserEndHelper.setSynced("checklistseed", checklistSeedsCompanion.serverID.value!);

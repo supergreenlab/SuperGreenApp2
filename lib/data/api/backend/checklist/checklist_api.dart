@@ -49,11 +49,11 @@ class ChecklistAPI {
     });
     Map<String, dynamic> result = JsonDecoder().convert(resp.body);
     List<ChecklistCollectionsCompanion> results = [];
-    List<dynamic> maps = result['checklistcollections']; 
+    List<dynamic> maps = result['checklistcollections'];
     for (int i = 0; i < maps.length; ++i) {
       try {
         ChecklistCollectionsCompanion fe = await ChecklistCollections.fromMap(maps[i]);
-        results.add(fe);  
+        results.add(fe);
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
       }
@@ -61,8 +61,23 @@ class ChecklistAPI {
     return results;
   }
 
+  Future<ChecklistCollectionsCompanion> getChecklistCollection(String collectionID) async {
+    Response resp =
+        await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      Logger.throwError('/checklistcollection/$collectionID failed with error: ${resp.body}', fwdThrow: true);
+    }
+    Map<String, dynamic> checklistMap = JsonDecoder().convert(resp.body);
+    return ChecklistCollections.fromMap(checklistMap);
+  }
+
   Future subscribeCollection(String collectionID, String checklistID) async {
-    await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$checklistID'), headers: {
+    await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$checklistID'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });

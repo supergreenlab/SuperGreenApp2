@@ -43,11 +43,11 @@ class Fullscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> titles = [];
     if (title != null) {
-      Text(
+      titles.add(Text(
         title!,
         style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor ?? Color(0xff565656)),
         textAlign: TextAlign.center,
-      );
+      ));
     }
     if (subtitle != null) {
       titles.add(Text(

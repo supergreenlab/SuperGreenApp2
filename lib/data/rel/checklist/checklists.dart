@@ -24,6 +24,8 @@ part 'checklists.g.dart';
 class ChecklistCollections extends Table {
   IntColumn get id => integer().autoIncrement()();
 
+  IntColumn get checklist => integer()();
+
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
 
   TextColumn get title => text().withDefault(Constant(''))();
@@ -83,11 +85,13 @@ class Checklists extends Table {
 }
 
 class DeletedChecklistSeedsCompanion extends ChecklistSeedsCompanion {
-  DeletedChecklistSeedsCompanion(serverID, checklistServerID) : super(serverID: serverID, checklistServerID: checklistServerID);
+  DeletedChecklistSeedsCompanion(serverID, checklistServerID)
+      : super(serverID: serverID, checklistServerID: checklistServerID);
 }
 
 class SkipChecklistSeedsCompanion extends ChecklistSeedsCompanion {
-  SkipChecklistSeedsCompanion(serverID, checklistServerID) : super(serverID: serverID, checklistServerID: checklistServerID);
+  SkipChecklistSeedsCompanion(serverID, checklistServerID)
+      : super(serverID: serverID, checklistServerID: checklistServerID);
 }
 
 class ChecklistSeeds extends Table {
@@ -108,6 +112,7 @@ class ChecklistSeeds extends Table {
   TextColumn get actions => text().withDefault(Constant('[]'))();
 
   TextColumn get checklistServerID => text().withLength(min: 36, max: 36).nullable()();
+  TextColumn get checklistCollectionServerID => text().withLength(min: 36, max: 36).nullable()();
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
@@ -135,6 +140,7 @@ class ChecklistSeeds extends Table {
       actions: Value(map['actions']),
       serverID: Value(map['id'] as String),
       checklistServerID: Value(map['checklistID'] as String),
+      checklistCollectionServerID: Value(map['collectionID'] as String),
       synced: Value(true),
     );
   }
@@ -144,7 +150,7 @@ class ChecklistSeeds extends Table {
     return {
       'id': checklistSeed.serverID,
       'checklistID': checklist.serverID,
-      'fast': checklistSeed.fast, 
+      'fast': checklistSeed.fast,
       'public': checklistSeed.public,
       'repeat': checklistSeed.repeat,
       'title': checklistSeed.title,
@@ -237,6 +243,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return into(checklists).insert(checklist);
   }
 
+  Future<int> addChecklistCollection(ChecklistCollectionsCompanion checklistCollection) {
+    return into(checklistCollections).insert(checklistCollection);
+  }
+
   Future<int> addChecklistSeed(ChecklistSeedsCompanion checklistSeed) {
     return into(checklistSeeds).insert(checklistSeed);
   }
@@ -251,6 +261,14 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Stream<Checklist> watchChecklistForPlant(int plantID) {
     return (select(checklists)..where((p) => p.plant.equals(plantID))).watchSingle();
+  }
+
+  Future<ChecklistCollection> getChecklistCollection(int id) {
+    return (select(checklistCollections)..where((p) => p.id.equals(id))).getSingle();
+  }
+
+  Future<ChecklistCollection> getChecklistCollectionForServerID(Checklist checklist, String id) {
+    return (select(checklistCollections)..where((p) => p.serverID.equals(id))).getSingle();
   }
 
   Future<Checklist> getChecklist(int id) {
@@ -280,7 +298,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   }
 
   Future<List<ChecklistSeed>> getChecklistSeeds(int checklistID) {
-    return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))..orderBy([(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])).get();
+    return (select(checklistSeeds)
+          ..where((p) => p.checklist.equals(checklistID))
+          ..orderBy([(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)]))
+        .get();
   }
 
   Future<List<ChecklistLog>> getChecklistLogs(int checklistID, {int limit = 0, int offset = 0}) {
