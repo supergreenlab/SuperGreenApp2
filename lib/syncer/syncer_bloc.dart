@@ -395,11 +395,10 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
         if (checklistSeedsCompanion.checklistCollectionServerID.value != null) {
           Checklist checklist =
-              await RelDB().checklistsDAO.getChecklistForServerID(checklistSeedsCompanion.checklistServerID.value!);
+              await RelDB.get().checklistsDAO.getChecklistForServerID(checklistSeedsCompanion.checklistServerID.value!);
           try {
             // If exists.
             await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, checklistSeedsCompanion.checklistCollectionServerID.value!);
-            return;
           } catch (e) {
             ChecklistCollectionsCompanion collection =
                 await BackendAPI().checklistAPI.getChecklistCollection(checklistSeedsCompanion.checklistCollectionServerID.value!);

@@ -75,7 +75,6 @@ class ChecklistHelper {
     try {
       // If exists.
       await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, collectionID);
-      return;
     } catch (e) {
       try {
         ChecklistCollectionsCompanion collection = await BackendAPI().checklistAPI.getChecklistCollection(collectionID);

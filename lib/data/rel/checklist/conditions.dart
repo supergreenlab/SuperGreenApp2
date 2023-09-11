@@ -168,14 +168,22 @@ class ChecklistConditionMetric extends ChecklistCondition {
       ];
 
   static ChecklistConditionMetric fromMap(Map<String, dynamic> map) {
+    double? min;
+    if (map['min'] != null && map['min'] is int) {
+      min = (map['min'] as int).toDouble();
+    }
+    double? max;
+    if (map['max'] != null && map['max'] is int) {
+      max = (map['max'] as int).toDouble();
+    }
     return ChecklistConditionMetric(
       key: map['key'],
-      inRange: map['inRange'],
-      min: map['min'],
-      max: map['max'],
+      inRange: map['inRange'] ?? false,
+      min: min,
+      max: max,
       duration: map['duration'],
       durationUnit: map['durationUnit'],
-      daysInRow: map['daysInRow'],
+      daysInRow: map['daysInRow'] ?? false,
       nDaysInRow: map['nDaysInRow'],
     );
   }
@@ -374,7 +382,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(
       date: DateTime.parse(map['date'] as String).toLocal(),
-      repeat: map['repeat'],
+      repeat: map['repeat'] ?? false,
       repeatDuration: map['repeatDuration'],
       durationUnit: map['durationUnit'],
     );
