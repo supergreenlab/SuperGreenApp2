@@ -46,17 +46,18 @@ class ChecklistActionPopupPage extends StatelessWidget {
           ),
           clipBehavior: Clip.hardEdge,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
                   ),
-                  child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
                 ),
               ),
             ],
@@ -67,23 +68,21 @@ class ChecklistActionPopupPage extends StatelessWidget {
   }
 
   Widget _renderBody(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _renderTitle(context, state),
-          _renderChecklistSeed(context, state),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Actions",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _renderTitle(context, state),
+        Expanded(child: _renderChecklistSeed(context, state)),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Actions",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
           ),
-          _renderActions(context, state),
-        ],
-      ),
+        ),
+        _renderActions(context, state),
+      ],
     );
   }
 
@@ -137,16 +136,13 @@ class ChecklistActionPopupPage extends StatelessWidget {
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: height),
-        child: SingleChildScrollView(
-          child: MarkdownBody(
-            data: state.checklistSeed.description,
-            styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.black, fontSize: 12),
-              h1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
-              h2: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-            ),
+      child: SingleChildScrollView(
+        child: MarkdownBody(
+          data: state.checklistSeed.description,
+          styleSheet: MarkdownStyleSheet(
+            p: TextStyle(color: Colors.black, fontSize: 12),
+            h1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+            h2: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -155,17 +151,12 @@ class ChecklistActionPopupPage extends StatelessWidget {
 
   Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     double height = MediaQuery.of(context).size.height * 0.35;
-    if (state.checklistLogs.length == 1) {
-      height = height * 0.3;
-    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: height),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
             children: state.checklistLogs.map<Widget>((log) {
               ChecklistAction action = ChecklistAction.fromJSON(log.action);
               return Padding(

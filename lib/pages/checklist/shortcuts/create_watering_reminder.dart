@@ -73,11 +73,26 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
 
 Make sure your soil is dry before watering, best way to check that is to check the dryness of the first inch of soil, if it's not dry, wait a few more days, and if you can, try to lift the pot manually, a dry soil is noticeably lightweight.
 
-![Pic](https://vivosun.com/wp-content/uploads/2022/03/How-often-to-Water-Cannabis.jpg)
-
 ## How to water
 
-When watering, make sure the soil is totally watered, which means you need to pour water until the run-off fills the plant, then let the soil absorb the run-off. Add more water in the plate until the soil does not absorb anymore, then remove the remaining water from the plate.
+Follow these 3 steps to make sure your soil is well watered:
+
+### 1. Place pot in a plate
+
+![Pic](https://www.supergreenlab.com/img/files/attig9yWzQqc2zBTR.jpg)
+
+### 2. Wait until run-off is absorbed
+
+![Pic](https://www.supergreenlab.com/img/files/attLsvB1lFMOMQGCA.jpg)
+
+### 3. Add more run-off if needed
+
+![Pic](https://www.supergreenlab.com/img/files/attSbOfquWiBoP2tn.jpg)
+
+### 4. Remove remaining run-off
+
+![Pic](https://www.supergreenlab.com/img/files/attJg4Px8XDhCR6gO.jpg)
+
                         ''';
                         ChecklistActionCreateCard waterAction = ChecklistActionCreateCard(
                           entryType: FE_WATER,

@@ -104,7 +104,7 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           MarkdownBody(
-            data: (checklistAction as ChecklistActionMessage).instructions ?? '',
+            data: (checklistAction as ChecklistActionBuyProduct).instructions ?? '',
             styleSheet: MarkdownStyleSheet(
               p: TextStyle(color: Colors.black, fontSize: 12),
               h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
