@@ -143,6 +143,7 @@ class RelDB extends _$RelDB {
       await m.addColumn(checklists, checklistSeeds.fast);
       await m.addColumn(checklistSeeds, checklistSeeds.collection);
       await m.addColumn(checklistSeeds, checklistSeeds.checklistCollectionServerID);
+      await m.addColumn(checklistLogs, checklistLogs.noRepeat);
       await m.createTable(checklistCollections);
     }
   }

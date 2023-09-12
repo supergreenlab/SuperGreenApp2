@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
@@ -314,6 +315,43 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
+    List<Widget> actions = [];
+    DateTime? currentDate;
+    for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
+      if (currentDate == null || currentDate.toString() != action.item3.date.toString()) {
+        currentDate = action.item3.date;
+        String formattedDate = DateFormat('E MMM d').format(currentDate);
+        actions.add(Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Container(
+            color: Color(0xffdedede),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(formattedDate, style: TextStyle(color: Color(0xff454545), fontWeight: FontWeight.bold,),),
+            ),
+            ),
+        ));
+      }
+      actions.add(Padding(
+        padding: const EdgeInsets.only(
+          bottom: 4.0,
+          left: 8.0,
+          right: 8.0,
+        ),
+        child: ChecklistActionButton.getActionPage(
+            plant: state.plant,
+            box: state.box,
+            checklistSeed: action.item1,
+            checklistAction: action.item2,
+            summarize: true,
+            onCheck: () {
+              BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCheckChecklistLog(action.item3));
+            },
+            onSkip: () {
+              BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
+            }),
+      ));
+    }
     return ListView(
       children: [
         _renderAutoChecklistPopulate(context, state),
@@ -332,30 +370,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     vertical: 24.0,
                   ),
                   child:
-                      Text('Today\'s Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
+                      Text('Today\'s Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 24,)),
                 ),
-                ...state.actions!.map((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 4.0,
-                      left: 8.0,
-                      right: 8.0,
-                    ),
-                    child: ChecklistActionButton.getActionPage(
-                        plant: state.plant,
-                        box: state.box,
-                        checklistSeed: action.item1,
-                        checklistAction: action.item2,
-                        summarize: true,
-                        onCheck: () {
-                          BlocProvider.of<ChecklistBloc>(context)
-                              .add(ChecklistBlocEventCheckChecklistLog(action.item3));
-                        },
-                        onSkip: () {
-                          BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
-                        }),
-                  );
-                }).toList(),
+                ...actions,
                 Container(
                   height: 10.0,
                 ),
@@ -364,7 +381,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     horizontal: 8.0,
                     vertical: 16.0,
                   ),
-                  child: Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545))),
+                  child: Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 24,)),
                 ),
                 ...state.checklistSeeds.map((cks) {
                   return Padding(
@@ -396,7 +413,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     Widget popupBody = Container();
     double? height;
     if (showCreateTimeReminder) {
-      height = MediaQuery.of(context).size.height-MediaQuery.of(context).viewInsets.bottom - 150;
+      height = MediaQuery.of(context).size.height - MediaQuery.of(context).viewInsets.bottom - 150;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
@@ -416,7 +433,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ),
       ]);
     } else if (showCreateMonitoring) {
-      height = MediaQuery.of(context).size.height-MediaQuery.of(context).viewInsets.bottom - 150;
+      height = MediaQuery.of(context).size.height - MediaQuery.of(context).viewInsets.bottom - 150;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
@@ -507,9 +524,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: SizedBox(width: 24, height: 32, child: Checkbox(value: false, onChanged: (bool? value) {
-                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
-                    })),
+                    child: SizedBox(
+                        width: 24,
+                        height: 32,
+                        child: Checkbox(
+                            value: false,
+                            onChanged: (bool? value) {
+                              BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
+                            })),
                   ),
                   Text('Activate auto checklist?',
                       style: TextStyle(
