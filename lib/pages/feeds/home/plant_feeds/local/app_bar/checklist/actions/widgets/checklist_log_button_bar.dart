@@ -35,12 +35,14 @@ class ChecklistLogButtonBottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           RedButton(
+            fontSize: 11,
             onPressed: this.onSkip,
             title: 'Skip',
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: GreenButton(
+              fontSize: 11,
               onPressed: this.onCheck,
               title: 'Check',
             ),

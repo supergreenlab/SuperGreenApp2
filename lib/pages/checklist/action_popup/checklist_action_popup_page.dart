@@ -131,11 +131,14 @@ class ChecklistActionPopupPage extends StatelessWidget {
     if (state.checklistSeed.description.length == 0) {
       return Container();
     }
-    double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height * 0.35;
+    if (state.checklistLogs.length == 1) {
+      height = height * 0.6;
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: height * 0.4),
+        constraints: BoxConstraints(maxHeight: height),
         child: SingleChildScrollView(
           child: MarkdownBody(
             data: state.checklistSeed.description,
@@ -151,11 +154,14 @@ class ChecklistActionPopupPage extends StatelessWidget {
   }
 
   Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
-    double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height * 0.35;
+    if (state.checklistLogs.length == 1) {
+      height = height * 0.3;
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: height * 0.3),
+        constraints: BoxConstraints(maxHeight: height),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -19,12 +19,14 @@
 import 'package:flutter/material.dart';
 
 class RedButton extends ElevatedButton {
-  RedButton({title, onPressed, color = 0xffC06363})
+  final double? fontSize;
+
+  RedButton({title, onPressed, color = 0xffC06363, this.fontSize})
       : super(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith((state) => Color(color)),
           ),
-          child: Text(title, style: TextStyle(color: Colors.white)),
+          child: Text(title, style: TextStyle(color: Colors.white, fontSize: fontSize)),
           onPressed: onPressed,
         );
 }
