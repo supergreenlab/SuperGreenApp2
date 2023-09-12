@@ -80,7 +80,7 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
             data: widget.instructionsManualTimerModeDescription,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         SliderFormParam(

@@ -275,7 +275,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 14)),
               ),
             ),
           ),

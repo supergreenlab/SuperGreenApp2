@@ -150,7 +150,7 @@ class NewDevicePage extends TraceableStatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: MarkdownBody(
               data: NewDevicePage.instructionsNewDeviceWifiFailed,
-              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
             ),
           ),
           Expanded(
@@ -170,7 +170,7 @@ class NewDevicePage extends TraceableStatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
                     data: NewDevicePage.instructionsNewDeviceWifiFailed3,
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
                   ),
                 ),
               ],

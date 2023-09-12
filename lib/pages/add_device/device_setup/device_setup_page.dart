@@ -140,7 +140,7 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: DeviceSetupPage.settingsDeviceSetupPagePasswordInstructions(),
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
               ),
             ),
           ),

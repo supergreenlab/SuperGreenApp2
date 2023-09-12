@@ -142,7 +142,7 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                               padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
                               child: MarkdownBody(
                                 data: '**${feedEntry.nickname}** ${feedEntry.commentTruncated}',
-                                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 14)),
                               ),
                             ),
                           ),

@@ -175,7 +175,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                     data: state.needsUpgrade
                         ? DevicePairingPage.devicePairingPageInstructionsNeedUpgrade
                         : DevicePairingPage.devicePairingPageInstructions,
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
                   ),
                 ),
               ),

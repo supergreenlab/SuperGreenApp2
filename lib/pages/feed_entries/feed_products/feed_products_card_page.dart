@@ -156,7 +156,7 @@ class FeedProductsCardPage extends StatelessWidget {
                   MarkdownBody(
                       data: product.description,
                       styleSheet:
-                          MarkdownStyleSheet(strong: TextStyle(), p: TextStyle(color: Colors.black, fontSize: 14))),
+                          MarkdownStyleSheet(strong: TextStyle(), p: TextStyle(color: Color(0xff454545), fontSize: 14))),
                 ],
               ),
             ),

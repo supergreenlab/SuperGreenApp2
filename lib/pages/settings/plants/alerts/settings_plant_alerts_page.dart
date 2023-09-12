@@ -189,7 +189,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         child: MarkdownBody(
           fitContent: true,
           data: SettingsPlantAlertsPage.settingsPlantAlertPageInstructions,
-          styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
         ),
       ),
       Padding(
@@ -218,7 +218,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           child: MarkdownBody(
             fitContent: true,
             data: SettingsPlantAlertsPage.settingsDayAlertPageInstructions,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         renderParameters(
@@ -267,7 +267,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           child: MarkdownBody(
             fitContent: true,
             data: SettingsPlantAlertsPage.settingsNightAlertPageInstructions,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         renderParameters(
@@ -454,7 +454,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 14)),
               ),
             ),
           ),

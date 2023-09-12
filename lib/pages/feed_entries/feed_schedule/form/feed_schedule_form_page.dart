@@ -238,8 +238,8 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
               MarkdownBody(
                 data: helper,
                 styleSheet: MarkdownStyleSheet(
-                    strong: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal),
-                    p: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w300)),
+                    strong: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.normal),
+                    p: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.w300)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

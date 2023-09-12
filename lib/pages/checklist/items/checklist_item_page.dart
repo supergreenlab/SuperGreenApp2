@@ -166,8 +166,8 @@ class ChecklistItemPage extends StatelessWidget {
                     child: MarkdownBody(
                       data: checklistSeed.description,
                       styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Colors.black, fontSize: 12),
-                        h1: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                        p: TextStyle(color: Color(0xff454545), fontSize: 12),
+                        h1: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),

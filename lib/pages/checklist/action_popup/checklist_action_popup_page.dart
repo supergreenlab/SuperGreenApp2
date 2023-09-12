@@ -77,7 +77,7 @@ class ChecklistActionPopupPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "Actions",
+            "Actions (${state.checklistLogs.length})",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
           ),
         ),
@@ -140,9 +140,9 @@ class ChecklistActionPopupPage extends StatelessWidget {
         child: MarkdownBody(
           data: state.checklistSeed.description,
           styleSheet: MarkdownStyleSheet(
-            p: TextStyle(color: Colors.black, fontSize: 12),
-            h1: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
-            h2: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+            p: TextStyle(color: Color(0xff454545), fontSize: 12),
+            h1: TextStyle(color: Color(0xff454545), fontSize: 14, fontWeight: FontWeight.bold),
+            h2: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
           ),
         ),
       ),

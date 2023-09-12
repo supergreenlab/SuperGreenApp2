@@ -112,7 +112,7 @@ class NotificationRequestPage extends TraceableStatelessWidget {
                     fitContent: false,
                     data: NotificationRequestPage.notificationPurposes,
                     styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Colors.black, fontSize: 16),
+                        p: TextStyle(color: Color(0xff454545), fontSize: 16),
                         strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16)),
                   ),
                 ],

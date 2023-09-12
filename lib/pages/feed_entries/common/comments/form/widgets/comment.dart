@@ -181,7 +181,7 @@ class CommentView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 4.0, left: 4.0),
                   child: MarkdownBody(
                     data: '**${comment.from}** ${comment.text}',
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
                   ),
                 ),
                 recommendations,

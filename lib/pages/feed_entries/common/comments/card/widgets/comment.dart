@@ -40,7 +40,7 @@ class SmallCommentView extends StatelessWidget {
         Expanded(
           child: MarkdownBody(
             data: '**${comment.from}** ${comment.text}',
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         InkWell(
