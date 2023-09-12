@@ -178,6 +178,7 @@ class ChecklistLogs extends Table {
 
   TextColumn get action => text().withDefault(Constant('{}'))();
 
+  BoolColumn get noRepeat => boolean().withDefault(Constant(false))();
   BoolColumn get checked => boolean().withDefault(Constant(false))();
   BoolColumn get skipped => boolean().withDefault(Constant(false))();
 
@@ -222,6 +223,7 @@ class ChecklistLogs extends Table {
       'id': checklistLog.serverID,
       'checked': checklistLog.checked,
       'skipped': checklistLog.skipped,
+      'noRepeat': checklistLog.noRepeat,
     };
   }
 }

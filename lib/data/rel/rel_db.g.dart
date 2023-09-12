@@ -5537,6 +5537,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
   final int checklistSeed;
   final int checklist;
   final String action;
+  final bool noRepeat;
   final bool checked;
   final bool skipped;
   final DateTime date;
@@ -5547,6 +5548,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       required this.checklistSeed,
       required this.checklist,
       required this.action,
+      required this.noRepeat,
       required this.checked,
       required this.skipped,
       required this.date,
@@ -5563,6 +5565,8 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
       action: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}action'])!,
+      noRepeat: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}no_repeat'])!,
       checked: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}checked'])!,
       skipped: const BoolType()
@@ -5582,6 +5586,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
     map['checklist_seed'] = Variable<int>(checklistSeed);
     map['checklist'] = Variable<int>(checklist);
     map['action'] = Variable<String>(action);
+    map['no_repeat'] = Variable<bool>(noRepeat);
     map['checked'] = Variable<bool>(checked);
     map['skipped'] = Variable<bool>(skipped);
     map['date'] = Variable<DateTime>(date);
@@ -5598,6 +5603,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       checklistSeed: Value(checklistSeed),
       checklist: Value(checklist),
       action: Value(action),
+      noRepeat: Value(noRepeat),
       checked: Value(checked),
       skipped: Value(skipped),
       date: Value(date),
@@ -5616,6 +5622,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       checklistSeed: serializer.fromJson<int>(json['checklistSeed']),
       checklist: serializer.fromJson<int>(json['checklist']),
       action: serializer.fromJson<String>(json['action']),
+      noRepeat: serializer.fromJson<bool>(json['noRepeat']),
       checked: serializer.fromJson<bool>(json['checked']),
       skipped: serializer.fromJson<bool>(json['skipped']),
       date: serializer.fromJson<DateTime>(json['date']),
@@ -5631,6 +5638,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       'checklistSeed': serializer.toJson<int>(checklistSeed),
       'checklist': serializer.toJson<int>(checklist),
       'action': serializer.toJson<String>(action),
+      'noRepeat': serializer.toJson<bool>(noRepeat),
       'checked': serializer.toJson<bool>(checked),
       'skipped': serializer.toJson<bool>(skipped),
       'date': serializer.toJson<DateTime>(date),
@@ -5644,6 +5652,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           int? checklistSeed,
           int? checklist,
           String? action,
+          bool? noRepeat,
           bool? checked,
           bool? skipped,
           DateTime? date,
@@ -5654,6 +5663,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
         checklistSeed: checklistSeed ?? this.checklistSeed,
         checklist: checklist ?? this.checklist,
         action: action ?? this.action,
+        noRepeat: noRepeat ?? this.noRepeat,
         checked: checked ?? this.checked,
         skipped: skipped ?? this.skipped,
         date: date ?? this.date,
@@ -5667,6 +5677,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           ..write('checklistSeed: $checklistSeed, ')
           ..write('checklist: $checklist, ')
           ..write('action: $action, ')
+          ..write('noRepeat: $noRepeat, ')
           ..write('checked: $checked, ')
           ..write('skipped: $skipped, ')
           ..write('date: $date, ')
@@ -5677,8 +5688,8 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
   }
 
   @override
-  int get hashCode => Object.hash(id, checklistSeed, checklist, action, checked,
-      skipped, date, serverID, synced);
+  int get hashCode => Object.hash(id, checklistSeed, checklist, action,
+      noRepeat, checked, skipped, date, serverID, synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5687,6 +5698,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           other.checklistSeed == this.checklistSeed &&
           other.checklist == this.checklist &&
           other.action == this.action &&
+          other.noRepeat == this.noRepeat &&
           other.checked == this.checked &&
           other.skipped == this.skipped &&
           other.date == this.date &&
@@ -5699,6 +5711,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
   final Value<int> checklistSeed;
   final Value<int> checklist;
   final Value<String> action;
+  final Value<bool> noRepeat;
   final Value<bool> checked;
   final Value<bool> skipped;
   final Value<DateTime> date;
@@ -5709,6 +5722,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     this.checklistSeed = const Value.absent(),
     this.checklist = const Value.absent(),
     this.action = const Value.absent(),
+    this.noRepeat = const Value.absent(),
     this.checked = const Value.absent(),
     this.skipped = const Value.absent(),
     this.date = const Value.absent(),
@@ -5720,6 +5734,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     required int checklistSeed,
     required int checklist,
     this.action = const Value.absent(),
+    this.noRepeat = const Value.absent(),
     this.checked = const Value.absent(),
     this.skipped = const Value.absent(),
     required DateTime date,
@@ -5733,6 +5748,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     Expression<int>? checklistSeed,
     Expression<int>? checklist,
     Expression<String>? action,
+    Expression<bool>? noRepeat,
     Expression<bool>? checked,
     Expression<bool>? skipped,
     Expression<DateTime>? date,
@@ -5744,6 +5760,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       if (checklistSeed != null) 'checklist_seed': checklistSeed,
       if (checklist != null) 'checklist': checklist,
       if (action != null) 'action': action,
+      if (noRepeat != null) 'no_repeat': noRepeat,
       if (checked != null) 'checked': checked,
       if (skipped != null) 'skipped': skipped,
       if (date != null) 'date': date,
@@ -5757,6 +5774,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       Value<int>? checklistSeed,
       Value<int>? checklist,
       Value<String>? action,
+      Value<bool>? noRepeat,
       Value<bool>? checked,
       Value<bool>? skipped,
       Value<DateTime>? date,
@@ -5767,6 +5785,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       checklistSeed: checklistSeed ?? this.checklistSeed,
       checklist: checklist ?? this.checklist,
       action: action ?? this.action,
+      noRepeat: noRepeat ?? this.noRepeat,
       checked: checked ?? this.checked,
       skipped: skipped ?? this.skipped,
       date: date ?? this.date,
@@ -5789,6 +5808,9 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     }
     if (action.present) {
       map['action'] = Variable<String>(action.value);
+    }
+    if (noRepeat.present) {
+      map['no_repeat'] = Variable<bool>(noRepeat.value);
     }
     if (checked.present) {
       map['checked'] = Variable<bool>(checked.value);
@@ -5815,6 +5837,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
           ..write('checklistSeed: $checklistSeed, ')
           ..write('checklist: $checklist, ')
           ..write('action: $action, ')
+          ..write('noRepeat: $noRepeat, ')
           ..write('checked: $checked, ')
           ..write('skipped: $skipped, ')
           ..write('date: $date, ')
@@ -5856,6 +5879,14 @@ class $ChecklistLogsTable extends ChecklistLogs
       type: const StringType(),
       requiredDuringInsert: false,
       defaultValue: Constant('{}'));
+  final VerificationMeta _noRepeatMeta = const VerificationMeta('noRepeat');
+  @override
+  late final GeneratedColumn<bool?> noRepeat = GeneratedColumn<bool?>(
+      'no_repeat', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (no_repeat IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _checkedMeta = const VerificationMeta('checked');
   @override
   late final GeneratedColumn<bool?> checked = GeneratedColumn<bool?>(
@@ -5899,6 +5930,7 @@ class $ChecklistLogsTable extends ChecklistLogs
         checklistSeed,
         checklist,
         action,
+        noRepeat,
         checked,
         skipped,
         date,
@@ -5934,6 +5966,10 @@ class $ChecklistLogsTable extends ChecklistLogs
     if (data.containsKey('action')) {
       context.handle(_actionMeta,
           action.isAcceptableOrUnknown(data['action']!, _actionMeta));
+    }
+    if (data.containsKey('no_repeat')) {
+      context.handle(_noRepeatMeta,
+          noRepeat.isAcceptableOrUnknown(data['no_repeat']!, _noRepeatMeta));
     }
     if (data.containsKey('checked')) {
       context.handle(_checkedMeta,

@@ -73,23 +73,23 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
 
 Make sure your soil is dry before watering, best way to check that is to check the dryness of the first inch of soil, if it's not dry, wait a few more days, and if you can, try to lift the pot manually, a dry soil is noticeably lightweight.
 
-## How to water
+# How to water
 
 Follow these 3 steps to make sure your soil is well watered:
 
-### 1. Place pot in a plate
+# 1. Place pot in a plate
 
 ![Pic](https://www.supergreenlab.com/img/files/attig9yWzQqc2zBTR.jpg)
 
-### 2. Wait until run-off is absorbed
+# 2. Wait until run-off is absorbed
 
 ![Pic](https://www.supergreenlab.com/img/files/attLsvB1lFMOMQGCA.jpg)
 
-### 3. Add more run-off if needed
+# 3. Add more run-off if needed
 
 ![Pic](https://www.supergreenlab.com/img/files/attSbOfquWiBoP2tn.jpg)
 
-### 4. Remove remaining run-off
+# 4. Remove remaining run-off
 
 ![Pic](https://www.supergreenlab.com/img/files/attJg4Px8XDhCR6gO.jpg)
 

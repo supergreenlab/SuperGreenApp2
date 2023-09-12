@@ -185,6 +185,14 @@ class AppDB {
     return _miscDB.get('$checklistID.close', defaultValue: false);
   }
 
+  void setNoRepeatChecklistSeed(int checklistSeedID, bool value) {
+    _miscDB.put('$checklistSeedID.repeat', value);
+  }
+
+  bool isNoRepeatChecklistSeed(int checklistSeedID) {
+    return _miscDB.get('$checklistSeedID.repeat', defaultValue: false);
+  }
+
   // Warning: this is never flushed, only used to cache things like favicon paths or any short strings
   void setCachedString(String key, String value) {
     _miscDB.put('cache.$key', value);

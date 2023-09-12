@@ -20,50 +20,72 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class ChecklistActionPopupPage extends StatelessWidget {
+class ChecklistActionPopupPage extends StatefulWidget {
+  @override
+  State<ChecklistActionPopupPage> createState() => _ChecklistActionPopupPageState();
+}
+
+class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
+  bool noRepeat = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
-      builder: (BuildContext context, ChecklistActionPopupBlocState state) {
-        if (state is ChecklistActionPopupBlocStateInit) {
-          return InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: FullscreenLoading(),
-          );
+    return BlocListener<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
+      listener: (BuildContext context, ChecklistActionPopupBlocState state) => {
+        if (state is ChecklistActionPopupBlocStateLoaded) {
+          setState(() {
+            noRepeat = AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
+          })
         }
-
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+      },
+      child: BlocBuilder<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
+        builder: (BuildContext context, ChecklistActionPopupBlocState state) {
+          if (state is ChecklistActionPopupBlocStateInit) {
+            return InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: FullscreenLoading(),
+            );
+          }
+    
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
                     ),
-                    child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -81,8 +103,26 @@ class ChecklistActionPopupPage extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
           ),
         ),
+        _renderRepeat(context, state),
         _renderActions(context, state),
       ],
+    );
+  }
+
+  Widget _renderRepeat(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          noRepeat = !noRepeat;
+        });
+        AppDB().setNoRepeatChecklistSeed(state.checklistSeed.id, noRepeat);
+      },
+      child: Row(
+        children: [
+          Checkbox(value: noRepeat, onChanged: (bool? v) {}),
+          Text("Ok don't show this checklist again."),
+        ],
+      ),
     );
   }
 
@@ -169,7 +209,7 @@ class ChecklistActionPopupPage extends StatelessWidget {
                     summarize: !action.hasBody,
                     onCheck: () {
                       BlocProvider.of<ChecklistActionPopupBloc>(context)
-                          .add(ChecklistActionPopupBlocEventCheckChecklistLog(log));
+                          .add(ChecklistActionPopupBlocEventCheckChecklistLog(log.copyWith(noRepeat: noRepeat)));
                       Navigator.pop(context);
                     },
                     onSkip: () {
