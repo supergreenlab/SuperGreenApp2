@@ -56,8 +56,8 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
         icon: ChecklistActionIcons[ChecklistActionMessage.TYPE]!,
         color: Colors.teal,
         title: (checklistAction as ChecklistActionMessage).title ?? checklistSeed.title,
-        onCheck: !summarize ? null : onCheck,
-        onSkip: !summarize ? null : onSkip,
+        onCheck: onCheck,
+        onSkip: onSkip,
         child: summarize ? null : _renderBody(context),
         content: AutoSizeText(
           (checklistAction as ChecklistActionMessage).instructions ?? 'Slide to check',
@@ -94,7 +94,7 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
       return Container();
     }
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -106,10 +106,6 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
                 h1: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-          ChecklistLogButtonBottomBar(
-            onCheck: this.onCheck,
-            onSkip: this.onSkip,
           ),
         ],
       ),

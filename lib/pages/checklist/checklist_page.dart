@@ -323,6 +323,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
     List<Widget> actions = [];
     DateTime? currentDate;
+    int? currentChecklistSeedID;
     for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
       if (currentDate == null ||
           DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
@@ -336,6 +337,25 @@ class _ChecklistPageState extends State<ChecklistPage> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 formattedDate,
+                style: TextStyle(
+                  color: Color(0xff454545),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ));
+      }
+      if (currentChecklistSeedID == null || currentChecklistSeedID != action.item1.id) {
+        currentChecklistSeedID = action.item1.id;
+        actions.add(Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            color: Color(0xffdedede),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                action.item1.title,
                 style: TextStyle(
                   color: Color(0xff454545),
                   fontWeight: FontWeight.bold,
