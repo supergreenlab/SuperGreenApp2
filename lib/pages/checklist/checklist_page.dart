@@ -39,6 +39,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:tuple/tuple.dart';
+import 'package:collection/collection.dart';
 
 class AppearAnimated extends StatefulWidget {
   final bool visible;
@@ -83,6 +84,7 @@ class ChecklistPage extends TraceableStatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
   bool showAutoChecklist = true;
+  bool loadingAutoChecklist = false;
   bool showCreateMenu = false;
 
   bool showCreateTimeReminder = false;
@@ -95,7 +97,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
       listener: (BuildContext context, ChecklistBlocState state) {
         if (state is ChecklistBlocStateLoaded) {
           setState(() {
+            if (loadingAutoChecklist) {
+              AppDB().setCloseAutoChecklist(state.checklist.id);
+            }
             showAutoChecklist = !AppDB().isCloseAutoChecklist(state.checklist.id);
+            loadingAutoChecklist = false;
           });
         }
       },
@@ -318,7 +324,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     List<Widget> actions = [];
     DateTime? currentDate;
     for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
-      if (currentDate == null || DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
+      if (currentDate == null ||
+          DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
         currentDate = action.item3.date;
         String formattedDate = DateFormat('E MMM d').format(currentDate);
         actions.add(Padding(
@@ -327,9 +334,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
             color: Color(0xffdedede),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(formattedDate, style: TextStyle(color: Color(0xff454545), fontWeight: FontWeight.bold,),),
+              child: Text(
+                formattedDate,
+                style: TextStyle(
+                  color: Color(0xff454545),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            ),
+          ),
         ));
       }
       actions.add(Padding(
@@ -369,8 +382,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     horizontal: 8.0,
                     vertical: 24.0,
                   ),
-                  child:
-                      Text('Today\'s Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 24,)),
+                  child: Text('Today\'s Actions',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff454545),
+                        fontSize: 24,
+                      )),
                 ),
                 ...actions,
                 Container(
@@ -381,13 +398,20 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     horizontal: 8.0,
                     vertical: 16.0,
                   ),
-                  child: Text('Future items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 24,)),
+                  child: Text('Future items (${state.checklistSeeds.length})',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff454545),
+                        fontSize: 24,
+                      )),
                 ),
                 ...state.checklistSeeds.map((cks) {
+                  ChecklistCollection? collection = state.collections.firstWhereOrNull((c) => c.id == cks.collection);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ChecklistItemPage(
                       checklistSeed: cks,
+                      collection: collection,
                       onSelect: () {
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
@@ -500,11 +524,29 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
-    if (!showAutoChecklist) {
+    if (!showAutoChecklist || state.checklist.serverID == null) {
       return Container(
         height: 12.0,
       );
     }
+
+    if (loadingAutoChecklist) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CreateChecklistSection(
+          title: 'Auto checklist',
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: FullscreenLoading(
+              title: 'Loading collection..',
+              size: 40,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CreateChecklistSection(
@@ -530,6 +572,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         child: Checkbox(
                             value: false,
                             onChanged: (bool? value) {
+                              setState(() {
+                                this.loadingAutoChecklist = true;
+                              });
                               BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
                             })),
                   ),

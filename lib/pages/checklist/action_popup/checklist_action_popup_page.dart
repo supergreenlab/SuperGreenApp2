@@ -110,6 +110,9 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   }
 
   Widget _renderRepeat(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+    if (!state.checklistSeed.repeat) {
+      return Container();
+    }
     return InkWell(
       onTap: () {
         setState(() {
@@ -180,9 +183,9 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
         child: MarkdownBody(
           data: state.checklistSeed.description,
           styleSheet: MarkdownStyleSheet(
-            p: TextStyle(color: Color(0xff454545), fontSize: 12),
-            h1: TextStyle(color: Color(0xff454545), fontSize: 14, fontWeight: FontWeight.bold),
-            h2: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
+            p: TextStyle(color: Color(0xff454545), fontSize: 14),
+            h1: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
+            h2: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -190,7 +193,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   }
 
   Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
-    double height = MediaQuery.of(context).size.height * 0.35;
+    double height = MediaQuery.of(context).size.height * 0.25;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ConstrainedBox(
@@ -206,16 +209,20 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     box: state.box,
                     checklistSeed: state.checklistSeed,
                     checklistAction: action,
-                    summarize: !action.hasBody,
+                    summarize: false,
                     onCheck: () {
                       BlocProvider.of<ChecklistActionPopupBloc>(context)
                           .add(ChecklistActionPopupBlocEventCheckChecklistLog(log.copyWith(noRepeat: noRepeat)));
-                      Navigator.pop(context);
+                      if (state.checklistLogs.length == 1) {
+                        Navigator.pop(context);
+                      }
                     },
                     onSkip: () {
                       BlocProvider.of<ChecklistActionPopupBloc>(context)
                           .add(ChecklistActionPopupBlocEventSkipChecklistLog(log));
-                      Navigator.pop(context);
+                      if (state.checklistLogs.length == 1) {
+                        Navigator.pop(context);
+                      }
                     }),
               );
             }).toList(),

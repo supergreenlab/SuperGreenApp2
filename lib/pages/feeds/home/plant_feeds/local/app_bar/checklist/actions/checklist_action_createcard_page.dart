@@ -59,8 +59,8 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
         icon: FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!,
         color: FeedEntryColors[(checklistAction as ChecklistActionCreateCard).entryType]!,
         title: checklistSeed.title,
-        onCheck: !summarize ? null : onCheck,
-        onSkip: !summarize ? null : onSkip,
+        onCheck: onCheck,
+        onSkip: onSkip,
         child: summarize ? null : _renderBody(context),
         content: AutoSizeText(
           'Create ${FeedEntryNames[(checklistAction as ChecklistActionCreateCard).entryType]!} card',
@@ -206,9 +206,12 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
   }
 
   Widget? _renderBody(BuildContext context) {
+    if ((checklistAction as ChecklistActionCreateCard).instructions == null) {
+      return Container();
+    }
     String instructions = (checklistAction as ChecklistActionCreateCard).instructions ?? '';
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -216,14 +219,10 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
             child: MarkdownBody(
               data: instructions,
               styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Color(0xff454545), fontSize: 12),
-                h1: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
+                p: TextStyle(color: Color(0xff454545), fontSize: 14),
+                h1: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-          ChecklistLogButtonBottomBar(
-            onCheck: this.onCheck,
-            onSkip: this.onSkip,
           ),
         ],
       ),

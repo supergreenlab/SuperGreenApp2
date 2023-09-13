@@ -98,6 +98,9 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
   }
 
   Widget _renderBody(BuildContext context) {
+    if ((checklistAction as ChecklistActionWebpage).instructions == null) {
+      return Container();
+    }
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
       child: Column(
@@ -106,8 +109,8 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
           MarkdownBody(
             data: (checklistAction as ChecklistActionWebpage).instructions ?? '',
             styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Color(0xff454545), fontSize: 12),
-              h1: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
+              p: TextStyle(color: Color(0xff454545), fontSize: 14),
+              h1: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
           ChecklistLogButtonBottomBar(

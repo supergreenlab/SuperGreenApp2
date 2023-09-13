@@ -391,20 +391,24 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         if (exists != null) {
           await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion.copyWith(id: Value(exists.id)));
         } else {
-          await RelDB.get().checklistsDAO.addChecklistSeed(checklistSeedsCompanion);
+          int id = await RelDB.get().checklistsDAO.addChecklistSeed(checklistSeedsCompanion);
+          checklistSeedsCompanion = checklistSeedsCompanion.copyWith(id: Value(id));
         }
         if (checklistSeedsCompanion.checklistCollectionServerID.value != null) {
           Checklist checklist =
               await RelDB.get().checklistsDAO.getChecklistForServerID(checklistSeedsCompanion.checklistServerID.value!);
           try {
             // If exists.
-            await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, checklistSeedsCompanion.checklistCollectionServerID.value!);
+            ChecklistCollection collection = await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, checklistSeedsCompanion.checklistCollectionServerID.value!);
+            checklistSeedsCompanion = checklistSeedsCompanion.copyWith(collection: Value(collection.id));
           } catch (e) {
             ChecklistCollectionsCompanion collection =
                 await BackendAPI().checklistAPI.getChecklistCollection(checklistSeedsCompanion.checklistCollectionServerID.value!);
             collection = collection.copyWith(checklist: Value(checklist.id));
-            await RelDB.get().checklistsDAO.addChecklistCollection(collection);
+            int id = await RelDB.get().checklistsDAO.addChecklistCollection(collection);
+            checklistSeedsCompanion = checklistSeedsCompanion.copyWith(collection: Value(id));
           }
+          await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion);
         }
       }
       await UserEndHelper.setSynced("checklistseed", checklistSeedsCompanion.serverID.value!);

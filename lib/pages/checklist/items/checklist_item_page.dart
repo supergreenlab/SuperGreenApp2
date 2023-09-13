@@ -30,11 +30,12 @@ class ChecklistItemPage extends StatelessWidget {
   final Function() onSelect;
   final Function() onDelete;
   final ChecklistSeed checklistSeed;
+  final ChecklistCollection? collection;
 
   late final List<ChecklistCondition> conditions;
   late final List<ChecklistAction> actions;
 
-  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect, required this.onDelete})
+  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect, required this.onDelete, required this.collection})
       : super(key: key) {
     conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
     actions = ChecklistAction.fromMapArray(json.decode(checklistSeed.actions));
@@ -153,6 +154,10 @@ class ChecklistItemPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          collection == null ? Container() : Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text('Collection: ${collection!.title}', style: TextStyle(color: Color(0xff454545), fontWeight: FontWeight.bold),),
+          ),
           checklistSeed.description == ''
               ? Container()
               : Padding(

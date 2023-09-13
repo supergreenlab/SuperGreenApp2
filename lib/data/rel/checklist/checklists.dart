@@ -270,7 +270,8 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   }
 
   Future<ChecklistCollection> getChecklistCollectionForServerID(Checklist checklist, String id) {
-    return (select(checklistCollections)..where((p) => p.serverID.equals(id))).getSingle();
+    return (select(checklistCollections)..where((p) => p.serverID.equals(id) & p.checklist.equals(checklist.id)))
+        .getSingle();
   }
 
   Future<Checklist> getChecklist(int id) {
@@ -289,6 +290,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklistLogs)..where((cks) => cks.checklistSeed.equals(checklistSeed.id))).get();
   }
 
+  Future<List<ChecklistLog>> getActiveChecklistLogsForChecklistSeed(ChecklistSeed checklistSeed) {
+    return (select(checklistLogs)..where((cks) => cks.checklistSeed.equals(checklistSeed.id) & cks.checked.equals(false) & cks.skipped.equals(false))).get();
+  }
+
   Future<Checklist> getChecklistForServerID(String serverID) {
     return (select(checklists)..where((cks) => cks.serverID.equals(serverID))).getSingle();
   }
@@ -302,7 +307,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   Future<List<ChecklistSeed>> getChecklistSeeds(int checklistID) {
     return (select(checklistSeeds)
           ..where((p) => p.checklist.equals(checklistID))
-          ..orderBy([(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)]))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc),
+            (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)
+          ]))
         .get();
   }
 
@@ -316,8 +324,16 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return query.get();
   }
 
+  Future<List<ChecklistCollection>> getChecklistCollections(int checklistID) {
+    return (select(checklistCollections)..where((p) => p.checklist.equals(checklistID))).get();
+  }
+
   Stream<List<ChecklistLog>> watchChecklistLogs(int checklistID) {
     return (select(checklistLogs)..where((p) => p.checklist.equals(checklistID))).watch();
+  }
+
+  Stream<List<ChecklistCollection>> watchCollections(int checklistID) {
+    return (select(checklistCollections)..where((p) => p.checklist.equals(checklistID))).watch();
   }
 
   Future updateChecklistSeed(ChecklistSeedsCompanion checklistSeed) {
@@ -330,6 +346,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future updateChecklistLog(ChecklistLogsCompanion checklistLog) {
     return (update(checklistLogs)..where((tbl) => tbl.id.equals(checklistLog.id.value))).write(checklistLog);
+  }
+
+  Stream<List<Checklist>> watchChecklist(int checklistID) {
+    return (select(checklists)..where((p) => p.id.equals(checklistID))).watch();
   }
 
   Stream<List<ChecklistSeed>> watchChecklistSeeds(int checklistID) {

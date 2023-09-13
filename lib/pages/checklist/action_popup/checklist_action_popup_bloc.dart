@@ -81,12 +81,16 @@ class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent,
   @override
   Stream<ChecklistActionPopupBlocState> mapEventToState(ChecklistActionPopupBlocEvent event) async* {
     if (event is ChecklistActionPopupBlocEventInit) {
-      List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getChecklistLogsForChecklistSeed(this.checklistSeed);
+      List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getActiveChecklistLogsForChecklistSeed(this.checklistSeed);
       yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistAction, checklistLogs);
     } else if (event is ChecklistActionPopupBlocEventSkipChecklistLog) {
       await ChecklistHelper.skipChecklistLog(event.checklistLog);
     } else if (event is ChecklistActionPopupBlocEventCheckChecklistLog) {
       await ChecklistHelper.checkChecklistLog(event.checklistLog);
+      List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getActiveChecklistLogsForChecklistSeed(this.checklistSeed);
+      if (checklistLogs.length != 0) {
+        yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistAction, checklistLogs);
+      }
     }
   }
 }
