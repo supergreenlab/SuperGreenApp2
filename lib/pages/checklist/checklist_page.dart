@@ -332,12 +332,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
         actions.add(Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Container(
-            color: Color(0xffdedede),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 formattedDate,
                 style: TextStyle(
+                  fontSize: 19,
                   color: Color(0xff454545),
                   fontWeight: FontWeight.bold,
                 ),
@@ -351,7 +351,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
         actions.add(Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            color: Color(0xffdedede),
+            decoration: BoxDecoration(
+              color: Color(0xffeaeaea),
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -360,6 +363,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   color: Color(0xff454545),
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
