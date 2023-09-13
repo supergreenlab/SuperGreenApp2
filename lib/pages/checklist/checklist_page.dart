@@ -318,7 +318,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     List<Widget> actions = [];
     DateTime? currentDate;
     for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
-      if (currentDate == null || currentDate.toString() != action.item3.date.toString()) {
+      if (currentDate == null || DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
         currentDate = action.item3.date;
         String formattedDate = DateFormat('E MMM d').format(currentDate);
         actions.add(Padding(

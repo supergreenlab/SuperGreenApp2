@@ -61,7 +61,12 @@ class CreatePlantBloc extends LegacyBloc<CreatePlantBlocEvent, CreatePlantBlocSt
       final feedID = await fdb.addFeed(feed);
       PlantsCompanion plant;
       plant = PlantsCompanion.insert(
-          feed: feedID, name: event.name, box: event.box, settings: Value(jsonEncode({'isSingle': event.isSingle})));
+        feed: feedID,
+        name: event.name,
+        box: event.box,
+        settings: Value(jsonEncode({'isSingle': event.isSingle})),
+        alerts: Value(true),
+      );
       final plantID = await bdb.addPlant(plant);
       final p = await bdb.getPlant(plantID);
       final b = await bdb.getBox(event.box);
