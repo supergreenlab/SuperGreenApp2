@@ -25,6 +25,7 @@ import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ChecklistActionPopupPage extends StatefulWidget {
@@ -34,6 +35,7 @@ class ChecklistActionPopupPage extends StatefulWidget {
 
 class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   bool noRepeat = false;
+  bool allSet = false;
 
   @override
   void initState() {
@@ -44,11 +46,12 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   Widget build(BuildContext context) {
     return BlocListener<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
       listener: (BuildContext context, ChecklistActionPopupBlocState state) => {
-        if (state is ChecklistActionPopupBlocStateLoaded) {
-          setState(() {
-            noRepeat = AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
-          })
-        }
+        if (state is ChecklistActionPopupBlocStateLoaded)
+          {
+            setState(() {
+              noRepeat = AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
+            })
+          }
       },
       child: BlocBuilder<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
         builder: (BuildContext context, ChecklistActionPopupBlocState state) {
@@ -60,7 +63,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
               child: FullscreenLoading(),
             );
           }
-    
+
           return Container(
             decoration: BoxDecoration(
               color: Colors.transparent,
@@ -90,6 +93,16 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   }
 
   Widget _renderBody(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+    if (allSet) {
+      return Fullscreen(
+        title: 'All set!',
+        child: Icon(
+          Icons.check,
+          color: Color(0xff3bb30b),
+          size: 100,
+        ),
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -210,17 +223,25 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     checklistSeed: state.checklistSeed,
                     checklistAction: action,
                     summarize: false,
-                    onCheck: () {
+                    onCheck: () async {
                       BlocProvider.of<ChecklistActionPopupBloc>(context)
                           .add(ChecklistActionPopupBlocEventCheckChecklistLog(log.copyWith(noRepeat: noRepeat)));
                       if (state.checklistLogs.length == 1) {
+                        setState(() {
+                          allSet = true;
+                        });
+                        await Future.delayed(Duration(seconds: 2));
                         Navigator.pop(context);
                       }
                     },
-                    onSkip: () {
+                    onSkip: () async {
                       BlocProvider.of<ChecklistActionPopupBloc>(context)
                           .add(ChecklistActionPopupBlocEventSkipChecklistLog(log));
                       if (state.checklistLogs.length == 1) {
+                        setState(() {
+                          allSet = true;
+                        });
+                        await Future.delayed(Duration(seconds: 2));
                         Navigator.pop(context);
                       }
                     }),
