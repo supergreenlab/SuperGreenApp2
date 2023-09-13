@@ -172,6 +172,7 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
     await subChecklist.cancel();
     await subLogs.cancel();
     await subChecklistSeeds.cancel();
+    await subCollections.cancel();
     return super.close();
   }
 }
