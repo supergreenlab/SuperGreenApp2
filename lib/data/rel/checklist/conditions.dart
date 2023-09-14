@@ -171,10 +171,14 @@ class ChecklistConditionMetric extends ChecklistCondition {
     double? min;
     if (map['min'] != null && map['min'] is int) {
       min = (map['min'] as int).toDouble();
+    } else {
+      min = map['min'];
     }
     double? max;
     if (map['max'] != null && map['max'] is int) {
       max = (map['max'] as int).toDouble();
+    } else {
+      max = map['max'];
     }
     return ChecklistConditionMetric(
       key: map['key'],
