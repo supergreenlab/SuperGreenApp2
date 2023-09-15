@@ -294,7 +294,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Your checklist is empty.\n\nPress the button below to start using it.",
+                'Your checklist is empty.\n\nPress the button below to start using it.',
                 style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
                 textAlign: TextAlign.center,
               ),
@@ -322,72 +322,84 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
     List<Widget> actions = [];
-    DateTime? currentDate;
-    int? currentChecklistSeedID;
-    for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
-      if (currentDate == null ||
-          DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
-        currentDate = action.item3.date;
-        String formattedDate = DateFormat('E MMM d').format(currentDate);
-        actions.add(Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                formattedDate,
-                style: TextStyle(
-                  fontSize: 19,
-                  color: Color(0xff454545),
-                  fontWeight: FontWeight.bold,
+    if (state.actions == null || state.actions!.length == 0) {
+      actions = [_renderNoActions(context, state)];
+    } else {
+      DateTime? currentDate;
+      int? currentChecklistSeedID;
+      for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
+        if (currentDate == null ||
+            DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
+          currentDate = action.item3.date;
+          String formattedDate = DateFormat('E MMM d').format(currentDate);
+          actions.add(Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  formattedDate == DateFormat('E MMM d').format(DateTime.now()) ? 'Today' : formattedDate,
+                  style: TextStyle(
+                    fontSize: 19,
+                    color: Color(0xff454545),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-        ));
-      }
-      if (currentChecklistSeedID == null || currentChecklistSeedID != action.item1.id) {
-        currentChecklistSeedID = action.item1.id;
-        actions.add(Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color(0xffeaeaea),
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                action.item1.title,
-                style: TextStyle(
-                  color: Color(0xff454545),
-                  fontWeight: FontWeight.bold,
+          ));
+        }
+        if (currentChecklistSeedID == null || currentChecklistSeedID != action.item1.id) {
+          currentChecklistSeedID = action.item1.id;
+          int days = DateTime.now().difference(action.item3.date).inDays;
+          Color color = Color(0xff3bb30b);
+          if (days >= 2) {
+            color = Color(0xffb32d0b);
+          } else if (days == 1) {
+            color = Color(0xffb3780b);
+          }
+
+          actions.add(Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  action.item1.title,
+                  style: TextStyle(
+                    color: Color(0xffffffff),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
+          ));
+        }
+        actions.add(Padding(
+          padding: const EdgeInsets.only(
+            bottom: 4.0,
+            left: 8.0,
+            right: 8.0,
           ),
+          child: ChecklistActionButton.getActionPage(
+              plant: state.plant,
+              box: state.box,
+              checklistSeed: action.item1,
+              checklistAction: action.item2,
+              summarize: true,
+              onCheck: () {
+                BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCheckChecklistLog(action.item3));
+              },
+              onSkip: () {
+                BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
+              }),
         ));
       }
-      actions.add(Padding(
-        padding: const EdgeInsets.only(
-          bottom: 4.0,
-          left: 8.0,
-          right: 8.0,
-        ),
-        child: ChecklistActionButton.getActionPage(
-            plant: state.plant,
-            box: state.box,
-            checklistSeed: action.item1,
-            checklistAction: action.item2,
-            summarize: true,
-            onCheck: () {
-              BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCheckChecklistLog(action.item3));
-            },
-            onSkip: () {
-              BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
-            }),
-      ));
     }
     return ListView(
       children: [
@@ -406,7 +418,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     horizontal: 8.0,
                     vertical: 24.0,
                   ),
-                  child: Text('Today\'s Actions',
+                  child: Text('To-Do',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xff454545),
@@ -452,6 +464,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ]),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _renderNoActions(BuildContext context, ChecklistBlocStateLoaded state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text('You\'re all set for today 👌'),
         ),
       ],
     );
