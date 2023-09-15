@@ -341,7 +341,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   formattedDate == DateFormat('E MMM d').format(DateTime.now()) ? 'Today' : formattedDate,
                   style: TextStyle(
                     fontSize: 19,
-                    color: Color(0xff454545),
+                    color: Color(0xff959595),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -414,9 +414,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
               padding: const EdgeInsets.all(4.0),
               child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 24.0,
+                  padding: const EdgeInsets.only(
+                    left: 8.0, right: 8.0,
+                    top: 24.0, bottom: 8.0,
                   ),
                   child: Text('To-Do',
                       style: TextStyle(
