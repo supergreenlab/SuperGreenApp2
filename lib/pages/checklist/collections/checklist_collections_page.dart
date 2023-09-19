@@ -88,6 +88,7 @@ class ChecklistCollectionsPage extends StatelessWidget {
                       GreenButton(
                         onPressed: state.checklistCollections.firstWhereOrNull((cc) => cc.serverID == c.serverID.value) != null ? null : () {
                           BlocProvider.of<ChecklistCollectionsBloc>(context).add(ChecklistCollectionsBlocEventAddCollection(c));
+                          Navigator.pop(context);
                         },
                         title: 'Add collection',
                       ),

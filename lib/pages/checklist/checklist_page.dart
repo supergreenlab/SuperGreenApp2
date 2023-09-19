@@ -24,6 +24,7 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -203,7 +204,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ],
             ),
             width: 300,
-            height: 310,
+            height: state.checklist.serverID == null ? 250 : 310,
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
@@ -245,8 +246,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       showCreateMenu = false;
                     });
                   }),
-                  SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
+                  state.checklist.serverID == null ? Container() : SvgPicture.asset('assets/checklist/line_separator.svg'),
+                  state.checklist.serverID == null ? Container() : _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
                     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.checklist));
                   }),
                 ],
@@ -574,7 +575,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
-    if (!showAutoChecklist || state.checklist.serverID == null) {
+    if (!showAutoChecklist || state.checklist.serverID == null || state.collections.indexWhere((c) => c.serverID == BackendAPI().checklistCollectionTheBasics) != -1) {
       return Container(
         height: 12.0,
       );
