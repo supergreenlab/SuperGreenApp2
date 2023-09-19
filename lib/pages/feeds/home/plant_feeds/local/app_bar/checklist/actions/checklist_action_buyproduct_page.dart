@@ -28,7 +28,6 @@ import 'package:super_green_app/pages/checklist/action_popup/checklist_action_po
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/widgets/checklist_log_button_bar.dart';
 import 'package:super_green_app/widgets/favicon.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,7 +60,7 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
           alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),
         ),
         color: Color.fromARGB(255, 140, 98, 158),
-        title: checklistSeed.title,
+        title: (checklistAction as ChecklistActionBuyProduct).name ?? checklistSeed.title,
         onCheck: onCheck,
         onSkip: onSkip,
         child: summarize ? null : _renderBody(context),

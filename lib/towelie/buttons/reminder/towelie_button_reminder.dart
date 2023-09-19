@@ -20,10 +20,10 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/notifications/model.dart';

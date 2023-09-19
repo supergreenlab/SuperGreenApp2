@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistCategory extends StatelessWidget {

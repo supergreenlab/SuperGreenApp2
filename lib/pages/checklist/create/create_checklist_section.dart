@@ -21,13 +21,14 @@ import 'package:flutter/material.dart';
 class CreateChecklistSection extends StatelessWidget {
   final Widget? icon;
   final String? title;
+  final Widget? titleWidget;
   final Widget child;
   final void Function()? onClose;
   final bool noBorder;
   final bool hideTitle;
 
   const CreateChecklistSection(
-      {Key? key, required this.child, this.title, this.onClose, this.icon, this.noBorder = false, this.hideTitle=false})
+      {Key? key, required this.child, this.title, this.titleWidget, this.onClose, this.icon, this.noBorder = false, this.hideTitle=false})
       : super(key: key);
 
   @override
@@ -59,7 +60,7 @@ class CreateChecklistSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 title == null
-                    ? Container()
+                    ? titleWidget ?? Container()
                     : Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

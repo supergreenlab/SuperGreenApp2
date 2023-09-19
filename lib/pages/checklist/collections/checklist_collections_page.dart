@@ -19,9 +19,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/pages/checklist/collections/checklist_collections_bloc.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
+import 'package:collection/collection.dart';
 
 class ChecklistCollectionsPage extends StatelessWidget {
   @override
@@ -51,34 +56,58 @@ class ChecklistCollectionsPage extends StatelessWidget {
     return ListView(children: [
       ...state.collections.map<Widget>((c) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0,),
+          child: CreateChecklistSection(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: Text(c.category.value),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: SvgPicture.asset(ChecklistCollectionCategory[c.category.value]!),
+                      ),
+                      Text(c.title.value, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),),
+                    ],
                   ),
-                  Text(c.title.value),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: MarkdownBody(
+                      data: c.description.value,
+                      styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Color(0xff454545), fontSize: 12),
+                        h1: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GreenButton(
+                        onPressed: state.checklistCollections.firstWhereOrNull((cc) => cc.serverID == c.serverID.value) != null ? null : () {
+                          BlocProvider.of<ChecklistCollectionsBloc>(context).add(ChecklistCollectionsBlocEventAddCollection(c));
+                        },
+                        title: 'Add collection',
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: MarkdownBody(
-                  data: c.description.value,
-                  styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Color(0xff454545), fontSize: 12),
-                    h1: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       }).toList(),
-      Text('More to come soon (hopefully)'),
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Text(
+            'More to come soon!',
+            style: TextStyle(fontSize: 20,),
+          ),
+        ),
+      ),
     ]);
   }
 }

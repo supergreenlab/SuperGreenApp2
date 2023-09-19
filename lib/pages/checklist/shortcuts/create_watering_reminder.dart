@@ -19,6 +19,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';

@@ -21,6 +21,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';

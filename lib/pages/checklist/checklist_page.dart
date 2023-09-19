@@ -203,7 +203,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               ],
             ),
             width: 300,
-            height: 250,
+            height: 310,
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
@@ -245,10 +245,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       showCreateMenu = false;
                     });
                   }),
-                  // SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  // _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
-                  //   BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.plant));
-                  // }),
+                  SvgPicture.asset('assets/checklist/line_separator.svg'),
+                  _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.checklist));
+                  }),
                 ],
               ),
             ),
@@ -415,8 +415,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                    left: 8.0, right: 8.0,
-                    top: 24.0, bottom: 8.0,
+                    left: 8.0,
+                    right: 8.0,
+                    top: 24.0,
+                    bottom: 8.0,
                   ),
                   child: Text('To-Do',
                       style: TextStyle(
@@ -598,7 +600,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CreateChecklistSection(
-        title: 'Auto checklist',
+        titleWidget: Padding(
+          padding: const EdgeInsets.only(left: 18.0, top: 12.0),
+          child: Text('Activate auto checklist?',
+              style: TextStyle(
+                color: Color(0xff454545),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              )),
+        ),
         onClose: () {
           setState(() {
             this.showAutoChecklist = false;
@@ -610,41 +620,26 @@ class _ChecklistPageState extends State<ChecklistPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: SizedBox(
-                        width: 24,
-                        height: 32,
-                        child: Checkbox(
-                            value: false,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                this.loadingAutoChecklist = true;
-                              });
-                              BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
-                            })),
-                  ),
-                  Text('Activate auto checklist?',
-                      style: TextStyle(
-                        color: Color(0xff454545),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ],
-              ),
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 32.0,
-                  bottom: 12,
-                  right: 8,
-                  top: 8,
-                ),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    'If checked, your checklist will be automatically populated with common checklist items based on your plant stage, diary items, environment etc.. Can be changed later in the settings.',
+                    'If checked, your checklist will be automatically populated with common checklist items based on your plant stage, diary items, environment etc..',
                     style: TextStyle(color: Color(0xff454545))),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GreenButton(
+                    onPressed: () {
+                      setState(() {
+                        this.loadingAutoChecklist = true;
+                      });
+                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
+                    },
+                    title: 'Add collection',
+                  ),
+                ],
+              )
             ],
           ),
         ),

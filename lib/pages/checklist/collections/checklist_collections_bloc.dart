@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -29,6 +30,16 @@ class ChecklistCollectionsBlocEventInit extends ChecklistCollectionsBlocEvent {
   List<Object?> get props => [];
 }
 
+class ChecklistCollectionsBlocEventAddCollection extends ChecklistCollectionsBlocEvent {
+
+  final ChecklistCollectionsCompanion collection;
+
+  ChecklistCollectionsBlocEventAddCollection(this.collection);
+
+  @override
+  List<Object?> get props => [collection,];
+}
+
 abstract class ChecklistCollectionsBlocState extends Equatable {}
 
 class ChecklistCollectionsBlocStateInit extends ChecklistCollectionsBlocState {
@@ -38,9 +49,10 @@ class ChecklistCollectionsBlocStateInit extends ChecklistCollectionsBlocState {
 
 class ChecklistCollectionsBlocStateLoaded extends ChecklistCollectionsBlocState {
 
+  final List<ChecklistCollection> checklistCollections;
   final List<ChecklistCollectionsCompanion> collections;
 
-  ChecklistCollectionsBlocStateLoaded(this.collections);
+  ChecklistCollectionsBlocStateLoaded(this.checklistCollections, this.collections);
 
   @override
   List<Object?> get props => [collections];
@@ -57,8 +69,11 @@ class ChecklistCollectionsBloc extends LegacyBloc<ChecklistCollectionsBlocEvent,
   @override
   Stream<ChecklistCollectionsBlocState> mapEventToState(ChecklistCollectionsBlocEvent event) async* {
     if (event is ChecklistCollectionsBlocEventInit) {
+      List<ChecklistCollection> checklistCollections = await RelDB.get().checklistsDAO.getChecklistCollectionsForChecklist(args.checklist);
       List<ChecklistCollectionsCompanion> collections = await BackendAPI().checklistAPI.getChecklistCollections();
-      yield ChecklistCollectionsBlocStateLoaded(collections);
+      yield ChecklistCollectionsBlocStateLoaded(checklistCollections, collections);
+    } else if (event is ChecklistCollectionsBlocEventAddCollection) {
+      await ChecklistHelper.subscribeCollection(event.collection.serverID.value!, args.checklist);
     }
   }
 }

@@ -16,27 +16,3 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const CH_FEEDING='FEEDING';
-const CH_PESTS='PESTS';
-const CH_TRAINING='TRAINING';
-const CH_ENVIRONMENT='ENVIRONMENT';
-const CH_SUPPLY='SUPPLY';
-const CH_OTHER='OTHER';
-
-const Map<String, String> ChecklistCategoryIcons = {
-  CH_FEEDING: 'assets/checklist/icon_watering.svg',
-  CH_PESTS: 'assets/checklist/icon_pests.svg',
-  CH_TRAINING: 'assets/checklist/icon_training.svg',
-  CH_ENVIRONMENT: 'assets/checklist/icon_environment.svg',
-  CH_SUPPLY: 'assets/checklist/icon_supply.svg',
-  CH_OTHER: 'assets/checklist/icon_other.svg',
-};
-
-const Map<String, String> ChecklistCategoryNames = {
-  CH_FEEDING: 'Feeding',
-  CH_PESTS: 'Pest/fungus/parasits control',
-  CH_TRAINING: 'Plant care and training',
-  CH_ENVIRONMENT: 'Environment',
-  CH_SUPPLY: 'Supply',
-  CH_OTHER: 'Other',
-};

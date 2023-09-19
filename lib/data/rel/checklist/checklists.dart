@@ -274,6 +274,11 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
         .getSingle();
   }
 
+  Future<List<ChecklistCollection>> getChecklistCollectionsForChecklist(Checklist checklist) {
+    return (select(checklistCollections)..where((p) => p.checklist.equals(checklist.id)))
+        .get();
+  }
+
   Future<Checklist> getChecklist(int id) {
     return (select(checklists)..where((p) => p.id.equals(id))).getSingle();
   }
@@ -291,7 +296,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   }
 
   Future<List<ChecklistLog>> getActiveChecklistLogsForChecklistSeed(ChecklistSeed checklistSeed) {
-    return (select(checklistLogs)..where((cks) => cks.checklistSeed.equals(checklistSeed.id) & cks.checked.equals(false) & cks.skipped.equals(false))).get();
+    return (select(checklistLogs)
+          ..where((cks) =>
+              cks.checklistSeed.equals(checklistSeed.id) & cks.checked.equals(false) & cks.skipped.equals(false)))
+        .get();
   }
 
   Future<Checklist> getChecklistForServerID(String serverID) {

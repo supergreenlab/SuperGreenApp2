@@ -643,12 +643,12 @@ class MainNavigateToCreateChecklist extends MainNavigatorEvent {
 }
 
 class MainNavigateToChecklistCollections extends MainNavigatorEvent {
-  final Plant plant;
+  final Checklist checklist;
 
-  MainNavigateToChecklistCollections(this.plant);
+  MainNavigateToChecklistCollections(this.checklist);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [checklist];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
