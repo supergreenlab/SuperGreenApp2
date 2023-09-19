@@ -473,12 +473,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderNoActions(BuildContext context, ChecklistBlocStateLoaded state) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('🎉', style: TextStyle(fontSize: 60),),
+        ),
+        Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text('You\'re all set for today 👌'),
+          child: Text('You\'re all set for today 👌', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff808080)),),
         ),
       ],
     );
