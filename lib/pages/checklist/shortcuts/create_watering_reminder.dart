@@ -113,7 +113,7 @@ Follow these 3 steps to make sure your soil is well watered:
                           repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
                           conditions: drift.Value('[${condition.toJSON()}]'),
                           exitConditions: drift.Value('[]'),
-                          actions: drift.Value('[${mediaAction.toJSON()}, ${waterAction.toJSON()}]'),
+                          actions: drift.Value('[${waterAction.toJSON()}]'), // ${mediaAction.toJSON()},
                           synced: drift.Value(false),
                         )));
                         SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
