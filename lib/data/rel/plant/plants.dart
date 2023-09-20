@@ -237,6 +237,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return (select(plants)..where((p) => p.serverID.equals(serverID))).getSingle();
   }
 
+  Future<Plant> getLastPlant() {
+    return (select(plants)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])..limit(1)).getSingle();
+  }
+
   Future<List<Plant>> getPlants() {
     return (select(plants)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])).get();
   }

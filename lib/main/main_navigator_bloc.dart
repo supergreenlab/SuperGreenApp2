@@ -55,6 +55,9 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToCreatePlantEvent extends MainNavigatorEvent {
+  
+  MainNavigateToCreatePlantEvent({futureFn}) : super(futureFn: futureFn);
+
   @override
   List<Object> get props => [];
 }

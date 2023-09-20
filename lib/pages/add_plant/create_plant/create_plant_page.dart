@@ -131,7 +131,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
         if (state is CreatePlantBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventPlantCreated(state.plant));
           Timer(const Duration(milliseconds: 3000), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
           });
         }
       },

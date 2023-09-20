@@ -778,7 +778,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             GreenButton(
               title: PlantFeedPage.plantFeedPageStart,
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToCreatePlantEvent(futureFn: (future) async {
+                  dynamic res = await future;
+                  if (res == true) {
+                    BlocProvider.of<PlantFeedBloc>(context).add(PlantFeedBlocEventLoad());
+                  }
+                }));
               },
             ),
           ],

@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -84,6 +85,7 @@ class PlantFeedBloc extends LegacyBloc<PlantFeedBlocEvent, PlantFeedBlocState> {
 
   late Box? box;
   late Plant? plant;
+  StreamSubscription<List<Plant>>? plantsStream;
   StreamSubscription<Plant>? plantStream;
   StreamSubscription<Box>? boxStream;
 
@@ -96,8 +98,24 @@ class PlantFeedBloc extends LegacyBloc<PlantFeedBlocEvent, PlantFeedBlocState> {
     if (event is PlantFeedBlocEventLoad) {
       plant = await PlantFeedBloc.getDisplayPlant(args.plant);
       if (plant == null) {
-        yield PlantFeedBlocStateNoPlant();
-        return;
+        int nPlants = await RelDB.get().plantsDAO.nPlants().getSingle();
+        if (nPlants == 0) {
+          plantsStream = RelDB.get().plantsDAO.watchPlants().listen((event) {
+            this.add(PlantFeedBlocEventLoad());
+          });
+          yield PlantFeedBlocStateNoPlant();
+          return;
+        } else {
+          try {
+            plant = await RelDB.get().plantsDAO.getLastPlant();
+            AppDB _db = AppDB();
+            _db.setLastPlant(plant!.id);
+          } catch (e, trace) {
+            Logger.logError(e, trace);
+            yield PlantFeedBlocStateNoPlant();
+            return;
+          }
+        }
       }
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(plant!.box);
