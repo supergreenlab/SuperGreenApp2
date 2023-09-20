@@ -101,7 +101,11 @@ class PlantFeedBloc extends LegacyBloc<PlantFeedBlocEvent, PlantFeedBlocState> {
         int nPlants = await RelDB.get().plantsDAO.nPlants().getSingle();
         if (nPlants == 0) {
           plantsStream = RelDB.get().plantsDAO.watchPlants().listen((event) {
-            this.add(PlantFeedBlocEventLoad());
+            if (event.length != 0) {
+              this.add(PlantFeedBlocEventLoad());
+              plantsStream!.cancel();
+              plantsStream = null;
+            }
           });
           yield PlantFeedBlocStateNoPlant();
           return;
@@ -147,6 +151,9 @@ class PlantFeedBloc extends LegacyBloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   Future<void> close() async {
     await plantStream?.cancel();
     await boxStream?.cancel();
+    if (plantsStream != null) {
+      await plantsStream!.cancel();
+    }
     return super.close();
   }
 
