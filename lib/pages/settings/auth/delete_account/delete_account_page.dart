@@ -209,7 +209,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: GreenButton(
                       title: 'Confirm delete',
-                      onPressed: nickname.text != '' && password.text != '' ? this._handleInput : null,
+                      onPressed: nickname.text != '' && password.text != '' ? () => this._handleInput(context) : null,
                     ),
                   ),
                 ],

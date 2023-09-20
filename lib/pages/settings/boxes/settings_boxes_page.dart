@@ -92,7 +92,7 @@ class SettingsBoxesPage extends TraceableStatelessWidget {
                     },
                     child: Icon(
                       Icons.add,
-                      color: Colors.white,
+                      color: Colors.green,
                     ),
                   ),
                 ],
