@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
-import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
@@ -35,8 +34,6 @@ class ChecklistItemPage extends StatelessWidget {
   final ChecklistSeed checklistSeed;
   final ChecklistCollection? collection;
 
-  late final List<ChecklistCondition> conditions;
-
   ChecklistItemPage(
       {Key? key,
       required this.plant,
@@ -45,9 +42,7 @@ class ChecklistItemPage extends StatelessWidget {
       required this.onSelect,
       required this.onDelete,
       required this.collection})
-      : super(key: key) {
-    conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
-  }
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -237,6 +237,26 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     style: TextStyle(color: Color(0xff454545))),
               );
             }).toList(),
+            state.checklistLogs.length != 0 ? Container() : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    'Actions',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
+                  ),
+                ),
+                ...actions.map((a) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                    ),
+                    child: Text(a.asSentence),
+                  );
+                }),
+              ],
+            ),
           ],
         ),
       ),
