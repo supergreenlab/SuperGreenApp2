@@ -28,7 +28,6 @@ import 'package:super_green_app/pages/checklist/action_popup/checklist_action_po
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/widgets/checklist_log_button_bar.dart';
 
 class ChecklistActionMessageButton extends ChecklistActionButton {
   ChecklistActionMessageButton(
@@ -77,7 +76,7 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
               builder: (BuildContext c) {
                 return BlocProvider<ChecklistActionPopupBloc>(
                   create: (BuildContext context) =>
-                      ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed, this.checklistAction),
+                      ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
                   child: ChecklistActionPopupPage(),
                 );
               },

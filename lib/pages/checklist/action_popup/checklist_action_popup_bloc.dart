@@ -18,7 +18,6 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
-import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
@@ -58,23 +57,21 @@ class ChecklistActionPopupBlocStateLoaded extends ChecklistActionPopupBlocState 
   final Plant plant;
   final Box box;
   final ChecklistSeed checklistSeed;
-  final ChecklistAction checklistAction;
   final List<ChecklistLog> checklistLogs;
 
   ChecklistActionPopupBlocStateLoaded(
-      this.plant, this.box, this.checklistSeed, this.checklistAction, this.checklistLogs);
+      this.plant, this.box, this.checklistSeed, this.checklistLogs);
 
   @override
-  List<Object?> get props => [plant, box, checklistSeed, checklistAction, checklistLogs];
+  List<Object?> get props => [plant, box, checklistSeed, checklistLogs];
 }
 
 class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent, ChecklistActionPopupBlocState> {
   final Plant plant;
   final Box box;
   final ChecklistSeed checklistSeed;
-  final ChecklistAction checklistAction;
 
-  ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed, this.checklistAction)
+  ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed)
       : super(ChecklistActionPopupBlocStateInit()) {
     add(ChecklistActionPopupBlocEventInit());
   }
@@ -84,20 +81,20 @@ class ChecklistActionPopupBloc extends LegacyBloc<ChecklistActionPopupBlocEvent,
     if (event is ChecklistActionPopupBlocEventInit) {
       List<ChecklistLog> checklistLogs =
           await RelDB.get().checklistsDAO.getActiveChecklistLogsForChecklistSeed(this.checklistSeed);
-      yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistAction, checklistLogs);
+      yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistLogs);
     } else if (event is ChecklistActionPopupBlocEventSkipChecklistLog) {
       await ChecklistHelper.skipChecklistLog(event.checklistLog);
       List<ChecklistLog> checklistLogs =
           await RelDB.get().checklistsDAO.getActiveChecklistLogsForChecklistSeed(this.checklistSeed);
       if (checklistLogs.length != 0) {
-        yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistAction, checklistLogs);
+        yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistLogs);
       }
     } else if (event is ChecklistActionPopupBlocEventCheckChecklistLog) {
       await ChecklistHelper.checkChecklistLog(event.checklistLog);
       List<ChecklistLog> checklistLogs =
           await RelDB.get().checklistsDAO.getActiveChecklistLogsForChecklistSeed(this.checklistSeed);
       if (checklistLogs.length != 0) {
-        yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistAction, checklistLogs);
+        yield ChecklistActionPopupBlocStateLoaded(plant, box, checklistSeed, checklistLogs);
       }
     }
   }

@@ -25,6 +25,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -300,14 +301,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Your checklist is empty.\n\nPress the button below to start using it.',
+                'Your checklist is empty.\nPress the button below to start using it.',
                 style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
                 textAlign: TextAlign.center,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 8.0),
                 child: GreenButton(
-                  title: 'Create new item',
+                  title: '+ Create new item',
                   onPressed: () {
                     setState(() {
                       showCreateMenu = true;
@@ -319,31 +320,31 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   },
                 ),
               ),
-              state.checklist.serverID == null ? Container() : Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Column(
-                  children: [
-                    Text(
-                      'Or checkout our pre-made\nchecklist collections:',
-                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GreenButton(
-                        onPressed: () {
-                          setState(() {
-                            this.loadingAutoChecklist = true;
-                          });
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToChecklistCollections(state.checklist));
-                        },
-                        title: 'View collections',
+              state.checklist.serverID == null
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Or checkout our pre-made\nchecklist collections:',
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+                            textAlign: TextAlign.center,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GreenButton(
+                              color: 0xFF673AB7,
+                              onPressed: () {
+                                BlocProvider.of<MainNavigatorBloc>(context)
+                                    .add(MainNavigateToChecklistCollections(state.checklist));
+                              },
+                              title: '🦜 View collections',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
@@ -479,6 +480,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ChecklistItemPage(
+                      plant: state.plant,
+                      box: state.box,
                       checklistSeed: cks,
                       collection: collection,
                       onSelect: () {
@@ -645,12 +648,21 @@ class _ChecklistPageState extends State<ChecklistPage> {
       child: CreateChecklistSection(
         titleWidget: Padding(
           padding: const EdgeInsets.only(left: 18.0, top: 12.0),
-          child: Text('Add daily checks?',
-              style: TextStyle(
-                color: Color(0xff454545),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              )),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SvgPicture.asset(ChecklistCollectionCategoryIcons[CO_BASICS]!),
+              ),
+              Text('Add daily checks?',
+                  maxLines: 3,
+                  style: TextStyle(
+                    color: Color(0xff454545),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
         ),
         onClose: () {
           setState(() {
@@ -666,7 +678,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    'Don\'t want to spend time confiruing alerts?\n\nSubscribe to the "Daily checks" collection and receive notifications about the most common things to pay attention to for a successful grow.',
+                    'Don\'t want to spend time configuring alerts?\n\nSubscribe to the "Daily checks" collection and receive notifications about the most common things to pay attention to for a successful grow.',
                     style: TextStyle(color: Color(0xff454545))),
               ),
               Row(

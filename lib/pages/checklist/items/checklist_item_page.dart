@@ -19,50 +19,61 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
-import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
-import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
+import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 
 class ChecklistItemPage extends StatelessWidget {
   final Function() onSelect;
   final Function() onDelete;
+  final Plant plant;
+  final Box box;
   final ChecklistSeed checklistSeed;
   final ChecklistCollection? collection;
 
-  late final List<ChecklistCondition> conditions;
-  late final List<ChecklistAction> actions;
-
-  ChecklistItemPage({Key? key, required this.checklistSeed, required this.onSelect, required this.onDelete, required this.collection})
-      : super(key: key) {
-    conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
-    actions = ChecklistAction.fromMapArray(json.decode(checklistSeed.actions));
-  }
+  ChecklistItemPage(
+      {Key? key, required this.plant, required this.box, required this.checklistSeed, required this.onSelect, required this.onDelete, required this.collection})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(50),
-            spreadRadius: 2.0,
-            blurRadius: 2.0,
-            offset: Offset(1, 1),
-          )
-        ],
-      ),
-      child: Column(
-        children: [
-          renderHeader(context),
-          renderBody(context),
-        ],
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet<bool>(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (BuildContext c) {
+            return BlocProvider<ChecklistActionPopupBloc>(
+              create: (BuildContext context) => ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
+              child: ChecklistActionPopupPage(),
+            );
+          },
+        );
+      },
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(50),
+              spreadRadius: 2.0,
+              blurRadius: 2.0,
+              offset: Offset(1, 1),
+            )
+          ],
+        ),
+        child: Column(
+          children: [
+            renderHeader(context),
+            renderBody(context),
+          ],
+        ),
       ),
     );
   }
@@ -155,62 +166,15 @@ class ChecklistItemPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          collection == null ? Container() : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text('Collection: ${collection!.title}', style: TextStyle(color: Color(0xff454545), fontWeight: FontWeight.bold),),
-          ),
-          checklistSeed.description == ''
+          collection == null
               ? Container()
               : Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 200,
-                  ),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: MarkdownBody(
-                      data: checklistSeed.description,
-                      styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Color(0xff454545), fontSize: 12),
-                        h1: TextStyle(color: Color(0xff454545), fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    'From collection: ${collection!.title}',
+                    style: TextStyle(color: Color(0xff454545), fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              'Conditions',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          ...conditions.map((c) {
-            return Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                bottom: 8.0,
-              ),
-              child: Text((conditions.indexOf(c) != 0 ? 'AND ' : '') + c.asSentence),
-            );
-          }).toList(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              'Actions',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          ...actions.map((a) {
-            return Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                bottom: 8.0,
-              ),
-              child: Text((actions.indexOf(a) != 0 ? 'AND ' : '') + a.asSentence),
-            );
-          }),
         ],
       ),
     );

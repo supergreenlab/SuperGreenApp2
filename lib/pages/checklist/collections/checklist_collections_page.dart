@@ -67,7 +67,7 @@ class ChecklistCollectionsPage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 16.0),
-                        child: SvgPicture.asset(ChecklistCollectionCategory[c.category.value]!),
+                        child: SvgPicture.asset(ChecklistCollectionCategoryIcons[c.category.value]!),
                       ),
                       Text(c.title.value, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),),
                     ],

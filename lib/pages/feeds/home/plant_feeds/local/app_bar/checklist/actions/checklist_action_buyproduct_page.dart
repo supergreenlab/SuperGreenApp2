@@ -82,7 +82,7 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
               builder: (BuildContext c) {
                 return BlocProvider<ChecklistActionPopupBloc>(
                   create: (BuildContext context) =>
-                      ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed, this.checklistAction),
+                      ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
                   child: ChecklistActionPopupPage(),
                 );
               },

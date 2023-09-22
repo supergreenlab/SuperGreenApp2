@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -23,7 +25,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -38,6 +40,9 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   bool noRepeat = false;
   bool allSet = false;
 
+  late final List<ChecklistCondition> conditions;
+  late final List<ChecklistAction> actions;
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +56,8 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
           {
             setState(() {
               noRepeat = AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
+              conditions = ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions));
+              actions = ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions));
             })
           }
       },
@@ -110,13 +117,15 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
       children: [
         _renderTitle(context, state),
         Expanded(child: _renderChecklistSeed(context, state)),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Actions (${state.checklistLogs.length})",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
-          ),
-        ),
+        state.checklistLogs.length == 0
+            ? Container()
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Actions (${state.checklistLogs.length})",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+                ),
+              ),
         _renderRepeat(context, state),
         _renderActions(context, state),
       ],
@@ -124,7 +133,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   }
 
   Widget _renderRepeat(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
-    if (!state.checklistSeed.repeat) {
+    if (!state.checklistSeed.repeat || state.checklistLogs.length == 0) {
       return Container();
     }
     return InkWell(
@@ -194,19 +203,50 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
       child: SingleChildScrollView(
-        child: MarkdownBody(
-          data: state.checklistSeed.description,
-          styleSheet: MarkdownStyleSheet(
-            p: TextStyle(color: Color(0xff454545), fontSize: 14),
-            h1: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
-            h2: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: MarkdownBody(
+                data: state.checklistSeed.description,
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Color(0xff454545), fontSize: 14),
+                  h1: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
+                  h2: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Trigger conditions',
+                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
+              ),
+            ),
+            ...conditions.map((c) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                ),
+                child: Text((conditions.indexOf(c) != 0 ? 'AND ' : '') + c.asSentence,
+                    style: TextStyle(color: Color(0xff454545))),
+              );
+            }).toList(),
+          ],
         ),
       ),
     );
   }
 
   Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+    if (state.checklistLogs.length == 0) {
+      return Container();
+    }
     double height = MediaQuery.of(context).size.height * 0.25;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),

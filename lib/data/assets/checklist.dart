@@ -62,7 +62,7 @@ const CO_BASICS='BASICS';
 const CO_NUTRIENT='NUTRIENT';
 const CO_RECIPE='RECIPE';
 
-const Map<String, String> ChecklistCollectionCategory = {
+const Map<String, String> ChecklistCollectionCategoryIcons = {
   CO_BASICS: 'assets/checklist/icon_daily_checks.svg',
   CO_NUTRIENT: 'assets/checklist/icon_nutrient.svg',
   CO_RECIPE: 'assets/checklist/icon_recipe.svg',
