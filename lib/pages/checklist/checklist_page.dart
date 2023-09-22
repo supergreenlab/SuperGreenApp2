@@ -645,7 +645,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
       child: CreateChecklistSection(
         titleWidget: Padding(
           padding: const EdgeInsets.only(left: 18.0, top: 12.0),
-          child: Text('Activate auto checklist?',
+          child: Text('Add daily checks?',
               style: TextStyle(
                 color: Color(0xff454545),
                 fontSize: 20,
@@ -666,7 +666,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    'If checked, your checklist will be automatically populated with common checklist items based on your plant stage, diary items, environment etc..',
+                    'Don\'t want to spend time confiruing alerts?\n\nSubscribe to the "Daily checks" collection and receive notifications about the most common things to pay attention to for a successful grow.',
                     style: TextStyle(color: Color(0xff454545))),
               ),
               Row(
