@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
@@ -34,9 +35,19 @@ class ChecklistItemPage extends StatelessWidget {
   final ChecklistSeed checklistSeed;
   final ChecklistCollection? collection;
 
+  late final List<ChecklistCondition> conditions;
+
   ChecklistItemPage(
-      {Key? key, required this.plant, required this.box, required this.checklistSeed, required this.onSelect, required this.onDelete, required this.collection})
-      : super(key: key);
+      {Key? key,
+      required this.plant,
+      required this.box,
+      required this.checklistSeed,
+      required this.onSelect,
+      required this.onDelete,
+      required this.collection})
+      : super(key: key) {
+    conditions = ChecklistCondition.fromMapArray(json.decode(checklistSeed.conditions));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,12 +180,19 @@ class ChecklistItemPage extends StatelessWidget {
           collection == null
               ? Container()
               : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
                     'From collection: ${collection!.title}',
-                    style: TextStyle(color: Color(0xff454545), fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Color(0xff606060), fontWeight: FontWeight.bold),
                   ),
                 ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text('Tap top view details', style: TextStyle(color: Color(0xffababab))),
+            ],
+          ),
         ],
       ),
     );
