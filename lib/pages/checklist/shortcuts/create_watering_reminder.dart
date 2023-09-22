@@ -22,7 +22,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
@@ -98,10 +97,10 @@ Follow these 3 steps to make sure your soil is well watered:
                         ChecklistActionCreateCard waterAction = ChecklistActionCreateCard(
                           entryType: FE_WATER,
                         );
-                        ChecklistActionCreateCard mediaAction = ChecklistActionCreateCard(
+                        /* ChecklistActionCreateCard mediaAction = ChecklistActionCreateCard(
                           entryType: FE_MEDIA,
                           instructions: 'Take a pic of your plant before the watering to see the difference.',
-                        );
+                        ); */
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,

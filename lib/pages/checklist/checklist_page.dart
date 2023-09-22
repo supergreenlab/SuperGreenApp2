@@ -246,10 +246,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       showCreateMenu = false;
                     });
                   }),
-                  state.checklist.serverID == null ? Container() : SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  state.checklist.serverID == null ? Container() : _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklistCollections(state.checklist));
-                  }),
+                  state.checklist.serverID == null
+                      ? Container()
+                      : SvgPicture.asset('assets/checklist/line_separator.svg'),
+                  state.checklist.serverID == null
+                      ? Container()
+                      : _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToChecklistCollections(state.checklist));
+                        }),
                 ],
               ),
             ),
@@ -312,6 +317,31 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       showCreateTimeReminder = false;
                     });
                   },
+                ),
+              ),
+              state.checklist.serverID == null ? Container() : Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'Or checkout our pre-made\nchecklist collections:',
+                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GreenButton(
+                        onPressed: () {
+                          setState(() {
+                            this.loadingAutoChecklist = true;
+                          });
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToChecklistCollections(state.checklist));
+                        },
+                        title: 'View collections',
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -478,11 +508,17 @@ class _ChecklistPageState extends State<ChecklistPage> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('🎉', style: TextStyle(fontSize: 60),),
+          child: Text(
+            '🎉',
+            style: TextStyle(fontSize: 60),
+          ),
         ),
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text('You\'re all set for today 👌', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff808080)),),
+          child: Text(
+            'You\'re all set for today 👌',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff808080)),
+          ),
         ),
       ],
     );
@@ -579,7 +615,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
-    if (!showAutoChecklist || state.checklist.serverID == null || state.collections.indexWhere((c) => c.serverID == BackendAPI().checklistCollectionTheBasics) != -1) {
+    if (!showAutoChecklist ||
+        state.checklist.serverID == null ||
+        state.collections.indexWhere((c) => c.serverID == BackendAPI().checklistCollectionTheBasics) != -1) {
       return Container(
         height: 12.0,
       );
