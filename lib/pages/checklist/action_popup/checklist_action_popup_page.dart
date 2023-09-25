@@ -72,27 +72,30 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
             );
           }
 
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
                       ),
-                      child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -165,14 +168,14 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                   padding: const EdgeInsets.only(right: 12.0),
                   child: SvgPicture.asset(
                     ChecklistCategoryIcons[state.checklistSeed.category]!,
-                    width: 20,
+                    width: 40,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     state.checklistSeed.title,
                     maxLines: 3,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),
                   ),
                 ),
               ],
@@ -215,9 +218,9 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
               child: MarkdownBody(
                 data: state.checklistSeed.description,
                 styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Color(0xff454545), fontSize: 14),
-                  h1: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
-                  h2: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
+                  p: TextStyle(color: Color(0xff454545), fontSize: 15),
+                  h1: TextStyle(color: Color(0xff454545), fontSize: 17, fontWeight: FontWeight.bold),
+                  h2: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

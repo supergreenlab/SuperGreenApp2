@@ -71,79 +71,82 @@ class NotificationRequestPage extends TraceableStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 345,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 4.0,
-        ),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                  child: SvgPicture.asset(
-                    'assets/home/icon_notification.svg',
-                    width: 30,
-                    height: 30,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    NotificationRequestPage.notificationRequestTitle,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+      child: Container(
+        height: 345,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 16.0,
+            horizontal: 4.0,
+          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                    child: SvgPicture.asset(
+                      'assets/home/icon_notification.svg',
+                      width: 30,
+                      height: 30,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-              child: ListView(
-                children: [
-                  MarkdownBody(
-                    fitContent: false,
-                    data: NotificationRequestPage.notificationPurposes,
-                    styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Color(0xff454545), fontSize: 16),
-                        strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16)),
+                  Expanded(
+                    child: Text(
+                      NotificationRequestPage.notificationRequestTitle,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: GreenButton(
-                    color: Colors.red.value,
-                    title: NotificationRequestPage.notificationRequestButtonCancel,
-                    onPressed: () async {
-                      BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
-                    },
-                  )),
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: GreenButton(
-                  title: NotificationRequestPage.notificationRequestButton,
-                  onPressed: () async {
-                    await NotificationsBloc.remoteNotifications.requestPermissions();
-                    BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
-                  },
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: ListView(
+                  children: [
+                    MarkdownBody(
+                      fitContent: false,
+                      data: NotificationRequestPage.notificationPurposes,
+                      styleSheet: MarkdownStyleSheet(
+                          p: TextStyle(color: Color(0xff454545), fontSize: 16),
+                          strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16)),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          )
-        ]),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: GreenButton(
+                      color: Colors.red.value,
+                      title: NotificationRequestPage.notificationRequestButtonCancel,
+                      onPressed: () async {
+                        BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
+                      },
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: GreenButton(
+                    title: NotificationRequestPage.notificationRequestButton,
+                    onPressed: () async {
+                      await NotificationsBloc.remoteNotifications.requestPermissions();
+                      BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
+                    },
+                  ),
+                ),
+              ],
+            )
+          ]),
+        ),
       ),
     );
   }
