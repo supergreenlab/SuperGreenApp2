@@ -122,7 +122,11 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 7) {
       await m.addColumn(plants, plants.public);
     } else if (fromVersion == 9) {
-      await m.addColumn(boxes, boxes.feed);
+      try {
+        await m.addColumn(boxes, boxes.feed);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
     } else if (fromVersion == 10) {
       await m.drop(chartCaches);
       await m.createTable(chartCaches);
@@ -140,10 +144,26 @@ class RelDB extends _$RelDB {
       await m.createTable(checklistSeeds);
       await m.createTable(checklistLogs);
     } else if (fromVersion == 16) {
-      await m.addColumn(checklistSeeds, checklistSeeds.fast);
-      await m.addColumn(checklistSeeds, checklistSeeds.collection);
-      await m.addColumn(checklistSeeds, checklistSeeds.checklistCollectionServerID);
-      await m.addColumn(checklistLogs, checklistLogs.noRepeat);
+      try {
+        await m.addColumn(checklistSeeds, checklistSeeds.fast);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+      try {
+        await m.addColumn(checklistSeeds, checklistSeeds.collection);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+      try {
+        await m.addColumn(checklistSeeds, checklistSeeds.checklistCollectionServerID);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+      try {
+        await m.addColumn(checklistLogs, checklistLogs.noRepeat);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
       await m.createTable(checklistCollections);
     }
   }
