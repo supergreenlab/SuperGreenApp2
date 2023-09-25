@@ -89,6 +89,7 @@ class TowelieButtonReminder extends TowelieButton {
       category: Value(CH_FEEDING),
       public: Value(false),
       repeat: Value(false),
+      mine: Value(true),
       conditions: Value('[${condition.toJSON()}]'),
       exitConditions: Value('[]'),
       actions: Value('[${action.toJSON()}]'),

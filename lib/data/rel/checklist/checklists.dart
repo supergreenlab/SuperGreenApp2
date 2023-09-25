@@ -106,6 +106,7 @@ class ChecklistSeeds extends Table {
   BoolColumn get fast => boolean().withDefault(Constant(false))();
   BoolColumn get public => boolean().withDefault(Constant(false))();
   BoolColumn get repeat => boolean().withDefault(Constant(false))();
+  BoolColumn get mine => boolean().withDefault(Constant(true))();
 
   TextColumn get conditions => text().withDefault(Constant('[]'))();
   TextColumn get exitConditions => text().withDefault(Constant('[]'))();
@@ -132,6 +133,7 @@ class ChecklistSeeds extends Table {
       fast: Value(map['fast']),
       public: Value(map['public']),
       repeat: Value(map['repeat']),
+      mine: Value(map['mine']),
       title: Value(map['title']),
       description: Value(map['description']),
       category: Value(map['category']),

@@ -484,11 +484,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       box: state.box,
                       checklistSeed: cks,
                       collection: collection,
-                      onSelect: () {
+                      onSelect: cks.mine == false ? null : () {
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
                       },
-                      onDelete: () {
+                      onDelete: cks.mine == false ? null : () {
                         _deleteChecklistSeed(context, cks);
                       },
                     ),

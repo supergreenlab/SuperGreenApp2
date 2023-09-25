@@ -78,6 +78,7 @@ class CreateChecklistSeedBloc extends LegacyBloc<CreateChecklistSeedBlocEvent, C
           checklist: this.args.checklist.id,
           public: Value(false),
           repeat: Value(false),
+          mine: Value(true),
           title: Value(''),
           description: Value(''),
           category: Value(''),

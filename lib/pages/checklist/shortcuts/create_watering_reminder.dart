@@ -41,7 +41,7 @@ class CreateWateringReminder extends StatefulWidget {
 
 class _CreateWateringReminderState extends State<CreateWateringReminder> {
   ChecklistCondition condition = ChecklistConditionTimer(
-    date: DateTime.now().add(Duration(days: 1)),
+    date: DateTime.now(),
   );
 
   @override
@@ -110,6 +110,7 @@ Follow these 3 steps to make sure your soil is well watered:
                           fast: drift.Value(false),
                           public: drift.Value(false),
                           repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
+                          mine: drift.Value(true),
                           conditions: drift.Value('[${condition.toJSON()}]'),
                           exitConditions: drift.Value('[]'),
                           actions: drift.Value('[${waterAction.toJSON()}]'), // ${mediaAction.toJSON()},

@@ -92,6 +92,7 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
                           fast: drift.Value(((this.action as ChecklistActionMessage).instructions?.length ?? 0) == 0),
                           public: drift.Value(false),
                           repeat: drift.Value(true),
+                          mine: drift.Value(true),
                           conditions: drift.Value('[${condition.toJSON()}]'),
                           exitConditions: drift.Value('[]'),
                           actions: drift.Value('[${action.toJSON()}]'),

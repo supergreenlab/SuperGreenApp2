@@ -4804,6 +4804,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   final bool fast;
   final bool public;
   final bool repeat;
+  final bool mine;
   final String conditions;
   final String exitConditions;
   final String actions;
@@ -4821,6 +4822,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       required this.fast,
       required this.public,
       required this.repeat,
+      required this.mine,
       required this.conditions,
       required this.exitConditions,
       required this.actions,
@@ -4849,6 +4851,8 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
       repeat: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}repeat'])!,
+      mine: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}mine'])!,
       conditions: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}conditions'])!,
       exitConditions: const StringType()
@@ -4879,6 +4883,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     map['fast'] = Variable<bool>(fast);
     map['public'] = Variable<bool>(public);
     map['repeat'] = Variable<bool>(repeat);
+    map['mine'] = Variable<bool>(mine);
     map['conditions'] = Variable<String>(conditions);
     map['exit_conditions'] = Variable<String>(exitConditions);
     map['actions'] = Variable<String>(actions);
@@ -4909,6 +4914,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       fast: Value(fast),
       public: Value(public),
       repeat: Value(repeat),
+      mine: Value(mine),
       conditions: Value(conditions),
       exitConditions: Value(exitConditions),
       actions: Value(actions),
@@ -4939,6 +4945,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       fast: serializer.fromJson<bool>(json['fast']),
       public: serializer.fromJson<bool>(json['public']),
       repeat: serializer.fromJson<bool>(json['repeat']),
+      mine: serializer.fromJson<bool>(json['mine']),
       conditions: serializer.fromJson<String>(json['conditions']),
       exitConditions: serializer.fromJson<String>(json['exitConditions']),
       actions: serializer.fromJson<String>(json['actions']),
@@ -4963,6 +4970,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       'fast': serializer.toJson<bool>(fast),
       'public': serializer.toJson<bool>(public),
       'repeat': serializer.toJson<bool>(repeat),
+      'mine': serializer.toJson<bool>(mine),
       'conditions': serializer.toJson<String>(conditions),
       'exitConditions': serializer.toJson<String>(exitConditions),
       'actions': serializer.toJson<String>(actions),
@@ -4984,6 +4992,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           bool? fast,
           bool? public,
           bool? repeat,
+          bool? mine,
           String? conditions,
           String? exitConditions,
           String? actions,
@@ -5001,6 +5010,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
         fast: fast ?? this.fast,
         public: public ?? this.public,
         repeat: repeat ?? this.repeat,
+        mine: mine ?? this.mine,
         conditions: conditions ?? this.conditions,
         exitConditions: exitConditions ?? this.exitConditions,
         actions: actions ?? this.actions,
@@ -5022,6 +5032,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           ..write('fast: $fast, ')
           ..write('public: $public, ')
           ..write('repeat: $repeat, ')
+          ..write('mine: $mine, ')
           ..write('conditions: $conditions, ')
           ..write('exitConditions: $exitConditions, ')
           ..write('actions: $actions, ')
@@ -5044,6 +5055,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       fast,
       public,
       repeat,
+      mine,
       conditions,
       exitConditions,
       actions,
@@ -5064,6 +5076,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           other.fast == this.fast &&
           other.public == this.public &&
           other.repeat == this.repeat &&
+          other.mine == this.mine &&
           other.conditions == this.conditions &&
           other.exitConditions == this.exitConditions &&
           other.actions == this.actions &&
@@ -5084,6 +5097,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   final Value<bool> fast;
   final Value<bool> public;
   final Value<bool> repeat;
+  final Value<bool> mine;
   final Value<String> conditions;
   final Value<String> exitConditions;
   final Value<String> actions;
@@ -5101,6 +5115,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.fast = const Value.absent(),
     this.public = const Value.absent(),
     this.repeat = const Value.absent(),
+    this.mine = const Value.absent(),
     this.conditions = const Value.absent(),
     this.exitConditions = const Value.absent(),
     this.actions = const Value.absent(),
@@ -5119,6 +5134,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     this.fast = const Value.absent(),
     this.public = const Value.absent(),
     this.repeat = const Value.absent(),
+    this.mine = const Value.absent(),
     this.conditions = const Value.absent(),
     this.exitConditions = const Value.absent(),
     this.actions = const Value.absent(),
@@ -5137,6 +5153,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     Expression<bool>? fast,
     Expression<bool>? public,
     Expression<bool>? repeat,
+    Expression<bool>? mine,
     Expression<String>? conditions,
     Expression<String>? exitConditions,
     Expression<String>? actions,
@@ -5155,6 +5172,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       if (fast != null) 'fast': fast,
       if (public != null) 'public': public,
       if (repeat != null) 'repeat': repeat,
+      if (mine != null) 'mine': mine,
       if (conditions != null) 'conditions': conditions,
       if (exitConditions != null) 'exit_conditions': exitConditions,
       if (actions != null) 'actions': actions,
@@ -5176,6 +5194,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       Value<bool>? fast,
       Value<bool>? public,
       Value<bool>? repeat,
+      Value<bool>? mine,
       Value<String>? conditions,
       Value<String>? exitConditions,
       Value<String>? actions,
@@ -5193,6 +5212,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       fast: fast ?? this.fast,
       public: public ?? this.public,
       repeat: repeat ?? this.repeat,
+      mine: mine ?? this.mine,
       conditions: conditions ?? this.conditions,
       exitConditions: exitConditions ?? this.exitConditions,
       actions: actions ?? this.actions,
@@ -5234,6 +5254,9 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     if (repeat.present) {
       map['repeat'] = Variable<bool>(repeat.value);
     }
+    if (mine.present) {
+      map['mine'] = Variable<bool>(mine.value);
+    }
     if (conditions.present) {
       map['conditions'] = Variable<String>(conditions.value);
     }
@@ -5271,6 +5294,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
           ..write('fast: $fast, ')
           ..write('public: $public, ')
           ..write('repeat: $repeat, ')
+          ..write('mine: $mine, ')
           ..write('conditions: $conditions, ')
           ..write('exitConditions: $exitConditions, ')
           ..write('actions: $actions, ')
@@ -5352,6 +5376,14 @@ class $ChecklistSeedsTable extends ChecklistSeeds
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (repeat IN (0, 1))',
       defaultValue: Constant(false));
+  final VerificationMeta _mineMeta = const VerificationMeta('mine');
+  @override
+  late final GeneratedColumn<bool?> mine = GeneratedColumn<bool?>(
+      'mine', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (mine IN (0, 1))',
+      defaultValue: Constant(true));
   final VerificationMeta _conditionsMeta = const VerificationMeta('conditions');
   @override
   late final GeneratedColumn<String?> conditions = GeneratedColumn<String?>(
@@ -5420,6 +5452,7 @@ class $ChecklistSeedsTable extends ChecklistSeeds
         fast,
         public,
         repeat,
+        mine,
         conditions,
         exitConditions,
         actions,
@@ -5477,6 +5510,10 @@ class $ChecklistSeedsTable extends ChecklistSeeds
     if (data.containsKey('repeat')) {
       context.handle(_repeatMeta,
           repeat.isAcceptableOrUnknown(data['repeat']!, _repeatMeta));
+    }
+    if (data.containsKey('mine')) {
+      context.handle(
+          _mineMeta, mine.isAcceptableOrUnknown(data['mine']!, _mineMeta));
     }
     if (data.containsKey('conditions')) {
       context.handle(

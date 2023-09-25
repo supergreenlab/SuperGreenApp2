@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,8 +25,8 @@ import 'package:super_green_app/pages/checklist/action_popup/checklist_action_po
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 
 class ChecklistItemPage extends StatelessWidget {
-  final Function() onSelect;
-  final Function() onDelete;
+  final Function()? onSelect;
+  final Function()? onDelete;
   final Plant plant;
   final Box box;
   final ChecklistSeed checklistSeed;
@@ -137,7 +135,7 @@ class ChecklistItemPage extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
+          onDelete == null ? Container() : InkWell(
               onTap: onDelete,
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -149,7 +147,7 @@ class ChecklistItemPage extends StatelessWidget {
                   color: Color(0xff606060),
                 ),
               )),
-          InkWell(
+          onSelect == null ? Container() : InkWell(
               onTap: onSelect,
               child: Padding(
                 padding: const EdgeInsets.only(

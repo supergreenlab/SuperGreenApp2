@@ -150,6 +150,11 @@ class RelDB extends _$RelDB {
         Logger.logError(e, trace);
       }
       try {
+        await m.addColumn(checklistSeeds, checklistSeeds.mine);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+      try {
         await m.addColumn(checklistSeeds, checklistSeeds.collection);
       } catch (e, trace) {
         Logger.logError(e, trace);
