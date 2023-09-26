@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
@@ -33,7 +34,7 @@ class PlantDrawerBlocEventLoadPlants extends PlantDrawerBlocEvent {
 class PlantDrawerBlocEventBoxListUpdated extends PlantDrawerBlocEvent {
   final List<Plant> plants;
   final List<Box> boxes;
-  final List<GetPendingFeedsResult> hasPending;
+  final List<GetNLogsPerPlantsResult> hasPending;
 
   PlantDrawerBlocEventBoxListUpdated(this.plants, this.boxes, this.hasPending);
 
@@ -51,7 +52,7 @@ class PlantDrawerBlocStateLoadingPlantList extends PlantDrawerBlocState {
 class PlantDrawerBlocStatePlantListUpdated extends PlantDrawerBlocState {
   final List<Plant> plants;
   final List<Box> boxes;
-  final List<GetPendingFeedsResult> hasPending;
+  final List<GetNLogsPerPlantsResult> hasPending;
 
   PlantDrawerBlocStatePlantListUpdated(this.plants, this.boxes, this.hasPending);
 
@@ -62,10 +63,10 @@ class PlantDrawerBlocStatePlantListUpdated extends PlantDrawerBlocState {
 class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   List<Plant> _plants = [];
   List<Box> _boxes = [];
-  List<GetPendingFeedsResult> _hasPending = [];
+  List<GetNLogsPerPlantsResult> _hasPending = [];
   StreamSubscription<List<Plant>>? _plantStream;
   StreamSubscription<List<Box>>? _boxesStream;
-  StreamSubscription<List<GetPendingFeedsResult>>? _pendingStream;
+  StreamSubscription<List<GetNLogsPerPlantsResult>>? _pendingStream;
 
   PlantDrawerBloc() : super(PlantDrawerBlocStateLoadingPlantList()) {
     add(PlantDrawerBlocEventLoadPlants());
@@ -75,10 +76,9 @@ class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocSt
   Stream<PlantDrawerBlocState> mapEventToState(PlantDrawerBlocEvent event) async* {
     if (event is PlantDrawerBlocEventLoadPlants) {
       final db = RelDB.get().plantsDAO;
-      _plantStream = db.watchPlants().listen(_onPlantListChange);
-      _boxesStream = db.watchBoxes().listen(_onBoxListChange);
-      final fdb = RelDB.get().feedsDAO;
-      _pendingStream = fdb.getPendingFeeds().watch().listen(_hasPendingChange);
+      _plantStream = RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
+      _boxesStream = RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
+      _pendingStream = RelDB.get().checklistsDAO.getNLogsPerPlants().watch().listen(_hasPendingChange);
     } else if (event is PlantDrawerBlocEventBoxListUpdated) {
       yield PlantDrawerBlocStatePlantListUpdated(_plants, _boxes, _hasPending);
     }
@@ -94,7 +94,7 @@ class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocSt
     add(PlantDrawerBlocEventBoxListUpdated(_plants, _boxes, _hasPending));
   }
 
-  void _hasPendingChange(List<GetPendingFeedsResult> hasPending) {
+  void _hasPendingChange(List<GetNLogsPerPlantsResult> hasPending) {
     _hasPending = hasPending;
     add(PlantDrawerBlocEventBoxListUpdated(_plants, _boxes, _hasPending));
   }

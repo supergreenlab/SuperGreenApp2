@@ -41,6 +41,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
   bool allSet = false;
 
   late final List<ChecklistCondition> conditions;
+  late final List<ChecklistCondition> exitConditions;
   late final List<ChecklistAction> actions;
 
   @override
@@ -57,6 +58,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
             setState(() {
               noRepeat = AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
               conditions = ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions));
+              exitConditions = ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.exitConditions));
               actions = ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions));
             })
           }
@@ -240,6 +242,26 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     style: TextStyle(color: Color(0xff454545))),
               );
             }).toList(),
+            exitConditions.length != 0 ? Container() : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    'Exit condition',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
+                  ),
+                ),
+                ...exitConditions.map((a) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                    ),
+                    child: Text(a.asSentence),
+                  );
+                }),
+              ],
+            ),
             state.checklistLogs.length != 0 ? Container() : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

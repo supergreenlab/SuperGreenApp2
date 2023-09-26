@@ -88,7 +88,7 @@ class HomePage extends TraceableStatelessWidget {
             try {
               int nOthers = 0;
               try {
-                nOthers = state.hasPending.where((e) => e.id != 1).map<int>((e) => e.nNew).reduce((a, e) => a + e);
+                nOthers = state.hasPending;
               } catch (e) {}
               if (nOthers > 0) {
                 homeIcon = Stack(

@@ -22,4 +22,37 @@ mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
           checklistLogs,
         }).map((QueryRow row) => row.read<int>('count(*)'));
   }
+
+  Selectable<int> getNLogsTotal() {
+    return customSelect(
+        'select count(*) from checklist_logs where checked=false and skipped=false',
+        variables: [],
+        readsFrom: {
+          checklistLogs,
+        }).map((QueryRow row) => row.read<int>('count(*)'));
+  }
+
+  Selectable<GetNLogsPerPlantsResult> getNLogsPerPlants() {
+    return customSelect(
+        'select\n      checklists.plant,\n      (select\n        count(*)\n        from checklist_logs\n        where checked=false and skipped=false and checklist_logs.checklist = checklists.id\n      ) as nPending\n    from checklists where nPending > 0',
+        variables: [],
+        readsFrom: {
+          checklists,
+          checklistLogs,
+        }).map((QueryRow row) {
+      return GetNLogsPerPlantsResult(
+        plant: row.read<int>('plant'),
+        nPending: row.read<int>('nPending'),
+      );
+    });
+  }
+}
+
+class GetNLogsPerPlantsResult {
+  final int plant;
+  final int nPending;
+  GetNLogsPerPlantsResult({
+    required this.plant,
+    required this.nPending,
+  });
 }

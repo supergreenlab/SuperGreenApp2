@@ -239,6 +239,19 @@ class ChecklistLogs extends Table {
   'getNLogs': '''
     select count(*) from checklist_logs where checked=false and skipped=false and checklist=?
   ''',
+  'getNLogsTotal': '''
+    select count(*) from checklist_logs where checked=false and skipped=false
+  ''',
+  'getNLogsPerPlants': '''
+    select
+      checklists.plant,
+      (select
+        count(*)
+        from checklist_logs
+        where checked=false and skipped=false and checklist_logs.checklist = checklists.id
+      ) as nPending
+    from checklists where nPending > 0
+  '''
 })
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   ChecklistsDAO(RelDB db) : super(db);
@@ -277,8 +290,7 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   }
 
   Future<List<ChecklistCollection>> getChecklistCollectionsForChecklist(Checklist checklist) {
-    return (select(checklistCollections)..where((p) => p.checklist.equals(checklist.id)))
-        .get();
+    return (select(checklistCollections)..where((p) => p.checklist.equals(checklist.id))).get();
   }
 
   Future<Checklist> getChecklist(int id) {
@@ -338,8 +350,14 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklistCollections)..where((p) => p.checklist.equals(checklistID))).get();
   }
 
+  Stream<List<ChecklistLog>> watchAllChecklistLogs() {
+    return (select(checklistLogs)..where((p) => p.checked.equals(false) & p.skipped.equals(false))).watch();
+  }
+
   Stream<List<ChecklistLog>> watchChecklistLogs(int checklistID) {
-    return (select(checklistLogs)..where((p) => p.checklist.equals(checklistID))).watch();
+    return (select(checklistLogs)
+          ..where((p) => p.checklist.equals(checklistID) & p.checked.equals(false) & p.skipped.equals(false)))
+        .watch();
   }
 
   Stream<List<ChecklistCollection>> watchCollections(int checklistID) {
@@ -388,6 +406,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future deleteChecklistLog(ChecklistLog checklistLog) {
     return delete(checklistLogs).delete(checklistLog);
+  }
+
+  Future<int> getNPendingLogsTotal(Checklist checklist) {
+    return getNLogsTotal().getSingle();
   }
 
   Future<int> getNPendingLogs(Checklist checklist) {

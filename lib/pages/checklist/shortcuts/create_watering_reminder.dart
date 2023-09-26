@@ -73,6 +73,22 @@ class _CreateWateringReminderState extends State<CreateWateringReminder> {
 
 Make sure your soil is dry before watering, best way to check that is to check the dryness of the first inch of soil, if it's not dry, wait a few more days, and if you can, try to lift the pot manually, a dry soil is noticeably lightweight.
 
+# Make sure you don't overwater
+
+**If you PH seems right, make sure you are not over watering your plant**
+
+Make sure the whole soil is dry before watering, just the top layer of soil being dry is not enough, the rest is certainly still humid.
+
+![Dryness direction](https://www.supergreenlab.com/img/files/atttO4BAih4eTtxGY.jpg)
+
+You can do a first "finger test", make sure to test deep enough.
+
+![Dryness direction](https://www.supergreenlab.com/img/files/attN3ySXUYFNtBXGJ.jpg)
+
+What you will want is something like the picture here, **the best way to test this is to weight the pot manually**, a dry soil is noticeably lighter.
+
+![Dryness direction](https://www.supergreenlab.com/img/files/attEufkItB4Bm0Mw0.jpg)
+
 # How to water
 
 Follow these 3 steps to make sure your soil is well watered:

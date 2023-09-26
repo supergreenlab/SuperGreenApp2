@@ -162,8 +162,8 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                       int? nUnseen = 0;
                       try {
                         nUnseen = state.hasPending
-                            .where((e) => e.id == p.feed)
-                            .map<int>((e) => e.nNew)
+                            .where((e) => e.plant == p.id)
+                            .map<int>((e) => e.nPending)
                             .reduce((a, e) => a + e);
                       } catch (e) {}
                       Widget item = Padding(

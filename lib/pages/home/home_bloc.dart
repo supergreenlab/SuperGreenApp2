@@ -31,7 +31,7 @@ class HomeBlocEventLoad extends HomeBlocEvent {
 }
 
 class HomeBlocEventLoaded extends HomeBlocEvent {
-  final List<GetPendingFeedsResult> hasPending;
+  final int hasPending;
 
   HomeBlocEventLoaded(this.hasPending);
 
@@ -47,7 +47,7 @@ class HomeBlocStateInit extends HomeBlocState {
 }
 
 class HomeBlocStateLoaded extends HomeBlocState {
-  final List<GetPendingFeedsResult> hasPending;
+  final int hasPending;
 
   HomeBlocStateLoaded(this.hasPending);
 
@@ -56,7 +56,7 @@ class HomeBlocStateLoaded extends HomeBlocState {
 }
 
 class HomeBloc extends LegacyBloc<HomeBlocEvent, HomeBlocState> {
-  StreamSubscription<List<GetPendingFeedsResult>>? _pendingStream;
+  StreamSubscription<int>? _pendingStream;
 
   HomeBloc() : super(HomeBlocStateInit()) {
     add(HomeBlocEventLoad());
@@ -65,14 +65,13 @@ class HomeBloc extends LegacyBloc<HomeBlocEvent, HomeBlocState> {
   @override
   Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {
     if (event is HomeBlocEventLoad) {
-      final fdb = RelDB.get().feedsDAO;
-      _pendingStream = fdb.getPendingFeeds().watch().listen(_hasPendingChange);
+      _pendingStream = RelDB.get().checklistsDAO.getNLogsTotal().watchSingle().listen(_hasPendingChange);
     } else if (event is HomeBlocEventLoaded) {
       yield HomeBlocStateLoaded(event.hasPending);
     }
   }
 
-  void _hasPendingChange(List<GetPendingFeedsResult> hasPending) {
+  void _hasPendingChange(int hasPending) {
     add(HomeBlocEventLoaded(hasPending));
   }
 
