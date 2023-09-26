@@ -433,6 +433,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ));
       }
     }
+
+    bool? currentMine = null;
     return ListView(
       children: [
         _renderAutoChecklistPopulate(context, state),
@@ -477,21 +479,38 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 ),
                 ...state.checklistSeeds.map((cks) {
                   ChecklistCollection? collection = state.collections.firstWhereOrNull((c) => c.id == cks.collection);
+                  Widget body = ChecklistItemPage(
+                    plant: state.plant,
+                    box: state.box,
+                    checklistSeed: cks,
+                    collection: collection,
+                    onSelect: cks.mine == false
+                        ? null
+                        : () {
+                            BlocProvider.of<MainNavigatorBloc>(context)
+                                .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
+                          },
+                    onDelete: cks.mine == false
+                        ? null
+                        : () {
+                            _deleteChecklistSeed(context, cks);
+                          },
+                  );
+                  if (currentMine != cks.mine) {
+                    body = Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Text(cks.mine ? 'Your items' : 'Collection items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 18)),
+                      ),
+                      body,
+                    ],);
+                    currentMine = cks.mine;
+                  }
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ChecklistItemPage(
-                      plant: state.plant,
-                      box: state.box,
-                      checklistSeed: cks,
-                      collection: collection,
-                      onSelect: cks.mine == false ? null : () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
-                      },
-                      onDelete: cks.mine == false ? null : () {
-                        _deleteChecklistSeed(context, cks);
-                      },
-                    ),
+                    child: body,
                   );
                 }).toList(),
                 Container(

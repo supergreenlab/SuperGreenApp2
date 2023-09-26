@@ -330,7 +330,7 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklistSeeds)
           ..where((p) => p.checklist.equals(checklistID))
           ..orderBy([
-            (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc),
+            (t) => OrderingTerm(expression: t.mine, mode: OrderingMode.desc),
             (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)
           ]))
         .get();
