@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistPhase extends StatelessWidget {
@@ -29,11 +30,11 @@ class ChecklistPhase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tuple3> choices = [
-      Tuple3('SEED', 'Seed', 'assets/plant_infos/icon_seed.svg'),
-      Tuple3('VEGGING', 'Vegging', 'assets/plant_infos/icon_vegging_since.svg'),
-      Tuple3('BLOOMING', 'Blooming', 'assets/plant_infos/icon_blooming_since.svg'),
-      Tuple3('DRYING', 'Drying', 'assets/plant_infos/icon_drying_since.svg'),
-      Tuple3('CURING', 'Curing', 'assets/plant_infos/icon_curing_since.svg'),
+      Tuple3(PH_SEED, PlantPhaseNames[PH_SEED], PlantPhaseIcons[PH_SEED]),
+      Tuple3(PH_VEGGING, PlantPhaseNames[PH_VEGGING], PlantPhaseIcons[PH_VEGGING]),
+      Tuple3(PH_BLOOMING, PlantPhaseNames[PH_BLOOMING], PlantPhaseIcons[PH_BLOOMING]),
+      Tuple3(PH_DRYING, PlantPhaseNames[PH_DRYING], PlantPhaseIcons[PH_DRYING]),
+      Tuple3(PH_CURING, PlantPhaseNames[PH_CURING], PlantPhaseIcons[PH_CURING]),
     ];
 
     return DropdownButton<String>(

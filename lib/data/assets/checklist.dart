@@ -67,3 +67,25 @@ const Map<String, String> ChecklistCollectionCategoryIcons = {
   CO_NUTRIENT: 'assets/checklist/icon_nutrient.svg',
   CO_RECIPE: 'assets/checklist/icon_recipe.svg',
 };
+
+const String PH_SEED = 'SEED';
+const String PH_VEGGING = 'VEGGING';
+const String PH_BLOOMING = 'BLOOMING';
+const String PH_DRYING = 'DRYING';
+const String PH_CURING = 'CURING';
+
+const Map<String, String> PlantPhaseIcons = {
+  PH_SEED: 'assets/checklist/icon_daily_checks.svg',
+  PH_VEGGING: 'assets/checklist/icon_nutrient.svg',
+  PH_BLOOMING: 'assets/checklist/icon_recipe.svg',
+  PH_DRYING: 'assets/plant_infos/icon_drying_since.svg',
+  PH_CURING: 'assets/plant_infos/icon_curing_since.svg',
+};
+
+const Map<String, String> PlantPhaseNames = {
+  PH_SEED: 'Seedling',
+  PH_VEGGING: 'Vegging',
+  PH_BLOOMING: 'Blooming',
+  PH_DRYING: 'Drying',
+  PH_CURING: 'Curing',
+};

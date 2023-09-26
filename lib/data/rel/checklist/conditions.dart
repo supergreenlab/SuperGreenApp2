@@ -20,6 +20,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/assets/checklist.dart';
+import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/assets/metrics.dart';
 
 abstract class ChecklistCondition extends Equatable {
@@ -116,7 +118,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
         str += 'above ${max!} ';
       }
     }
-    str += 'for ${duration!} $durationUnit';
+    str += 'for ${duration!} ${durationUnit.toLowerCase()}';
     if (daysInRow && nDaysInRow != null) {
       str += ' over ${nDaysInRow!} consecutive days.';
     }
@@ -222,7 +224,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   final int? duration;
   final String durationUnit;
 
-  String get asSentence => 'If last ${entryType!} diary entry is ${duration!} $durationUnit old.';
+  String get asSentence => 'If last "${FeedEntryNames[entryType!]!}" diary entry is ${duration!} ${durationUnit.toLowerCase()} old.';
 
   ChecklistConditionAfterCard({
     this.entryType,
@@ -279,7 +281,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   final int? duration;
   final String durationUnit;
 
-  String get asSentence => 'If plant is ${phase!} since ${duration!} $durationUnit.';
+  String get asSentence => 'If plant is ${PlantPhaseNames[phase!]!} since ${duration!} ${durationUnit.toLowerCase()}.';
 
   ChecklistConditionAfterPhase({
     this.phase,
@@ -341,7 +343,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   String get asSentence {
     String str = 'Trigger on ${DateFormat.yMMMMEEEEd().format(date!)} at ${DateFormat.Hm().format(date!)}';
     if (repeat) {
-      str += ' then repeat every ${repeatDuration!} $durationUnit.';
+      str += ' then repeat every ${repeatDuration!} ${durationUnit.toLowerCase()}.';
     }
     return str;
   }

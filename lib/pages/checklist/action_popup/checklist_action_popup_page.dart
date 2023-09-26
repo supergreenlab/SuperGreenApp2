@@ -242,13 +242,13 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     style: TextStyle(color: Color(0xff454545))),
               );
             }).toList(),
-            exitConditions.length != 0 ? Container() : Column(
+            exitConditions.length == 0 ? Container() : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    'Exit condition',
+                    'Exit conditions',
                     style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
                   ),
                 ),
