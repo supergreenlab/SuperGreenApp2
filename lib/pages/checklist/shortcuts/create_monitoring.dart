@@ -20,6 +20,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
+import 'package:super_green_app/data/assets/metrics.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
@@ -87,7 +88,7 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
                         BlocProvider.of<ChecklistBloc>(context)
                             .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
-                          title: drift.Value('Reminder'),
+                          title: drift.Value('${LabMetricNames[(condition as ChecklistConditionMetric).key]!} monitoring'),
                           category: drift.Value(CH_ENVIRONMENT),
                           fast: drift.Value(((this.action as ChecklistActionMessage).instructions?.length ?? 0) == 0),
                           public: drift.Value(false),
