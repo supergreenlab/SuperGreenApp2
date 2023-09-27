@@ -33,9 +33,14 @@ class MetricConditionPage extends StatefulWidget {
   final bool hideTitle;
   final bool noBorder;
 
-  const MetricConditionPage(
-      {Key? key, this.onClose, required this.condition, required this.onUpdate, this.hideTitle = false, this.noBorder = false,})
-      : super(key: key);
+  const MetricConditionPage({
+    Key? key,
+    this.onClose,
+    required this.condition,
+    required this.onUpdate,
+    this.hideTitle = false,
+    this.noBorder = false,
+  }) : super(key: key);
 
   @override
   State<MetricConditionPage> createState() => _MetricConditionPageState();
@@ -130,13 +135,21 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: FeedFormTextarea(
                     keyboardType: TextInputType.number,
-                    placeholder: '(Optional)',
+                    placeholder: '-∞',
                     soloLine: true,
                     noPadding: true,
                     textEditingController: _minController,
                     onChanged: (value) {
+                      bool clearMin = false;
+                      double? v;
+                      try {
+                        v = double.parse(value);
+                      } catch (e) {
+                        clearMin = true;
+                      }
                       widget.onUpdate(widget.condition.copyWith(
-                        min: double.parse(value),
+                        min: v,
+                        clearMin: clearMin,
                       ));
                     },
                   ),
@@ -153,13 +166,21 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: FeedFormTextarea(
                     keyboardType: TextInputType.number,
-                    placeholder: '(Optional)',
+                    placeholder: '+∞',
                     soloLine: true,
                     noPadding: true,
                     textEditingController: _maxController,
                     onChanged: (value) {
+                      bool clearMax = false;
+                      double? v;
+                      try {
+                        v = double.parse(value);
+                      } catch (e) {
+                        clearMax = true;
+                      }
                       widget.onUpdate(widget.condition.copyWith(
-                        max: double.parse(value),
+                        max: v,
+                        clearMax: clearMax,
                       ));
                     },
                   ),
