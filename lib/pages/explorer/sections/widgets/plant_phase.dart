@@ -40,6 +40,7 @@ class PlantPhase extends StatelessWidget {
     Tuple3<PlantPhases, DateTime, Duration>? phaseData = plantSettings.phaseAt(DateTime.now());
     if (phaseData != null && phaseData.item1 != PlantPhases.GERMINATING) {
       List<String> phases = [
+        'Cloning for: ',
         'Germinated: ',
         'Vegging for: ',
         'Blooming for: ',

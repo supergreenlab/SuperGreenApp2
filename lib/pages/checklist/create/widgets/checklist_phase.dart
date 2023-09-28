@@ -30,6 +30,7 @@ class ChecklistPhase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tuple3> choices = [
+      Tuple3(PH_CLONE, PlantPhaseNames[PH_CLONE], PlantPhaseIcons[PH_CLONE]),
       Tuple3(PH_SEED, PlantPhaseNames[PH_SEED], PlantPhaseIcons[PH_SEED]),
       Tuple3(PH_VEGGING, PlantPhaseNames[PH_VEGGING], PlantPhaseIcons[PH_VEGGING]),
       Tuple3(PH_BLOOMING, PlantPhaseNames[PH_BLOOMING], PlantPhaseIcons[PH_BLOOMING]),

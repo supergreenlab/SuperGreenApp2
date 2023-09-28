@@ -39,6 +39,7 @@ class ChecklistCardType extends StatelessWidget {
       FE_NUTRIENT_MIX,
       FE_TRANSPLANT,
       FE_BENDING,
+      FE_CLONING,
       FE_FIMMING,
       FE_TOPPING,
       FE_DEFOLIATION,

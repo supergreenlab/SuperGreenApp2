@@ -50,6 +50,7 @@ class DateRenderer {
       return 'Life events not set.';
     }
     List<String Function(Duration)> phases = [
+      (Duration diff) => 'Clon. for ${renderDuration(phaseData.item3)}',
       (Duration diff) => 'Germ. ${renderDuration(phaseData.item3)}',
       (Duration diff) => 'Veg. for ${renderDuration(phaseData.item3, suffix: '')}',
       (Duration diff) => 'Bloom. for ${renderDuration(phaseData.item3, suffix: '')}',
@@ -60,11 +61,13 @@ class DateRenderer {
   }
 
   static String renderSinceGermination(PlantSettings plantSettings, DateTime date) {
-    if (plantSettings.germinationDate == null) {
+    if (plantSettings.germinationDate == null && plantSettings.cloningDate == null) {
       return 'Germination date not set.';
     }
-    Duration diff = date.difference(plantSettings.germinationDate!);
-    return 'Germinated ${renderDuration(diff)}';
+    DateTime date = plantSettings.germinationDate ?? plantSettings.cloningDate!;
+    String label = plantSettings.germinationDate != null ? "Germinated" : "Cloned";
+    Duration diff = date.difference(date);
+    return '$label ${renderDuration(diff)}';
   }
 
   static String renderDuration(Duration diff, {suffix = ' ago'}) {
