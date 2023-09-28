@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/card/feed_bending_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_cloning/card/feed_cloning_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/card/feed_defoliation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/feed_fimming_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/feed_topping_card_page.dart';
@@ -55,6 +56,8 @@ class FeedEntriesCardHelpers {
         FeedToppingCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_DEFOLIATION': (animation, feedState, state, {cardActions}) =>
         FeedDefoliationCardPage(animation, feedState, state, cardActions: cardActions),
+    'FE_CLONING': (animation, feedState, state, {cardActions}) =>
+        FeedCloningCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_FIMMING': (animation, feedState, state, {cardActions}) =>
         FeedFimmingCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_BENDING': (animation, feedState, state, {cardActions}) =>

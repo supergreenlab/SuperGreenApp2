@@ -255,6 +255,11 @@ class MainNavigateToFeedToppingFormEvent extends MainNavigateToFeedCareCommonFor
       : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
+class MainNavigateToFeedCloningFormEvent extends MainNavigateToFeedCareCommonFormEvent {
+  MainNavigateToFeedCloningFormEvent(Plant plant, {pushAsReplacement = false, futureFn})
+      : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
+}
+
 class MainNavigateToFeedFimmingFormEvent extends MainNavigateToFeedCareCommonFormEvent {
   MainNavigateToFeedFimmingFormEvent(Plant plant, {pushAsReplacement = false, futureFn})
       : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
@@ -748,6 +753,8 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/topping', event);
     } else if (event is MainNavigateToFeedDefoliationFormEvent) {
       future = _pushOrReplace('/feed/form/defoliation', event);
+    } else if (event is MainNavigateToFeedCloningFormEvent) {
+      future = _pushOrReplace('/feed/form/cloning', event);
     } else if (event is MainNavigateToFeedFimmingFormEvent) {
       future = _pushOrReplace('/feed/form/fimming', event);
     } else if (event is MainNavigateToFeedBendingFormEvent) {

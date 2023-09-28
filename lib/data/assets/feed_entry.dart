@@ -21,11 +21,14 @@ import 'package:flutter/material.dart';
 
 const FE_MEDIA='FE_MEDIA';
 const FE_MEASURE='FE_MEASURE';
+
+const FE_CLONING='FE_CLONING';
 const FE_TRANSPLANT='FE_TRANSPLANT';
 const FE_BENDING='FE_BENDING';
 const FE_FIMMING='FE_FIMMING';
 const FE_TOPPING='FE_TOPPING';
 const FE_DEFOLIATION='FE_DEFOLIATION';
+
 const FE_TIMELAPSE='FE_TIMELAPSE';
 const FE_NUTRIENT_MIX='FE_NUTRIENT_MIX';
 const FE_WATER='FE_WATER';
@@ -43,11 +46,14 @@ const FE_TOWELIE_INFO='FE_TOWELIE_INFO';
 const Map<String, String> FeedEntryIcons = {
   FE_MEDIA: 'assets/feed_card/icon_media.svg',
   FE_MEASURE: 'assets/feed_card/icon_measure.svg',
+
+  FE_CLONING: 'assets/feed_card/icon_cloning.svg',
   FE_TRANSPLANT: 'assets/feed_card/icon_transplant.svg',
   FE_BENDING: 'assets/feed_card/icon_bending.svg',
   FE_FIMMING: 'assets/feed_card/icon_fimming.svg',
   FE_TOPPING: 'assets/feed_card/icon_topping.svg',
   FE_DEFOLIATION: 'assets/feed_card/icon_defoliation.svg',
+
   FE_TIMELAPSE: 'assets/feed_card/icon_timelapse.svg',
   FE_NUTRIENT_MIX: 'assets/feed_card/icon_nutrient_mix.svg',
   FE_WATER: 'assets/feed_card/icon_watering.svg',
@@ -66,11 +72,14 @@ const Map<String, String> FeedEntryIcons = {
 const Map<String, String> FeedEntryNames = {
   FE_MEDIA: 'Media',
   FE_MEASURE: 'Measure',
+
   FE_TRANSPLANT: 'Transplant',
   FE_BENDING: 'Banding',
+  FE_CLONING: 'Cloning',
   FE_FIMMING: 'Fimming',
   FE_TOPPING: 'Topping',
   FE_DEFOLIATION: 'Defoliation',
+  
   FE_TIMELAPSE: 'Timelapse',
   FE_NUTRIENT_MIX: 'Nutrient mix',
   FE_WATER: 'Watering',
@@ -89,11 +98,14 @@ const Map<String, String> FeedEntryNames = {
 const Map<String, Color> FeedEntryColors = {
   FE_MEDIA: Colors.blueGrey,
   FE_MEASURE: Colors.blueGrey,
+
   FE_TRANSPLANT: Color.fromARGB(255, 97, 141, 93),
   FE_BENDING: Color.fromARGB(255, 97, 141, 93),
+  FE_CLONING: Color.fromARGB(255, 97, 141, 93),
   FE_FIMMING: Color.fromARGB(255, 97, 141, 93),
   FE_TOPPING: Color.fromARGB(255, 97, 141, 93),
   FE_DEFOLIATION: Color.fromARGB(255, 97, 141, 93),
+  
   FE_TIMELAPSE: Colors.blueGrey,
   FE_NUTRIENT_MIX: Color(0xFF506EBA),
   FE_WATER: Color(0xFF506EBA),
@@ -112,11 +124,14 @@ const Map<String, Color> FeedEntryColors = {
 const Map<String, String> FeedEntryActionIcons = {
   FE_MEDIA: 'assets/app_bar/icon_growlog.svg',
   FE_MEASURE: 'assets/app_bar/icon_growlog.svg',
+
   FE_TRANSPLANT: 'assets/app_bar/icon_growlog.svg',
   FE_BENDING: 'assets/app_bar/icon_growlog.svg',
+  FE_CLONING: 'assets/app_bar/icon_growlog.svg',
   FE_FIMMING: 'assets/app_bar/icon_growlog.svg',
   FE_TOPPING: 'assets/app_bar/icon_growlog.svg',
   FE_DEFOLIATION: 'assets/app_bar/icon_growlog.svg',
+  
   FE_TIMELAPSE: 'assets/app_bar/icon_growlog.svg',
   FE_NUTRIENT_MIX: 'assets/app_bar/icon_watering.svg',
   FE_WATER: 'assets/app_bar/icon_watering.svg',

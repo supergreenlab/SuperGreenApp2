@@ -81,6 +81,8 @@ import 'package:super_green_app/pages/feed_entries/common/comments/form/comments
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_cloning/form/feed_cloning_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_cloning/form/feed_cloning_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/form/feed_defoliation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/form/feed_defoliation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/form/feed_fimming_form_bloc.dart';
@@ -244,47 +246,49 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Portal(
-      child: GestureDetector(
-          onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-    
-            if (!currentFocus.hasPrimaryFocus) {
-              FocusManager.instance.primaryFocus!.unfocus();
-            }
-          },
-          child: wrapListeners(MaterialApp(
-            useInheritedMediaQuery: true,
-            //navigatorObservers: [_analyticsObserver,],
-            localizationsDelegates: [
-              const SGLLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('en'),
-              const Locale('es'),
-              const Locale('fr'),
-            ],
-            navigatorKey: widget._navigatorKey,
-            onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context)!.title,
-            onGenerateRoute: (settings) => CupertinoPageRoute(
-                settings: settings,
-                builder: (context) {
-                  if (lastRouteContext != null) {
-                    lastRouteContextsStack.addLast(lastRouteContext!);
-                  }
-                  lastRouteContext = context;
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
-                    child: wrapPinLock(wrapSyncIndicator(TowelieHelper.wrapWidget(
-                        settings,
-                        context,
-                        _onGenerateRoute(context, settings, onPop: () {
-                          lastRouteContext = lastRouteContextsStack.removeLast();
-                        }),
-                      )),
-                    ),
-                  );
+        child: GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      child: wrapListeners(
+        MaterialApp(
+          useInheritedMediaQuery: true,
+          //navigatorObservers: [_analyticsObserver,],
+          localizationsDelegates: [
+            const SGLLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('es'),
+            const Locale('fr'),
+          ],
+          navigatorKey: widget._navigatorKey,
+          onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context)!.title,
+          onGenerateRoute: (settings) => CupertinoPageRoute(
+              settings: settings,
+              builder: (context) {
+                if (lastRouteContext != null) {
+                  lastRouteContextsStack.addLast(lastRouteContext!);
+                }
+                lastRouteContext = context;
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+                  child: wrapPinLock(
+                    wrapSyncIndicator(TowelieHelper.wrapWidget(
+                      settings,
+                      context,
+                      _onGenerateRoute(context, settings, onPop: () {
+                        lastRouteContext = lastRouteContextsStack.removeLast();
+                      }),
+                    )),
+                  ),
+                );
               }),
           theme: ThemeData(
             fontFamily: 'Roboto',
@@ -300,44 +304,42 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
   Widget wrapListeners(Widget body) {
     return BlocListener<PinLockBloc, PinLockBlocState>(
-      listener: (BuildContext context, PinLockBlocState state) {
-      },
+      listener: (BuildContext context, PinLockBlocState state) {},
       child: BlocListener<NotificationsBloc, NotificationsBlocState>(
-        listener: (BuildContext context, NotificationsBlocState state) {
-          if (state is NotificationsBlocStateMainNavigation) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
-          } else if (state is NotificationsBlocStateRequestPermission) {
-            _requestNotificationPermissions(lastRouteContext!);
-          } else if (state is NotificationsBlocStateNotification) {
-            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventTrigger(
-                TowelieActionHelpNotification.id, state, ModalRoute.of(context)!.settings.name!));
-          }
-        },
-        child: BlocListener<TowelieBloc, TowelieBlocState>(
-          listener: (BuildContext context, state) {
-            if (state is TowelieBlocStateMainNavigation) {
+          listener: (BuildContext context, NotificationsBlocState state) {
+            if (state is NotificationsBlocStateMainNavigation) {
               BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
-            } else if (state is TowelieBlocStateLocalNotification) {
-              BlocProvider.of<NotificationsBloc>(context).add(state.localNotificationBlocEventReminder);
+            } else if (state is NotificationsBlocStateRequestPermission) {
+              _requestNotificationPermissions(lastRouteContext!);
+            } else if (state is NotificationsBlocStateNotification) {
+              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventTrigger(
+                  TowelieActionHelpNotification.id, state, ModalRoute.of(context)!.settings.name!));
             }
           },
-          child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
+          child: BlocListener<TowelieBloc, TowelieBlocState>(
             listener: (BuildContext context, state) {
-              if (state is DeepLinkBlocStateMainNavigation) {
+              if (state is TowelieBlocStateMainNavigation) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
+              } else if (state is TowelieBlocStateLocalNotification) {
+                BlocProvider.of<NotificationsBloc>(context).add(state.localNotificationBlocEventReminder);
               }
             },
-            child: BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-              listener: (BuildContext context, DeviceDaemonBlocState state) {
-                if (state is DeviceDaemonBlocStateRequiresLogin) {
-                  _promptDeviceAuth(lastRouteContext!, state.device);
+            child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
+              listener: (BuildContext context, state) {
+                if (state is DeepLinkBlocStateMainNavigation) {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
                 }
               },
-              child: body,
+              child: BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+                listener: (BuildContext context, DeviceDaemonBlocState state) {
+                  if (state is DeviceDaemonBlocStateRequiresLogin) {
+                    _promptDeviceAuth(lastRouteContext!, state.device);
+                  }
+                },
+                child: body,
+              ),
             ),
-          ),
-        )
-      ),
+          )),
     );
   }
 
@@ -532,6 +534,11 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         return BlocProvider(
           create: (context) => FeedToppingFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
           child: addOnPopCallBack(FeedToppingFormPage(), onPop),
+        );
+      case '/feed/form/cloning':
+        return BlocProvider(
+          create: (context) => FeedCloningFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
+          child: addOnPopCallBack(FeedCloningFormPage(), onPop),
         );
       case '/feed/form/fimming':
         return BlocProvider(
@@ -766,14 +773,17 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       case '/checklist/create':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => CreateChecklistSeedBloc(settings.arguments as MainNavigateToCreateChecklist)),
+            BlocProvider(
+                create: (context) => CreateChecklistSeedBloc(settings.arguments as MainNavigateToCreateChecklist)),
           ],
           child: addOnPopCallBack(CreateChecklistSeedPage(), onPop),
         );
       case '/checklist/collections':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => ChecklistCollectionsBloc(settings.arguments as MainNavigateToChecklistCollections)),
+            BlocProvider(
+                create: (context) =>
+                    ChecklistCollectionsBloc(settings.arguments as MainNavigateToChecklistCollections)),
           ],
           child: addOnPopCallBack(ChecklistCollectionsPage(), onPop),
         );

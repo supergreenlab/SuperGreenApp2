@@ -112,6 +112,15 @@ class PlantFeedPage extends TraceableStatefulWidget {
     );
   }
 
+  static String get plantFeedPageMenuCloning {
+    return Intl.message(
+      'Cloning',
+      name: 'plantFeedPageMenuCloning',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
   static String get plantFeedPageMenuFimming {
     return Intl.message(
       'Fimming',
@@ -465,6 +474,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
                 't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
               ])),
+      _renderSpeedDialChild(
+          PlantFeedPage.plantFeedPageMenuCloning,
+          FeedEntryIcons[FE_CLONING]!,
+          _onSpeedDialSelected(
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedCloningFormEvent(state.plant,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+          )),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuFimming,
           FeedEntryIcons[FE_FIMMING]!,

@@ -67,6 +67,7 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
       'FE_SCHEDULE': FeedScheduleLoader(add),
       'FE_TOPPING': FeedCareLoader(add),
       'FE_DEFOLIATION': FeedCareLoader(add),
+      'FE_CLONING': FeedCareLoader(add),
       'FE_FIMMING': FeedCareLoader(add),
       'FE_BENDING': FeedCareLoader(add),
       'FE_TRANSPLANT': FeedCareLoader(add),

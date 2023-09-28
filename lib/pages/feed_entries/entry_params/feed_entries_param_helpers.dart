@@ -36,11 +36,14 @@ abstract class FeedEntriesParamHelpers {
     'FE_MEDIA': (json) => FeedMediaParams.fromJSON(json),
     'FE_MEASURE': (json) => FeedMeasureParams.fromJSON(json),
     'FE_SCHEDULE': (json) => FeedScheduleParams.fromJSON(json),
+
+    'FE_CLONING': (json) => FeedCareParams.fromJSON(json),
     'FE_TOPPING': (json) => FeedCareParams.fromJSON(json),
     'FE_DEFOLIATION': (json) => FeedCareParams.fromJSON(json),
     'FE_FIMMING': (json) => FeedCareParams.fromJSON(json),
     'FE_BENDING': (json) => FeedCareParams.fromJSON(json),
     'FE_TRANSPLANT': (json) => FeedCareParams.fromJSON(json),
+
     'FE_VENTILATION': (json) => FeedVentilationParams.fromJSON(json),
     'FE_WATER': (json) => FeedWaterParams.fromJSON(json),
     'FE_TOWELIE_INFO': (json) => FeedTowelieInfoParams.fromJSON(json),
