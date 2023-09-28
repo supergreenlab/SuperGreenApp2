@@ -42,6 +42,15 @@ class FeedLifeEventCardPage extends StatelessWidget {
     );
   }
 
+  static String get feedLifeEventCardPageCloning {
+    return Intl.message(
+      'Cloning!',
+      name: 'feedLifeEventCardPageCloning',
+      desc: 'Cloning life event',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
   static String get feedLifeEventCardPageGermination {
     return Intl.message(
       'Germination!',
@@ -129,6 +138,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state, PlantFeedState feedState) {
     FeedLifeEventParams params = state.params as FeedLifeEventParams;
     List<String> phases = [
+      FeedLifeEventCardPage.feedLifeEventCardPageCloning,
       FeedLifeEventCardPage.feedLifeEventCardPageGermination,
       FeedLifeEventCardPage.feedLifeEventCardPageVeggingStarted,
       FeedLifeEventCardPage.feedLifeEventCardPageBloomingStarted,

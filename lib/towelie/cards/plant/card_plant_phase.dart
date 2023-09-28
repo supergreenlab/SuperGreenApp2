@@ -46,6 +46,7 @@ Is it already **vegging** or still **just a seed**?''',
         'text': CardPlantPhase.toweliePlantPhase,
         'buttons': [
           TowelieButtonPlantSeedPhase.createButton(),
+          TowelieButtonPlantCloningPhase.createButton(),
           TowelieButtonPlantSeedlingPhase.createButton(),
           TowelieButtonPlantVegPhase.createButton(),
           TowelieButtonPlantBloomPhase.createButton(),

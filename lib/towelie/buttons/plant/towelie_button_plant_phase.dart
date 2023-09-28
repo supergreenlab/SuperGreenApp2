@@ -43,6 +43,19 @@ class TowelieButtonPlantSeedPhase extends TowelieButtonPlantPhase {
   }
 }
 
+const _cloningID = 'PLANT_CLONING_STAGE';
+
+class TowelieButtonPlantCloningPhase extends TowelieButtonPlantPhase {
+  @override
+  String get id => _cloningID;
+
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_cloningID, {
+        'title': 'Clone',
+      });
+
+  TowelieButtonPlantCloningPhase() : super(PlantPhases.CLONING, 'VEG');
+}
+
 const _seedlingID = 'PLANT_SEEDLING_STAGE';
 
 class TowelieButtonPlantSeedlingPhase extends TowelieButtonPlantPhase {

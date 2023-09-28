@@ -168,6 +168,14 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xFF494949))),
       ),
       PlantInfosWidget(
+          color: Color.fromARGB(255, 45, 117, 17),
+          icon: FeedEntryIcons[FE_LIFE_EVENT]!,
+          title: 'Cloning',
+          value: state.plantInfos.plantSettings!.cloningDate != null
+              ? DateFormat(format).format(state.plantInfos.plantSettings!.cloningDate!)
+              : null,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('CLONING_DATE')),
+      PlantInfosWidget(
           color: Color(0xFF3BB30B),
           icon: FeedEntryIcons[FE_LIFE_EVENT]!,
           title: 'Germination',
@@ -244,6 +252,14 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
             onSubmit: (String? plantType) =>
                 updatePlantSettings(context, state, state.plantInfos.plantSettings!.copyWith(plantType: plantType)),
           ),
+      'CLONING_DATE': () => PlantInfosPhaseSince(
+          title: 'Cloning date',
+          icon: 'icon_cloning_date.svg',
+          date: state.plantInfos.plantSettings!.cloningDate,
+          onCancel: () => _openForm(null),
+          onSubmit: (DateTime date) {
+            updatePhase(context, PlantPhases.CLONING, date);
+          }),
       'GERMINATION_DATE': () => PlantInfosPhaseSince(
           title: 'Germination date',
           icon: 'icon_germination_date.svg',

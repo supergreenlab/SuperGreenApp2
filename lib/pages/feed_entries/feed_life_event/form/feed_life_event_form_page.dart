@@ -32,6 +32,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:tuple/tuple.dart';
 
 List<Tuple2<String, String>> phasesTitles = [
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelCloning, FeedEntryIcons[FE_LIFE_EVENT]!),
   Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelGermination, FeedEntryIcons[FE_LIFE_EVENT]!),
   Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelVegging, 'assets/plant_infos/icon_vegging_since.svg'),
   Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelBlooming, 'assets/plant_infos/icon_blooming_since.svg'),
@@ -40,6 +41,15 @@ List<Tuple2<String, String>> phasesTitles = [
 ];
 
 class FeedLifeEventFormPage extends TraceableStatefulWidget {
+  static String get feedLifeEventFormPagePhaseLabelCloning {
+    return Intl.message(
+      'Cloning date',
+      name: 'feedLifeEventFormPagePhaseLabelCloning',
+      desc: 'Life event cloning label',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
   static String get feedLifeEventFormPagePhaseLabelGermination {
     return Intl.message(
       'Germination date',

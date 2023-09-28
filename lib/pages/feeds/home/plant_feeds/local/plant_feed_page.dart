@@ -529,6 +529,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             });
           }),
       _renderSpeedDialChild(
+          PlantFeedPage.plantFeedPageMenuCloning,
+          FeedEntryIcons[FE_LIFE_EVENT]!,
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
+                  state.plant, PlantPhases.CLONING,
+                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),)),
+      _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGerminating,
           FeedEntryIcons[FE_LIFE_EVENT]!,
           _onSpeedDialSelected(

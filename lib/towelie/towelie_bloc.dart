@@ -216,6 +216,7 @@ class TowelieBloc extends LegacyBloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieButton> buttons = [
     // Plant onboarding
     TowelieButtonPlantSeedPhase(),
+    TowelieButtonPlantCloningPhase(),
     TowelieButtonPlantSeedlingPhase(),
     TowelieButtonPlantVegPhase(),
     TowelieButtonPlantBloomPhase(),

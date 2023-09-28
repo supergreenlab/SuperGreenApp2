@@ -22,7 +22,7 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:tuple/tuple.dart';
 
-enum PlantPhases { GERMINATING, VEGGING, BLOOMING, DRYING, CURING }
+enum PlantPhases { CLONING, GERMINATING, VEGGING, BLOOMING, DRYING, CURING }
 
 class PlantSettings extends Equatable {
   final String? plantType;
@@ -31,6 +31,7 @@ class PlantSettings extends Equatable {
   final String? strain;
   final String? seedbank;
 
+  final DateTime? cloningDate;
   final DateTime? germinationDate;
   final DateTime? veggingStart;
   final DateTime? bloomingStart;
@@ -40,7 +41,7 @@ class PlantSettings extends Equatable {
 
   final List<Product>? products;
 
-  PlantSettings(this.plantType, this.isSingle, this.strain, this.seedbank, this.germinationDate, this.veggingStart,
+  PlantSettings(this.plantType, this.isSingle, this.strain, this.seedbank, this.cloningDate, this.germinationDate, this.veggingStart,
       this.bloomingStart, this.dryingStart, this.curingStart, this.medium, this.products);
 
   Tuple3<PlantPhases, DateTime, Duration>? phaseAt(DateTime date) {
@@ -57,12 +58,17 @@ class PlantSettings extends Equatable {
     } else if (germinationDate != null && germinationDate!.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
           PlantPhases.GERMINATING, germinationDate!, date.difference(germinationDate!));
+    } else if (cloningDate != null && cloningDate!.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.CLONING, cloningDate!, date.difference(cloningDate!));
     }
     return null;
   }
 
   DateTime? dateForPhase(PlantPhases phase) {
-    if (phase == PlantPhases.GERMINATING) {
+    if (phase == PlantPhases.CLONING) {
+      return cloningDate;
+    } else if (phase == PlantPhases.GERMINATING) {
       return germinationDate;
     } else if (phase == PlantPhases.VEGGING) {
       return veggingStart;
@@ -77,7 +83,9 @@ class PlantSettings extends Equatable {
   }
 
   PlantSettings setDateForPhase(PlantPhases phase, DateTime date) {
-    if (phase == PlantPhases.GERMINATING) {
+    if (phase == PlantPhases.CLONING) {
+      return this.copyWith(cloningDate: date);
+    } else if (phase == PlantPhases.GERMINATING) {
       return this.copyWith(germinationDate: date);
     } else if (phase == PlantPhases.VEGGING) {
       return this.copyWith(veggingStart: date);
@@ -97,6 +105,7 @@ class PlantSettings extends Equatable {
       this.isSingle,
       this.strain,
       this.seedbank,
+      phase == PlantPhases.CLONING ? null : this.cloningDate,
       phase == PlantPhases.GERMINATING ? null : this.germinationDate,
       phase == PlantPhases.VEGGING ? null : this.veggingStart,
       phase == PlantPhases.BLOOMING ? null : this.bloomingStart,
@@ -114,6 +123,7 @@ class PlantSettings extends Equatable {
       map['isSingle'],
       map['strain'],
       map['seedBank'],
+      map['cloningDate'] == null ? null : DateTime.parse(map['cloningDate'] as String).toLocal(),
       map['germinationDate'] == null ? null : DateTime.parse(map['germinationDate'] as String).toLocal(),
       map['veggingStart'] == null ? null : DateTime.parse(map['veggingStart'] as String).toLocal(),
       map['bloomingStart'] == null ? null : DateTime.parse(map['bloomingStart'] as String).toLocal(),
@@ -130,6 +140,7 @@ class PlantSettings extends Equatable {
       'isSingle': isSingle,
       'strain': strain,
       'seedBank': seedbank,
+      'cloningDate': cloningDate?.toUtc().toIso8601String(),
       'germinationDate': germinationDate?.toUtc().toIso8601String(),
       'veggingStart': veggingStart?.toUtc().toIso8601String(),
       'bloomingStart': bloomingStart?.toUtc().toIso8601String(),
@@ -155,6 +166,7 @@ class PlantSettings extends Equatable {
         isSingle,
         strain,
         seedbank,
+        cloningDate,
         germinationDate,
         veggingStart,
         bloomingStart,
@@ -169,6 +181,7 @@ class PlantSettings extends Equatable {
           bool? isSingle,
           String? strain,
           String? seedbank,
+          DateTime? cloningDate,
           DateTime? germinationDate,
           DateTime? veggingStart,
           DateTime? bloomingStart,
@@ -181,6 +194,7 @@ class PlantSettings extends Equatable {
         isSingle ?? this.isSingle,
         (strain ?? this.strain) == '' ? null : strain ?? this.strain,
         (seedbank ?? this.seedbank) == '' ? null : seedbank ?? this.seedbank,
+        cloningDate ?? this.cloningDate,
         germinationDate ?? this.germinationDate,
         veggingStart ?? this.veggingStart,
         bloomingStart ?? this.bloomingStart,
