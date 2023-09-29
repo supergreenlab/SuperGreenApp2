@@ -46,6 +46,18 @@ mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
       );
     });
   }
+
+  Selectable<ChecklistSeed> searchSeeds(String searchTerms, int checklistid) {
+    return customSelect(
+        'select checklist_seeds.* from checklist_seeds where (title like \'%\' || :searchTerms || \'%\' or description like \'%\' || :searchTerms || \'%\' or actions like \'%\' || :searchTerms || \'%\') and checklist=:checklistid order by mine desc, id desc',
+        variables: [
+          Variable<String>(searchTerms),
+          Variable<int>(checklistid)
+        ],
+        readsFrom: {
+          checklistSeeds,
+        }).map(checklistSeeds.mapFromRow);
+  }
 }
 
 class GetNLogsPerPlantsResult {

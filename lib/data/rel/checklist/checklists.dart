@@ -251,6 +251,9 @@ class ChecklistLogs extends Table {
         where checked=false and skipped=false and checklist_logs.checklist = checklists.id
       ) as nPending
     from checklists where nPending > 0
+  ''',
+  'searchSeeds': '''
+    select checklist_seeds.* from checklist_seeds where (title like '%' || :searchTerms || '%' or description like '%' || :searchTerms || '%' or actions like '%' || :searchTerms || '%') and checklist=:checklistid order by mine desc, id desc
   '''
 })
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {

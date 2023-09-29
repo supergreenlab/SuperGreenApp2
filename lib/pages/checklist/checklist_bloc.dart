@@ -82,6 +82,15 @@ class ChecklistBlocEventAutoChecklist extends ChecklistBlocEvent {
   List<Object> get props => [];
 }
 
+class ChecklistBlocEventFilter extends ChecklistBlocEvent {
+  final String searchTerms;
+
+  ChecklistBlocEventFilter(this.searchTerms);
+
+  @override
+  List<Object> get props => [searchTerms];
+}
+
 abstract class ChecklistBlocState extends Equatable {}
 
 class ChecklistBlocStateInit extends ChecklistBlocState {
@@ -118,6 +127,8 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
   late StreamSubscription subLogs;
   late StreamSubscription subCollections;
 
+  String? searchTerms;
+
   ChecklistBloc(this.args) : super(ChecklistBlocStateInit()) {
     add(ChecklistBlocEventInit());
   }
@@ -139,7 +150,12 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
       });
     } else if (event is ChecklistBlocEventLoad) {
       Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(this.args.checklist.id);
-      List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(this.args.checklist.id);
+      late List<ChecklistSeed> checklistSeeds;
+      if (searchTerms == null || searchTerms == '') {
+        checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(this.args.checklist.id);
+      } else {
+        checklistSeeds = await RelDB.get().checklistsDAO.searchSeeds(searchTerms!, this.args.checklist.id).get();
+      }
       List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(this.args.checklist.id);
       List<ChecklistCollection> collections = await RelDB.get().checklistsDAO.getChecklistCollections(this.args.checklist.id);
       List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>> actions = [];
@@ -163,6 +179,9 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
     } else if (event is ChecklistBlocEventAutoChecklist) {
       Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(this.args.checklist.id);
       await ChecklistHelper.subscribeCollection(BackendAPI().checklistCollectionTheBasics, checklist);
+      add(ChecklistBlocEventLoad());
+    } else if (event is ChecklistBlocEventFilter) {
+      this.searchTerms = event.searchTerms;
       add(ChecklistBlocEventLoad());
     }
   }

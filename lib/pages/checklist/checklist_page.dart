@@ -38,6 +38,7 @@ import 'package:super_green_app/pages/checklist/shortcuts/create_timer_reminder.
 import 'package:super_green_app/pages/checklist/shortcuts/create_watering_reminder.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:tuple/tuple.dart';
@@ -85,6 +86,10 @@ class ChecklistPage extends TraceableStatefulWidget {
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
+  Timer? autocompleteTimer;
+
   bool showAutoChecklist = true;
   bool loadingAutoChecklist = false;
   bool showCreateMenu = false;
@@ -116,7 +121,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
             if (state is ChecklistBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is ChecklistBlocStateLoaded) {
-              if (state.checklistSeeds.length != 0) {
+              if (state.checklistSeeds.length != 0 || _searchController.text != '') {
                 body = _renderLoaded(context, state);
               } else {
                 body = _renderEmpty(context, state);
@@ -477,6 +482,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         fontSize: 24,
                       )),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _renderSearchField(context),
+                ),
                 ...state.checklistSeeds.map((cks) {
                   ChecklistCollection? collection = state.collections.firstWhereOrNull((c) => c.id == cks.collection);
                   Widget body = ChecklistItemPage(
@@ -500,12 +509,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     body = Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Text(cks.mine ? 'Your items' : 'Collection items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 18)),
-                      ),
-                      body,
-                    ],);
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text(cks.mine ? 'Your items' : 'Collection items',
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 18)),
+                        ),
+                        body,
+                      ],
+                    );
                     currentMine = cks.mine;
                   }
                   return Padding(
@@ -521,6 +532,59 @@ class _ChecklistPageState extends State<ChecklistPage> {
           ),
         ),
       ],
+    );
+  }
+
+  // TODO DRY
+  Widget _renderSearchField(BuildContext context) {
+    Widget trailing;
+    if (_searchController.text == '') {
+      trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
+    } else {
+      trailing = InkWell(
+        child: Icon(Icons.clear),
+        onTap: () {
+          setState(() {
+            _searchController.text = '';
+            BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventFilter(''));
+            _searchFocus.unfocus();
+          });
+        },
+      );
+    }
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Color(0xffc8c8c8)),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(children: [
+          Expanded(
+            child: TextFormField(
+              focusNode: _searchFocus,
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search',
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
+              onChanged: (value) {
+                autocompleteTimer?.cancel();
+                autocompleteTimer = Timer(Duration(milliseconds: 500), () {
+                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventFilter(value));
+                  autocompleteTimer = null;
+                });
+              },
+            ),
+          ),
+          trailing,
+        ]),
+      ),
     );
   }
 

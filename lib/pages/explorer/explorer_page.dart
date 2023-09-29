@@ -297,6 +297,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
     });
   }
 
+  // TODO DRY
   Widget _renderSearchField(BuildContext context, ExplorerBlocStateLoaded state) {
     return Container(
       height: 40,
