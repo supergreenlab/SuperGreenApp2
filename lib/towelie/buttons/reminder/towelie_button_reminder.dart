@@ -31,6 +31,7 @@ import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
+import 'package:uuid/uuid.dart';
 
 const _id = 'REMINDER';
 
@@ -80,6 +81,7 @@ class TowelieButtonReminder extends TowelieButton {
       entryType: FE_WATER,
     );
     ChecklistCondition condition = ChecklistConditionTimer(
+      id: Uuid().v4(),
       date: DateTime.now().add(Duration(days: 1)),
     );
     ChecklistSeedsCompanion reminder = ChecklistSeedsCompanion.insert(

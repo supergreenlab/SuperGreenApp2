@@ -530,7 +530,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           }),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuCloning,
-          FeedEntryIcons[FE_LIFE_EVENT]!,
+          FeedEntryIcons[FE_LIFE_EVENT_CLONING]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
@@ -538,7 +538,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),)),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGerminating,
-          FeedEntryIcons[FE_LIFE_EVENT]!,
+          FeedEntryIcons[FE_LIFE_EVENT_GERMINATING]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(

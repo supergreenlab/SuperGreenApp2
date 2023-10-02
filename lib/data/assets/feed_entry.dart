@@ -41,6 +41,13 @@ const FE_SCHEDULE_BLOOM='FE_SCHEDULE_BLOOM';
 const FE_SCHEDULE_AUTO='FE_SCHEDULE_AUTO';
 
 const FE_LIFE_EVENT='FE_LIFE_EVENT';
+const FE_LIFE_EVENT_CLONING='FE_LIFE_EVENT_CLONING';
+const FE_LIFE_EVENT_GERMINATING='FE_LIFE_EVENT_GERMINATING';
+const FE_LIFE_EVENT_VEGGING='FE_LIFE_EVENT_VEGGING';
+const FE_LIFE_EVENT_BLOOMING='FE_LIFE_EVENT_BLOOMING';
+const FE_LIFE_EVENT_DRYING='FE_LIFE_EVENT_DRYING';
+const FE_LIFE_EVENT_CURING='FE_LIFE_EVENT_CURING';
+
 const FE_TOWELIE_INFO='FE_TOWELIE_INFO';
 
 const Map<String, String> FeedEntryIcons = {
@@ -66,6 +73,13 @@ const Map<String, String> FeedEntryIcons = {
   FE_SCHEDULE_AUTO: 'assets/feed_card/icon_schedule.svg',
 
   FE_LIFE_EVENT: 'assets/plant_infos/icon_germination_date.svg',
+  FE_LIFE_EVENT_CLONING: 'assets/plant_infos/icon_germination_date.svg',
+  FE_LIFE_EVENT_GERMINATING: 'assets/plant_infos/icon_germination_date.svg',
+  FE_LIFE_EVENT_VEGGING: 'assets/plant_infos/icon_vegging_since.svg',
+  FE_LIFE_EVENT_BLOOMING: 'assets/plant_infos/icon_blooming_since.svg',
+  FE_LIFE_EVENT_DRYING: 'assets/plant_infos/icon_drying_since.svg',
+  FE_LIFE_EVENT_CURING: 'assets/plant_infos/icon_curing_since.svg',
+
   FE_TOWELIE_INFO: 'assets/feed_card/icon_towelie.png',
 };
 
@@ -92,6 +106,13 @@ const Map<String, String> FeedEntryNames = {
   FE_SCHEDULE_AUTO: 'Auto schedule',
 
   FE_LIFE_EVENT: 'Life event',
+  FE_LIFE_EVENT_CLONING: 'Life event cloning',
+  FE_LIFE_EVENT_GERMINATING: 'Life event germinating',
+  FE_LIFE_EVENT_VEGGING: 'Life event vegging',
+  FE_LIFE_EVENT_BLOOMING: 'assets/plant_infos/icon_blooming_since.svg',
+  FE_LIFE_EVENT_DRYING: 'assets/plant_infos/icon_drying_since.svg',
+  FE_LIFE_EVENT_CURING: 'assets/plant_infos/icon_curing_since.svg',
+
   FE_TOWELIE_INFO: 'Towelie',
 };
 
@@ -118,31 +139,12 @@ const Map<String, Color> FeedEntryColors = {
   FE_SCHEDULE_AUTO: Color.fromARGB(255, 127, 139, 96),
 
   FE_LIFE_EVENT: Colors.blueGrey,
+  FE_LIFE_EVENT_CLONING: Colors.blueGrey,
+  FE_LIFE_EVENT_GERMINATING: Colors.blueGrey,
+  FE_LIFE_EVENT_VEGGING: Colors.blueGrey,
+  FE_LIFE_EVENT_BLOOMING: Colors.blueGrey,
+  FE_LIFE_EVENT_DRYING: Colors.blueGrey,
+  FE_LIFE_EVENT_CURING: Colors.blueGrey,
+
   FE_TOWELIE_INFO: Colors.blueGrey,
-};
-
-const Map<String, String> FeedEntryActionIcons = {
-  FE_MEDIA: 'assets/app_bar/icon_growlog.svg',
-  FE_MEASURE: 'assets/app_bar/icon_growlog.svg',
-
-  FE_TRANSPLANT: 'assets/app_bar/icon_growlog.svg',
-  FE_BENDING: 'assets/app_bar/icon_growlog.svg',
-  FE_CLONING: 'assets/app_bar/icon_growlog.svg',
-  FE_FIMMING: 'assets/app_bar/icon_growlog.svg',
-  FE_TOPPING: 'assets/app_bar/icon_growlog.svg',
-  FE_DEFOLIATION: 'assets/app_bar/icon_growlog.svg',
-  
-  FE_TIMELAPSE: 'assets/app_bar/icon_growlog.svg',
-  FE_NUTRIENT_MIX: 'assets/app_bar/icon_watering.svg',
-  FE_WATER: 'assets/app_bar/icon_watering.svg',
-  FE_LIGHT: 'assets/app_bar/icon_growlog.svg',
-  FE_VENTILATION: 'assets/app_bar/icon_growlog.svg',
-  
-  FE_SCHEDULE: 'assets/app_bar/icon_growlog.svg',
-  FE_SCHEDULE_VEG: 'assets/app_bar/icon_growlog.svg',
-  FE_SCHEDULE_BLOOM: 'assets/app_bar/icon_growlog.svg',
-  FE_SCHEDULE_AUTO: 'assets/app_bar/icon_growlog.svg',
-
-  FE_LIFE_EVENT: 'assets/app_bar/icon_growlog.svg',
-  FE_TOWELIE_INFO: 'assets/app_bar/icon_growlog.svg',
 };

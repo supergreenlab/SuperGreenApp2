@@ -29,6 +29,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_bloc.dart';
 import 'package:super_green_app/pages/checklist/action_popup/checklist_action_popup_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/widgets/checklist_log_button_bar.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -72,7 +73,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           ),
         ),
         action: getAction(context),
-        actionIcon: SvgPicture.asset(FeedEntryActionIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
+        actionIcon: SvgPicture.asset(FeedEntryIcons[(checklistAction as ChecklistActionCreateCard).entryType]!),
       ),
     );
   }
@@ -86,8 +87,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
           backgroundColor: Colors.transparent,
           builder: (BuildContext c) {
             return BlocProvider<ChecklistActionPopupBloc>(
-              create: (BuildContext context) =>
-                  ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
+              create: (BuildContext context) => ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
               child: ChecklistActionPopupPage(),
             );
           },
@@ -179,6 +179,47 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
             ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
                 pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
           ),
+
+
+      FE_LIFE_EVENT: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.VEGGING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant))),
+      FE_LIFE_EVENT_CLONING: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.CLONING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant))),
+      FE_LIFE_EVENT_GERMINATING: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.GERMINATING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          tipID: 'TIP_GERMINATING',
+          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en']),
+      FE_LIFE_EVENT_VEGGING: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.VEGGING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          tipID: 'TIP_VEGGING',
+          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en']),
+      FE_LIFE_EVENT_BLOOMING: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.BLOOMING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          tipID: 'TIP_BLOOMING',
+          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en']),
+      FE_LIFE_EVENT_DRYING: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.DRYING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          tipID: 'TIP_DRYING',
+          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en ']),
+      FE_LIFE_EVENT_CURING: (BuildContext context) => _onAction(
+          context,
+          ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(plant, PlantPhases.CURING,
+              pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
+          tipID: 'TIP_CURING',
+          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/why_cure/l/en']),
+
       FE_SCHEDULE: (BuildContext context) => _onAction(
           context,
           ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,

@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/assets/feed_entry.dart';
 import 'package:super_green_app/data/assets/metrics.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class ChecklistCondition extends Equatable {
   final String type;
@@ -144,6 +145,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     var params = {
+      'id': id,
       'key': key,
       'inRange': inRange,
       'min': min,
@@ -160,6 +162,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
   }
 
   List<Object?> get props => [
+        id,
         type,
         key,
         inRange,
@@ -185,7 +188,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
       max = map['max'];
     }
     return ChecklistConditionMetric(
-      id: map['id'],
+      id: map['id'] ?? Uuid().v4(),
       key: map['key'],
       inRange: map['inRange'] ?? false,
       min: min,
@@ -266,7 +269,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 
   static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterCard(
-      id: map['id'],
+      id: map['id'] ?? Uuid().v4(),
       entryType: map['entryType'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
@@ -328,7 +331,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
 
   static ChecklistConditionAfterPhase fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterPhase(
-      id: map['id'],
+      id: map['id'] ?? Uuid().v4(),
       phase: map['phase'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
@@ -412,7 +415,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
 
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(
-      id: map['id'],
+      id: map['id'] ?? Uuid().v4(),
       date: DateTime.parse(map['date'] as String).toLocal(),
       repeat: map['repeat'] ?? false,
       repeatDuration: map['repeatDuration'],

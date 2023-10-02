@@ -42,7 +42,7 @@ class CreateTimerReminder extends StatefulWidget {
 
 class _CreateTimerReminderState extends State<CreateTimerReminder> {
   ChecklistCondition condition = ChecklistConditionTimer(
-    id: Uuid().v4(), 
+    id: Uuid().v4(),
     date: DateTime.now().add(Duration(days: 1)),
   );
   ChecklistAction action = ChecklistActionMessage();
