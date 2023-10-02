@@ -70,6 +70,7 @@ abstract class ChecklistCondition extends Equatable {
 class ChecklistConditionMetric extends ChecklistCondition {
   static const String TYPE = 'metric';
 
+  final String id;
   final String? key;
   final bool inRange;
   final double? min;
@@ -89,7 +90,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
     if (daysInRow && nDaysInRow == null) {
       return false;
     }
-      return true;
+    return true;
   }
 
   String get asSentence {
@@ -126,6 +127,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
   }
 
   ChecklistConditionMetric({
+    required this.id,
     this.key,
     this.inRange = true,
     this.min,
@@ -183,6 +185,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
       max = map['max'];
     }
     return ChecklistConditionMetric(
+      id: map['id'],
       key: map['key'],
       inRange: map['inRange'] ?? false,
       min: min,
@@ -207,6 +210,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
     int? nDaysInRow,
   }) {
     return ChecklistConditionMetric(
+      id: id,
       key: key ?? this.key,
       inRange: inRange ?? this.inRange,
       min: clearMin == true ? null : (min ?? this.min),
@@ -222,13 +226,16 @@ class ChecklistConditionMetric extends ChecklistCondition {
 class ChecklistConditionAfterCard extends ChecklistCondition {
   static const String TYPE = 'after_card';
 
+  final String id;
   final String? entryType;
   final int? duration;
   final String durationUnit;
 
-  String get asSentence => 'If last "${FeedEntryNames[entryType!]!}" diary entry is ${duration!} ${durationUnit.toLowerCase()} old.';
+  String get asSentence =>
+      'If last "${FeedEntryNames[entryType!]!}" diary entry is ${duration!} ${durationUnit.toLowerCase()} old.';
 
   ChecklistConditionAfterCard({
+    required this.id,
     this.entryType,
     this.duration,
     this.durationUnit = 'DAYS',
@@ -238,6 +245,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     var params = {
+      'id': id,
       'entryType': entryType,
       'duration': duration,
       'durationUnit': durationUnit,
@@ -249,6 +257,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   }
 
   List<Object?> get props => [
+        id,
         type,
         entryType,
         duration,
@@ -257,6 +266,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 
   static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterCard(
+      id: map['id'],
       entryType: map['entryType'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
@@ -269,6 +279,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
     String? durationUnit = 'DAYS',
   }) {
     return ChecklistConditionAfterCard(
+      id: id,
       entryType: entryType ?? this.entryType,
       duration: duration ?? this.duration,
       durationUnit: durationUnit ?? this.durationUnit,
@@ -279,6 +290,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 class ChecklistConditionAfterPhase extends ChecklistCondition {
   static const String TYPE = 'after_phase';
 
+  final String id;
   final String? phase;
   final int? duration;
   final String durationUnit;
@@ -286,6 +298,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   String get asSentence => 'If plant is ${PlantPhaseNames[phase!]!} since ${duration!} ${durationUnit.toLowerCase()}.';
 
   ChecklistConditionAfterPhase({
+    required this.id,
     this.phase,
     this.duration,
     this.durationUnit = 'DAYS',
@@ -295,6 +308,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     var params = {
+      'id': id,
       'phase': phase,
       'duration': duration,
       'durationUnit': durationUnit,
@@ -314,6 +328,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
 
   static ChecklistConditionAfterPhase fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterPhase(
+      id: map['id'],
       phase: map['phase'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
@@ -326,6 +341,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
     String? durationUnit = 'DAYS',
   }) {
     return ChecklistConditionAfterPhase(
+      id: id,
       phase: phase ?? this.phase,
       duration: duration ?? this.duration,
       durationUnit: durationUnit ?? this.durationUnit,
@@ -336,6 +352,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
 class ChecklistConditionTimer extends ChecklistCondition {
   static const String TYPE = 'timer';
 
+  final String id;
   final DateTime? date;
 
   final bool repeat;
@@ -361,6 +378,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   }
 
   ChecklistConditionTimer({
+    required this.id,
     this.date,
     this.repeat = false,
     this.repeatDuration,
@@ -371,6 +389,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     var params = {
+      'id': id,
       'date': date!.toUtc().toIso8601String(),
       'repeat': repeat,
       'repeatDuration': repeatDuration,
@@ -383,12 +402,17 @@ class ChecklistConditionTimer extends ChecklistCondition {
   }
 
   List<Object?> get props => [
+        id,
         type,
         date,
+        repeat,
+        repeatDuration,
+        durationUnit,
       ];
 
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(
+      id: map['id'],
       date: DateTime.parse(map['date'] as String).toLocal(),
       repeat: map['repeat'] ?? false,
       repeatDuration: map['repeatDuration'],
@@ -403,6 +427,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
     String? durationUnit,
   }) {
     return ChecklistConditionTimer(
+      id: id,
       date: date ?? this.date,
       repeat: repeat ?? this.repeat,
       repeatDuration: repeatDuration ?? this.repeatDuration,

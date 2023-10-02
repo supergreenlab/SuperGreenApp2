@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_action_condition_popup.dart';
+import 'package:uuid/uuid.dart';
 
 class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
   final void Function(ChecklistCondition action) onAdd;
@@ -37,7 +38,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
             'Time reminder',
             'Just a simple reminder, set a date and it will show up in your checklist at that date.',
             'Ex: In X days.', () {
-          onAdd(ChecklistConditionTimer(date: DateTime.now(),));
+          onAdd(ChecklistConditionTimer(id: Uuid().v4(), date: DateTime.now(),));
         }),
         renderCondition(
             context,
@@ -45,7 +46,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
             'Metric monitoring',
             'This checklist item will show up in your checklist if a metric is in or out of a given range.',
             'Ex: When temperature is >X° for 3 days.', () {
-          onAdd(ChecklistConditionMetric(nDaysInRow: 4,));
+          onAdd(ChecklistConditionMetric(id: Uuid().v4(), nDaysInRow: 4,));
         }),
         this.filteredValues.contains(ChecklistConditionAfterCard.TYPE) ? Container() : renderCondition(
             context,
@@ -53,7 +54,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
             'After a diary entry is created',
             'Choose a diary entry type and set a duration after which this checklist entry will show up in your checklist.',
             'Ex: 5 days after last watering card', () {
-          onAdd(ChecklistConditionAfterCard());
+          onAdd(ChecklistConditionAfterCard(id: Uuid().v4()));
         }),
         this.filteredValues.contains(ChecklistConditionAfterPhase.TYPE) ? Container() : renderCondition(
             context,
@@ -61,7 +62,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
             'Plant phase',
             'Select a phase and a duration. This checklist item will show up on time in your checklist.',
             'Ex: after 2 weeks into bloom, start the next seeds', () {
-          onAdd(ChecklistConditionAfterPhase());
+          onAdd(ChecklistConditionAfterPhase(id: Uuid().v4()));
         }),
       ],
     );

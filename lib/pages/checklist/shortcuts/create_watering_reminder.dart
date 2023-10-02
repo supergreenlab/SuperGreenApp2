@@ -28,6 +28,7 @@ import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateWateringReminder extends StatefulWidget {
   final Function() onClose;
@@ -41,6 +42,7 @@ class CreateWateringReminder extends StatefulWidget {
 
 class _CreateWateringReminderState extends State<CreateWateringReminder> {
   ChecklistCondition condition = ChecklistConditionTimer(
+    id: Uuid().v4(), 
     date: DateTime.now(),
   );
 

@@ -21,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
@@ -29,6 +28,7 @@ import 'package:super_green_app/pages/checklist/create/actions/message_action_pa
 import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateTimerReminder extends StatefulWidget {
   final Function() onClose;
@@ -42,6 +42,7 @@ class CreateTimerReminder extends StatefulWidget {
 
 class _CreateTimerReminderState extends State<CreateTimerReminder> {
   ChecklistCondition condition = ChecklistConditionTimer(
+    id: Uuid().v4(), 
     date: DateTime.now().add(Duration(days: 1)),
   );
   ChecklistAction action = ChecklistActionMessage();

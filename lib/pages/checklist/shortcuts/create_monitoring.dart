@@ -30,6 +30,7 @@ import 'package:super_green_app/pages/checklist/create/actions/message_action_pa
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateMonitoring extends StatefulWidget {
   final Checklist checklist;
@@ -42,7 +43,7 @@ class CreateMonitoring extends StatefulWidget {
 }
 
 class _CreateMonitoringState extends State<CreateMonitoring> {
-  ChecklistCondition condition = ChecklistConditionMetric();
+  ChecklistCondition condition = ChecklistConditionMetric(id: Uuid().v4());
   ChecklistAction action = ChecklistActionMessage();
 
   @override
