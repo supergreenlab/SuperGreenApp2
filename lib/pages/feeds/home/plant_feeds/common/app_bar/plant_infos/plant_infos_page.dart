@@ -322,7 +322,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
         children: <Widget>[
           Center(
               child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
             child: Container(
                 decoration: BoxDecoration(
                     color: Color(0xff063047),

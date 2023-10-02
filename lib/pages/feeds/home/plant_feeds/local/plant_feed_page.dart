@@ -320,6 +320,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
 
+  int tabIndex = 0;
+
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
@@ -738,7 +740,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           actions: actions,
           bottomPadding: true,
           title: '',
-          appBarHeight: 360,
+          appBarHeight: tabIndex == 3 ? 400 : 360,
           appBar: _renderAppBar(context, state),
           firstItem: PlantFeedFilterPage(
             filters: filters,
@@ -894,6 +896,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           ),
           Expanded(
             child: Swiper(
+              onIndexChanged: (value) {
+                setState(() {
+                  this.tabIndex = value;
+                });
+              },
               itemCount: tabs.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
