@@ -162,9 +162,9 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                       styleSheet: MarkdownStyleSheet(
                           textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
               GreenButton(
-                title: 'SHOP NOW',
+                title: 'VIEW GUIDE',
                 onPressed: () {
-                  launchUrl(Uri.parse('https://www.supergreenlab.com'));
+                  launchUrl(Uri.parse('https://www.supergreenlab.com/guide/how-to-setup-a-remote-live-camera'));
                 },
               ),
             ],
