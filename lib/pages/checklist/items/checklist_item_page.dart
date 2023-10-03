@@ -179,11 +179,10 @@ class ChecklistItemPage extends StatelessWidget {
                     style: TextStyle(color: Color(0xff606060), fontWeight: FontWeight.bold),
                   ),
                 ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text('Tap top view details', style: TextStyle(color: Color(0xffababab))),
+              Text('Tap to view details', style: TextStyle(color: Color(0xffababab))),
             ],
           ),
         ],
