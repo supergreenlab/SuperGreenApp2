@@ -159,7 +159,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
                       GreenButton(
                         title: 'SHOP NOW',
                         onPressed: () {
-                          launchUrl(Uri.parse('https://www.supergreenlab.com'));
+                          launchUrl(Uri.parse('https://www.supergreenlab.com/bundle/micro-box-bundle'));
                         },
                       ),
                       Padding(
@@ -169,7 +169,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
                       GreenButton(
                         title: 'DIY NOW',
                         onPressed: () {
-                          launchUrl(Uri.parse('https://github.com/supergreenlab/'));
+                          launchUrl(Uri.parse('https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
                         },
                       ),
                     ],

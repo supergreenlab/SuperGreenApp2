@@ -102,7 +102,7 @@ class AppBarMissingController extends StatelessWidget {
                 GreenButton(
                   title: AppBarMissingController.appBarMissingControllerShopNow,
                   onPressed: () {
-                    launchUrl(Uri.parse('https://www.supergreenlab.com'));
+                    launchUrl(Uri.parse('https://www.supergreenlab.com/bundle/micro-box-bundle'));
                   },
                 ),
                 Padding(
@@ -133,7 +133,7 @@ class AppBarMissingController extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      launchUrl(Uri.parse('https://github.com/supergreenlab'));
+                      launchUrl(Uri.parse('https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
                     },
                   ),
                 ],

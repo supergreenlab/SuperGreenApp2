@@ -329,7 +329,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       GreenButton(
                         title: SelectDevicePage.selectDeviceShopNow,
                         onPressed: () {
-                          launchUrl(Uri.parse('https://www.supergreenlab.com'));
+                          launchUrl(Uri.parse('https://www.supergreenlab.com/bundle/micro-box-bundle'));
                         },
                       ),
                       Padding(
@@ -339,7 +339,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       GreenButton(
                         title: SelectDevicePage.selectDeviceDIYNow,
                         onPressed: () {
-                          launchUrl(Uri.parse('https://github.com/supergreenlab/'));
+                          launchUrl(Uri.parse('https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
                         },
                       ),
                     ],

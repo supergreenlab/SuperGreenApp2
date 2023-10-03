@@ -151,14 +151,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                           GreenButton(
                             title: FeedLightFormPage.feedLightFormPageShopNow,
                             onPressed: () {
-                              launchUrl(Uri.parse('https://www.supergreenlab.com'));
+                              launchUrl(Uri.parse('https://www.supergreenlab.com/bundle/micro-box-bundle'));
                             },
                           ),
                           Text(FeedLightFormPage.feedLightFormPageOr),
                           GreenButton(
                             title: FeedLightFormPage.feedLightFormPageDIYNow,
                             onPressed: () {
-                              launchUrl(Uri.parse('https://github.com/supergreenlab'));
+                              launchUrl(Uri.parse('https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
                             },
                           ),
                         ],
