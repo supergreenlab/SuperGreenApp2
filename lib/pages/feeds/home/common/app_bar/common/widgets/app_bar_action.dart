@@ -194,7 +194,17 @@ class AppBarAction extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
               ),
-              child: actionIcon),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  actionIcon!,
+                  Positioned(
+                    right: -5,
+                    bottom: -10,
+                    child: Text('+', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 93, 96, 147)),),
+                  ),
+                ],
+              )),
         ),
       ],
     );

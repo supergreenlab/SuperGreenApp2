@@ -31,7 +31,6 @@ import 'package:super_green_app/pages/checklist/action_popup/checklist_action_po
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/widgets/checklist_log_button_bar.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class ChecklistActionCreateCardButton extends ChecklistActionButton {
@@ -105,6 +104,11 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
             ({pushAsReplacement = false}) => MainNavigateToFeedMeasureFormEvent(plant,
                 pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
           ),
+      
+      FE_CLONING: (BuildContext context) => _onAction(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedCloningFormEvent(plant,
+                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),),
       FE_TRANSPLANT: (BuildContext context) => _onAction(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedTransplantFormEvent(plant,
@@ -144,6 +148,7 @@ class ChecklistActionCreateCardButton extends ChecklistActionButton {
               pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, plant)),
           tipID: 'TIP_DEFOLIATION',
           tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en']),
+      
       FE_TIMELAPSE: (BuildContext context) {
         return () {};
       },

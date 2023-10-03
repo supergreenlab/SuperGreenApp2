@@ -109,9 +109,9 @@ const Map<String, String> FeedEntryNames = {
   FE_LIFE_EVENT_CLONING: 'Life event cloning',
   FE_LIFE_EVENT_GERMINATING: 'Life event germinating',
   FE_LIFE_EVENT_VEGGING: 'Life event vegging',
-  FE_LIFE_EVENT_BLOOMING: 'assets/plant_infos/icon_blooming_since.svg',
-  FE_LIFE_EVENT_DRYING: 'assets/plant_infos/icon_drying_since.svg',
-  FE_LIFE_EVENT_CURING: 'assets/plant_infos/icon_curing_since.svg',
+  FE_LIFE_EVENT_BLOOMING: 'Life event blooming',
+  FE_LIFE_EVENT_DRYING: 'Life event drying',
+  FE_LIFE_EVENT_CURING: 'Life event curing',
 
   FE_TOWELIE_INFO: 'Towelie',
 };

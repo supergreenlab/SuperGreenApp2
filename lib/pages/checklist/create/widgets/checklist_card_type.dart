@@ -57,7 +57,18 @@ class ChecklistCardType extends StatelessWidget {
       FE_SCHEDULE_AUTO,
     ];
     if (creatableCards) {
-      choices = choices.where((element) => element != FE_TIMELAPSE && element != FE_LIFE_EVENT && element != FE_LIFE_EVENT_CLONING && element != FE_LIFE_EVENT_GERMINATING && element != FE_LIFE_EVENT_VEGGING && element != FE_LIFE_EVENT_BLOOMING && element != FE_LIFE_EVENT_DRYING && element != FE_LIFE_EVENT_CURING).toList();
+      choices = choices.where((element) => element != FE_TIMELAPSE).toList();
+    } else {
+      choices = choices
+          .where((element) =>
+              element != FE_LIFE_EVENT &&
+              element != FE_LIFE_EVENT_CLONING &&
+              element != FE_LIFE_EVENT_GERMINATING &&
+              element != FE_LIFE_EVENT_VEGGING &&
+              element != FE_LIFE_EVENT_BLOOMING &&
+              element != FE_LIFE_EVENT_DRYING &&
+              element != FE_LIFE_EVENT_CURING)
+          .toList();
     }
     return DropdownButton<String?>(
       hint: Text('Select card type'),
