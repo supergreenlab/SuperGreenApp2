@@ -42,7 +42,8 @@ class FeedPage extends StatefulWidget {
 
   final List<String>? initFilter;
   final Color color;
-  final String title;
+  final String? title;
+  final Widget? titleWidget;
   final bool pinned;
   final Widget? appBar;
   final double? appBarHeight;
@@ -61,7 +62,8 @@ class FeedPage extends StatefulWidget {
   final Function(ScrollController)? onScroll;
 
   const FeedPage({
-    required this.title,
+    this.title,
+    this.titleWidget,
     this.pinned = false,
     required this.color,
     this.appBar,
@@ -191,7 +193,7 @@ class _FeedPageState extends State<FeedPage> {
       content.add(
         SliverAppBar(
           automaticallyImplyLeading: widget.automaticallyImplyLeading,
-          title: Text(widget.title),
+          title: widget.title != null ? Text(widget.title!) : widget.titleWidget,
           pinned: widget.pinned,
           // floating: true,
           leading: widget.leading,
@@ -204,7 +206,7 @@ class _FeedPageState extends State<FeedPage> {
           flexibleSpace: FlexibleSpaceBar(
             background: this.widget.appBar,
             centerTitle: this.widget.appBar == null,
-            title: this.widget.appBar == null ? Text(widget.title, style: TextStyle(color: Color(0xff404040))) : null,
+            title: this.widget.appBar == null? Text(widget.title ?? '', style: TextStyle(color: Color(0xff404040))) : null,
           ),
         ),
       );

@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -322,6 +323,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   int tabIndex = 0;
 
+  int nameScrollIndex = 0;
+  late Timer nameScrollTimer;
+
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
@@ -333,6 +337,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   @override
   void initState() {
     filters = AppDB().getAppData().filters ?? [];
+    nameScrollTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+      setState(() {
+        nameScrollIndex++;
+      });
+    });
     super.initState();
   }
 
@@ -534,10 +543,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           PlantFeedPage.plantFeedPageMenuCloning,
           FeedEntryIcons[FE_LIFE_EVENT_CLONING]!,
           _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant, PlantPhases.CLONING,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),)),
+            context,
+            ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(state.plant, PlantPhases.CLONING,
+                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+          )),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGerminating,
           FeedEntryIcons[FE_LIFE_EVENT_GERMINATING]!,
@@ -739,7 +748,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           color: Color(0xff063047),
           actions: actions,
           bottomPadding: true,
-          title: '',
+          titleWidget: _renderName(context, state),
           appBarHeight: tabIndex == 3 ? 400 : 360,
           appBar: _renderAppBar(context, state),
           firstItem: PlantFeedFilterPage(
@@ -833,42 +842,74 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state) {
+  Widget _renderName(BuildContext context, PlantFeedBlocStateLoaded state) {
     String name = state.plant.name;
 
     Widget nameText;
     if (_showIP) {
-      nameText = Column(
-        children: <Widget>[
-          Text(
-            name,
-            style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
-          ),
-          Text(_remote ? 'Remote controled!' : _deviceIP,
-              style: TextStyle(
-                fontSize: 10,
-                color: _remote ? Color(0xff3bb30b) : Colors.grey,
-              ))
-        ],
-      );
+      nameText = ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 145),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                name,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.fade,
+                style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
+              ),
+              Text(_remote ? 'Remote controled!' : _deviceIP,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: _remote ? Color(0xff3bb30b) : Colors.grey,
+                  ))
+            ],
+          ));
     } else {
-      nameText = Text(
-        name,
-        style: TextStyle(color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
-      );
-    }
-    if (state.box.device != null) {
-      nameText = Row(
-        children: <Widget>[
-          nameText,
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Icon(Icons.offline_bolt, color: _reachable ? Colors.green : Colors.grey, size: 20),
+      nameText = ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 145),
+        child: AutoSizeText(
+          name,
+          maxLines: 2,
+          overflow: TextOverflow.fade,
+          softWrap: true,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontWeight: FontWeight.w200,
           ),
-        ],
+        ),
       );
+      if (state.box.device != null) {
+        nameText = Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: nameText,
+            ),
+            Icon(Icons.offline_bolt, color: _reachable ? Colors.green : Colors.grey, size: 20),
+          ],
+        );
+      }
     }
 
+    nameText = InkWell(
+      onTap: () {
+        if (state.box.device == null) {
+          return;
+        }
+        setState(() {
+          _showIP = !_showIP;
+        });
+      },
+      child: nameText,
+    );
+
+    return nameText;
+  }
+
+  Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state) {
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
       _renderQuickView,
       _renderControls,
@@ -877,42 +918,24 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       _renderProducts,
     ];
     return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 64.0, top: 12.0),
-            child: InkWell(
-              onTap: () {
-                if (state.box.device == null) {
-                  return;
-                }
-                setState(() {
-                  _showIP = !_showIP;
-                });
-              },
-              child: nameText,
-            ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 45.0),
+        child: Swiper(
+          onIndexChanged: (value) {
+            setState(() {
+              this.tabIndex = value;
+            });
+          },
+          itemCount: tabs.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (BuildContext context, int index) {
+            return tabs[index](context, state);
+          },
+          pagination: SwiperPagination(
+            builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
           ),
-          Expanded(
-            child: Swiper(
-              onIndexChanged: (value) {
-                setState(() {
-                  this.tabIndex = value;
-                });
-              },
-              itemCount: tabs.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return tabs[index](context, state);
-              },
-              pagination: SwiperPagination(
-                builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
-              ),
-              loop: false,
-            ),
-          ),
-        ],
+          loop: false,
+        ),
       ),
     );
   }
@@ -951,6 +974,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       create: (context) => ProductsBloc(LocalProductsBlocDelegate(state.plant)),
       child: ProductsPage(),
     );
+  }
+
+  @override
+  void dispose() {
+    nameScrollTimer.cancel();
+    super.dispose();
   }
 
 // TODO DRY this somewhere
