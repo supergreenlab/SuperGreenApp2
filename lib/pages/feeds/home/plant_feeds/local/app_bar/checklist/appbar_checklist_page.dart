@@ -26,6 +26,7 @@ import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_bloc.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:tuple/tuple.dart';
@@ -41,6 +42,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     return BlocListener<AppbarChecklistBloc, AppbarChecklistBlocState>(
       listener: (BuildContext context, AppbarChecklistBlocState state) {
         if (state is AppbarChecklistBlocStateCreated) {
+          BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventForceSyncChecklists());
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigateToChecklist(state.plant, state.box, state.checklist));
         }
