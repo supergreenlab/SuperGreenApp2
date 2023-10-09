@@ -124,8 +124,8 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
       });
       metrics = await AppBarMetricsParamsController.load(device!, box);
       subscriptions = metrics!.listenParams(device!, onParamsUpdate);
+      await forceRefresh();
       yield AppBarMetricsBlocStateLoaded(plant, metrics!);
-      forceRefresh();
     } else if (event is AppBarMetricsBlocEventLoaded) {
       yield event.state;
     }
@@ -136,7 +136,7 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
     add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics!)));
   }
 
-  void forceRefresh() async {
+  Future forceRefresh() async {
     if (metrics == null) {
       return;
     }
