@@ -32,6 +32,7 @@ class AppBarAction extends StatelessWidget {
   final Widget? actionIcon;
   final bool center;
   final bool shadowed;
+  final bool addIcon;
   final Widget? child;
 
   final Function()? onCheck;
@@ -52,6 +53,7 @@ class AppBarAction extends StatelessWidget {
     this.height = 65,
     this.center = false,
     this.shadowed = true,
+    this.addIcon = true,
     this.onCheck,
     this.onSkip,
     this.child,
@@ -194,7 +196,7 @@ class AppBarAction extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
               ),
-              child: Stack(
+              child: addIcon ? Stack(
                 clipBehavior: Clip.none,
                 children: [
                   actionIcon!,
@@ -204,7 +206,7 @@ class AppBarAction extends StatelessWidget {
                     child: Text('+', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 93, 96, 147)),),
                   ),
                 ],
-              )),
+              ) : actionIcon!),
         ),
       ],
     );

@@ -53,6 +53,7 @@ class PlantInfosWidget extends StatelessWidget {
         title: title,
         content: content,
         action: onEdit,
+        addIcon: false,
         actionIcon: onEdit != null ? SvgPicture.asset("assets/plant_infos/edit.svg") : null,
       ),
     );
