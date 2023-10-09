@@ -26,6 +26,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
+import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -55,6 +56,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bl
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/widgets/plant_dial_button.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/widgets/plant_public_link.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -715,16 +717,18 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ),
             ));
       }
-      actions.insert(
-        0,
-        IconButton(
-          icon: SvgPicture.asset('assets/home/icon_qrcode.svg'),
-          tooltip: 'View live cams',
-          onPressed: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToQRCodeViewer(state.plant));
-          },
-        ),
-      );
+      if (state.plant.serverID != null) {
+        actions.insert(
+          0,
+          IconButton(
+            icon: SvgPicture.asset('assets/home/icon_share_link.svg'),
+            tooltip: 'Share link',
+            onPressed: () {
+              _showSharingLink(context, state);
+            },
+          ),
+        );
+      }
       Widget? bottom;
       if (state.feedEntry != null) {
         bottom = SingleFeedEntry(
@@ -973,6 +977,34 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return BlocProvider(
       create: (context) => ProductsBloc(LocalProductsBlocDelegate(state.plant)),
       child: ProductsPage(),
+    );
+  }
+
+  void _showSharingLink(BuildContext context, PlantFeedBlocStateLoaded state) async {
+    await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext c) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              child: PlantPublicLink(
+                state: state,
+                onMakePublic: () {
+                  BlocProvider.of<PlantFeedBloc>(context).add(PlantFeedBlocEventMakePublic());
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

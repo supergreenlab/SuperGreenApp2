@@ -63,11 +63,15 @@ class _QRCodeViewerPageState extends State<QRCodeViewerPage> {
         Center(
           child: Column(
             children: [
-              Text(
-                state.plant.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 35,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  state.plant.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35,
+                  ),
                 ),
               ),
               Row(

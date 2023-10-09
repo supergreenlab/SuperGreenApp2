@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -30,6 +31,11 @@ import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 abstract class PlantFeedBlocEvent extends Equatable {}
 
 class PlantFeedBlocEventLoad extends PlantFeedBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class PlantFeedBlocEventMakePublic extends PlantFeedBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -134,6 +140,13 @@ class PlantFeedBloc extends LegacyBloc<PlantFeedBlocEvent, PlantFeedBlocState> {
       }
       yield PlantFeedBlocStateLoaded(box!, plant!,
           feedEntry: args.feedEntry, commentID: args.commentID, replyTo: args.replyTo);
+    } else if (event is PlantFeedBlocEventMakePublic) {
+      if (plant == null) {
+        return;
+      }
+      await RelDB.get()
+          .plantsDAO
+          .updatePlant(PlantsCompanion(id: Value(plant!.id), public: Value(true), synced: Value(false)));
     }
   }
 

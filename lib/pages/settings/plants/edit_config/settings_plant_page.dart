@@ -182,6 +182,14 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                   BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlantAlerts(state.plant));
                 },
               ),
+              ListTile(
+                leading: SvgPicture.asset('assets/home/icon_qrcode.svg', color: Color(0xff454545), width: 35, height: 35,),
+                title: Text('QR Code'),
+                subtitle: Text('Tap to see the qr code for this plant'),
+                onTap: () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToQRCodeViewer(state.plant));
+                },
+              ),
               SectionTitle(
                 title: 'Plant lab',
                 icon: 'assets/settings/icon_lab.svg',
