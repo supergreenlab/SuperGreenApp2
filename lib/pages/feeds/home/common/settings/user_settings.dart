@@ -31,11 +31,14 @@ class UserSettings {
   int preferredNotificationHour = 18;
   @HiveField(3)
   bool freedomUnits = false;
+  @HiveField(4)
+  String? userID;
 
-  UserSettings({this.timeOffset = 0, this.preferredNotificationHour = 18, this.freedomUnits=false});
+  UserSettings({this.timeOffset = 0, this.preferredNotificationHour = 18, this.freedomUnits=false, this.userID});
 
   factory UserSettings.fromMap(Map<String, dynamic> map) {
     return UserSettings(
+      userID: map['userID'],
       timeOffset: map['timeOffset'],
       preferredNotificationHour: map['preferredNotificationHour'],
       freedomUnits: map['freedomUnits'],
@@ -49,6 +52,7 @@ class UserSettings {
 
   Map<String, dynamic> toMap() {
     return {
+      'userID': userID,
       'timeOffset': timeOffset,
       'preferredNotificationHour': preferredNotificationHour,
       'freedomUnits': freedomUnits,
