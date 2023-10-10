@@ -314,15 +314,13 @@ class NotificationDataChecklistSeedTriggered extends NotificationData {
       String? body,
       required String plantID,
       required String checklistID,
-      required CommentType checklistSeedID,
-      required String checklistLog,})
+      required CommentType checklistSeedID,})
       : super(
           id: id,
           data: {
             'plantID': plantID,
             'checklistID': checklistID,
             'checklistSeedID': checklistSeedID,
-            'checklistLog': checklistLog,
           },
           type: NotificationDataType.CHECKLIST_SEED_TRIGGERED,
           title: title,
@@ -333,5 +331,4 @@ class NotificationDataChecklistSeedTriggered extends NotificationData {
   String get plantID => data['plantID'];
   String get checklistID => data['checklistID'];
   String get checklistSeedID => data['checklistSeedID'];
-  String get checklistLog => data['checklistLog'];
 }
