@@ -63,7 +63,7 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
 
   @override
   Widget build(BuildContext context) {
-    bool freedomUnits = AppDB().getAppData().freedomUnits;
+    bool freedomUnits = AppDB().getUserSettings().freedomUnits;
     String unit = freedomUnits ? imperialUnit : 'cm';
     return PlantInfosForm(
       title: 'Lab dimensions',

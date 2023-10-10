@@ -29,7 +29,7 @@ class AppData {
   @HiveField(2)
   bool allowAnalytics = false;
   @HiveField(3)
-  bool freedomUnits = true;
+  bool freedomUnits = true; // TODO: not used anymore
   @HiveField(4)
   String? jwt;
   @HiveField(5)

@@ -82,7 +82,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
   @override
   Widget build(BuildContext context) {
     this.refreshParamsController();
-    String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
+    String unit = AppDB().getUserSettings().freedomUnits == true ? '°F' : '°C';
     return ListView(
       children: [
         Padding(
@@ -219,7 +219,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
   }
 
   double _tempUnit(double temp) {
-    if (AppDB().getAppData().freedomUnits == true) {
+    if (AppDB().getUserSettings().freedomUnits == true) {
       return temp * 9 / 5 + 32;
     }
     return temp;

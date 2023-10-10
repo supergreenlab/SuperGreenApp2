@@ -52,7 +52,7 @@ class SettingsBlocState extends Equatable {
 
 class SettingsBloc extends LegacyBloc<SettingsBlocEvent, SettingsBlocState> {
   SettingsBloc() : super(SettingsBlocState(
-    AppDB().getAppData().freedomUnits,
+    AppDB().getUserSettings().freedomUnits,
     AppDB().getAppData().pinLock ?? '',
   ));
 

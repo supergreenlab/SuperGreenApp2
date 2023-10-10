@@ -43,7 +43,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   }
 
   Widget itemBuilder(BuildContext context, PublicPlant plant) {
-    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getUserSettings().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return InkWell(
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(

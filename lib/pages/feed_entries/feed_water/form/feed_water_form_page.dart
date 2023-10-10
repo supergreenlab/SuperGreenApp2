@@ -52,7 +52,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
 
   @override
   void initState() {
-    freedomUnits = AppDB().getAppData().freedomUnits == true;
+    freedomUnits = AppDB().getUserSettings().freedomUnits == true;
     super.initState();
   }
 

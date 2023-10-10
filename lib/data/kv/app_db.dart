@@ -19,6 +19,7 @@
 import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/user_settings.dart';
 
 class AppDB {
   static final AppDB _instance = AppDB._newInstance();
@@ -45,6 +46,10 @@ class AppDB {
 
   AppData getAppData() {
     return _settingsDB.get('data', defaultValue: AppData());
+  }
+
+  UserSettings getUserSettings() {
+    return _settingsDB.get('userSettings', defaultValue: UserSettings());
   }
 
   DeviceData getDeviceData(String identifier) {
@@ -84,9 +89,9 @@ class AppDB {
   }
 
   void setFreedomUnits(bool freedomUnits) {
-    AppData appData = getAppData();
-    appData.freedomUnits = freedomUnits;
-    setAppData(appData);
+    UserSettings userSettings = getUserSettings();
+    userSettings.freedomUnits = freedomUnits;
+    setUserSettings(userSettings);
   }
 
   void setPinLock(String pinLock) {
@@ -159,6 +164,10 @@ class AppDB {
 
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
+  }
+
+  void setUserSettings(UserSettings userSettings) {
+    _settingsDB.put('userSettings', userSettings);
   }
 
   void setDeviceData(String identifier, DeviceData deviceData) {

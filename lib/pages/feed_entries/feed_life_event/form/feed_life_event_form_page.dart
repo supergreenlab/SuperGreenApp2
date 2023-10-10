@@ -185,7 +185,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
     String text;
     String buttonText;
     if (date != null) {
-      String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+      String format = AppDB().getUserSettings().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
       DateFormat f = DateFormat(format);
       text = f.format(date!);
       buttonText = FeedLifeEventFormPage.feedLifeEventFormPageChangeButton;

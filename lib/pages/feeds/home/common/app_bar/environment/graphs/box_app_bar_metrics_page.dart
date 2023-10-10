@@ -71,10 +71,10 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
   }
 
   Widget _renderGraphs(BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
-    String tempUnit = AppDB().getAppData().freedomUnits ? '°F' : '°C';
+    String tempUnit = AppDB().getUserSettings().freedomUnits ? '°F' : '°C';
     DateTime metricDate = state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
-    String weightUnit = AppDB().getAppData().freedomUnits ? 'lb' : 'kg';
-    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
+    String weightUnit = AppDB().getUserSettings().freedomUnits ? 'lb' : 'kg';
+    String format = AppDB().getUserSettings().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
         style: TextStyle(color: Color(0xFF494949), fontSize: 15, fontWeight: FontWeight.bold));
     List<charts.LineAnnotationSegment<Object>>? annotations;

@@ -182,7 +182,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   }
 
   Widget _renderForm(BuildContext context, SettingsPlantAlertsBlocStateLoaded state) {
-    String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
+    String unit = AppDB().getUserSettings().freedomUnits == true ? '°F' : '°C';
     List<Widget> items = [
       Padding(
         padding: const EdgeInsets.all(16.0),
@@ -537,7 +537,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   }
 
   double _tempUnit(double temp) {
-    if (AppDB().getAppData().freedomUnits == true) {
+    if (AppDB().getUserSettings().freedomUnits == true) {
       return temp * 9 / 5 + 32;
     }
     return temp;

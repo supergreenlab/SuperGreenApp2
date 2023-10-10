@@ -62,7 +62,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
   }
 
   Widget _renderTemperatureMode() {
-    String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
+    String unit = AppDB().getUserSettings().freedomUnits == true ? '°F' : '°C';
     List<Widget> cards = [
       renderCard(
           FeedEntryIcons[FE_VENTILATION]!,
@@ -266,7 +266,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
   }
 
   double _tempUnit(double temp) {
-    if (AppDB().getAppData().freedomUnits == true) {
+    if (AppDB().getUserSettings().freedomUnits == true) {
       return temp * 9 / 5 + 32;
     }
     return temp;

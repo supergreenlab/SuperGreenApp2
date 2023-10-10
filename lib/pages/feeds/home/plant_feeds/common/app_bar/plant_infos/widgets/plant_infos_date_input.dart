@@ -32,7 +32,7 @@ class PlantInfosDateInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getUserSettings().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(

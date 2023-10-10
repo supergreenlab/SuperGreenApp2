@@ -569,7 +569,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   }
 
   Widget renderVolume(BuildContext context) {
-    bool freedomUnits = AppDB().getAppData().freedomUnits == true;
+    bool freedomUnits = AppDB().getUserSettings().freedomUnits == true;
     return NumberFormParam(
       icon: 'assets/feed_form/icon_volume.svg',
       title: FeedNutrientMixFormPage.feedNutrientMixFormPageVolume,
