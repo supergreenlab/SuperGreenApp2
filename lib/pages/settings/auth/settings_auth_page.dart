@@ -152,7 +152,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Connected as '),
-                Text(state.user!.nickname, style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(state.user!.nickname!, style: TextStyle(fontWeight: FontWeight.bold)),
               ],
             )
           : Row(mainAxisAlignment: MainAxisAlignment.center, children: [

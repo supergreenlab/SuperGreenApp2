@@ -18,7 +18,6 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
 part 'user_settings.g.dart';
@@ -52,7 +51,6 @@ class UserSettings {
 
   Map<String, dynamic> toMap() {
     return {
-      'userID': userID,
       'timeOffset': timeOffset,
       'preferredNotificationHour': preferredNotificationHour,
       'freedomUnits': freedomUnits,

@@ -207,7 +207,7 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
         id: tempID,
         feedEntryID: feedEntryID,
         userID: this.user!.id!,
-        from: this.user!.nickname,
+        from: this.user!.nickname!,
         pic: this.user!.pic,
         replyTo: event.replyTo?.id,
         text: event.text,

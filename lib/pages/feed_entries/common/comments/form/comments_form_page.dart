@@ -543,7 +543,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                         focusNode: inputFocus,
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: CommentsFormPage.commentsFormPageInputHintText(user!.nickname)),
+                            hintText: CommentsFormPage.commentsFormPageInputHintText(user!.nickname!)),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
                         minLines: 1,

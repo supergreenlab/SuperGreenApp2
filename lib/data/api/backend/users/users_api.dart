@@ -27,17 +27,29 @@ import 'package:super_green_app/data/logger/logger.dart';
 
 class User extends Equatable {
   final String? id;
-  final String nickname;
+  final String? nickname;
   final String? pic;
+  final String? settings;
 
-  User({this.id, required this.nickname, this.pic});
+  User({this.id, this.nickname, this.pic, this.settings});
 
   factory User.fromMap(Map<String, dynamic> userMap) {
-    return User(id: userMap['id'], nickname: userMap['nickname'], pic: userMap['pic']);
+    return User(id: userMap['id'], nickname: userMap['nickname'], pic: userMap['pic'], settings: userMap['settings']);
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    if (pic != null) {
+      data['pic'] = pic;
+    }
+    if (settings != null) {
+      data['settings'] = settings;
+    }
+    return data;
   }
 
   @override
-  List<Object?> get props => [id, nickname, pic];
+  List<Object?> get props => [id, nickname, pic, settings,];
 }
 
 class UsersAPI {
@@ -112,13 +124,17 @@ class UsersAPI {
             data: {"filePath": file.path, "fileSize": file.lengthSync()}, fwdThrow: true);
       }
     }
+    await updateUser(User(pic: Uri.parse(uploadUrl['filePath']).path.split('/')[2]));
+  }
+
+  Future updateUser(User user) async {
     try {
       await BackendAPI().apiClient.put(Uri.parse('${BackendAPI().serverHost}/user'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
           },
-          body: JsonEncoder().convert({'pic': Uri.parse(uploadUrl['filePath']).path.split('/')[2]}));
+          body: JsonEncoder().convert(user.toMap()));
     } catch (e, trace) {
       Logger.logError(e, trace, fwdThrow: true);
     }
