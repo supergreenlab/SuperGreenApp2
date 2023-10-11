@@ -33,6 +33,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/user_settings.dart';
 import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
@@ -107,7 +108,17 @@ class AppInitBloc extends LegacyBloc<AppInitBlocEvent, AppInitBlocState> {
         AppDB().setStoreGeo(localeToStoreGeo[locale] ?? 'us_us');
       }
 
+      // TODO remove this when all devices have migrated to new settings
+      if (!AppDB().hasUserSettings()) {
+        UserSettings userSettings = AppDB().getUserSettings();
+        userSettings.freedomUnits = AppDB().getAppData().freedomUnits;
+        AppDB().setUserSettings(userSettings);
+      }
+
       BackendAPI(); // force init
+      if (BackendAPI().usersAPI.loggedIn) {
+        await BackendAPI().usersAPI.syncUserSettings();
+      }
 
       await MatomoTracker().initialize(
         siteId: kReleaseMode || Platform.isIOS ? 5 : 8,

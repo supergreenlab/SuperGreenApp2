@@ -66,6 +66,7 @@ void main() async {
         sound: true,
       );
 
+      // TODO maybe create a Init bloc, because app init is split between PinLockBloc and AppInitBloc.
       runApp(MultiBlocProvider(providers: <BlocProvider>[
         BlocProvider<PinLockBloc>(create: (context) => PinLockBloc()),
         BlocProvider<MainNavigatorBloc>(create: (context) => MainNavigatorBloc(navigatorKey)),

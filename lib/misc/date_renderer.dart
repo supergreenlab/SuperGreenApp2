@@ -34,7 +34,7 @@ class DateRenderer {
   }
 
   static String renderAbsoluteDate(DateTime date) {
-    String format = AppDB().getUserSettings().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     DateFormat f = DateFormat(format);
     return f.format(date);
   }

@@ -48,6 +48,11 @@ class AppDB {
     return _settingsDB.get('data', defaultValue: AppData());
   }
 
+  bool hasUserSettings() {
+    UserSettings? userSettings = _settingsDB.get('userSettings');
+    return userSettings != null;
+  }
+
   UserSettings getUserSettings() {
     return _settingsDB.get('userSettings', defaultValue: UserSettings.defaults());
   }
