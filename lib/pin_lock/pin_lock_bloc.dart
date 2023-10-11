@@ -63,28 +63,13 @@ class PinLockBloc extends LegacyBloc<PinLockBlocEvent, PinLockBlocState> {
 
   Stream<PinLockBlocState> mapEventToState(PinLockBlocEvent event) async* {
     if (event is PinLockBlocEventInit) {
-      final Directory appDocDir = await getApplicationDocumentsDirectory();
-      final Directory tmpDocDir = await getTemporaryDirectory();
-      Hive.init(appDocDir.path);
-      Hive.registerAdapter(AppDataAdapter());
-      Hive.registerAdapter(DeviceDataAdapter());
-      Hive.registerAdapter(UserSettingsAdapter());
-      
-      AppDB().documentPath = appDocDir.path;
-      AppDB().tmpPath = tmpDocDir.path;
-
-      final String dirPath = '${appDocDir.path}/Pictures/sgl';
-      await Directory(dirPath).create(recursive: true);
-
-      await _db.init();
-
-      if (_db.hasPinLock()) {
+      if (AppDB().hasPinLock()) {
         yield PinLockBlocStateShow(AppDB().pinLock);
       } else {
         yield PinLockBlocStateSuccess();
       }
     } else if (event is PinLockBlocEventShow) {
-      if (_db.hasPinLock()) {
+      if (AppDB().hasPinLock()) {
         yield PinLockBlocStateShow(AppDB().pinLock);
       } else {
         yield PinLockBlocStateSuccess();

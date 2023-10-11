@@ -83,47 +83,12 @@ class AppInitBloc extends LegacyBloc<AppInitBlocEvent, AppInitBlocState> {
   @override
   Stream<AppInitBlocState> mapEventToState(AppInitBlocEvent event) async* {
     if (event is AppInitBlocEventInit) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-
-      RecaptchaHandler.instance.setupSiteKey(dataSiteKey: Config.recaptchaKey);
-
-      await Logger.init();
-      FlutterError.onError = (FlutterErrorDetails details) {
-        Logger.logError(details.exception, details.stack);
-      };
-
-      await AppDB().init();
-      final AppData appData = AppDB().getAppData();
-
-      if (appData.storeGeo == null) {
-        final Map<String, String> localeToStoreGeo = {
-          'en_US': 'us_us',
-          'de_DE': 'eu_de',
-          'fr_FR': 'eu_fr',
-        };
-        final String? locale = await Devicelocale.currentLocale;
-        AppDB().setStoreGeo(localeToStoreGeo[locale] ?? 'us_us');
-      }
-
-      // TODO remove this when all devices have migrated to new settings
-      if (!AppDB().hasUserSettings()) {
-        UserSettings userSettings = AppDB().getUserSettings();
-        userSettings.freedomUnits = AppDB().getAppData().freedomUnits;
-        AppDB().setUserSettings(userSettings);
-      }
-
-      BackendAPI(); // force init
-      if (BackendAPI().usersAPI.loggedIn) {
-        await BackendAPI().usersAPI.syncUserSettings();
-      }
-
       await MatomoTracker().initialize(
         siteId: kReleaseMode || Platform.isIOS ? 5 : 8,
         url: 'https://analytics.supergreenlab.com/matomo.php',
       );
+      
+      final AppData appData = AppDB().getAppData();
       MatomoTracker().setOptOut(!appData.allowAnalytics);
       yield AppInitBlocStateReady(appData.firstStart);
     } else if (event is AppInitBlocEventAllowAnalytics) {
