@@ -24,6 +24,7 @@ import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/user_settings.dart';
 
 class User extends Equatable {
   final String? id;
@@ -138,6 +139,22 @@ class UsersAPI {
     } catch (e, trace) {
       Logger.logError(e, trace, fwdThrow: true);
     }
+  }
+
+  Future updateUserSettings(UserSettings userSettings) async {
+    await updateUser(User(settings: userSettings.toJSON()));
+  }
+
+  Future syncUserSettings() async {
+    User user = await me();
+    UserSettings currentUserSettings = AppDB().getUserSettings();
+    UserSettings userSettings = UserSettings.fromJSON(user.settings ?? '{}');
+    AppDB().setUserSettings(currentUserSettings.copyWith(
+      timeOffset: userSettings.timeOffset,
+      preferredNotificationHour: userSettings.preferredNotificationHour,
+      freedomUnits: userSettings.freedomUnits,
+      userID: userSettings.userID,
+    ));
   }
 
   Future<User> me() async {

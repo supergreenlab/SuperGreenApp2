@@ -25,15 +25,25 @@ part 'user_settings.g.dart';
 @HiveType(typeId: 37)
 class UserSettings {
   @HiveField(0)
-  int timeOffset = 0;
+  int? timeOffset;
   @HiveField(1)
-  int preferredNotificationHour = 18;
+  int? preferredNotificationHour;
   @HiveField(3)
-  bool freedomUnits = false;
+  bool? freedomUnits;
   @HiveField(4)
   String? userID;
 
-  UserSettings({this.timeOffset = 0, this.preferredNotificationHour = 18, this.freedomUnits=false, this.userID});
+  UserSettings({this.timeOffset, this.preferredNotificationHour, this.freedomUnits, this.userID});
+  UserSettings.defaults({this.timeOffset = 0, this.preferredNotificationHour = 18, this.freedomUnits=false, this.userID});
+
+  UserSettings copyWith({int? timeOffset, int? preferredNotificationHour, bool? freedomUnits, String? userID}) {
+    return UserSettings(
+      timeOffset: timeOffset ?? this.timeOffset,
+      preferredNotificationHour: preferredNotificationHour ?? this.preferredNotificationHour,
+      freedomUnits: freedomUnits ?? this.freedomUnits,
+      userID: userID ?? this.userID,
+    );
+  }
 
   factory UserSettings.fromMap(Map<String, dynamic> map) {
     return UserSettings(

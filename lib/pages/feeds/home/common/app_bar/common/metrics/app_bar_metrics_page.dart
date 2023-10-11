@@ -190,7 +190,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   }
 
   Widget _renderMetrics(int temp, int humidity, double? vpd, int? co2, double? weight) {
-    bool freedomUnits = AppDB().getUserSettings().freedomUnits;
+    bool freedomUnits = AppDB().getUserSettings().freedomUnits!;
     String tempUnit = freedomUnits ? '°F' : '°C';
     if (freedomUnits) {
       temp = (temp * 9 / 5 + 32).toInt();

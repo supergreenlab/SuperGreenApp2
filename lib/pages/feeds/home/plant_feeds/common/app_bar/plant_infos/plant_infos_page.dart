@@ -108,7 +108,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       strain = '# ${state.plantInfos.plantSettings!.strain}';
     }
 
-    String format = AppDB().getUserSettings().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
 
     String? dimensions;
     if (state.plantInfos.boxSettings?.width != null &&
