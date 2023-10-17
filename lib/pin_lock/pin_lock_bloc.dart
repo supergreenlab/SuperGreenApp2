@@ -1,14 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/kv/models/app_data.dart';
-import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/misc/bloc.dart';
-import 'package:super_green_app/pages/feeds/home/common/settings/user_settings.dart';
 
 abstract class PinLockBlocEvent extends Equatable {}
 
@@ -55,8 +49,6 @@ class PinLockBlocStateSuccess extends PinLockBlocState {
 }
 
 class PinLockBloc extends LegacyBloc<PinLockBlocEvent, PinLockBlocState> {
-  AppDB _db = AppDB();
-
   PinLockBloc() : super(PinLockBlocStateInit()) {
     add(PinLockBlocEventInit());
   }
