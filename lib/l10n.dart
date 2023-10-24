@@ -26,14 +26,14 @@ class SGLLocalizations {
 
   static SGLLocalizations? current;
 
-  static Future<SGLLocalizations?> load(Locale locale) {
+  static Future<SGLLocalizations> load(Locale locale) {
     final String name =
         locale.countryCode == null || locale.countryCode!.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {
       current = SGLLocalizations(localeName);
-      return current;
+      return current!;
     });
   }
 
@@ -60,7 +60,7 @@ class SGLLocalizationsDelegate extends LocalizationsDelegate<SGLLocalizations> {
   bool isSupported(Locale locale) => ['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
-  Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale) as Future<SGLLocalizations>;
+  Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale);
 
   @override
   bool shouldReload(SGLLocalizationsDelegate old) => false;
