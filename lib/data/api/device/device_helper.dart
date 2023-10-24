@@ -108,7 +108,7 @@ class DeviceHelper {
       value = await DeviceAPI.setStringParam(device.ip, param.key, value,
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     }
-    Param newParam = param.copyWith(svalue: value);
+    Param newParam = param.copyWith(svalue: Value(value));
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
   }
@@ -122,7 +122,7 @@ class DeviceHelper {
       value = await DeviceAPI.setIntParam(device.ip, param.key, value,
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     }
-    Param newParam = param.copyWith(ivalue: value);
+    Param newParam = param.copyWith(ivalue: Value(value));
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
   }
@@ -157,7 +157,7 @@ class DeviceHelper {
     String? auth = AppDB().getDeviceAuth(device.identifier);
     String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
-    await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
+    await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: Value(value)));
     return param;
   }
 
@@ -172,7 +172,7 @@ class DeviceHelper {
     String? auth = AppDB().getDeviceAuth(device.identifier);
     int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
-    Param newParam = param.copyWith(ivalue: value);
+    Param newParam = param.copyWith(ivalue: Value(value));
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
   }

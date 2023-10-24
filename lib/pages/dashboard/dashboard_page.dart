@@ -18,10 +18,10 @@
 
 import 'dart:async';
 
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/dashboard/dashboard_bloc.dart';
 import 'package:super_green_app/pages/dashboard/tuto/tuto_bloc.dart';

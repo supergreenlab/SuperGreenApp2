@@ -402,7 +402,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
       {int? feedID, bool? synced, bool? feedEntrySynced}) async {
     JoinedSelectStatement query =
         select(feedMedias).join([leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))]);
-    Expression<bool?> where = feedEntries.type.equals(feedType);
+    Expression<bool> where = feedEntries.type.equals(feedType);
     if (feedID != null) {
       where &= feedEntries.feed.equals(feedID);
     }

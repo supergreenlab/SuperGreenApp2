@@ -2,10 +2,7 @@
 
 part of 'deletes.dart';
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
+// ignore_for_file: type=lint
 mixin _$DeletesDAOMixin on DatabaseAccessor<RelDB> {
   $DeletesTable get deletes => attachedDatabase.deletes;
 }

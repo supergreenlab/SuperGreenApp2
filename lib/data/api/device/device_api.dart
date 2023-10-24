@@ -314,7 +314,7 @@ class DeviceAPI {
                   ivalue: Value(value));
               await db.addParam(param);
             } else {
-              await db.updateParam(exists.copyWith(ivalue: value));
+              await db.updateParam(exists.copyWith(ivalue: Value(value)));
             }
           } catch (e, trace) {
             Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']}, fwdThrow: true);
@@ -331,7 +331,7 @@ class DeviceAPI {
                   svalue: Value(value));
               await db.addParam(param);
             } else {
-              await db.updateParam(exists.copyWith(svalue: value));
+              await db.updateParam(exists.copyWith(svalue: Value(value)));
             }
           } catch (e, trace) {
             Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']}, fwdThrow: true);

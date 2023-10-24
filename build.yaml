@@ -3,7 +3,6 @@ targets:
     builders:
       drift_dev:
         options:
-          compact_query_methods: true
           use_column_name_as_json_key_when_defined_in_moor_file: true
           sqlite_modules:
             - json1

@@ -614,7 +614,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         for (int j = 0; j < checklistSeeds.length; ++j) {
           await RelDB.get()
               .checklistsDAO
-              .updateChecklistSeed(checklistSeeds[j].copyWith(checklistServerID: serverID).toCompanion(false));
+              .updateChecklistSeed(checklistSeeds[j].copyWith(checklistServerID: Value(serverID)).toCompanion(false));
         }
       }
     }

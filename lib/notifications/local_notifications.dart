@@ -20,6 +20,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:super_green_app/main.dart';
 import 'package:super_green_app/notifications/model.dart';
 import 'package:super_green_app/notifications/notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotifications {
   final Function(NotificationData) onNotificationData;
@@ -72,8 +73,11 @@ class LocalNotifications {
     var iOSPlatformChannelSpecifics = DarwinNotificationDetails();
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(
-        id, notificationData.title, notificationData.body, scheduledNotificationDateTime, platformChannelSpecifics,
-        androidAllowWhileIdle: true, payload: notificationData.toJSON());
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        id, notificationData.title, notificationData.body, tz.TZDateTime.from(scheduledNotificationDateTime, tz.UTC), platformChannelSpecifics,
+        androidAllowWhileIdle: true, payload: notificationData.toJSON(),
+        androidScheduleMode: AndroidScheduleMode.alarmClock,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 }

@@ -174,11 +174,11 @@ class DeviceWebsocket {
         }
         dynamic value = cm.value;
         if (value is String) {
-          await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
+          await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: Value(value)));
         } else if (value is double) {
-          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value.round()));
+          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: Value(value.round())));
         } else if (value is int) {
-          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
+          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: Value(value)));
         }
       }
     }, onError: (e) async {

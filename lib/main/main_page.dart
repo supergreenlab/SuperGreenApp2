@@ -237,6 +237,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         BlocProvider.of<PinLockBloc>(context).add(PinLockBlocEventShow());
         break;
 
+      case AppLifecycleState.hidden:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
         break;

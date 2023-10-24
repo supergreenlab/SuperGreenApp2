@@ -97,7 +97,7 @@ class _QRCodeViewerPageState extends State<QRCodeViewerPage> {
           ),
         ),
         Center(
-          child: QrImage(
+          child: QrImageView(
             data: "sglapp://supergreenlab.com/plant?id=${state.plant.serverID ?? state.plant.id}",
             version: QrVersions.auto,
             size: 250.0,

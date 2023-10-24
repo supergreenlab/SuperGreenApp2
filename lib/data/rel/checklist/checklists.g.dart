@@ -2,10 +2,7 @@
 
 part of 'checklists.dart';
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
+// ignore_for_file: type=lint
 mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
   $ChecklistsTable get checklists => attachedDatabase.checklists;
   $ChecklistSeedsTable get checklistSeeds => attachedDatabase.checklistSeeds;
@@ -14,49 +11,47 @@ mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
       attachedDatabase.checklistCollections;
   Selectable<int> getNLogs(int var1) {
     return customSelect(
-        'select count(*) from checklist_logs where checked=false and skipped=false and checklist=?',
+        'SELECT count(*) AS _c0 FROM checklist_logs WHERE checked = FALSE AND skipped = FALSE AND checklist = ?1',
         variables: [
           Variable<int>(var1)
         ],
         readsFrom: {
           checklistLogs,
-        }).map((QueryRow row) => row.read<int>('count(*)'));
+        }).map((QueryRow row) => row.read<int>('_c0'));
   }
 
   Selectable<int> getNLogsTotal() {
     return customSelect(
-        'select count(*) from checklist_logs where checked=false and skipped=false',
+        'SELECT count(*) AS _c0 FROM checklist_logs WHERE checked = FALSE AND skipped = FALSE',
         variables: [],
         readsFrom: {
           checklistLogs,
-        }).map((QueryRow row) => row.read<int>('count(*)'));
+        }).map((QueryRow row) => row.read<int>('_c0'));
   }
 
   Selectable<GetNLogsPerPlantsResult> getNLogsPerPlants() {
     return customSelect(
-        'select\n      checklists.plant,\n      (select\n        count(*)\n        from checklist_logs\n        where checked=false and skipped=false and checklist_logs.checklist = checklists.id\n      ) as nPending\n    from checklists where nPending > 0',
+        'SELECT checklists.plant, (SELECT count(*) FROM checklist_logs WHERE checked = FALSE AND skipped = FALSE AND checklist_logs.checklist = checklists.id) AS nPending FROM checklists WHERE nPending > 0',
         variables: [],
         readsFrom: {
           checklists,
           checklistLogs,
-        }).map((QueryRow row) {
-      return GetNLogsPerPlantsResult(
-        plant: row.read<int>('plant'),
-        nPending: row.read<int>('nPending'),
-      );
-    });
+        }).map((QueryRow row) => GetNLogsPerPlantsResult(
+          plant: row.read<int>('plant'),
+          nPending: row.read<int>('nPending'),
+        ));
   }
 
   Selectable<ChecklistSeed> searchSeeds(String searchTerms, int checklistid) {
     return customSelect(
-        'select checklist_seeds.* from checklist_seeds where (title like \'%\' || :searchTerms || \'%\' or description like \'%\' || :searchTerms || \'%\' or actions like \'%\' || :searchTerms || \'%\' or conditions like \'%\' || :searchTerms || \'%\' or exitConditions like \'%\' || :searchTerms || \'%\') and checklist=:checklistid order by mine desc, id desc',
+        'SELECT checklist_seeds.* FROM checklist_seeds WHERE(title LIKE \'%\' || ?1 || \'%\' OR description LIKE \'%\' || ?1 || \'%\' OR actions LIKE \'%\' || ?1 || \'%\' OR conditions LIKE \'%\' || ?1 || \'%\' OR exitConditions LIKE \'%\' || ?1 || \'%\')AND checklist = ?2 ORDER BY mine DESC, id DESC',
         variables: [
           Variable<String>(searchTerms),
           Variable<int>(checklistid)
         ],
         readsFrom: {
           checklistSeeds,
-        }).map(checklistSeeds.mapFromRow);
+        }).asyncMap(checklistSeeds.mapFromRow);
   }
 }
 

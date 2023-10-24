@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';

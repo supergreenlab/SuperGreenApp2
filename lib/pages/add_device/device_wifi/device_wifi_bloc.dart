@@ -171,7 +171,7 @@ class DeviceWifiBloc extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState
     device = await RelDB.get().devicesDAO.getDevice(device.id);
 
     ipParam = await ddb.getParam(device.id, 'WIFI_IP');
-    await ddb.updateParam(ipParam.copyWith(svalue: ip));
+    await ddb.updateParam(ipParam.copyWith(svalue: Value(ip)));
 
     Param wifiStatusParam = await ddb.getParam(device.id, 'WIFI_STATUS');
     await DeviceHelper.refreshIntParam(device, wifiStatusParam);

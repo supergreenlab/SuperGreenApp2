@@ -2,11 +2,225 @@
 
 part of 'rel_db.dart';
 
-// **************************************************************************
-// MoorGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
+class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DevicesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _identifierMeta =
+      const VerificationMeta('identifier');
+  @override
+  late final GeneratedColumn<String> identifier = GeneratedColumn<String>(
+      'identifier', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _ipMeta = const VerificationMeta('ip');
+  @override
+  late final GeneratedColumn<String> ip = GeneratedColumn<String>(
+      'ip', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 7, maxTextLength: 15),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _mdnsMeta = const VerificationMeta('mdns');
+  @override
+  late final GeneratedColumn<String> mdns = GeneratedColumn<String>(
+      'mdns', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _isReachableMeta =
+      const VerificationMeta('isReachable');
+  @override
+  late final GeneratedColumn<bool> isReachable = GeneratedColumn<bool>(
+      'is_reachable', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_reachable" IN (0, 1))'),
+      defaultValue: Constant(true));
+  static const VerificationMeta _isRemoteMeta =
+      const VerificationMeta('isRemote');
+  @override
+  late final GeneratedColumn<bool> isRemote = GeneratedColumn<bool>(
+      'is_remote', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_remote" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _isSetupMeta =
+      const VerificationMeta('isSetup');
+  @override
+  late final GeneratedColumn<bool> isSetup = GeneratedColumn<bool>(
+      'is_setup', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_setup" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _configMeta = const VerificationMeta('config');
+  @override
+  late final GeneratedColumn<String> config = GeneratedColumn<String>(
+      'config', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  @override
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
+      'synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
+      defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        identifier,
+        name,
+        ip,
+        mdns,
+        isReachable,
+        isRemote,
+        isSetup,
+        config,
+        serverID,
+        synced
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'devices';
+  @override
+  VerificationContext validateIntegrity(Insertable<Device> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('identifier')) {
+      context.handle(
+          _identifierMeta,
+          identifier.isAcceptableOrUnknown(
+              data['identifier']!, _identifierMeta));
+    } else if (isInserting) {
+      context.missing(_identifierMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('ip')) {
+      context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip']!, _ipMeta));
+    } else if (isInserting) {
+      context.missing(_ipMeta);
+    }
+    if (data.containsKey('mdns')) {
+      context.handle(
+          _mdnsMeta, mdns.isAcceptableOrUnknown(data['mdns']!, _mdnsMeta));
+    } else if (isInserting) {
+      context.missing(_mdnsMeta);
+    }
+    if (data.containsKey('is_reachable')) {
+      context.handle(
+          _isReachableMeta,
+          isReachable.isAcceptableOrUnknown(
+              data['is_reachable']!, _isReachableMeta));
+    }
+    if (data.containsKey('is_remote')) {
+      context.handle(_isRemoteMeta,
+          isRemote.isAcceptableOrUnknown(data['is_remote']!, _isRemoteMeta));
+    }
+    if (data.containsKey('is_setup')) {
+      context.handle(_isSetupMeta,
+          isSetup.isAcceptableOrUnknown(data['is_setup']!, _isSetupMeta));
+    }
+    if (data.containsKey('config')) {
+      context.handle(_configMeta,
+          config.isAcceptableOrUnknown(data['config']!, _configMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Device map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Device(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      identifier: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}identifier'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      ip: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ip'])!,
+      mdns: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mdns'])!,
+      isReachable: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_reachable'])!,
+      isRemote: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_remote'])!,
+      isSetup: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_setup'])!,
+      config: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}config']),
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
+  }
+
+  @override
+  $DevicesTable createAlias(String alias) {
+    return $DevicesTable(attachedDatabase, alias);
+  }
+}
+
 class Device extends DataClass implements Insertable<Device> {
   final int id;
   final String identifier;
@@ -19,7 +233,7 @@ class Device extends DataClass implements Insertable<Device> {
   final String? config;
   final String? serverID;
   final bool synced;
-  Device(
+  const Device(
       {required this.id,
       required this.identifier,
       required this.name,
@@ -31,33 +245,6 @@ class Device extends DataClass implements Insertable<Device> {
       this.config,
       this.serverID,
       required this.synced});
-  factory Device.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Device(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      identifier: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}identifier'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      ip: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}ip'])!,
-      mdns: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}mdns'])!,
-      isReachable: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable'])!,
-      isRemote: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_remote'])!,
-      isSetup: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_setup'])!,
-      config: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}config']),
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -70,10 +257,10 @@ class Device extends DataClass implements Insertable<Device> {
     map['is_remote'] = Variable<bool>(isRemote);
     map['is_setup'] = Variable<bool>(isSetup);
     if (!nullToAbsent || config != null) {
-      map['config'] = Variable<String?>(config);
+      map['config'] = Variable<String>(config);
     }
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -142,8 +329,8 @@ class Device extends DataClass implements Insertable<Device> {
           bool? isReachable,
           bool? isRemote,
           bool? isSetup,
-          String? config,
-          String? serverID,
+          Value<String?> config = const Value.absent(),
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       Device(
         id: id ?? this.id,
@@ -154,8 +341,8 @@ class Device extends DataClass implements Insertable<Device> {
         isReachable: isReachable ?? this.isReachable,
         isRemote: isRemote ?? this.isRemote,
         isSetup: isSetup ?? this.isSetup,
-        config: config ?? this.config,
-        serverID: serverID ?? this.serverID,
+        config: config.present ? config.value : this.config,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -246,8 +433,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     Expression<bool>? isReachable,
     Expression<bool>? isRemote,
     Expression<bool>? isSetup,
-    Expression<String?>? config,
-    Expression<String?>? serverID,
+    Expression<String>? config,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -320,10 +507,10 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       map['is_setup'] = Variable<bool>(isSetup.value);
     }
     if (config.present) {
-      map['config'] = Variable<String?>(config.value);
+      map['config'] = Variable<String>(config.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -350,129 +537,68 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   }
 }
 
-class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
+class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $DevicesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ModulesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _identifierMeta = const VerificationMeta('identifier');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _deviceMeta = const VerificationMeta('device');
   @override
-  late final GeneratedColumn<String?> identifier = GeneratedColumn<String?>(
-      'identifier', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<int> device = GeneratedColumn<int>(
+      'device', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _ipMeta = const VerificationMeta('ip');
+  static const VerificationMeta _isArrayMeta =
+      const VerificationMeta('isArray');
   @override
-  late final GeneratedColumn<String?> ip = GeneratedColumn<String?>(
-      'ip', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 7, maxTextLength: 15),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _mdnsMeta = const VerificationMeta('mdns');
+  late final GeneratedColumn<bool> isArray = GeneratedColumn<bool>(
+      'is_array', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_array" IN (0, 1))'));
+  static const VerificationMeta _arrayLenMeta =
+      const VerificationMeta('arrayLen');
   @override
-  late final GeneratedColumn<String?> mdns = GeneratedColumn<String?>(
-      'mdns', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _isReachableMeta =
-      const VerificationMeta('isReachable');
+  late final GeneratedColumn<int> arrayLen = GeneratedColumn<int>(
+      'array_len', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<bool?> isReachable = GeneratedColumn<bool?>(
-      'is_reachable', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_reachable IN (0, 1))',
-      defaultValue: Constant(true));
-  final VerificationMeta _isRemoteMeta = const VerificationMeta('isRemote');
+  List<GeneratedColumn> get $columns => [id, device, name, isArray, arrayLen];
   @override
-  late final GeneratedColumn<bool?> isRemote = GeneratedColumn<bool?>(
-      'is_remote', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_remote IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _isSetupMeta = const VerificationMeta('isSetup');
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  late final GeneratedColumn<bool?> isSetup = GeneratedColumn<bool?>(
-      'is_setup', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_setup IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _configMeta = const VerificationMeta('config');
+  String get actualTableName => $name;
+  static const String $name = 'modules';
   @override
-  late final GeneratedColumn<String?> config = GeneratedColumn<String?>(
-      'config', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
-      'server_i_d', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
-      'synced', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
-      defaultValue: Constant(false));
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        identifier,
-        name,
-        ip,
-        mdns,
-        isReachable,
-        isRemote,
-        isSetup,
-        config,
-        serverID,
-        synced
-      ];
-  @override
-  String get aliasedName => _alias ?? 'devices';
-  @override
-  String get actualTableName => 'devices';
-  @override
-  VerificationContext validateIntegrity(Insertable<Device> instance,
+  VerificationContext validateIntegrity(Insertable<Module> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('identifier')) {
-      context.handle(
-          _identifierMeta,
-          identifier.isAcceptableOrUnknown(
-              data['identifier']!, _identifierMeta));
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
     } else if (isInserting) {
-      context.missing(_identifierMeta);
+      context.missing(_deviceMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -480,42 +606,17 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('ip')) {
-      context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip']!, _ipMeta));
+    if (data.containsKey('is_array')) {
+      context.handle(_isArrayMeta,
+          isArray.isAcceptableOrUnknown(data['is_array']!, _isArrayMeta));
     } else if (isInserting) {
-      context.missing(_ipMeta);
+      context.missing(_isArrayMeta);
     }
-    if (data.containsKey('mdns')) {
-      context.handle(
-          _mdnsMeta, mdns.isAcceptableOrUnknown(data['mdns']!, _mdnsMeta));
+    if (data.containsKey('array_len')) {
+      context.handle(_arrayLenMeta,
+          arrayLen.isAcceptableOrUnknown(data['array_len']!, _arrayLenMeta));
     } else if (isInserting) {
-      context.missing(_mdnsMeta);
-    }
-    if (data.containsKey('is_reachable')) {
-      context.handle(
-          _isReachableMeta,
-          isReachable.isAcceptableOrUnknown(
-              data['is_reachable']!, _isReachableMeta));
-    }
-    if (data.containsKey('is_remote')) {
-      context.handle(_isRemoteMeta,
-          isRemote.isAcceptableOrUnknown(data['is_remote']!, _isRemoteMeta));
-    }
-    if (data.containsKey('is_setup')) {
-      context.handle(_isSetupMeta,
-          isSetup.isAcceptableOrUnknown(data['is_setup']!, _isSetupMeta));
-    }
-    if (data.containsKey('config')) {
-      context.handle(_configMeta,
-          config.isAcceptableOrUnknown(data['config']!, _configMeta));
-    }
-    if (data.containsKey('server_i_d')) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
-    }
-    if (data.containsKey('synced')) {
-      context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+      context.missing(_arrayLenMeta);
     }
     return context;
   }
@@ -523,14 +624,25 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Device map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Device.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Module map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Module(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      device: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}device'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      isArray: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_array'])!,
+      arrayLen: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}array_len'])!,
+    );
   }
 
   @override
-  $DevicesTable createAlias(String alias) {
-    return $DevicesTable(attachedDatabase, alias);
+  $ModulesTable createAlias(String alias) {
+    return $ModulesTable(attachedDatabase, alias);
   }
 }
 
@@ -540,27 +652,12 @@ class Module extends DataClass implements Insertable<Module> {
   final String name;
   final bool isArray;
   final int arrayLen;
-  Module(
+  const Module(
       {required this.id,
       required this.device,
       required this.name,
       required this.isArray,
       required this.arrayLen});
-  factory Module.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Module(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      device: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}device'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      isArray: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_array'])!,
-      arrayLen: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}array_len'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -727,51 +824,66 @@ class ModulesCompanion extends UpdateCompanion<Module> {
   }
 }
 
-class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
+class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ModulesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ParamsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _deviceMeta = const VerificationMeta('device');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _deviceMeta = const VerificationMeta('device');
   @override
-  late final GeneratedColumn<int?> device = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> device = GeneratedColumn<int>(
       'device', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _moduleMeta = const VerificationMeta('module');
   @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
-      'name', aliasedName, false,
+  late final GeneratedColumn<int> module = GeneratedColumn<int>(
+      'module', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+      'key', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
-      type: const StringType(),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 30),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _isArrayMeta = const VerificationMeta('isArray');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<bool?> isArray = GeneratedColumn<bool?>(
-      'is_array', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: true,
-      defaultConstraints: 'CHECK (is_array IN (0, 1))');
-  final VerificationMeta _arrayLenMeta = const VerificationMeta('arrayLen');
+  late final GeneratedColumn<int> type = GeneratedColumn<int>(
+      'type', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _svalueMeta = const VerificationMeta('svalue');
   @override
-  late final GeneratedColumn<int?> arrayLen = GeneratedColumn<int?>(
-      'array_len', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<String> svalue = GeneratedColumn<String>(
+      'svalue', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _ivalueMeta = const VerificationMeta('ivalue');
   @override
-  List<GeneratedColumn> get $columns => [id, device, name, isArray, arrayLen];
+  late final GeneratedColumn<int> ivalue = GeneratedColumn<int>(
+      'ivalue', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   @override
-  String get aliasedName => _alias ?? 'modules';
+  List<GeneratedColumn> get $columns =>
+      [id, device, module, key, type, svalue, ivalue];
   @override
-  String get actualTableName => 'modules';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  VerificationContext validateIntegrity(Insertable<Module> instance,
+  String get actualTableName => $name;
+  static const String $name = 'params';
+  @override
+  VerificationContext validateIntegrity(Insertable<Param> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -784,23 +896,31 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
     } else if (isInserting) {
       context.missing(_deviceMeta);
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('module')) {
+      context.handle(_moduleMeta,
+          module.isAcceptableOrUnknown(data['module']!, _moduleMeta));
+    } else if (isInserting) {
+      context.missing(_moduleMeta);
+    }
+    if (data.containsKey('key')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+          _keyMeta, key.isAcceptableOrUnknown(data['key']!, _keyMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_keyMeta);
     }
-    if (data.containsKey('is_array')) {
-      context.handle(_isArrayMeta,
-          isArray.isAcceptableOrUnknown(data['is_array']!, _isArrayMeta));
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
-      context.missing(_isArrayMeta);
+      context.missing(_typeMeta);
     }
-    if (data.containsKey('array_len')) {
-      context.handle(_arrayLenMeta,
-          arrayLen.isAcceptableOrUnknown(data['array_len']!, _arrayLenMeta));
-    } else if (isInserting) {
-      context.missing(_arrayLenMeta);
+    if (data.containsKey('svalue')) {
+      context.handle(_svalueMeta,
+          svalue.isAcceptableOrUnknown(data['svalue']!, _svalueMeta));
+    }
+    if (data.containsKey('ivalue')) {
+      context.handle(_ivalueMeta,
+          ivalue.isAcceptableOrUnknown(data['ivalue']!, _ivalueMeta));
     }
     return context;
   }
@@ -808,14 +928,29 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Module map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Module.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Param map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Param(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      device: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}device'])!,
+      module: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}module'])!,
+      key: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}key'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}type'])!,
+      svalue: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}svalue']),
+      ivalue: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}ivalue']),
+    );
   }
 
   @override
-  $ModulesTable createAlias(String alias) {
-    return $ModulesTable(attachedDatabase, alias);
+  $ParamsTable createAlias(String alias) {
+    return $ParamsTable(attachedDatabase, alias);
   }
 }
 
@@ -827,7 +962,7 @@ class Param extends DataClass implements Insertable<Param> {
   final int type;
   final String? svalue;
   final int? ivalue;
-  Param(
+  const Param(
       {required this.id,
       required this.device,
       required this.module,
@@ -835,25 +970,6 @@ class Param extends DataClass implements Insertable<Param> {
       required this.type,
       this.svalue,
       this.ivalue});
-  factory Param.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Param(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      device: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}device'])!,
-      module: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}module'])!,
-      key: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}key'])!,
-      type: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
-      svalue: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}svalue']),
-      ivalue: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}ivalue']),
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -863,10 +979,10 @@ class Param extends DataClass implements Insertable<Param> {
     map['key'] = Variable<String>(key);
     map['type'] = Variable<int>(type);
     if (!nullToAbsent || svalue != null) {
-      map['svalue'] = Variable<String?>(svalue);
+      map['svalue'] = Variable<String>(svalue);
     }
     if (!nullToAbsent || ivalue != null) {
-      map['ivalue'] = Variable<int?>(ivalue);
+      map['ivalue'] = Variable<int>(ivalue);
     }
     return map;
   }
@@ -918,16 +1034,16 @@ class Param extends DataClass implements Insertable<Param> {
           int? module,
           String? key,
           int? type,
-          String? svalue,
-          int? ivalue}) =>
+          Value<String?> svalue = const Value.absent(),
+          Value<int?> ivalue = const Value.absent()}) =>
       Param(
         id: id ?? this.id,
         device: device ?? this.device,
         module: module ?? this.module,
         key: key ?? this.key,
         type: type ?? this.type,
-        svalue: svalue ?? this.svalue,
-        ivalue: ivalue ?? this.ivalue,
+        svalue: svalue.present ? svalue.value : this.svalue,
+        ivalue: ivalue.present ? ivalue.value : this.ivalue,
       );
   @override
   String toString() {
@@ -994,8 +1110,8 @@ class ParamsCompanion extends UpdateCompanion<Param> {
     Expression<int>? module,
     Expression<String>? key,
     Expression<int>? type,
-    Expression<String?>? svalue,
-    Expression<int?>? ivalue,
+    Expression<String>? svalue,
+    Expression<int>? ivalue,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1046,10 +1162,10 @@ class ParamsCompanion extends UpdateCompanion<Param> {
       map['type'] = Variable<int>(type.value);
     }
     if (svalue.present) {
-      map['svalue'] = Variable<String?>(svalue.value);
+      map['svalue'] = Variable<String>(svalue.value);
     }
     if (ivalue.present) {
-      map['ivalue'] = Variable<int?>(ivalue.value);
+      map['ivalue'] = Variable<int>(ivalue.value);
     }
     return map;
   }
@@ -1069,100 +1185,148 @@ class ParamsCompanion extends UpdateCompanion<Param> {
   }
 }
 
-class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
+class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ParamsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $PlantsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _deviceMeta = const VerificationMeta('device');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _feedMeta = const VerificationMeta('feed');
   @override
-  late final GeneratedColumn<int?> device = GeneratedColumn<int?>(
-      'device', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _moduleMeta = const VerificationMeta('module');
+  late final GeneratedColumn<int> feed = GeneratedColumn<int>(
+      'feed', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _boxMeta = const VerificationMeta('box');
   @override
-  late final GeneratedColumn<int?> module = GeneratedColumn<int?>(
-      'module', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _keyMeta = const VerificationMeta('key');
+  late final GeneratedColumn<int> box = GeneratedColumn<int>(
+      'box', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String?> key = GeneratedColumn<String?>(
-      'key', aliasedName, false,
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 30),
-      type: const StringType(),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  static const VerificationMeta _singleMeta = const VerificationMeta('single');
   @override
-  late final GeneratedColumn<int?> type = GeneratedColumn<int?>(
-      'type', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _svalueMeta = const VerificationMeta('svalue');
+  late final GeneratedColumn<bool> single = GeneratedColumn<bool>(
+      'single', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("single" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _publicMeta = const VerificationMeta('public');
   @override
-  late final GeneratedColumn<String?> svalue = GeneratedColumn<String?>(
-      'svalue', aliasedName, true,
+  late final GeneratedColumn<bool> public = GeneratedColumn<bool>(
+      'public', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("public" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _alertsMeta = const VerificationMeta('alerts');
+  @override
+  late final GeneratedColumn<bool> alerts = GeneratedColumn<bool>(
+      'alerts', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("alerts" IN (0, 1))'),
+      defaultValue: Constant(true));
+  static const VerificationMeta _settingsMeta =
+      const VerificationMeta('settings');
+  @override
+  late final GeneratedColumn<String> settings = GeneratedColumn<String>(
+      'settings', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 64),
-      type: const StringType(),
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _ivalueMeta = const VerificationMeta('ivalue');
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<int?> ivalue = GeneratedColumn<int?>(
-      'ivalue', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
+      'synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, device, module, key, type, svalue, ivalue];
+      [id, feed, box, name, single, public, alerts, settings, serverID, synced];
   @override
-  String get aliasedName => _alias ?? 'params';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'params';
+  String get actualTableName => $name;
+  static const String $name = 'plants';
   @override
-  VerificationContext validateIntegrity(Insertable<Param> instance,
+  VerificationContext validateIntegrity(Insertable<Plant> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('device')) {
-      context.handle(_deviceMeta,
-          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
-    } else if (isInserting) {
-      context.missing(_deviceMeta);
-    }
-    if (data.containsKey('module')) {
-      context.handle(_moduleMeta,
-          module.isAcceptableOrUnknown(data['module']!, _moduleMeta));
-    } else if (isInserting) {
-      context.missing(_moduleMeta);
-    }
-    if (data.containsKey('key')) {
+    if (data.containsKey('feed')) {
       context.handle(
-          _keyMeta, key.isAcceptableOrUnknown(data['key']!, _keyMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     } else if (isInserting) {
-      context.missing(_keyMeta);
+      context.missing(_feedMeta);
     }
-    if (data.containsKey('type')) {
+    if (data.containsKey('box')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
     } else if (isInserting) {
-      context.missing(_typeMeta);
+      context.missing(_boxMeta);
     }
-    if (data.containsKey('svalue')) {
-      context.handle(_svalueMeta,
-          svalue.isAcceptableOrUnknown(data['svalue']!, _svalueMeta));
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
     }
-    if (data.containsKey('ivalue')) {
-      context.handle(_ivalueMeta,
-          ivalue.isAcceptableOrUnknown(data['ivalue']!, _ivalueMeta));
+    if (data.containsKey('single')) {
+      context.handle(_singleMeta,
+          single.isAcceptableOrUnknown(data['single']!, _singleMeta));
+    }
+    if (data.containsKey('public')) {
+      context.handle(_publicMeta,
+          public.isAcceptableOrUnknown(data['public']!, _publicMeta));
+    }
+    if (data.containsKey('alerts')) {
+      context.handle(_alertsMeta,
+          alerts.isAcceptableOrUnknown(data['alerts']!, _alertsMeta));
+    }
+    if (data.containsKey('settings')) {
+      context.handle(_settingsMeta,
+          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -1170,14 +1334,35 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Param map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Param.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Plant map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Plant(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      feed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}feed'])!,
+      box: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}box'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      single: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}single'])!,
+      public: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}public'])!,
+      alerts: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}alerts'])!,
+      settings: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}settings'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $ParamsTable createAlias(String alias) {
-    return $ParamsTable(attachedDatabase, alias);
+  $PlantsTable createAlias(String alias) {
+    return $PlantsTable(attachedDatabase, alias);
   }
 }
 
@@ -1192,7 +1377,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   final String settings;
   final String? serverID;
   final bool synced;
-  Plant(
+  const Plant(
       {required this.id,
       required this.feed,
       required this.box,
@@ -1203,31 +1388,6 @@ class Plant extends DataClass implements Insertable<Plant> {
       required this.settings,
       this.serverID,
       required this.synced});
-  factory Plant.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Plant(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      feed: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
-      box: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}box'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      single: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}single'])!,
-      public: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
-      alerts: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}alerts'])!,
-      settings: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}settings'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1240,7 +1400,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     map['alerts'] = Variable<bool>(alerts);
     map['settings'] = Variable<String>(settings);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -1305,7 +1465,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           bool? public,
           bool? alerts,
           String? settings,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       Plant(
         id: id ?? this.id,
@@ -1316,7 +1476,7 @@ class Plant extends DataClass implements Insertable<Plant> {
         public: public ?? this.public,
         alerts: alerts ?? this.alerts,
         settings: settings ?? this.settings,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -1401,7 +1561,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     Expression<bool>? public,
     Expression<bool>? alerts,
     Expression<String>? settings,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -1471,7 +1631,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       map['settings'] = Variable<String>(settings.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -1497,92 +1657,80 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   }
 }
 
-class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
+class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlantsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $BoxesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _feedMeta = const VerificationMeta('feed');
   @override
-  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
-      'feed', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  late final GeneratedColumn<int> feed = GeneratedColumn<int>(
+      'feed', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _deviceMeta = const VerificationMeta('device');
   @override
-  late final GeneratedColumn<int?> box = GeneratedColumn<int?>(
-      'box', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<int> device = GeneratedColumn<int>(
+      'device', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _deviceBoxMeta =
+      const VerificationMeta('deviceBox');
   @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+  late final GeneratedColumn<int> deviceBox = GeneratedColumn<int>(
+      'device_box', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _singleMeta = const VerificationMeta('single');
+  static const VerificationMeta _settingsMeta =
+      const VerificationMeta('settings');
   @override
-  late final GeneratedColumn<bool?> single = GeneratedColumn<bool?>(
-      'single', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (single IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _publicMeta = const VerificationMeta('public');
-  @override
-  late final GeneratedColumn<bool?> public = GeneratedColumn<bool?>(
-      'public', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (public IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _alertsMeta = const VerificationMeta('alerts');
-  @override
-  late final GeneratedColumn<bool?> alerts = GeneratedColumn<bool?>(
-      'alerts', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (alerts IN (0, 1))',
-      defaultValue: Constant(true));
-  final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  @override
-  late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> settings = GeneratedColumn<String>(
       'settings', aliasedName, false,
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: Constant('{}'));
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
   @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
       'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
       'synced', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
       defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feed, box, name, single, public, alerts, settings, serverID, synced];
+      [id, feed, device, deviceBox, name, settings, serverID, synced];
   @override
-  String get aliasedName => _alias ?? 'plants';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'plants';
+  String get actualTableName => $name;
+  static const String $name = 'boxes';
   @override
-  VerificationContext validateIntegrity(Insertable<Plant> instance,
+  VerificationContext validateIntegrity(Insertable<Box> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1592,32 +1740,20 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     if (data.containsKey('feed')) {
       context.handle(
           _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
-    } else if (isInserting) {
-      context.missing(_feedMeta);
     }
-    if (data.containsKey('box')) {
-      context.handle(
-          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
-    } else if (isInserting) {
-      context.missing(_boxMeta);
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
+    }
+    if (data.containsKey('device_box')) {
+      context.handle(_deviceBoxMeta,
+          deviceBox.isAcceptableOrUnknown(data['device_box']!, _deviceBoxMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
-    }
-    if (data.containsKey('single')) {
-      context.handle(_singleMeta,
-          single.isAcceptableOrUnknown(data['single']!, _singleMeta));
-    }
-    if (data.containsKey('public')) {
-      context.handle(_publicMeta,
-          public.isAcceptableOrUnknown(data['public']!, _publicMeta));
-    }
-    if (data.containsKey('alerts')) {
-      context.handle(_alertsMeta,
-          alerts.isAcceptableOrUnknown(data['alerts']!, _alertsMeta));
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
@@ -1637,14 +1773,31 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Plant map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Plant.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Box map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Box(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      feed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}feed']),
+      device: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}device']),
+      deviceBox: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}device_box']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      settings: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}settings'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $PlantsTable createAlias(String alias) {
-    return $PlantsTable(attachedDatabase, alias);
+  $BoxesTable createAlias(String alias) {
+    return $BoxesTable(attachedDatabase, alias);
   }
 }
 
@@ -1657,7 +1810,7 @@ class Box extends DataClass implements Insertable<Box> {
   final String settings;
   final String? serverID;
   final bool synced;
-  Box(
+  const Box(
       {required this.id,
       this.feed,
       this.device,
@@ -1666,44 +1819,23 @@ class Box extends DataClass implements Insertable<Box> {
       required this.settings,
       this.serverID,
       required this.synced});
-  factory Box.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Box(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      feed: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      device: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      deviceBox: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      settings: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}settings'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || feed != null) {
-      map['feed'] = Variable<int?>(feed);
+      map['feed'] = Variable<int>(feed);
     }
     if (!nullToAbsent || device != null) {
-      map['device'] = Variable<int?>(device);
+      map['device'] = Variable<int>(device);
     }
     if (!nullToAbsent || deviceBox != null) {
-      map['device_box'] = Variable<int?>(deviceBox);
+      map['device_box'] = Variable<int>(deviceBox);
     }
     map['name'] = Variable<String>(name);
     map['settings'] = Variable<String>(settings);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -1758,21 +1890,21 @@ class Box extends DataClass implements Insertable<Box> {
 
   Box copyWith(
           {int? id,
-          int? feed,
-          int? device,
-          int? deviceBox,
+          Value<int?> feed = const Value.absent(),
+          Value<int?> device = const Value.absent(),
+          Value<int?> deviceBox = const Value.absent(),
           String? name,
           String? settings,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       Box(
         id: id ?? this.id,
-        feed: feed ?? this.feed,
-        device: device ?? this.device,
-        deviceBox: deviceBox ?? this.deviceBox,
+        feed: feed.present ? feed.value : this.feed,
+        device: device.present ? device.value : this.device,
+        deviceBox: deviceBox.present ? deviceBox.value : this.deviceBox,
         name: name ?? this.name,
         settings: settings ?? this.settings,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -1838,12 +1970,12 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   }) : name = Value(name);
   static Insertable<Box> custom({
     Expression<int>? id,
-    Expression<int?>? feed,
-    Expression<int?>? device,
-    Expression<int?>? deviceBox,
+    Expression<int>? feed,
+    Expression<int>? device,
+    Expression<int>? deviceBox,
     Expression<String>? name,
     Expression<String>? settings,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -1886,13 +2018,13 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       map['id'] = Variable<int>(id.value);
     }
     if (feed.present) {
-      map['feed'] = Variable<int?>(feed.value);
+      map['feed'] = Variable<int>(feed.value);
     }
     if (device.present) {
-      map['device'] = Variable<int?>(device.value);
+      map['device'] = Variable<int>(device.value);
     }
     if (deviceBox.present) {
-      map['device_box'] = Variable<int?>(deviceBox.value);
+      map['device_box'] = Variable<int>(deviceBox.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1901,7 +2033,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       map['settings'] = Variable<String>(settings.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -1925,90 +2057,66 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   }
 }
 
-class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
+class $ChartCachesTable extends ChartCaches
+    with TableInfo<$ChartCachesTable, ChartCache> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $BoxesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ChartCachesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _boxMeta = const VerificationMeta('box');
   @override
-  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
-      'feed', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
-  final VerificationMeta _deviceMeta = const VerificationMeta('device');
+  late final GeneratedColumn<int> box = GeneratedColumn<int>(
+      'box', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<int?> device = GeneratedColumn<int?>(
-      'device', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
-  final VerificationMeta _deviceBoxMeta = const VerificationMeta('deviceBox');
-  @override
-  late final GeneratedColumn<int?> deviceBox = GeneratedColumn<int?>(
-      'device_box', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _settingsMeta = const VerificationMeta('settings');
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(
-      'settings', aliasedName, false,
-      type: const StringType(),
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+      'date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _valuesMeta = const VerificationMeta('values');
+  @override
+  late final GeneratedColumn<String> values = GeneratedColumn<String>(
+      'values', aliasedName, false,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+      defaultValue: Constant('[]'));
   @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
-      'server_i_d', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  List<GeneratedColumn> get $columns => [id, box, name, date, values];
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
-      'synced', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
-      defaultValue: Constant(false));
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, feed, device, deviceBox, name, settings, serverID, synced];
+  String get actualTableName => $name;
+  static const String $name = 'chart_caches';
   @override
-  String get aliasedName => _alias ?? 'boxes';
-  @override
-  String get actualTableName => 'boxes';
-  @override
-  VerificationContext validateIntegrity(Insertable<Box> instance,
+  VerificationContext validateIntegrity(Insertable<ChartCache> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('feed')) {
+    if (data.containsKey('box')) {
       context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
-    }
-    if (data.containsKey('device')) {
-      context.handle(_deviceMeta,
-          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
-    }
-    if (data.containsKey('device_box')) {
-      context.handle(_deviceBoxMeta,
-          deviceBox.isAcceptableOrUnknown(data['device_box']!, _deviceBoxMeta));
+          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
+    } else if (isInserting) {
+      context.missing(_boxMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -2016,17 +2124,15 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('settings')) {
-      context.handle(_settingsMeta,
-          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
     }
-    if (data.containsKey('server_i_d')) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
-    }
-    if (data.containsKey('synced')) {
-      context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    if (data.containsKey('values')) {
+      context.handle(_valuesMeta,
+          values.isAcceptableOrUnknown(data['values']!, _valuesMeta));
     }
     return context;
   }
@@ -2034,14 +2140,25 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Box map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Box.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  ChartCache map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChartCache(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      box: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}box'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      values: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}values'])!,
+    );
   }
 
   @override
-  $BoxesTable createAlias(String alias) {
-    return $BoxesTable(attachedDatabase, alias);
+  $ChartCachesTable createAlias(String alias) {
+    return $ChartCachesTable(attachedDatabase, alias);
   }
 }
 
@@ -2051,27 +2168,12 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   final String name;
   final DateTime date;
   final String values;
-  ChartCache(
+  const ChartCache(
       {required this.id,
       required this.box,
       required this.name,
       required this.date,
       required this.values});
-  factory ChartCache.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ChartCache(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      box: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}box'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      date: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
-      values: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}values'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2237,79 +2339,218 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   }
 }
 
-class $ChartCachesTable extends ChartCaches
-    with TableInfo<$ChartCachesTable, ChartCache> {
+class $TimelapsesTable extends Timelapses
+    with TableInfo<$TimelapsesTable, Timelapse> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ChartCachesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $TimelapsesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _boxMeta = const VerificationMeta('box');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _plantMeta = const VerificationMeta('plant');
   @override
-  late final GeneratedColumn<int?> box = GeneratedColumn<int?>(
-      'box', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<int> plant = GeneratedColumn<int>(
+      'plant', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
-      'name', aliasedName, false,
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _dateMeta = const VerificationMeta('date');
-  @override
-  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
-      'date', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _valuesMeta = const VerificationMeta('values');
-  @override
-  late final GeneratedColumn<String?> values = GeneratedColumn<String?>(
-      'values', aliasedName, false,
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultValue: Constant('[]'));
+      defaultValue: Constant('dropbox'));
+  static const VerificationMeta _settingsMeta =
+      const VerificationMeta('settings');
   @override
-  List<GeneratedColumn> get $columns => [id, box, name, date, values];
+  late final GeneratedColumn<String> settings = GeneratedColumn<String>(
+      'settings', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
+  static const VerificationMeta _ssidMeta = const VerificationMeta('ssid');
   @override
-  String get aliasedName => _alias ?? 'chart_caches';
+  late final GeneratedColumn<String> ssid = GeneratedColumn<String>(
+      'ssid', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _passwordMeta =
+      const VerificationMeta('password');
   @override
-  String get actualTableName => 'chart_caches';
+  late final GeneratedColumn<String> password = GeneratedColumn<String>(
+      'password', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _controllerIDMeta =
+      const VerificationMeta('controllerID');
   @override
-  VerificationContext validateIntegrity(Insertable<ChartCache> instance,
+  late final GeneratedColumn<String> controllerID = GeneratedColumn<String>(
+      'controller_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _rotateMeta = const VerificationMeta('rotate');
+  @override
+  late final GeneratedColumn<String> rotate = GeneratedColumn<String>(
+      'rotate', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _strainMeta = const VerificationMeta('strain');
+  @override
+  late final GeneratedColumn<String> strain = GeneratedColumn<String>(
+      'strain', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _dropboxTokenMeta =
+      const VerificationMeta('dropboxToken');
+  @override
+  late final GeneratedColumn<String> dropboxToken = GeneratedColumn<String>(
+      'dropbox_token', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _uploadNameMeta =
+      const VerificationMeta('uploadName');
+  @override
+  late final GeneratedColumn<String> uploadName = GeneratedColumn<String>(
+      'upload_name', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  @override
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
+      'synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
+      defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        plant,
+        type,
+        settings,
+        ssid,
+        password,
+        controllerID,
+        rotate,
+        name,
+        strain,
+        dropboxToken,
+        uploadName,
+        serverID,
+        synced
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'timelapses';
+  @override
+  VerificationContext validateIntegrity(Insertable<Timelapse> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('box')) {
+    if (data.containsKey('plant')) {
       context.handle(
-          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
+          _plantMeta, plant.isAcceptableOrUnknown(data['plant']!, _plantMeta));
     } else if (isInserting) {
-      context.missing(_boxMeta);
+      context.missing(_plantMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    }
+    if (data.containsKey('settings')) {
+      context.handle(_settingsMeta,
+          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
+    }
+    if (data.containsKey('ssid')) {
+      context.handle(
+          _ssidMeta, ssid.isAcceptableOrUnknown(data['ssid']!, _ssidMeta));
+    }
+    if (data.containsKey('password')) {
+      context.handle(_passwordMeta,
+          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
+    }
+    if (data.containsKey('controller_i_d')) {
+      context.handle(
+          _controllerIDMeta,
+          controllerID.isAcceptableOrUnknown(
+              data['controller_i_d']!, _controllerIDMeta));
+    }
+    if (data.containsKey('rotate')) {
+      context.handle(_rotateMeta,
+          rotate.isAcceptableOrUnknown(data['rotate']!, _rotateMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
     }
-    if (data.containsKey('date')) {
+    if (data.containsKey('strain')) {
+      context.handle(_strainMeta,
+          strain.isAcceptableOrUnknown(data['strain']!, _strainMeta));
+    }
+    if (data.containsKey('dropbox_token')) {
       context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
-    } else if (isInserting) {
-      context.missing(_dateMeta);
+          _dropboxTokenMeta,
+          dropboxToken.isAcceptableOrUnknown(
+              data['dropbox_token']!, _dropboxTokenMeta));
     }
-    if (data.containsKey('values')) {
-      context.handle(_valuesMeta,
-          values.isAcceptableOrUnknown(data['values']!, _valuesMeta));
+    if (data.containsKey('upload_name')) {
+      context.handle(
+          _uploadNameMeta,
+          uploadName.isAcceptableOrUnknown(
+              data['upload_name']!, _uploadNameMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -2317,14 +2558,43 @@ class $ChartCachesTable extends ChartCaches
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ChartCache map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ChartCache.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Timelapse map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Timelapse(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      plant: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      settings: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}settings'])!,
+      ssid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ssid']),
+      password: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}password']),
+      controllerID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}controller_i_d']),
+      rotate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}rotate']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name']),
+      strain: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}strain']),
+      dropboxToken: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dropbox_token']),
+      uploadName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}upload_name']),
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $ChartCachesTable createAlias(String alias) {
-    return $ChartCachesTable(attachedDatabase, alias);
+  $TimelapsesTable createAlias(String alias) {
+    return $TimelapsesTable(attachedDatabase, alias);
   }
 }
 
@@ -2343,7 +2613,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   final String? uploadName;
   final String? serverID;
   final bool synced;
-  Timelapse(
+  const Timelapse(
       {required this.id,
       required this.plant,
       required this.type,
@@ -2358,39 +2628,6 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       this.uploadName,
       this.serverID,
       required this.synced});
-  factory Timelapse.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Timelapse(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      plant: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}plant'])!,
-      type: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
-      settings: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}settings'])!,
-      ssid: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
-      password: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}password']),
-      controllerID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}controller_i_d']),
-      rotate: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}rotate']),
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      strain: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}strain']),
-      dropboxToken: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}dropbox_token']),
-      uploadName: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}upload_name']),
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2399,31 +2636,31 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     map['type'] = Variable<String>(type);
     map['settings'] = Variable<String>(settings);
     if (!nullToAbsent || ssid != null) {
-      map['ssid'] = Variable<String?>(ssid);
+      map['ssid'] = Variable<String>(ssid);
     }
     if (!nullToAbsent || password != null) {
-      map['password'] = Variable<String?>(password);
+      map['password'] = Variable<String>(password);
     }
     if (!nullToAbsent || controllerID != null) {
-      map['controller_i_d'] = Variable<String?>(controllerID);
+      map['controller_i_d'] = Variable<String>(controllerID);
     }
     if (!nullToAbsent || rotate != null) {
-      map['rotate'] = Variable<String?>(rotate);
+      map['rotate'] = Variable<String>(rotate);
     }
     if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String?>(name);
+      map['name'] = Variable<String>(name);
     }
     if (!nullToAbsent || strain != null) {
-      map['strain'] = Variable<String?>(strain);
+      map['strain'] = Variable<String>(strain);
     }
     if (!nullToAbsent || dropboxToken != null) {
-      map['dropbox_token'] = Variable<String?>(dropboxToken);
+      map['dropbox_token'] = Variable<String>(dropboxToken);
     }
     if (!nullToAbsent || uploadName != null) {
-      map['upload_name'] = Variable<String?>(uploadName);
+      map['upload_name'] = Variable<String>(uploadName);
     }
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -2506,30 +2743,32 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           int? plant,
           String? type,
           String? settings,
-          String? ssid,
-          String? password,
-          String? controllerID,
-          String? rotate,
-          String? name,
-          String? strain,
-          String? dropboxToken,
-          String? uploadName,
-          String? serverID,
+          Value<String?> ssid = const Value.absent(),
+          Value<String?> password = const Value.absent(),
+          Value<String?> controllerID = const Value.absent(),
+          Value<String?> rotate = const Value.absent(),
+          Value<String?> name = const Value.absent(),
+          Value<String?> strain = const Value.absent(),
+          Value<String?> dropboxToken = const Value.absent(),
+          Value<String?> uploadName = const Value.absent(),
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       Timelapse(
         id: id ?? this.id,
         plant: plant ?? this.plant,
         type: type ?? this.type,
         settings: settings ?? this.settings,
-        ssid: ssid ?? this.ssid,
-        password: password ?? this.password,
-        controllerID: controllerID ?? this.controllerID,
-        rotate: rotate ?? this.rotate,
-        name: name ?? this.name,
-        strain: strain ?? this.strain,
-        dropboxToken: dropboxToken ?? this.dropboxToken,
-        uploadName: uploadName ?? this.uploadName,
-        serverID: serverID ?? this.serverID,
+        ssid: ssid.present ? ssid.value : this.ssid,
+        password: password.present ? password.value : this.password,
+        controllerID:
+            controllerID.present ? controllerID.value : this.controllerID,
+        rotate: rotate.present ? rotate.value : this.rotate,
+        name: name.present ? name.value : this.name,
+        strain: strain.present ? strain.value : this.strain,
+        dropboxToken:
+            dropboxToken.present ? dropboxToken.value : this.dropboxToken,
+        uploadName: uploadName.present ? uploadName.value : this.uploadName,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -2641,15 +2880,15 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     Expression<int>? plant,
     Expression<String>? type,
     Expression<String>? settings,
-    Expression<String?>? ssid,
-    Expression<String?>? password,
-    Expression<String?>? controllerID,
-    Expression<String?>? rotate,
-    Expression<String?>? name,
-    Expression<String?>? strain,
-    Expression<String?>? dropboxToken,
-    Expression<String?>? uploadName,
-    Expression<String?>? serverID,
+    Expression<String>? ssid,
+    Expression<String>? password,
+    Expression<String>? controllerID,
+    Expression<String>? rotate,
+    Expression<String>? name,
+    Expression<String>? strain,
+    Expression<String>? dropboxToken,
+    Expression<String>? uploadName,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -2719,31 +2958,31 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
       map['settings'] = Variable<String>(settings.value);
     }
     if (ssid.present) {
-      map['ssid'] = Variable<String?>(ssid.value);
+      map['ssid'] = Variable<String>(ssid.value);
     }
     if (password.present) {
-      map['password'] = Variable<String?>(password.value);
+      map['password'] = Variable<String>(password.value);
     }
     if (controllerID.present) {
-      map['controller_i_d'] = Variable<String?>(controllerID.value);
+      map['controller_i_d'] = Variable<String>(controllerID.value);
     }
     if (rotate.present) {
-      map['rotate'] = Variable<String?>(rotate.value);
+      map['rotate'] = Variable<String>(rotate.value);
     }
     if (name.present) {
-      map['name'] = Variable<String?>(name.value);
+      map['name'] = Variable<String>(name.value);
     }
     if (strain.present) {
-      map['strain'] = Variable<String?>(strain.value);
+      map['strain'] = Variable<String>(strain.value);
     }
     if (dropboxToken.present) {
-      map['dropbox_token'] = Variable<String?>(dropboxToken.value);
+      map['dropbox_token'] = Variable<String>(dropboxToken.value);
     }
     if (uploadName.present) {
-      map['upload_name'] = Variable<String?>(uploadName.value);
+      map['upload_name'] = Variable<String>(uploadName.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -2773,202 +3012,83 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   }
 }
 
-class $TimelapsesTable extends Timelapses
-    with TableInfo<$TimelapsesTable, Timelapse> {
+class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TimelapsesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $FeedsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _plantMeta = const VerificationMeta('plant');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<int?> plant = GeneratedColumn<int?>(
-      'plant', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
-  @override
-  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
-      'type', aliasedName, false,
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
-      type: const StringType(),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _isNewsFeedMeta =
+      const VerificationMeta('isNewsFeed');
+  @override
+  late final GeneratedColumn<bool> isNewsFeed = GeneratedColumn<bool>(
+      'is_news_feed', aliasedName, false,
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultValue: Constant('dropbox'));
-  final VerificationMeta _settingsMeta = const VerificationMeta('settings');
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_news_feed" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
   @override
-  late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(
-      'settings', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
-  final VerificationMeta _ssidMeta = const VerificationMeta('ssid');
-  @override
-  late final GeneratedColumn<String?> ssid = GeneratedColumn<String?>(
-      'ssid', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _passwordMeta = const VerificationMeta('password');
-  @override
-  late final GeneratedColumn<String?> password = GeneratedColumn<String?>(
-      'password', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _controllerIDMeta =
-      const VerificationMeta('controllerID');
-  @override
-  late final GeneratedColumn<String?> controllerID = GeneratedColumn<String?>(
-      'controller_i_d', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _rotateMeta = const VerificationMeta('rotate');
-  @override
-  late final GeneratedColumn<String?> rotate = GeneratedColumn<String?>(
-      'rotate', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
-      'name', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _strainMeta = const VerificationMeta('strain');
-  @override
-  late final GeneratedColumn<String?> strain = GeneratedColumn<String?>(
-      'strain', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _dropboxTokenMeta =
-      const VerificationMeta('dropboxToken');
-  @override
-  late final GeneratedColumn<String?> dropboxToken = GeneratedColumn<String?>(
-      'dropbox_token', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _uploadNameMeta = const VerificationMeta('uploadName');
-  @override
-  late final GeneratedColumn<String?> uploadName = GeneratedColumn<String?>(
-      'upload_name', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
       'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
       'synced', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
       defaultValue: Constant(false));
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        plant,
-        type,
-        settings,
-        ssid,
-        password,
-        controllerID,
-        rotate,
-        name,
-        strain,
-        dropboxToken,
-        uploadName,
-        serverID,
-        synced
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, name, isNewsFeed, serverID, synced];
   @override
-  String get aliasedName => _alias ?? 'timelapses';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'timelapses';
+  String get actualTableName => $name;
+  static const String $name = 'feeds';
   @override
-  VerificationContext validateIntegrity(Insertable<Timelapse> instance,
+  VerificationContext validateIntegrity(Insertable<Feed> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('plant')) {
-      context.handle(
-          _plantMeta, plant.isAcceptableOrUnknown(data['plant']!, _plantMeta));
-    } else if (isInserting) {
-      context.missing(_plantMeta);
-    }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    }
-    if (data.containsKey('settings')) {
-      context.handle(_settingsMeta,
-          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
-    }
-    if (data.containsKey('ssid')) {
-      context.handle(
-          _ssidMeta, ssid.isAcceptableOrUnknown(data['ssid']!, _ssidMeta));
-    }
-    if (data.containsKey('password')) {
-      context.handle(_passwordMeta,
-          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
-    }
-    if (data.containsKey('controller_i_d')) {
-      context.handle(
-          _controllerIDMeta,
-          controllerID.isAcceptableOrUnknown(
-              data['controller_i_d']!, _controllerIDMeta));
-    }
-    if (data.containsKey('rotate')) {
-      context.handle(_rotateMeta,
-          rotate.isAcceptableOrUnknown(data['rotate']!, _rotateMeta));
-    }
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
     }
-    if (data.containsKey('strain')) {
-      context.handle(_strainMeta,
-          strain.isAcceptableOrUnknown(data['strain']!, _strainMeta));
-    }
-    if (data.containsKey('dropbox_token')) {
+    if (data.containsKey('is_news_feed')) {
       context.handle(
-          _dropboxTokenMeta,
-          dropboxToken.isAcceptableOrUnknown(
-              data['dropbox_token']!, _dropboxTokenMeta));
-    }
-    if (data.containsKey('upload_name')) {
-      context.handle(
-          _uploadNameMeta,
-          uploadName.isAcceptableOrUnknown(
-              data['upload_name']!, _uploadNameMeta));
+          _isNewsFeedMeta,
+          isNewsFeed.isAcceptableOrUnknown(
+              data['is_news_feed']!, _isNewsFeedMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
@@ -2984,14 +3104,25 @@ class $TimelapsesTable extends Timelapses
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Timelapse map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Timelapse.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Feed map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Feed(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      isNewsFeed: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_news_feed'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $TimelapsesTable createAlias(String alias) {
-    return $TimelapsesTable(attachedDatabase, alias);
+  $FeedsTable createAlias(String alias) {
+    return $FeedsTable(attachedDatabase, alias);
   }
 }
 
@@ -3001,27 +3132,12 @@ class Feed extends DataClass implements Insertable<Feed> {
   final bool isNewsFeed;
   final String? serverID;
   final bool synced;
-  Feed(
+  const Feed(
       {required this.id,
       required this.name,
       required this.isNewsFeed,
       this.serverID,
       required this.synced});
-  factory Feed.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Feed(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      isNewsFeed: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_news_feed'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3029,7 +3145,7 @@ class Feed extends DataClass implements Insertable<Feed> {
     map['name'] = Variable<String>(name);
     map['is_news_feed'] = Variable<bool>(isNewsFeed);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -3074,13 +3190,13 @@ class Feed extends DataClass implements Insertable<Feed> {
           {int? id,
           String? name,
           bool? isNewsFeed,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       Feed(
         id: id ?? this.id,
         name: name ?? this.name,
         isNewsFeed: isNewsFeed ?? this.isNewsFeed,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -3132,7 +3248,7 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
     Expression<int>? id,
     Expression<String>? name,
     Expression<bool>? isNewsFeed,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -3172,7 +3288,7 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
       map['is_news_feed'] = Variable<bool>(isNewsFeed.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -3193,76 +3309,114 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
   }
 }
 
-class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
+class $FeedEntriesTable extends FeedEntries
+    with TableInfo<$FeedEntriesTable, FeedEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FeedsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $FeedEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _feedMeta = const VerificationMeta('feed');
   @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
-      'name', aliasedName, false,
+  late final GeneratedColumn<int> feed = GeneratedColumn<int>(
+      'feed', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+      'date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _isNewsFeedMeta = const VerificationMeta('isNewsFeed');
+  static const VerificationMeta _isNewMeta = const VerificationMeta('isNew');
   @override
-  late final GeneratedColumn<bool?> isNewsFeed = GeneratedColumn<bool?>(
-      'is_news_feed', aliasedName, false,
-      type: const BoolType(),
+  late final GeneratedColumn<bool> isNew = GeneratedColumn<bool>(
+      'is_new', aliasedName, false,
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_news_feed IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_new" IN (0, 1))'),
       defaultValue: Constant(false));
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  static const VerificationMeta _paramsMeta = const VerificationMeta('params');
   @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> params = GeneratedColumn<String>(
+      'params', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
       'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
       'synced', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
       defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, isNewsFeed, serverID, synced];
+      [id, feed, date, type, isNew, params, serverID, synced];
   @override
-  String get aliasedName => _alias ?? 'feeds';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'feeds';
+  String get actualTableName => $name;
+  static const String $name = 'feed_entries';
   @override
-  VerificationContext validateIntegrity(Insertable<Feed> instance,
+  VerificationContext validateIntegrity(Insertable<FeedEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('feed')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_feedMeta);
     }
-    if (data.containsKey('is_news_feed')) {
+    if (data.containsKey('date')) {
       context.handle(
-          _isNewsFeedMeta,
-          isNewsFeed.isAcceptableOrUnknown(
-              data['is_news_feed']!, _isNewsFeedMeta));
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('is_new')) {
+      context.handle(
+          _isNewMeta, isNew.isAcceptableOrUnknown(data['is_new']!, _isNewMeta));
+    }
+    if (data.containsKey('params')) {
+      context.handle(_paramsMeta,
+          params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
@@ -3278,14 +3432,31 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Feed map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Feed.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  FeedEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FeedEntry(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      feed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}feed'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      isNew: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_new'])!,
+      params: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}params'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $FeedsTable createAlias(String alias) {
-    return $FeedsTable(attachedDatabase, alias);
+  $FeedEntriesTable createAlias(String alias) {
+    return $FeedEntriesTable(attachedDatabase, alias);
   }
 }
 
@@ -3298,7 +3469,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   final String params;
   final String? serverID;
   final bool synced;
-  FeedEntry(
+  const FeedEntry(
       {required this.id,
       required this.feed,
       required this.date,
@@ -3307,27 +3478,6 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       required this.params,
       this.serverID,
       required this.synced});
-  factory FeedEntry.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return FeedEntry(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      feed: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
-      date: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
-      type: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
-      isNew: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_new'])!,
-      params: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}params'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3338,7 +3488,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     map['is_new'] = Variable<bool>(isNew);
     map['params'] = Variable<String>(params);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -3395,7 +3545,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           String? type,
           bool? isNew,
           String? params,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       FeedEntry(
         id: id ?? this.id,
@@ -3404,7 +3554,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
         type: type ?? this.type,
         isNew: isNew ?? this.isNew,
         params: params ?? this.params,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -3477,7 +3627,7 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     Expression<String>? type,
     Expression<bool>? isNew,
     Expression<String>? params,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -3535,7 +3685,7 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       map['params'] = Variable<String>(params.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -3559,77 +3709,50 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   }
 }
 
-class $FeedEntriesTable extends FeedEntries
-    with TableInfo<$FeedEntriesTable, FeedEntry> {
+class $FeedEntryDraftsTable extends FeedEntryDrafts
+    with TableInfo<$FeedEntryDraftsTable, FeedEntryDraft> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FeedEntriesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $FeedEntryDraftsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _feedMeta = const VerificationMeta('feed');
   @override
-  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> feed = GeneratedColumn<int>(
       'feed', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _dateMeta = const VerificationMeta('date');
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
-      'date', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
-  @override
-  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
       'type', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _isNewMeta = const VerificationMeta('isNew');
+  static const VerificationMeta _paramsMeta = const VerificationMeta('params');
   @override
-  late final GeneratedColumn<bool?> isNew = GeneratedColumn<bool?>(
-      'is_new', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_new IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  @override
-  late final GeneratedColumn<String?> params = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> params = GeneratedColumn<String>(
       'params', aliasedName, false,
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: Constant('{}'));
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
   @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
-      'server_i_d', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  List<GeneratedColumn> get $columns => [id, feed, type, params];
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
-      'synced', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
-      defaultValue: Constant(false));
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, feed, date, type, isNew, params, serverID, synced];
+  String get actualTableName => $name;
+  static const String $name = 'feed_entry_drafts';
   @override
-  String get aliasedName => _alias ?? 'feed_entries';
-  @override
-  String get actualTableName => 'feed_entries';
-  @override
-  VerificationContext validateIntegrity(Insertable<FeedEntry> instance,
+  VerificationContext validateIntegrity(Insertable<FeedEntryDraft> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -3642,33 +3765,15 @@ class $FeedEntriesTable extends FeedEntries
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
-    if (data.containsKey('date')) {
-      context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
-    } else if (isInserting) {
-      context.missing(_dateMeta);
-    }
     if (data.containsKey('type')) {
       context.handle(
           _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
-    if (data.containsKey('is_new')) {
-      context.handle(
-          _isNewMeta, isNew.isAcceptableOrUnknown(data['is_new']!, _isNewMeta));
-    }
     if (data.containsKey('params')) {
       context.handle(_paramsMeta,
           params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
-    }
-    if (data.containsKey('server_i_d')) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
-    }
-    if (data.containsKey('synced')) {
-      context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -3676,14 +3781,23 @@ class $FeedEntriesTable extends FeedEntries
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FeedEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FeedEntry.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  FeedEntryDraft map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FeedEntryDraft(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      feed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}feed'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      params: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}params'])!,
+    );
   }
 
   @override
-  $FeedEntriesTable createAlias(String alias) {
-    return $FeedEntriesTable(attachedDatabase, alias);
+  $FeedEntryDraftsTable createAlias(String alias) {
+    return $FeedEntryDraftsTable(attachedDatabase, alias);
   }
 }
 
@@ -3692,24 +3806,11 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
   final int feed;
   final String type;
   final String params;
-  FeedEntryDraft(
+  const FeedEntryDraft(
       {required this.id,
       required this.feed,
       required this.type,
       required this.params});
-  factory FeedEntryDraft.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return FeedEntryDraft(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      feed: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
-      type: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
-      params: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}params'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3855,47 +3956,79 @@ class FeedEntryDraftsCompanion extends UpdateCompanion<FeedEntryDraft> {
   }
 }
 
-class $FeedEntryDraftsTable extends FeedEntryDrafts
-    with TableInfo<$FeedEntryDraftsTable, FeedEntryDraft> {
+class $FeedMediasTable extends FeedMedias
+    with TableInfo<$FeedMediasTable, FeedMedia> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FeedEntryDraftsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $FeedMediasTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _feedMeta = const VerificationMeta('feed');
   @override
-  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> feed = GeneratedColumn<int>(
       'feed', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _feedEntryMeta =
+      const VerificationMeta('feedEntry');
   @override
-  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
-      'type', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _paramsMeta = const VerificationMeta('params');
+  late final GeneratedColumn<int> feedEntry = GeneratedColumn<int>(
+      'feed_entry', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _filePathMeta =
+      const VerificationMeta('filePath');
   @override
-  late final GeneratedColumn<String?> params = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
+      'file_path', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _thumbnailPathMeta =
+      const VerificationMeta('thumbnailPath');
+  @override
+  late final GeneratedColumn<String> thumbnailPath = GeneratedColumn<String>(
+      'thumbnail_path', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _paramsMeta = const VerificationMeta('params');
+  @override
+  late final GeneratedColumn<String> params = GeneratedColumn<String>(
       'params', aliasedName, false,
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: Constant('{}'));
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
   @override
-  List<GeneratedColumn> get $columns => [id, feed, type, params];
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  String get aliasedName => _alias ?? 'feed_entry_drafts';
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
+      'synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
+      defaultValue: Constant(false));
   @override
-  String get actualTableName => 'feed_entry_drafts';
+  List<GeneratedColumn> get $columns =>
+      [id, feed, feedEntry, filePath, thumbnailPath, params, serverID, synced];
   @override
-  VerificationContext validateIntegrity(Insertable<FeedEntryDraft> instance,
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'feed_medias';
+  @override
+  VerificationContext validateIntegrity(Insertable<FeedMedia> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -3908,15 +4041,37 @@ class $FeedEntryDraftsTable extends FeedEntryDrafts
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    if (data.containsKey('feed_entry')) {
+      context.handle(_feedEntryMeta,
+          feedEntry.isAcceptableOrUnknown(data['feed_entry']!, _feedEntryMeta));
     } else if (isInserting) {
-      context.missing(_typeMeta);
+      context.missing(_feedEntryMeta);
+    }
+    if (data.containsKey('file_path')) {
+      context.handle(_filePathMeta,
+          filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta));
+    } else if (isInserting) {
+      context.missing(_filePathMeta);
+    }
+    if (data.containsKey('thumbnail_path')) {
+      context.handle(
+          _thumbnailPathMeta,
+          thumbnailPath.isAcceptableOrUnknown(
+              data['thumbnail_path']!, _thumbnailPathMeta));
+    } else if (isInserting) {
+      context.missing(_thumbnailPathMeta);
     }
     if (data.containsKey('params')) {
       context.handle(_paramsMeta,
           params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -3924,14 +4079,31 @@ class $FeedEntryDraftsTable extends FeedEntryDrafts
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FeedEntryDraft map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FeedEntryDraft.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  FeedMedia map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FeedMedia(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      feed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}feed'])!,
+      feedEntry: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}feed_entry'])!,
+      filePath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}file_path'])!,
+      thumbnailPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}thumbnail_path'])!,
+      params: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}params'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $FeedEntryDraftsTable createAlias(String alias) {
-    return $FeedEntryDraftsTable(attachedDatabase, alias);
+  $FeedMediasTable createAlias(String alias) {
+    return $FeedMediasTable(attachedDatabase, alias);
   }
 }
 
@@ -3944,7 +4116,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final String params;
   final String? serverID;
   final bool synced;
-  FeedMedia(
+  const FeedMedia(
       {required this.id,
       required this.feed,
       required this.feedEntry,
@@ -3953,27 +4125,6 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       required this.params,
       this.serverID,
       required this.synced});
-  factory FeedMedia.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return FeedMedia(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      feed: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
-      feedEntry: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}feed_entry'])!,
-      filePath: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}file_path'])!,
-      thumbnailPath: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path'])!,
-      params: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}params'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3984,7 +4135,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
     map['thumbnail_path'] = Variable<String>(thumbnailPath);
     map['params'] = Variable<String>(params);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -4041,7 +4192,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           String? filePath,
           String? thumbnailPath,
           String? params,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       FeedMedia(
         id: id ?? this.id,
@@ -4050,7 +4201,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
         filePath: filePath ?? this.filePath,
         thumbnailPath: thumbnailPath ?? this.thumbnailPath,
         params: params ?? this.params,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -4124,7 +4275,7 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
     Expression<String>? filePath,
     Expression<String>? thumbnailPath,
     Expression<String>? params,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -4182,7 +4333,7 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
       map['params'] = Variable<String>(params.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -4206,115 +4357,63 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   }
 }
 
-class $FeedMediasTable extends FeedMedias
-    with TableInfo<$FeedMediasTable, FeedMedia> {
+class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FeedMediasTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $DeletesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
   @override
-  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
-      'feed', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _feedEntryMeta = const VerificationMeta('feedEntry');
-  @override
-  late final GeneratedColumn<int?> feedEntry = GeneratedColumn<int?>(
-      'feed_entry', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _filePathMeta = const VerificationMeta('filePath');
-  @override
-  late final GeneratedColumn<String?> filePath = GeneratedColumn<String?>(
-      'file_path', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _thumbnailPathMeta =
-      const VerificationMeta('thumbnailPath');
-  @override
-  late final GeneratedColumn<String?> thumbnailPath = GeneratedColumn<String?>(
-      'thumbnail_path', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  @override
-  late final GeneratedColumn<String?> params = GeneratedColumn<String?>(
-      'params', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
-      'server_i_d', aliasedName, true,
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
+      'server_i_d', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
-      'synced', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
-      defaultValue: Constant(false));
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, feed, feedEntry, filePath, thumbnailPath, params, serverID, synced];
+  List<GeneratedColumn> get $columns => [id, serverID, type];
   @override
-  String get aliasedName => _alias ?? 'feed_medias';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'feed_medias';
+  String get actualTableName => $name;
+  static const String $name = 'deletes';
   @override
-  VerificationContext validateIntegrity(Insertable<FeedMedia> instance,
+  VerificationContext validateIntegrity(Insertable<Delete> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('feed')) {
-      context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
-    } else if (isInserting) {
-      context.missing(_feedMeta);
-    }
-    if (data.containsKey('feed_entry')) {
-      context.handle(_feedEntryMeta,
-          feedEntry.isAcceptableOrUnknown(data['feed_entry']!, _feedEntryMeta));
-    } else if (isInserting) {
-      context.missing(_feedEntryMeta);
-    }
-    if (data.containsKey('file_path')) {
-      context.handle(_filePathMeta,
-          filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta));
-    } else if (isInserting) {
-      context.missing(_filePathMeta);
-    }
-    if (data.containsKey('thumbnail_path')) {
-      context.handle(
-          _thumbnailPathMeta,
-          thumbnailPath.isAcceptableOrUnknown(
-              data['thumbnail_path']!, _thumbnailPathMeta));
-    } else if (isInserting) {
-      context.missing(_thumbnailPathMeta);
-    }
-    if (data.containsKey('params')) {
-      context.handle(_paramsMeta,
-          params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
-    }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
           serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
+    } else if (isInserting) {
+      context.missing(_serverIDMeta);
     }
-    if (data.containsKey('synced')) {
-      context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
     }
     return context;
   }
@@ -4322,14 +4421,21 @@ class $FeedMediasTable extends FeedMedias
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FeedMedia map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FeedMedia.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Delete map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Delete(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+    );
   }
 
   @override
-  $FeedMediasTable createAlias(String alias) {
-    return $FeedMediasTable(attachedDatabase, alias);
+  $DeletesTable createAlias(String alias) {
+    return $DeletesTable(attachedDatabase, alias);
   }
 }
 
@@ -4337,18 +4443,7 @@ class Delete extends DataClass implements Insertable<Delete> {
   final int id;
   final String serverID;
   final String type;
-  Delete({required this.id, required this.serverID, required this.type});
-  factory Delete.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Delete(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d'])!,
-      type: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
-    );
-  }
+  const Delete({required this.id, required this.serverID, required this.type});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4473,59 +4568,72 @@ class DeletesCompanion extends UpdateCompanion<Delete> {
   }
 }
 
-class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
+class $ChecklistsTable extends Checklists
+    with TableInfo<$ChecklistsTable, Checklist> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $DeletesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ChecklistsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _plantMeta = const VerificationMeta('plant');
   @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
-      'server_i_d', aliasedName, false,
+  late final GeneratedColumn<int> plant = GeneratedColumn<int>(
+      'plant', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _typeMeta = const VerificationMeta('type');
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
-      'type', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
-      type: const StringType(),
-      requiredDuringInsert: true);
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
+      'synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
+      defaultValue: Constant(false));
   @override
-  List<GeneratedColumn> get $columns => [id, serverID, type];
+  List<GeneratedColumn> get $columns => [id, plant, serverID, synced];
   @override
-  String get aliasedName => _alias ?? 'deletes';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'deletes';
+  String get actualTableName => $name;
+  static const String $name = 'checklists';
   @override
-  VerificationContext validateIntegrity(Insertable<Delete> instance,
+  VerificationContext validateIntegrity(Insertable<Checklist> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    if (data.containsKey('plant')) {
+      context.handle(
+          _plantMeta, plant.isAcceptableOrUnknown(data['plant']!, _plantMeta));
+    } else if (isInserting) {
+      context.missing(_plantMeta);
+    }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
           serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
-    } else if (isInserting) {
-      context.missing(_serverIDMeta);
     }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -4533,14 +4641,23 @@ class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Delete map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Delete.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  Checklist map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Checklist(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      plant: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $DeletesTable createAlias(String alias) {
-    return $DeletesTable(attachedDatabase, alias);
+  $ChecklistsTable createAlias(String alias) {
+    return $ChecklistsTable(attachedDatabase, alias);
   }
 }
 
@@ -4549,31 +4666,18 @@ class Checklist extends DataClass implements Insertable<Checklist> {
   final int plant;
   final String? serverID;
   final bool synced;
-  Checklist(
+  const Checklist(
       {required this.id,
       required this.plant,
       this.serverID,
       required this.synced});
-  factory Checklist.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return Checklist(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      plant: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}plant'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['plant'] = Variable<int>(plant);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -4611,11 +4715,15 @@ class Checklist extends DataClass implements Insertable<Checklist> {
     };
   }
 
-  Checklist copyWith({int? id, int? plant, String? serverID, bool? synced}) =>
+  Checklist copyWith(
+          {int? id,
+          int? plant,
+          Value<String?> serverID = const Value.absent(),
+          bool? synced}) =>
       Checklist(
         id: id ?? this.id,
         plant: plant ?? this.plant,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -4661,7 +4769,7 @@ class ChecklistsCompanion extends UpdateCompanion<Checklist> {
   static Insertable<Checklist> custom({
     Expression<int>? id,
     Expression<int>? plant,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -4695,7 +4803,7 @@ class ChecklistsCompanion extends UpdateCompanion<Checklist> {
       map['plant'] = Variable<int>(plant.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -4715,59 +4823,256 @@ class ChecklistsCompanion extends UpdateCompanion<Checklist> {
   }
 }
 
-class $ChecklistsTable extends Checklists
-    with TableInfo<$ChecklistsTable, Checklist> {
+class $ChecklistSeedsTable extends ChecklistSeeds
+    with TableInfo<$ChecklistSeedsTable, ChecklistSeed> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ChecklistsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ChecklistSeedsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _plantMeta = const VerificationMeta('plant');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _checklistMeta =
+      const VerificationMeta('checklist');
   @override
-  late final GeneratedColumn<int?> plant = GeneratedColumn<int?>(
-      'plant', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  late final GeneratedColumn<int> checklist = GeneratedColumn<int>(
+      'checklist', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _collectionMeta =
+      const VerificationMeta('collection');
   @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+  late final GeneratedColumn<int> collection = GeneratedColumn<int>(
+      'collection', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  static const VerificationMeta _fastMeta = const VerificationMeta('fast');
+  @override
+  late final GeneratedColumn<bool> fast = GeneratedColumn<bool>(
+      'fast', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("fast" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _publicMeta = const VerificationMeta('public');
+  @override
+  late final GeneratedColumn<bool> public = GeneratedColumn<bool>(
+      'public', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("public" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _repeatMeta = const VerificationMeta('repeat');
+  @override
+  late final GeneratedColumn<bool> repeat = GeneratedColumn<bool>(
+      'repeat', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("repeat" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _mineMeta = const VerificationMeta('mine');
+  @override
+  late final GeneratedColumn<bool> mine = GeneratedColumn<bool>(
+      'mine', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("mine" IN (0, 1))'),
+      defaultValue: Constant(true));
+  static const VerificationMeta _conditionsMeta =
+      const VerificationMeta('conditions');
+  @override
+  late final GeneratedColumn<String> conditions = GeneratedColumn<String>(
+      'conditions', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('[]'));
+  static const VerificationMeta _exitConditionsMeta =
+      const VerificationMeta('exitConditions');
+  @override
+  late final GeneratedColumn<String> exitConditions = GeneratedColumn<String>(
+      'exit_conditions', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('[]'));
+  static const VerificationMeta _actionsMeta =
+      const VerificationMeta('actions');
+  @override
+  late final GeneratedColumn<String> actions = GeneratedColumn<String>(
+      'actions', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant('[]'));
+  static const VerificationMeta _checklistServerIDMeta =
+      const VerificationMeta('checklistServerID');
+  @override
+  late final GeneratedColumn<String> checklistServerID =
+      GeneratedColumn<String>('checklist_server_i_d', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 36, maxTextLength: 36),
+          type: DriftSqlType.string,
+          requiredDuringInsert: false);
+  static const VerificationMeta _checklistCollectionServerIDMeta =
+      const VerificationMeta('checklistCollectionServerID');
+  @override
+  late final GeneratedColumn<String> checklistCollectionServerID =
+      GeneratedColumn<String>(
+          'checklist_collection_server_i_d', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 36, maxTextLength: 36),
+          type: DriftSqlType.string,
+          requiredDuringInsert: false);
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
+  @override
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
       'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
       'synced', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
       defaultValue: Constant(false));
   @override
-  List<GeneratedColumn> get $columns => [id, plant, serverID, synced];
+  List<GeneratedColumn> get $columns => [
+        id,
+        checklist,
+        collection,
+        title,
+        description,
+        category,
+        fast,
+        public,
+        repeat,
+        mine,
+        conditions,
+        exitConditions,
+        actions,
+        checklistServerID,
+        checklistCollectionServerID,
+        serverID,
+        synced
+      ];
   @override
-  String get aliasedName => _alias ?? 'checklists';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'checklists';
+  String get actualTableName => $name;
+  static const String $name = 'checklist_seeds';
   @override
-  VerificationContext validateIntegrity(Insertable<Checklist> instance,
+  VerificationContext validateIntegrity(Insertable<ChecklistSeed> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('plant')) {
-      context.handle(
-          _plantMeta, plant.isAcceptableOrUnknown(data['plant']!, _plantMeta));
+    if (data.containsKey('checklist')) {
+      context.handle(_checklistMeta,
+          checklist.isAcceptableOrUnknown(data['checklist']!, _checklistMeta));
     } else if (isInserting) {
-      context.missing(_plantMeta);
+      context.missing(_checklistMeta);
+    }
+    if (data.containsKey('collection')) {
+      context.handle(
+          _collectionMeta,
+          collection.isAcceptableOrUnknown(
+              data['collection']!, _collectionMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
+    if (data.containsKey('fast')) {
+      context.handle(
+          _fastMeta, fast.isAcceptableOrUnknown(data['fast']!, _fastMeta));
+    }
+    if (data.containsKey('public')) {
+      context.handle(_publicMeta,
+          public.isAcceptableOrUnknown(data['public']!, _publicMeta));
+    }
+    if (data.containsKey('repeat')) {
+      context.handle(_repeatMeta,
+          repeat.isAcceptableOrUnknown(data['repeat']!, _repeatMeta));
+    }
+    if (data.containsKey('mine')) {
+      context.handle(
+          _mineMeta, mine.isAcceptableOrUnknown(data['mine']!, _mineMeta));
+    }
+    if (data.containsKey('conditions')) {
+      context.handle(
+          _conditionsMeta,
+          conditions.isAcceptableOrUnknown(
+              data['conditions']!, _conditionsMeta));
+    }
+    if (data.containsKey('exit_conditions')) {
+      context.handle(
+          _exitConditionsMeta,
+          exitConditions.isAcceptableOrUnknown(
+              data['exit_conditions']!, _exitConditionsMeta));
+    }
+    if (data.containsKey('actions')) {
+      context.handle(_actionsMeta,
+          actions.isAcceptableOrUnknown(data['actions']!, _actionsMeta));
+    }
+    if (data.containsKey('checklist_server_i_d')) {
+      context.handle(
+          _checklistServerIDMeta,
+          checklistServerID.isAcceptableOrUnknown(
+              data['checklist_server_i_d']!, _checklistServerIDMeta));
+    }
+    if (data.containsKey('checklist_collection_server_i_d')) {
+      context.handle(
+          _checklistCollectionServerIDMeta,
+          checklistCollectionServerID.isAcceptableOrUnknown(
+              data['checklist_collection_server_i_d']!,
+              _checklistCollectionServerIDMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
@@ -4783,14 +5088,50 @@ class $ChecklistsTable extends Checklists
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Checklist map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Checklist.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  ChecklistSeed map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChecklistSeed(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      checklist: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}checklist'])!,
+      collection: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}collection']),
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
+      fast: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}fast'])!,
+      public: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}public'])!,
+      repeat: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}repeat'])!,
+      mine: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}mine'])!,
+      conditions: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}conditions'])!,
+      exitConditions: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}exit_conditions'])!,
+      actions: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}actions'])!,
+      checklistServerID: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}checklist_server_i_d']),
+      checklistCollectionServerID: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}checklist_collection_server_i_d']),
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $ChecklistsTable createAlias(String alias) {
-    return $ChecklistsTable(attachedDatabase, alias);
+  $ChecklistSeedsTable createAlias(String alias) {
+    return $ChecklistSeedsTable(attachedDatabase, alias);
   }
 }
 
@@ -4812,7 +5153,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   final String? checklistCollectionServerID;
   final String? serverID;
   final bool synced;
-  ChecklistSeed(
+  const ChecklistSeed(
       {required this.id,
       required this.checklist,
       this.collection,
@@ -4830,52 +5171,13 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
       this.checklistCollectionServerID,
       this.serverID,
       required this.synced});
-  factory ChecklistSeed.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ChecklistSeed(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      checklist: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
-      collection: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}collection']),
-      title: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
-      description: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
-      category: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category'])!,
-      fast: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}fast'])!,
-      public: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
-      repeat: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}repeat'])!,
-      mine: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}mine'])!,
-      conditions: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}conditions'])!,
-      exitConditions: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}exit_conditions'])!,
-      actions: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}actions'])!,
-      checklistServerID: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}checklist_server_i_d']),
-      checklistCollectionServerID: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}checklist_collection_server_i_d']),
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['checklist'] = Variable<int>(checklist);
     if (!nullToAbsent || collection != null) {
-      map['collection'] = Variable<int?>(collection);
+      map['collection'] = Variable<int>(collection);
     }
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
@@ -4888,14 +5190,14 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
     map['exit_conditions'] = Variable<String>(exitConditions);
     map['actions'] = Variable<String>(actions);
     if (!nullToAbsent || checklistServerID != null) {
-      map['checklist_server_i_d'] = Variable<String?>(checklistServerID);
+      map['checklist_server_i_d'] = Variable<String>(checklistServerID);
     }
     if (!nullToAbsent || checklistCollectionServerID != null) {
       map['checklist_collection_server_i_d'] =
-          Variable<String?>(checklistCollectionServerID);
+          Variable<String>(checklistCollectionServerID);
     }
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -4985,7 +5287,7 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
   ChecklistSeed copyWith(
           {int? id,
           int? checklist,
-          int? collection,
+          Value<int?> collection = const Value.absent(),
           String? title,
           String? description,
           String? category,
@@ -4996,14 +5298,14 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
           String? conditions,
           String? exitConditions,
           String? actions,
-          String? checklistServerID,
-          String? checklistCollectionServerID,
-          String? serverID,
+          Value<String?> checklistServerID = const Value.absent(),
+          Value<String?> checklistCollectionServerID = const Value.absent(),
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       ChecklistSeed(
         id: id ?? this.id,
         checklist: checklist ?? this.checklist,
-        collection: collection ?? this.collection,
+        collection: collection.present ? collection.value : this.collection,
         title: title ?? this.title,
         description: description ?? this.description,
         category: category ?? this.category,
@@ -5014,10 +5316,13 @@ class ChecklistSeed extends DataClass implements Insertable<ChecklistSeed> {
         conditions: conditions ?? this.conditions,
         exitConditions: exitConditions ?? this.exitConditions,
         actions: actions ?? this.actions,
-        checklistServerID: checklistServerID ?? this.checklistServerID,
-        checklistCollectionServerID:
-            checklistCollectionServerID ?? this.checklistCollectionServerID,
-        serverID: serverID ?? this.serverID,
+        checklistServerID: checklistServerID.present
+            ? checklistServerID.value
+            : this.checklistServerID,
+        checklistCollectionServerID: checklistCollectionServerID.present
+            ? checklistCollectionServerID.value
+            : this.checklistCollectionServerID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -5146,7 +5451,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   static Insertable<ChecklistSeed> custom({
     Expression<int>? id,
     Expression<int>? checklist,
-    Expression<int?>? collection,
+    Expression<int>? collection,
     Expression<String>? title,
     Expression<String>? description,
     Expression<String>? category,
@@ -5157,9 +5462,9 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
     Expression<String>? conditions,
     Expression<String>? exitConditions,
     Expression<String>? actions,
-    Expression<String?>? checklistServerID,
-    Expression<String?>? checklistCollectionServerID,
-    Expression<String?>? serverID,
+    Expression<String>? checklistServerID,
+    Expression<String>? checklistCollectionServerID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -5234,7 +5539,7 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       map['checklist'] = Variable<int>(checklist.value);
     }
     if (collection.present) {
-      map['collection'] = Variable<int?>(collection.value);
+      map['collection'] = Variable<int>(collection.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -5267,14 +5572,14 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
       map['actions'] = Variable<String>(actions.value);
     }
     if (checklistServerID.present) {
-      map['checklist_server_i_d'] = Variable<String?>(checklistServerID.value);
+      map['checklist_server_i_d'] = Variable<String>(checklistServerID.value);
     }
     if (checklistCollectionServerID.present) {
       map['checklist_collection_server_i_d'] =
-          Variable<String?>(checklistCollectionServerID.value);
+          Variable<String>(checklistCollectionServerID.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -5307,171 +5612,126 @@ class ChecklistSeedsCompanion extends UpdateCompanion<ChecklistSeed> {
   }
 }
 
-class $ChecklistSeedsTable extends ChecklistSeeds
-    with TableInfo<$ChecklistSeedsTable, ChecklistSeed> {
+class $ChecklistLogsTable extends ChecklistLogs
+    with TableInfo<$ChecklistLogsTable, ChecklistLog> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ChecklistSeedsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ChecklistLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _checklistMeta = const VerificationMeta('checklist');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _checklistSeedMeta =
+      const VerificationMeta('checklistSeed');
   @override
-  late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> checklistSeed = GeneratedColumn<int>(
+      'checklist_seed', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _checklistMeta =
+      const VerificationMeta('checklist');
+  @override
+  late final GeneratedColumn<int> checklist = GeneratedColumn<int>(
       'checklist', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _collectionMeta = const VerificationMeta('collection');
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _actionMeta = const VerificationMeta('action');
   @override
-  late final GeneratedColumn<int?> collection = GeneratedColumn<int?>(
-      'collection', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
-      'title', aliasedName, false,
-      type: const StringType(),
+  late final GeneratedColumn<String> action = GeneratedColumn<String>(
+      'action', aliasedName, false,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultValue: Constant(''));
-  final VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+      defaultValue: Constant('{}'));
+  static const VerificationMeta _noRepeatMeta =
+      const VerificationMeta('noRepeat');
   @override
-  late final GeneratedColumn<String?> description = GeneratedColumn<String?>(
-      'description', aliasedName, false,
-      type: const StringType(),
+  late final GeneratedColumn<bool> noRepeat = GeneratedColumn<bool>(
+      'no_repeat', aliasedName, false,
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultValue: Constant(''));
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  @override
-  late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
-      'category', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant(''));
-  final VerificationMeta _fastMeta = const VerificationMeta('fast');
-  @override
-  late final GeneratedColumn<bool?> fast = GeneratedColumn<bool?>(
-      'fast', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (fast IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("no_repeat" IN (0, 1))'),
       defaultValue: Constant(false));
-  final VerificationMeta _publicMeta = const VerificationMeta('public');
+  static const VerificationMeta _checkedMeta =
+      const VerificationMeta('checked');
   @override
-  late final GeneratedColumn<bool?> public = GeneratedColumn<bool?>(
-      'public', aliasedName, false,
-      type: const BoolType(),
+  late final GeneratedColumn<bool> checked = GeneratedColumn<bool>(
+      'checked', aliasedName, false,
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (public IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("checked" IN (0, 1))'),
       defaultValue: Constant(false));
-  final VerificationMeta _repeatMeta = const VerificationMeta('repeat');
+  static const VerificationMeta _skippedMeta =
+      const VerificationMeta('skipped');
   @override
-  late final GeneratedColumn<bool?> repeat = GeneratedColumn<bool?>(
-      'repeat', aliasedName, false,
-      type: const BoolType(),
+  late final GeneratedColumn<bool> skipped = GeneratedColumn<bool>(
+      'skipped', aliasedName, false,
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (repeat IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("skipped" IN (0, 1))'),
       defaultValue: Constant(false));
-  final VerificationMeta _mineMeta = const VerificationMeta('mine');
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumn<bool?> mine = GeneratedColumn<bool?>(
-      'mine', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (mine IN (0, 1))',
-      defaultValue: Constant(true));
-  final VerificationMeta _conditionsMeta = const VerificationMeta('conditions');
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+      'date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
   @override
-  late final GeneratedColumn<String?> conditions = GeneratedColumn<String?>(
-      'conditions', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant('[]'));
-  final VerificationMeta _exitConditionsMeta =
-      const VerificationMeta('exitConditions');
-  @override
-  late final GeneratedColumn<String?> exitConditions = GeneratedColumn<String?>(
-      'exit_conditions', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant('[]'));
-  final VerificationMeta _actionsMeta = const VerificationMeta('actions');
-  @override
-  late final GeneratedColumn<String?> actions = GeneratedColumn<String?>(
-      'actions', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant('[]'));
-  final VerificationMeta _checklistServerIDMeta =
-      const VerificationMeta('checklistServerID');
-  @override
-  late final GeneratedColumn<String?> checklistServerID =
-      GeneratedColumn<String?>('checklist_server_i_d', aliasedName, true,
-          additionalChecks: GeneratedColumn.checkTextLength(
-              minTextLength: 36, maxTextLength: 36),
-          type: const StringType(),
-          requiredDuringInsert: false);
-  final VerificationMeta _checklistCollectionServerIDMeta =
-      const VerificationMeta('checklistCollectionServerID');
-  @override
-  late final GeneratedColumn<String?> checklistCollectionServerID =
-      GeneratedColumn<String?>(
-          'checklist_collection_server_i_d', aliasedName, true,
-          additionalChecks: GeneratedColumn.checkTextLength(
-              minTextLength: 36, maxTextLength: 36),
-          type: const StringType(),
-          requiredDuringInsert: false);
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
       'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  static const VerificationMeta _syncedMeta = const VerificationMeta('synced');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> synced = GeneratedColumn<bool>(
       'synced', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
       defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        checklistSeed,
         checklist,
-        collection,
-        title,
-        description,
-        category,
-        fast,
-        public,
-        repeat,
-        mine,
-        conditions,
-        exitConditions,
-        actions,
-        checklistServerID,
-        checklistCollectionServerID,
+        action,
+        noRepeat,
+        checked,
+        skipped,
+        date,
         serverID,
         synced
       ];
   @override
-  String get aliasedName => _alias ?? 'checklist_seeds';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'checklist_seeds';
+  String get actualTableName => $name;
+  static const String $name = 'checklist_logs';
   @override
-  VerificationContext validateIntegrity(Insertable<ChecklistSeed> instance,
+  VerificationContext validateIntegrity(Insertable<ChecklistLog> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('checklist_seed')) {
+      context.handle(
+          _checklistSeedMeta,
+          checklistSeed.isAcceptableOrUnknown(
+              data['checklist_seed']!, _checklistSeedMeta));
+    } else if (isInserting) {
+      context.missing(_checklistSeedMeta);
     }
     if (data.containsKey('checklist')) {
       context.handle(_checklistMeta,
@@ -5479,70 +5739,27 @@ class $ChecklistSeedsTable extends ChecklistSeeds
     } else if (isInserting) {
       context.missing(_checklistMeta);
     }
-    if (data.containsKey('collection')) {
+    if (data.containsKey('action')) {
+      context.handle(_actionMeta,
+          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
+    }
+    if (data.containsKey('no_repeat')) {
+      context.handle(_noRepeatMeta,
+          noRepeat.isAcceptableOrUnknown(data['no_repeat']!, _noRepeatMeta));
+    }
+    if (data.containsKey('checked')) {
+      context.handle(_checkedMeta,
+          checked.isAcceptableOrUnknown(data['checked']!, _checkedMeta));
+    }
+    if (data.containsKey('skipped')) {
+      context.handle(_skippedMeta,
+          skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta));
+    }
+    if (data.containsKey('date')) {
       context.handle(
-          _collectionMeta,
-          collection.isAcceptableOrUnknown(
-              data['collection']!, _collectionMeta));
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
-    }
-    if (data.containsKey('fast')) {
-      context.handle(
-          _fastMeta, fast.isAcceptableOrUnknown(data['fast']!, _fastMeta));
-    }
-    if (data.containsKey('public')) {
-      context.handle(_publicMeta,
-          public.isAcceptableOrUnknown(data['public']!, _publicMeta));
-    }
-    if (data.containsKey('repeat')) {
-      context.handle(_repeatMeta,
-          repeat.isAcceptableOrUnknown(data['repeat']!, _repeatMeta));
-    }
-    if (data.containsKey('mine')) {
-      context.handle(
-          _mineMeta, mine.isAcceptableOrUnknown(data['mine']!, _mineMeta));
-    }
-    if (data.containsKey('conditions')) {
-      context.handle(
-          _conditionsMeta,
-          conditions.isAcceptableOrUnknown(
-              data['conditions']!, _conditionsMeta));
-    }
-    if (data.containsKey('exit_conditions')) {
-      context.handle(
-          _exitConditionsMeta,
-          exitConditions.isAcceptableOrUnknown(
-              data['exit_conditions']!, _exitConditionsMeta));
-    }
-    if (data.containsKey('actions')) {
-      context.handle(_actionsMeta,
-          actions.isAcceptableOrUnknown(data['actions']!, _actionsMeta));
-    }
-    if (data.containsKey('checklist_server_i_d')) {
-      context.handle(
-          _checklistServerIDMeta,
-          checklistServerID.isAcceptableOrUnknown(
-              data['checklist_server_i_d']!, _checklistServerIDMeta));
-    }
-    if (data.containsKey('checklist_collection_server_i_d')) {
-      context.handle(
-          _checklistCollectionServerIDMeta,
-          checklistCollectionServerID.isAcceptableOrUnknown(
-              data['checklist_collection_server_i_d']!,
-              _checklistCollectionServerIDMeta));
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
@@ -5558,14 +5775,35 @@ class $ChecklistSeedsTable extends ChecklistSeeds
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ChecklistSeed map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ChecklistSeed.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  ChecklistLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChecklistLog(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      checklistSeed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}checklist_seed'])!,
+      checklist: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}checklist'])!,
+      action: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}action'])!,
+      noRepeat: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}no_repeat'])!,
+      checked: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}checked'])!,
+      skipped: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}skipped'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      synced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}synced'])!,
+    );
   }
 
   @override
-  $ChecklistSeedsTable createAlias(String alias) {
-    return $ChecklistSeedsTable(attachedDatabase, alias);
+  $ChecklistLogsTable createAlias(String alias) {
+    return $ChecklistLogsTable(attachedDatabase, alias);
   }
 }
 
@@ -5580,7 +5818,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
   final DateTime date;
   final String? serverID;
   final bool synced;
-  ChecklistLog(
+  const ChecklistLog(
       {required this.id,
       required this.checklistSeed,
       required this.checklist,
@@ -5591,31 +5829,6 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
       required this.date,
       this.serverID,
       required this.synced});
-  factory ChecklistLog.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ChecklistLog(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      checklistSeed: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}checklist_seed'])!,
-      checklist: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
-      action: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}action'])!,
-      noRepeat: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}no_repeat'])!,
-      checked: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}checked'])!,
-      skipped: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}skipped'])!,
-      date: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5628,7 +5841,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
     map['skipped'] = Variable<bool>(skipped);
     map['date'] = Variable<DateTime>(date);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['synced'] = Variable<bool>(synced);
     return map;
@@ -5693,7 +5906,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
           bool? checked,
           bool? skipped,
           DateTime? date,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
       ChecklistLog(
         id: id ?? this.id,
@@ -5704,7 +5917,7 @@ class ChecklistLog extends DataClass implements Insertable<ChecklistLog> {
         checked: checked ?? this.checked,
         skipped: skipped ?? this.skipped,
         date: date ?? this.date,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
       );
   @override
@@ -5789,7 +6002,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
     Expression<bool>? checked,
     Expression<bool>? skipped,
     Expression<DateTime>? date,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
@@ -5859,7 +6072,7 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
       map['date'] = Variable<DateTime>(date.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -5885,114 +6098,75 @@ class ChecklistLogsCompanion extends UpdateCompanion<ChecklistLog> {
   }
 }
 
-class $ChecklistLogsTable extends ChecklistLogs
-    with TableInfo<$ChecklistLogsTable, ChecklistLog> {
+class $ChecklistCollectionsTable extends ChecklistCollections
+    with TableInfo<$ChecklistCollectionsTable, ChecklistCollection> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ChecklistLogsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ChecklistCollectionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _checklistSeedMeta =
-      const VerificationMeta('checklistSeed');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _checklistMeta =
+      const VerificationMeta('checklist');
   @override
-  late final GeneratedColumn<int?> checklistSeed = GeneratedColumn<int?>(
-      'checklist_seed', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _checklistMeta = const VerificationMeta('checklist');
-  @override
-  late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> checklist = GeneratedColumn<int>(
       'checklist', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _actionMeta = const VerificationMeta('action');
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _serverIDMeta =
+      const VerificationMeta('serverID');
   @override
-  late final GeneratedColumn<String?> action = GeneratedColumn<String?>(
-      'action', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant('{}'));
-  final VerificationMeta _noRepeatMeta = const VerificationMeta('noRepeat');
-  @override
-  late final GeneratedColumn<bool?> noRepeat = GeneratedColumn<bool?>(
-      'no_repeat', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (no_repeat IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _checkedMeta = const VerificationMeta('checked');
-  @override
-  late final GeneratedColumn<bool?> checked = GeneratedColumn<bool?>(
-      'checked', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (checked IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _skippedMeta = const VerificationMeta('skipped');
-  @override
-  late final GeneratedColumn<bool?> skipped = GeneratedColumn<bool?>(
-      'skipped', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (skipped IN (0, 1))',
-      defaultValue: Constant(false));
-  final VerificationMeta _dateMeta = const VerificationMeta('date');
-  @override
-  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
-      'date', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+  late final GeneratedColumn<String> serverID = GeneratedColumn<String>(
       'server_i_d', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
+      type: DriftSqlType.string,
       requiredDuringInsert: false);
-  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
-      'synced', aliasedName, false,
-      type: const BoolType(),
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (synced IN (0, 1))',
-      defaultValue: Constant(false));
+      defaultValue: Constant(''));
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        checklistSeed,
-        checklist,
-        action,
-        noRepeat,
-        checked,
-        skipped,
-        date,
-        serverID,
-        synced
-      ];
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
   @override
-  String get aliasedName => _alias ?? 'checklist_logs';
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(''));
   @override
-  String get actualTableName => 'checklist_logs';
+  List<GeneratedColumn> get $columns =>
+      [id, checklist, serverID, title, description, category];
   @override
-  VerificationContext validateIntegrity(Insertable<ChecklistLog> instance,
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'checklist_collections';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ChecklistCollection> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('checklist_seed')) {
-      context.handle(
-          _checklistSeedMeta,
-          checklistSeed.isAcceptableOrUnknown(
-              data['checklist_seed']!, _checklistSeedMeta));
-    } else if (isInserting) {
-      context.missing(_checklistSeedMeta);
     }
     if (data.containsKey('checklist')) {
       context.handle(_checklistMeta,
@@ -6000,35 +6174,23 @@ class $ChecklistLogsTable extends ChecklistLogs
     } else if (isInserting) {
       context.missing(_checklistMeta);
     }
-    if (data.containsKey('action')) {
-      context.handle(_actionMeta,
-          action.isAcceptableOrUnknown(data['action']!, _actionMeta));
-    }
-    if (data.containsKey('no_repeat')) {
-      context.handle(_noRepeatMeta,
-          noRepeat.isAcceptableOrUnknown(data['no_repeat']!, _noRepeatMeta));
-    }
-    if (data.containsKey('checked')) {
-      context.handle(_checkedMeta,
-          checked.isAcceptableOrUnknown(data['checked']!, _checkedMeta));
-    }
-    if (data.containsKey('skipped')) {
-      context.handle(_skippedMeta,
-          skipped.isAcceptableOrUnknown(data['skipped']!, _skippedMeta));
-    }
-    if (data.containsKey('date')) {
-      context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
-    } else if (isInserting) {
-      context.missing(_dateMeta);
-    }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
           serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
-    if (data.containsKey('synced')) {
-      context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
     }
     return context;
   }
@@ -6036,14 +6198,27 @@ class $ChecklistLogsTable extends ChecklistLogs
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ChecklistLog map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ChecklistLog.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  ChecklistCollection map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChecklistCollection(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      checklist: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}checklist'])!,
+      serverID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}server_i_d']),
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
+    );
   }
 
   @override
-  $ChecklistLogsTable createAlias(String alias) {
-    return $ChecklistLogsTable(attachedDatabase, alias);
+  $ChecklistCollectionsTable createAlias(String alias) {
+    return $ChecklistCollectionsTable(attachedDatabase, alias);
   }
 }
 
@@ -6055,38 +6230,20 @@ class ChecklistCollection extends DataClass
   final String title;
   final String description;
   final String category;
-  ChecklistCollection(
+  const ChecklistCollection(
       {required this.id,
       required this.checklist,
       this.serverID,
       required this.title,
       required this.description,
       required this.category});
-  factory ChecklistCollection.fromData(Map<String, dynamic> data,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ChecklistCollection(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      checklist: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}checklist'])!,
-      serverID: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      title: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
-      description: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
-      category: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['checklist'] = Variable<int>(checklist);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String?>(serverID);
+      map['server_i_d'] = Variable<String>(serverID);
     }
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
@@ -6135,14 +6292,14 @@ class ChecklistCollection extends DataClass
   ChecklistCollection copyWith(
           {int? id,
           int? checklist,
-          String? serverID,
+          Value<String?> serverID = const Value.absent(),
           String? title,
           String? description,
           String? category}) =>
       ChecklistCollection(
         id: id ?? this.id,
         checklist: checklist ?? this.checklist,
-        serverID: serverID ?? this.serverID,
+        serverID: serverID.present ? serverID.value : this.serverID,
         title: title ?? this.title,
         description: description ?? this.description,
         category: category ?? this.category,
@@ -6202,7 +6359,7 @@ class ChecklistCollectionsCompanion
   static Insertable<ChecklistCollection> custom({
     Expression<int>? id,
     Expression<int>? checklist,
-    Expression<String?>? serverID,
+    Expression<String>? serverID,
     Expression<String>? title,
     Expression<String>? description,
     Expression<String>? category,
@@ -6244,7 +6401,7 @@ class ChecklistCollectionsCompanion
       map['checklist'] = Variable<int>(checklist.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String?>(serverID.value);
+      map['server_i_d'] = Variable<String>(serverID.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -6272,113 +6429,8 @@ class ChecklistCollectionsCompanion
   }
 }
 
-class $ChecklistCollectionsTable extends ChecklistCollections
-    with TableInfo<$ChecklistCollectionsTable, ChecklistCollection> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ChecklistCollectionsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
-      'id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _checklistMeta = const VerificationMeta('checklist');
-  @override
-  late final GeneratedColumn<int?> checklist = GeneratedColumn<int?>(
-      'checklist', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  @override
-  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
-      'server_i_d', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
-      'title', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant(''));
-  final VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String?> description = GeneratedColumn<String?>(
-      'description', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant(''));
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  @override
-  late final GeneratedColumn<String?> category = GeneratedColumn<String?>(
-      'category', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: Constant(''));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, checklist, serverID, title, description, category];
-  @override
-  String get aliasedName => _alias ?? 'checklist_collections';
-  @override
-  String get actualTableName => 'checklist_collections';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<ChecklistCollection> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('checklist')) {
-      context.handle(_checklistMeta,
-          checklist.isAcceptableOrUnknown(data['checklist']!, _checklistMeta));
-    } else if (isInserting) {
-      context.missing(_checklistMeta);
-    }
-    if (data.containsKey('server_i_d')) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  ChecklistCollection map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ChecklistCollection.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
-  }
-
-  @override
-  $ChecklistCollectionsTable createAlias(String alias) {
-    return $ChecklistCollectionsTable(attachedDatabase, alias);
-  }
-}
-
 abstract class _$RelDB extends GeneratedDatabase {
-  _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$RelDB(QueryExecutor e) : super(e);
   late final $DevicesTable devices = $DevicesTable(this);
   late final $ModulesTable modules = $ModulesTable(this);
   late final $ParamsTable params = $ParamsTable(this);
@@ -6403,7 +6455,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   late final DeletesDAO deletesDAO = DeletesDAO(this as RelDB);
   late final ChecklistsDAO checklistsDAO = ChecklistsDAO(this as RelDB);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, Object?>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         devices,

@@ -48,7 +48,7 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler:
-  drift: ^1.0.0
+  drift:
   sqlite3_flutter_libs:
   path_provider:
   path:
@@ -62,18 +62,20 @@ dependencies:
   url_launcher:
   basic_utils:
   flutter_speed_dial:
-    path: ./vendor/flutter_speed_dial
+    # path: ./vendor/flutter_speed_dial
   event_bus:
   video_player:
   flutter_keyboard_visibility:
   video_thumbnail:
   flutter_localizations:
     sdk: flutter
-  flutter_cupertino_localizations:
   intl:
   intl_generator:
-  flutter_swiper:
+  card_swiper:
   charts_flutter:
+    git: 
+      url: https://github.com/supergreenlab/charts.git
+      path: charts_flutter
   flutter_markdown:
   youtube_player_flutter:
   matrix_gesture_detector:
@@ -108,7 +110,7 @@ dependencies:
 
 dev_dependencies:
   hive_generator:
-  drift_dev: ^1.0.0
+  drift_dev:
   build_runner:
   flutter_test:
     sdk: flutter
