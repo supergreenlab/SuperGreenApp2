@@ -23,7 +23,7 @@ dependencies:
   flutter_slidable:
   cached_network_image:
   favicon:
-  flutter_datetime_picker:
+  flutter_datetime_picker_plus:
   webview_flutter_plus: ^0.3.0+2
   envied:
   envied_generator:
