@@ -62,7 +62,7 @@ class AnimatedSwitch extends StatefulWidget {
     required this.onPressed,
   }) : super(key: key);
 
-  bool value;
+  final bool value;
   final void Function(bool x)? onPressed;
 
   @override
@@ -84,9 +84,6 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          widget.value = !widget.value;
-        });
         widget.onPressed!(widget.value);
       },
       child: AnimatedContainer(
