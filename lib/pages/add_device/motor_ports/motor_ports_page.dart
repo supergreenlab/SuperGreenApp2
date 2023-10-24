@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/motor_ports/motor_ports_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -26,7 +25,7 @@ import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class MotorPortPage extends TraceableStatefulWidget {
+class MotorPortPage extends StatefulWidget {
   @override
   _MotorPortPageState createState() => _MotorPortPageState();
 }

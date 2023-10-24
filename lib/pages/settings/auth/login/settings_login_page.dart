@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -16,7 +15,7 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
-class SettingsLoginPage extends TraceableStatefulWidget {
+class SettingsLoginPage extends StatefulWidget {
   @override
   _SettingsLoginPageState createState() => _SettingsLoginPageState();
 }

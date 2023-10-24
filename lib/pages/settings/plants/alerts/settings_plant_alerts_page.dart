@@ -21,7 +21,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/services/models/alerts.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/l10n.dart';
@@ -36,7 +35,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class SettingsPlantAlertsPage extends TraceableStatefulWidget {
+class SettingsPlantAlertsPage extends StatefulWidget {
   static String get settingsPlantAlertPageTitle {
     return Intl.message(
       'Alerts',

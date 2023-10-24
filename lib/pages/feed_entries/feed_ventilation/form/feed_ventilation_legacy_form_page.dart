@@ -18,11 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationLegacyFormPage extends TraceableStatefulWidget {
+class FeedVentilationLegacyFormPage extends StatefulWidget {
   final LegacyBlowerParamsController paramsController;
 
   const FeedVentilationLegacyFormPage(this.paramsController, {Key? key}) : super(key: key);

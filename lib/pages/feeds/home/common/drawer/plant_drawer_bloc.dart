@@ -21,7 +21,6 @@ import 'dart:async';
 import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class PlantDrawerBlocEvent extends Equatable {}
@@ -75,7 +74,6 @@ class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocSt
   @override
   Stream<PlantDrawerBlocState> mapEventToState(PlantDrawerBlocEvent event) async* {
     if (event is PlantDrawerBlocEventLoadPlants) {
-      final db = RelDB.get().plantsDAO;
       _plantStream = RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
       _boxesStream = RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
       _pendingStream = RelDB.get().checklistsDAO.getNLogsPerPlants().watch().listen(_hasPendingChange);

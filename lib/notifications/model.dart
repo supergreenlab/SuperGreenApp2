@@ -22,8 +22,6 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/logger/logger.dart';
-import 'package:super_green_app/data/rel/checklist/checklists.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 
 enum NotificationDataType {
   PLANT_COMMENT,

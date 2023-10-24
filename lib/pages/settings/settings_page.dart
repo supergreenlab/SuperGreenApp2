@@ -24,7 +24,6 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/screen_lock.dart';
@@ -33,7 +32,7 @@ import 'package:super_green_app/theme.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:package_info/package_info.dart';
 
-class SettingsPage extends TraceableStatefulWidget {
+class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }

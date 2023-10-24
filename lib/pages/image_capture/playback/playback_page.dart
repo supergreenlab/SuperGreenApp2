@@ -21,14 +21,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:video_player/video_player.dart';
 
-class PlaybackPage extends TraceableStatefulWidget {
+class PlaybackPage extends StatefulWidget {
   @override
   _PlaybackPageState createState() => _PlaybackPageState();
 }

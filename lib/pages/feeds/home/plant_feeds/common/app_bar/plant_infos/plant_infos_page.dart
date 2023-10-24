@@ -16,13 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
-import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/products/specs/seed_specs.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -41,7 +38,7 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class PlantInfosPage<PlantInfosBloc> extends TraceableStatefulWidget {
+class PlantInfosPage<PlantInfosBloc> extends StatefulWidget {
   PlantInfosPage({Key? key}) : super(key: key);
 
   @override
@@ -216,25 +213,6 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
               : null,
           onEdit: state.plantInfos.editable == false ? null : () => _openForm('CURING_START')),
     ]);
-  }
-
-  Widget _renderPicture(BuildContext context, PlantInfosBlocStateLoaded state) {
-    return SizedBox(
-        height: 100,
-        child: state.plantInfos.thumbnailPath!.startsWith("http")
-            ? Image.network(
-                state.plantInfos.thumbnailPath!,
-                headers: {'Host': BackendAPI().storageServerHostHeader},
-                fit: BoxFit.fill,
-                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return FullscreenLoading(
-                      percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
-                },
-              )
-            : Image.file(File(state.plantInfos.thumbnailPath!), fit: BoxFit.fill));
   }
 
   Widget _renderForm(BuildContext context, PlantInfosBlocStateLoaded state) {

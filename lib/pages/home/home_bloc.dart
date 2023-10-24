@@ -20,7 +20,6 @@ import 'dart:async';
 
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class HomeBlocEvent extends Equatable {}

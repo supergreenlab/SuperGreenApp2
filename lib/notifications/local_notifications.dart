@@ -75,7 +75,7 @@ class LocalNotifications {
         NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id, notificationData.title, notificationData.body, tz.TZDateTime.from(scheduledNotificationDateTime, tz.UTC), platformChannelSpecifics,
-        androidAllowWhileIdle: true, payload: notificationData.toJSON(),
+        payload: notificationData.toJSON(),
         androidScheduleMode: AndroidScheduleMode.alarmClock,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);

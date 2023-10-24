@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
@@ -28,7 +27,7 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationTemperatureFormPage extends TraceableStatefulWidget {
+class FeedVentilationTemperatureFormPage extends StatefulWidget {
   static String get instructionsBlowerTemperatureModeDescription {
     return Intl.message(
       '''This is the **Temperature based blower control**, in this mode the blower is **in sync with the box temperature sensor**.''',

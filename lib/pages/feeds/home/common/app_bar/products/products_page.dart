@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -30,7 +29,7 @@ import 'package:super_green_app/pages/products/product/product_category/product_
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProductsPage extends TraceableStatefulWidget {
+class ProductsPage extends StatefulWidget {
   static String get productsPageLoadingPlantData {
     return Intl.message(
       'Loading plant data',

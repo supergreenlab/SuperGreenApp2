@@ -20,13 +20,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_picker_builder/data/media_file.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/permissions.dart';
@@ -34,7 +31,7 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_picker/picker_widget.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class CapturePage extends TraceableStatefulWidget {
+class CapturePage extends StatefulWidget {
   @override
   _CapturePageState createState() => _CapturePageState();
 }

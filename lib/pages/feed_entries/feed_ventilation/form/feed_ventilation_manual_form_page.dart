@@ -20,13 +20,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationManualFormPage extends TraceableStatefulWidget {
+class FeedVentilationManualFormPage extends StatefulWidget {
   static String get instructionsManualTimerBlowerModeDescription {
     return Intl.message(
       'This is the **manual blower control** mode, just set a value and the blower will stay at this power.',

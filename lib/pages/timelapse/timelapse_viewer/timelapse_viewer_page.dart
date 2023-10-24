@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_bloc.dart';
@@ -28,7 +27,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TimelapseViewerPage extends TraceableStatefulWidget {
+class TimelapseViewerPage extends StatefulWidget {
   @override
   _TimelapseViewerPageState createState() => _TimelapseViewerPageState();
 }

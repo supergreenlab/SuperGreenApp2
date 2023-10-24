@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -38,6 +37,7 @@ import 'package:super_green_app/pages/checklist/shortcuts/create_timer_reminder.
 import 'package:super_green_app/pages/checklist/shortcuts/create_watering_reminder.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+// ignore: unused_import
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -80,7 +80,7 @@ class _AppearAnimatedState extends State<AppearAnimated> {
   }
 }
 
-class ChecklistPage extends TraceableStatefulWidget {
+class ChecklistPage extends StatefulWidget {
   @override
   _ChecklistPageState createState() => _ChecklistPageState();
 }

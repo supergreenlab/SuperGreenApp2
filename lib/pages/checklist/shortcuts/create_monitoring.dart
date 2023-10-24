@@ -22,7 +22,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/assets/checklist.dart';
 import 'package:super_green_app/data/assets/metrics.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/data/rel/checklist/categories.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';

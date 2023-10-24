@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -32,7 +31,7 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class DevicePairingPage extends TraceableStatefulWidget {
+class DevicePairingPage extends StatefulWidget {
   static String get devicePairingPageTitle {
     return Intl.message(
       'Pair controller',

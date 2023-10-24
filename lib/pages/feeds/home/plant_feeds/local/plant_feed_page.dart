@@ -17,7 +17,6 @@
  */
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
@@ -68,7 +66,7 @@ enum SpeedDialType {
   lifeevents,
 }
 
-class PlantFeedPage extends TraceableStatefulWidget {
+class PlantFeedPage extends StatefulWidget {
   static String get plantFeedPageTitle {
     return Intl.message(
       'Plant feed',

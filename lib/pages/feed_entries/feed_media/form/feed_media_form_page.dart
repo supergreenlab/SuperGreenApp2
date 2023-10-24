@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -79,7 +78,7 @@ class FeedMediaDraft extends FeedEntryDraftState {
   }
 }
 
-class FeedMediaFormPage extends TraceableStatefulWidget {
+class FeedMediaFormPage extends StatefulWidget {
   static String get feedMediaFormPageAttachedMedia {
     return Intl.message(
       'Attached media',

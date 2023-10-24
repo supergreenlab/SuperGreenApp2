@@ -24,7 +24,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -37,7 +36,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsDevicePage extends TraceableStatefulWidget {
+class SettingsDevicePage extends StatefulWidget {
   static String get settingsDevicePageLoading {
     return Intl.message(
       'Refreshing..',

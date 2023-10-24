@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n/common.dart';
@@ -31,7 +30,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:tuple/tuple.dart';
 
-class AppbarChecklistPage extends TraceableStatefulWidget {
+class AppbarChecklistPage extends StatefulWidget {
   @override
   _AppbarChecklistPageState createState() => _AppbarChecklistPageState();
 }

@@ -20,15 +20,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
-import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
+class FeedVentilationHumidityFormPage extends StatefulWidget {
   static String get instructionsBlowerHumidityModeDescription {
     return Intl.message(
       '''This is the **Humidity based blower control**, in this mode the blower is **in sync with the box humidity sensor**.''',

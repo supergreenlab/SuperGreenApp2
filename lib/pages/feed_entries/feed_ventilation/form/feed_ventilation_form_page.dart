@@ -20,7 +20,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -33,10 +32,8 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
-import 'package:super_green_app/widgets/green_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class FeedVentilationFormPage extends TraceableStatefulWidget {
+class FeedVentilationFormPage extends StatefulWidget {
   @override
   _FeedVentilationFormPageState createState() => _FeedVentilationFormPageState();
 }
@@ -117,7 +114,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocEventCreate());
                 },
                 onSettings: state is FeedVentilationFormBlocStateLoaded ? () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToMotorPortEvent((state as FeedVentilationFormBlocStateLoaded).device!, null));
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToMotorPortEvent(state.device!, null));
                 } : null,
                 body: WillPopScope(
                   onWillPop: () async {

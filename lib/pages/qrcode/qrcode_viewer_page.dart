@@ -19,12 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/pages/qrcode/qrcode_viewer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class QRCodeViewerPage extends TraceableStatefulWidget {
+class QRCodeViewerPage extends StatefulWidget {
   @override
   _QRCodeViewerPageState createState() => _QRCodeViewerPageState();
 }

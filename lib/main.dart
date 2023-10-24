@@ -20,7 +20,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:devicelocale/devicelocale.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +37,6 @@ import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
-import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 import 'package:super_green_app/pin_lock/pin_lock_bloc.dart';
@@ -127,7 +125,11 @@ Future initApp() async {
 
   BackendAPI(); // force init
   if (BackendAPI().usersAPI.loggedIn) {
-    await BackendAPI().usersAPI.syncUserSettings();
+    try {
+      await BackendAPI().usersAPI.syncUserSettings();
+    } catch (e, t) {
+      Logger.logError(e, t);
+    }
   }
 }
 

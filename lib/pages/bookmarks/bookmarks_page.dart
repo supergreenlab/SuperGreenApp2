@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_bloc.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_feed_delegate.dart';
@@ -29,7 +28,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class BookmarksPage extends TraceableStatefulWidget {
+class BookmarksPage extends StatefulWidget {
   @override
   _BookmarksPageState createState() => _BookmarksPageState();
 }

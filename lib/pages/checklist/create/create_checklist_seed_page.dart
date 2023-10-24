@@ -17,14 +17,12 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -47,7 +45,7 @@ import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class CreateChecklistSeedPage extends TraceableStatefulWidget {
+class CreateChecklistSeedPage extends StatefulWidget {
   @override
   _CreateChecklistSeedPageState createState() => _CreateChecklistSeedPageState();
 }

@@ -19,11 +19,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class UserAvatar extends TraceableStatelessWidget {
+class UserAvatar extends StatelessWidget {
   final String? icon;
   final double size;
 

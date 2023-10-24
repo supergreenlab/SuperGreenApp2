@@ -16,13 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
 import 'dart:math';
 
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';

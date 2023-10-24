@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/settings/devices/auth_modal/auth_modal_bloc.dart';
@@ -29,7 +28,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
-class AuthModalPage extends TraceableStatefulWidget {
+class AuthModalPage extends StatefulWidget {
   static String get authModalButton {
     return Intl.message(
       'NOTIFY ME',

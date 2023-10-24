@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
@@ -30,7 +29,7 @@ import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:collection/collection.dart';
 
-class ProductSupplierPage extends TraceableStatefulWidget {
+class ProductSupplierPage extends StatefulWidget {
   @override
   _ProductSupplierPageState createState() => _ProductSupplierPageState();
 }

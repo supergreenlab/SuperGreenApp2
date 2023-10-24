@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
@@ -28,7 +27,7 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class SettingsBoxesPage extends TraceableStatelessWidget {
+class SettingsBoxesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SettingsBoxesBloc, SettingsBoxesBlocState>(

@@ -20,11 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
-import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_bloc.dart';
 
-class FullscreenPicturePage extends TraceableStatefulWidget {
+class FullscreenPicturePage extends StatefulWidget {
   @override
   _FullscreenPicturePageState createState() => _FullscreenPicturePageState();
 }
