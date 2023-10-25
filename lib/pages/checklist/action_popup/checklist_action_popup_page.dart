@@ -141,16 +141,19 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
     if (!state.checklistSeed.repeat || state.checklistLogs.length == 0) {
       return Container();
     }
-    return InkWell(
-      onTap: () {
+    Function() onChange = () {
         setState(() {
           noRepeat = !noRepeat;
         });
         AppDB().setNoRepeatChecklistSeed(state.checklistSeed.id, noRepeat);
-      },
+      };
+    return InkWell(
+      onTap: onChange,
       child: Row(
         children: [
-          Checkbox(value: noRepeat, onChanged: (bool? v) {}),
+          Checkbox(value: noRepeat, onChanged: (bool? v) {
+            onChange();
+          }),
           Text("Ok don't show this checklist again."),
         ],
       ),
@@ -319,7 +322,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     },
                     onSkip: () async {
                       BlocProvider.of<ChecklistActionPopupBloc>(context)
-                          .add(ChecklistActionPopupBlocEventSkipChecklistLog(log));
+                          .add(ChecklistActionPopupBlocEventSkipChecklistLog(log.copyWith(noRepeat: noRepeat)));
                       if (state.checklistLogs.length == 1) {
                         setState(() {
                           allSet = true;

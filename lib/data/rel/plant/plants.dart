@@ -117,7 +117,7 @@ class Boxes extends Table {
     return BoxesCompanion(
         feed: Value(feedID),
         device: Value(deviceID),
-        deviceBox: Value(map['deviceBox'] as int),
+        deviceBox: Value(map['deviceBox'] as int?),
         name: Value(map['name'] as String),
         settings: Value(map['settings'] as String),
         synced: Value(true),

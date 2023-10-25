@@ -44,7 +44,7 @@ mixin _$ChecklistsDAOMixin on DatabaseAccessor<RelDB> {
 
   Selectable<ChecklistSeed> searchSeeds(String searchTerms, int checklistid) {
     return customSelect(
-        'SELECT checklist_seeds.* FROM checklist_seeds WHERE(title LIKE \'%\' || ?1 || \'%\' OR description LIKE \'%\' || ?1 || \'%\' OR actions LIKE \'%\' || ?1 || \'%\' OR conditions LIKE \'%\' || ?1 || \'%\' OR exitConditions LIKE \'%\' || ?1 || \'%\')AND checklist = ?2 ORDER BY mine DESC, id DESC',
+        'SELECT checklist_seeds.* FROM checklist_seeds WHERE(title LIKE \'%\' || ?1 || \'%\' OR description LIKE \'%\' || ?1 || \'%\' OR actions LIKE \'%\' || ?1 || \'%\' OR conditions LIKE \'%\' || ?1 || \'%\' OR exit_conditions LIKE \'%\' || ?1 || \'%\')AND checklist = ?2 ORDER BY mine DESC, id DESC',
         variables: [
           Variable<String>(searchTerms),
           Variable<int>(checklistid)
