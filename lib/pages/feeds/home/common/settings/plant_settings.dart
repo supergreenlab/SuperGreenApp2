@@ -120,7 +120,7 @@ class PlantSettings extends Equatable {
     List<dynamic> products = (map['products'] ?? []);
     return PlantSettings(
       map['plantType'],
-      map['isSingle'],
+      map['isSingle'] ?? true,
       map['strain'],
       map['seedBank'],
       map['cloningDate'] == null ? null : DateTime.parse(map['cloningDate'] as String).toLocal(),

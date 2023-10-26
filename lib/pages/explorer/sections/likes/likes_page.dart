@@ -40,10 +40,12 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
     return 150;
   }
 
+  @override
   Widget renderBody(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return renderGrid(context, state, items);
   }
 
+  @override
   Widget itemBuilder(BuildContext context, PublicFeedEntry feedEntry) {
     String? pic = feedEntry.pic;
     if (pic != null) {
