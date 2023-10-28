@@ -4,7 +4,7 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 
 class PlantFeedState extends FeedState {
   final String plantID;
-  final String boxID;
+  final String? boxID;
 
   final PlantSettings plantSettings;
   final BoxSettings boxSettings;

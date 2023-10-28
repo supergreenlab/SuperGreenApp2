@@ -31,8 +31,8 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
     Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
     plantInfosLoaded(PlantInfos(
         plant['name'],
-        BackendAPI().feedsAPI.absoluteFileURL(plant['filePath']),
-        BackendAPI().feedsAPI.absoluteFileURL(plant['thumbnailPath']),
+        BackendAPI().feedsAPI.absoluteFileURL(plant['filePath'] ?? ''), // TODO set default
+        BackendAPI().feedsAPI.absoluteFileURL(plant['thumbnailPath'] ?? ''),
         BoxSettings.fromJSON(plant['boxSettings']),
         PlantSettings.fromJSON(plant['settings']),
         false));
