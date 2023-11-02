@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -317,13 +318,10 @@ class PlantFeedPage extends StatefulWidget {
 class _PlantFeedPageState extends State<PlantFeedPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final _openCloseDial = ValueNotifier<bool>(false);
+  final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
 
   int tabIndex = 0;
-
-  int nameScrollIndex = 0;
-  late Timer nameScrollTimer;
 
   bool _speedDialOpen = false;
   bool _showIP = false;
@@ -336,11 +334,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   @override
   void initState() {
     filters = AppDB().getAppData().filters ?? [];
-    nameScrollTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
-      setState(() {
-        nameScrollIndex++;
-      });
-    });
     super.initState();
   }
 
@@ -349,7 +342,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return WillPopScope(
       onWillPop: () async {
         if (_speedDialOpen) {
-          _openCloseDial.value = true;
+          _openCloseDial.value = Random().nextInt(1 << 32);
           return false;
         }
         return true;
@@ -426,7 +419,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return SpeedDial(
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
-        //animationSpeed: 50,
+        animationSpeed: 50,
         curve: Curves.bounceIn,
         backgroundColor: Color(0xff3bb30b),
         child: PlantDialButton(
@@ -669,7 +662,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
       {String? tipID, List<String>? tipPaths}) {
     return () {
-      _openCloseDial.value = true;
+      _openCloseDial.value = Random().nextInt(1 << 32);
       if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
             tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
@@ -835,7 +828,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return InkWell(
           onTap: () {
-            _openCloseDial.value = true;
+            _openCloseDial.value = Random().nextInt(1 << 32);
           },
           child: Container(width: constraints.maxWidth, height: constraints.maxHeight, color: Colors.white60),
         );
@@ -1007,7 +1000,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   @override
   void dispose() {
-    nameScrollTimer.cancel();
     super.dispose();
   }
 
