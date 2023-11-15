@@ -747,7 +747,7 @@ packages:
       path: "vendor/flutter_speed_dial"
       relative: true
     source: path
-    version: "7.0.0"
+    version: "1.2.5"
   flutter_svg:
     dependency: "direct main"
     description:

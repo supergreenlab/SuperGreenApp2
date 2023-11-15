@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -56,7 +57,10 @@ class ChecklistCollectionsPage extends StatelessWidget {
     return ListView(children: [
       ...state.collections.map<Widget>((c) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0,),
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 12.0,
+          ),
           child: CreateChecklistSection(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -69,7 +73,15 @@ class ChecklistCollectionsPage extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 16.0),
                         child: SvgPicture.asset(ChecklistCollectionCategoryIcons[c.category.value]!),
                       ),
-                      Text(c.title.value, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),),
+                      Expanded(
+                        child: AutoSizeText(
+                          c.title.value,
+                          maxLines: 2,
+                          overflow: TextOverflow.fade,
+                          softWrap: true,
+                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+                        ),
+                      ),
                     ],
                   ),
                   Padding(
@@ -86,10 +98,14 @@ class ChecklistCollectionsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GreenButton(
-                        onPressed: state.checklistCollections.firstWhereOrNull((cc) => cc.serverID == c.serverID.value) != null ? null : () {
-                          BlocProvider.of<ChecklistCollectionsBloc>(context).add(ChecklistCollectionsBlocEventAddCollection(c));
-                          Navigator.pop(context);
-                        },
+                        onPressed:
+                            state.checklistCollections.firstWhereOrNull((cc) => cc.serverID == c.serverID.value) != null
+                                ? null
+                                : () {
+                                    BlocProvider.of<ChecklistCollectionsBloc>(context)
+                                        .add(ChecklistCollectionsBlocEventAddCollection(c));
+                                    Navigator.pop(context);
+                                  },
                         title: 'Add collection',
                       ),
                     ],
@@ -105,7 +121,9 @@ class ChecklistCollectionsPage extends StatelessWidget {
         child: Center(
           child: Text(
             'More to come soon!',
-            style: TextStyle(fontSize: 20,),
+            style: TextStyle(
+              fontSize: 20,
+            ),
           ),
         ),
       ),

@@ -123,24 +123,28 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: state.actions!.map<Widget>((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
-                return ChecklistActionButton.getActionPage(
-                    plant: state.plant,
-                    box: state.box,
-                    checklistSeed: action.item1,
-                    checklistAction: action.item2,
-                    summarize: true,
-                    onCheck: () {
-                      BlocProvider.of<AppbarChecklistBloc>(context)
-                          .add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));
-                    },
-                    onSkip: () {
-                      BlocProvider.of<AppbarChecklistBloc>(context)
-                          .add(AppbarChecklistBlocEventSkipChecklistLog(action.item3));
-                    });
+                int index = state.actions!.indexOf(action);
+                return Padding(
+                  padding: index == 0 ? EdgeInsets.zero : const EdgeInsets.only(top: 9.0),
+                  child: ChecklistActionButton.getActionPage(
+                      plant: state.plant,
+                      box: state.box,
+                      checklistSeed: action.item1,
+                      checklistAction: action.item2,
+                      summarize: true,
+                      onCheck: () {
+                        BlocProvider.of<AppbarChecklistBloc>(context)
+                            .add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));
+                      },
+                      onSkip: () {
+                        BlocProvider.of<AppbarChecklistBloc>(context)
+                            .add(AppbarChecklistBlocEventSkipChecklistLog(action.item3));
+                      }),
+                );
               }).toList(),
             ),
           ),
@@ -162,8 +166,11 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
           ),
-          Text('OPEN CHECKLIST (${state.nPendingLogs})',
-              style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
+            child: Text('OPEN CHECKLIST (${state.nPendingLogs})',
+                style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+          ),
         ],
       ),
     );
