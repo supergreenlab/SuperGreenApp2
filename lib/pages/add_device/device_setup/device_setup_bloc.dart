@@ -185,8 +185,9 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
 
       final Param state = await db.getParam(deviceID, 'STATE');
 
-      // Just got his device, set schedule to local timezone
+      // Just got his device
       if (state.ivalue == 0) {
+        // set schedule to local timezone
         final Module boxes = await db.getModule(deviceID, 'box');
         for (int i = 0; i < boxes.arrayLen; ++i) {
           final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
@@ -196,6 +197,13 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
           final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
           final Param offMin = await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
           await DeviceHelper.updateHourMinParams(d, offHour, offMin, offHour.ivalue!, offMin.ivalue!);
+        }
+
+        // set motors MAX parameter
+        final Module motors = await db.getModule(deviceID, 'motor');
+        for (int i = 0; i < motors.arrayLen; ++i) {
+          final Param max = await db.getParam(deviceID, 'MOTOR_${i}_MAX');
+          await DeviceHelper.updateIntParam(d, max, 50);
         }
       }
 
