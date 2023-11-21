@@ -21,6 +21,10 @@ import 'package:super_green_app/pages/explorer/models/feedentries.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 
 class DiscussionsBloc extends SectionBloc<PublicFeedEntry> {
-  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicCommentedFeedEntries(n, offset);
+  Future<List<dynamic>> loadItems(int n, int offset) async {
+    List<dynamic> comments = await BackendAPI().feedsAPI.publicCommentedFeedEntries(n, offset);
+    comments.removeWhere((c) => BackendAPI().blockedUserIDs.contains(c['commentUserID']));
+    return comments;
+  }
   PublicFeedEntry itemFromMap(Map<String, dynamic> map) => PublicFeedEntry.fromMap(map);
 }

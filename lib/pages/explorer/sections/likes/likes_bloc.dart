@@ -24,7 +24,11 @@ class LikesBloc extends SectionBloc<PublicFeedEntry> {
   @override
   int get nItemsLoad => 20;
 
-  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicLiked(n, offset);
+  Future<List<dynamic>> loadItems(int n, int offset) async {
+    List<dynamic> likes = await BackendAPI().feedsAPI.publicLiked(n, offset);
+    likes.removeWhere((l) => BackendAPI().blockedUserIDs.contains(l['likedBy']));
+    return likes;
+  }
   /*Future<List<dynamic>> loadItems(int n, int offset) async {
     List<dynamic> likedFeedEntries = await BackendAPI().feedsAPI.publicLikedFeedEntries(n, offset);
     List<dynamic> likedComments = await BackendAPI().feedsAPI.publicLikedComments(n, offset);

@@ -50,7 +50,9 @@ class BackendAPI {
   final Client apiClient = Client();
   final Client storageClient = Client();
 
-  late String checklistCollectionTheBasics = '9859f126-592d-4282-905c-403bc8dc90ba';
+  List<String> blockedUserIDs = [];
+
+  String checklistCollectionTheBasics = '9859f126-592d-4282-905c-403bc8dc90ba';
 
   factory BackendAPI() => _instance;
 

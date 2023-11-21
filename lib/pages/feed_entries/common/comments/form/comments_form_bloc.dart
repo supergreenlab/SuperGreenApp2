@@ -201,6 +201,8 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
           event.comment.copyWith(liked: !event.comment.liked, nLikes: event.comment.nLikes + 1));
     } else if (event is CommentsFormBlocEventReport) {
       await BackendAPI().feedsAPI.reportComment(event.comment);
+      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      yield* fetchComments();
     } else if (event is CommentsFormBlocEventPostComment) {
       String tempID = Uuid().v4();
       Comment comment = Comment(
@@ -239,6 +241,8 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
       comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
       n = await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
     }
+
+    comments.removeWhere((c) => BackendAPI().blockedUserIDs.contains(c.userID));
 
     yield CommentsFormBlocStateLoaded(this.args.autoFocus, this.args.feedEntry, comments, n, this.user,
         comments.where((c) => c.replyTo == null).length != limit, this.args.commentID, this.args.replyTo);

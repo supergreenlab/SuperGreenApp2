@@ -52,6 +52,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
       comments = await BackendAPI()
           .feedsAPI
           .fetchCommentsForFeedEntry(state.feedEntryID, offset: 0, limit: 2, rootCommentsOnly: true);
+      comments.removeWhere((c) => BackendAPI().blockedUserIDs.contains(c.userID));
     }
     onFeedEntryStateUpdated(state.copyWith(socialState: socialState.copyWith(comments: comments)));
   }

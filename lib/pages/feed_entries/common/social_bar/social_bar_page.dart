@@ -68,6 +68,7 @@ class SocialBarPage extends StatelessWidget {
                   () => onLike(context)),
               renderButton(context, 'button_comment', () => onComment(context)),
               renderButton(context, 'button_share', () => onShare(context)),
+              state.feedEntryID is String ? renderButton(context, 'button_report', () => createReport(context)) : Container(),
               Expanded(child: Container()),
               renderButton(
                   context,
@@ -154,6 +155,34 @@ class SocialBarPage extends StatelessWidget {
         });
     if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+    }
+  }
+
+  void createReport(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Report this post?', style: TextStyle(fontSize: 10),),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(CommonL10N.cancel),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text(CommonL10N.ok),
+              ),
+            ],
+          );
+        });
+    if (confirm ?? false) {
+      BlocProvider.of<FeedBloc>(context).add(FeedBlocEventReportEntry(state.feedEntryID));
     }
   }
 }

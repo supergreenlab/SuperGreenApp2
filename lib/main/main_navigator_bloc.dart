@@ -30,7 +30,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class MainNavigatorEvent extends Equatable {
-  final void Function(Future<dynamic>? future)? futureFn;
+  final dynamic Function(Future<dynamic>? future)? futureFn;
 
   MainNavigatorEvent({this.futureFn});
 

@@ -62,6 +62,9 @@ class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
     List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicFeedEntries(n, offset);
+    
+    entriesMap.removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));
+
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
       return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap).copyWith(showPlantInfos: true);

@@ -431,6 +431,16 @@ class FeedsAPI {
     }
   }
 
+  Future<List<String>> fetchBlockedUserIDs() async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/reports');
+      return (results['reports'] as List<dynamic>).map<String>((r) => r['reportUserID']).toList();
+    } catch (e, trace) {
+      Logger.logError(e, trace);
+      throw e;
+    }
+  }
+
   Future<List<dynamic>> publicPlants(int n, int offset) async {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plants?limit=$n&offset=$offset');

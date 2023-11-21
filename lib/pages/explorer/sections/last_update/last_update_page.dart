@@ -38,7 +38,7 @@ class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
 
   @override
   double get listHeight {
-    return 250;
+    return 228;
   }
 
   Widget itemBuilder(BuildContext context, PublicPlant plant) {

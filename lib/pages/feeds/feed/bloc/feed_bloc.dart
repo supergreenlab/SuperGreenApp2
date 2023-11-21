@@ -192,6 +192,15 @@ class FeedBlocEventBookmarkFeedEntry extends FeedBlocEvent {
   List<Object> get props => [entry];
 }
 
+class FeedBlocEventReportEntry extends FeedBlocEvent {
+  final String entry;
+
+  FeedBlocEventReportEntry(this.entry);
+
+  @override
+  List<Object> get props => [entry];
+}
+
 abstract class FeedBlocState extends Equatable {}
 
 class FeedBlocStateInit extends FeedBlocState {
@@ -280,6 +289,9 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
   Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
     if (event is FeedBlocEventInit) {
       await delegate.init(this.add);
+      try {
+        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      } catch(e) {}
       delegate.loadFeed();
     } else if (event is FeedBlocEventFeedLoaded) {
       feedState = event.feed;
@@ -353,6 +365,9 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       delegate.likeFeedEntry(event.entry);
     } else if (event is FeedBlocEventBookmarkFeedEntry) {
       delegate.bookmarkFeedEntry(event.entry);
+    } else if (event is FeedBlocEventReportEntry) {
+      await BackendAPI().feedsAPI.reportFeedEntry(event.entry);
+      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
     } else {
       yield* delegate.mapEventToState(event);
     }

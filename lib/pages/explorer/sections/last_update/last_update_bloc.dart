@@ -21,6 +21,10 @@ import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 
 class LastUpdateBloc extends SectionBloc<PublicPlant> {
-  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicPlants(n, offset);
+  Future<List<dynamic>> loadItems(int n, int offset) async {
+    List<dynamic> plants = await BackendAPI().feedsAPI.publicPlants(n, offset);
+    plants.removeWhere((p) => BackendAPI().blockedUserIDs.contains(p['userID']));
+    return plants;
+  }
   PublicPlant itemFromMap(Map<String, dynamic> map) => PublicPlant.fromMap(map);
 }
