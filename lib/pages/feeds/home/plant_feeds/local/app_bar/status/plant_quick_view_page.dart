@@ -32,7 +32,7 @@ class PlantQuickViewPage extends StatelessWidget {
   static String get plantQuickViewPageLoadingPlantData {
     return Intl.message(
       'Loading plant data',
-      name: 'productsPageLoadingPlantData',
+      name: 'plantQuickViewPageLoadingPlantData',
       desc: 'Products page loading plant data',
       locale: SGLLocalizations.current?.localeName,
     );

@@ -29,7 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m3(n) => "(+${n} other)";
 
-  static m4(comment) => "Comment was: \"${comment}\"";
+  static m4(comment) => "Comment was: \"${comment}\". This will also block this user.";
 
   static m5(name, boxName) => "Plant ${name} on lab ${boxName} created:)";
 
@@ -102,6 +102,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'appBarMissingControllerShopNow': MessageLookupByLibrary.simpleMessage('SHOP NOW'),
     'authModalButton': MessageLookupByLibrary.simpleMessage('NOTIFY ME'),
     'authModalTitle': m0,
+    'boxControlPageLoadingPlantData': MessageLookupByLibrary.simpleMessage('Loading plant data'),
     'cancel': MessageLookupByLibrary.simpleMessage('CANCEL'),
     'commentsFormPageCommentLikeCount': m1,
     'commentsFormPageCommentTypeTitle': MessageLookupByLibrary.simpleMessage('What kind of post do you want to do?'),
@@ -111,7 +112,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'commentsFormPagePleaseLogin': MessageLookupByLibrary.simpleMessage('Please login to add a comment'),
     'commentsFormPageReplyButton': MessageLookupByLibrary.simpleMessage('Reply'),
     'commentsFormPageReplyingTo': MessageLookupByLibrary.simpleMessage('Replying to '),
-    'commentsFormPageReportButton': MessageLookupByLibrary.simpleMessage('Report'),
+    'commentsFormPageReportButton': MessageLookupByLibrary.simpleMessage('Report&Block'),
     'commentsFormPageReportDialogBody': m4,
     'commentsFormPageReportDialogTitle': MessageLookupByLibrary.simpleMessage('Report this comment?'),
     'commentsFormPageSendingCommentLoading': MessageLookupByLibrary.simpleMessage('Sending comment..'),
@@ -177,9 +178,11 @@ class MessageLookup extends MessageLookupByLibrary {
     'feedCareCommonDraftRecoveryDialogTitle': MessageLookupByLibrary.simpleMessage('Draft recovery'),
     'feedCareCommonFormSaving': MessageLookupByLibrary.simpleMessage('Saving..'),
     'feedCareCommonObservations': MessageLookupByLibrary.simpleMessage('Observations'),
+    'feedCloningCardPageTitle': MessageLookupByLibrary.simpleMessage('Cloning'),
     'feedDefoliationCardPageTitle': MessageLookupByLibrary.simpleMessage('Defoliation'),
     'feedFimmingCardPageTitle': MessageLookupByLibrary.simpleMessage('Fimming'),
     'feedLifeEventCardPageBloomingStarted': MessageLookupByLibrary.simpleMessage('Blooming Started!'),
+    'feedLifeEventCardPageCloning': MessageLookupByLibrary.simpleMessage('Cloning!'),
     'feedLifeEventCardPageCuringStarted': MessageLookupByLibrary.simpleMessage('Curing Started!'),
     'feedLifeEventCardPageDryingStarted': MessageLookupByLibrary.simpleMessage('Drying Started!'),
     'feedLifeEventCardPageGermination': MessageLookupByLibrary.simpleMessage('Germination!'),
@@ -189,6 +192,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'feedLifeEventFormPageNotSet': MessageLookupByLibrary.simpleMessage('Not set'),
     'feedLifeEventFormPagePhaseLabel': MessageLookupByLibrary.simpleMessage('Phase'),
     'feedLifeEventFormPagePhaseLabelBlooming': MessageLookupByLibrary.simpleMessage('Blooming since'),
+    'feedLifeEventFormPagePhaseLabelCloning': MessageLookupByLibrary.simpleMessage('Cloning date'),
     'feedLifeEventFormPagePhaseLabelCuring': MessageLookupByLibrary.simpleMessage('Curing since'),
     'feedLifeEventFormPagePhaseLabelDrying': MessageLookupByLibrary.simpleMessage('Drying since'),
     'feedLifeEventFormPagePhaseLabelGermination': MessageLookupByLibrary.simpleMessage('Germination date'),
@@ -285,7 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'feedWateringCardPageVolume': MessageLookupByLibrary.simpleMessage('Water quantity'),
     'feedWateringCardPageWasDry': m19,
     'feedWateringCardPageWithNutes': m20,
-    'formAllowAnalytics': MessageLookupByLibrary.simpleMessage('**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*'),
+    'formAllowAnalytics': MessageLookupByLibrary.simpleMessage('**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.'),
     'formCGU': MessageLookupByLibrary.simpleMessage('*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. '),
     'instructionsAutoScheduleHelper': MessageLookupByLibrary.simpleMessage('Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.'),
     'instructionsBloomScheduleHelper': MessageLookupByLibrary.simpleMessage('**Bloom stage** is the phase where the plant develops its flowers. It requires **at most 12h lights per days**, usual setting is **12h** per day.'),
@@ -330,6 +334,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'plantFeedPageLoading': MessageLookupByLibrary.simpleMessage('Loading plant..'),
     'plantFeedPageMenuBending': MessageLookupByLibrary.simpleMessage('Bending'),
     'plantFeedPageMenuBlooming': MessageLookupByLibrary.simpleMessage('Blooming'),
+    'plantFeedPageMenuCloning': MessageLookupByLibrary.simpleMessage('Cloning'),
     'plantFeedPageMenuCuring': MessageLookupByLibrary.simpleMessage('Curing'),
     'plantFeedPageMenuDefoliation': MessageLookupByLibrary.simpleMessage('Defoliation'),
     'plantFeedPageMenuDrying': MessageLookupByLibrary.simpleMessage('Drying'),
@@ -351,6 +356,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'plantFeedPageStart': MessageLookupByLibrary.simpleMessage('START'),
     'plantFeedPageTitle': MessageLookupByLibrary.simpleMessage('Plant feed'),
     'plantPickerPageSelectButton': m21,
+    'plantQuickViewPageLoadingPlantData': MessageLookupByLibrary.simpleMessage('Loading plant data'),
     'productTypePageSelectCategoryNextButton': MessageLookupByLibrary.simpleMessage('NEXT'),
     'productTypePageSelectCategorySectionTitle': MessageLookupByLibrary.simpleMessage('Please choose the new product\'s\ncategory.'),
     'productsPageLoadingPlantData': MessageLookupByLibrary.simpleMessage('Loading plant data'),
@@ -432,6 +438,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'testingLEDDone': MessageLookupByLibrary.simpleMessage('Testing done'),
     'testingLEDTitle': MessageLookupByLibrary.simpleMessage('Testing LED'),
     'title': MessageLookupByLibrary.simpleMessage('SuperGreenLab'),
+    'towelieButtonCreatePlant': MessageLookupByLibrary.simpleMessage('GO!'),
     'towelieHelperAddDevice': MessageLookupByLibrary.simpleMessage('**Good**.\nNow this is when you should **plug the controller to its power supply** if not already.\nThen you will choose one of the options above to **connect to the controller**.'),
     'towelieHelperAddExistingDevice': MessageLookupByLibrary.simpleMessage('Ok, so your controller is **already running** and **connected to your home wifi**, let\'s search for it over the network!\nEnter the **name you gave it last time** (default is **supergreencontroller**), if you can\'t remember it, you can also type its **IP address**.\nThe **IP address** can be easily found on your **router\'s home page**.\nTo **access your router\'s homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.'),
     'towelieHelperCreateLab': MessageLookupByLibrary.simpleMessage('Now we\'re creating our **first Lab**!\nA lab is where you **simulate a tiny ecosystem**\nwith artificial **lights and ventilation**.'),

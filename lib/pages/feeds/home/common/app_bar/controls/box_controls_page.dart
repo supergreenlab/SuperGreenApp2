@@ -35,11 +35,11 @@ import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/a
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class BoxControlsPage extends StatelessWidget {
-  static String get plantQuickViewPageLoadingPlantData {
+  static String get boxControlPageLoadingPlantData {
     return Intl.message(
       'Loading plant data',
-      name: 'productsPageLoadingPlantData',
-      desc: 'Products page loading plant data',
+      name: 'boxControlPageLoadingPlantData',
+      desc: 'Box control page loading plant data',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -98,7 +98,7 @@ class BoxControlsPage extends StatelessWidget {
 
   Widget _renderLoading(BuildContext context, BoxControlsBlocStateInit state) {
     return FullscreenLoading(
-      title: BoxControlsPage.plantQuickViewPageLoadingPlantData,
+      title: BoxControlsPage.boxControlPageLoadingPlantData,
     );
   }
 

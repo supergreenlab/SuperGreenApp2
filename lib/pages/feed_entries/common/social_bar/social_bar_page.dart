@@ -164,7 +164,8 @@ class SocialBarPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Report this post?', style: TextStyle(fontSize: 10),),
+            title: Text('Report this post?',),
+            content: Text('This will also block this user.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

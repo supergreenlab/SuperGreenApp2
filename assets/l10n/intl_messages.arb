@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2023-07-19T06:00:21.082807",
+  "@@last_modified": "2023-11-23T11:34:44.079196",
   "loading": "Loading...",
   "@loading": {
     "description": "Loading message usually displayed on the fullscreen overlay",
@@ -93,6 +93,12 @@
   "confirmUnRevertableChange": "This can't be reverted. Continue?",
   "@confirmUnRevertableChange": {
     "description": "Body for the delete dialog confirmation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonCreatePlant": "GO!",
+  "@towelieButtonCreatePlant": {
+    "description": "Towelie button create plant",
     "type": "text",
     "placeholders": {}
   },
@@ -637,6 +643,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "boxControlPageLoadingPlantData": "Loading plant data",
+  "@boxControlPageLoadingPlantData": {
+    "description": "Box control page loading plant data",
+    "type": "text",
+    "placeholders": {}
+  },
   "appBarMissingControllerControllerRequired": "Monitoring feature\nrequires an SGL controller",
   "@appBarMissingControllerControllerRequired": {
     "description": "Message over the graphs when controller is missing",
@@ -729,6 +741,12 @@
   },
   "plantFeedPageMenuTopping": "Topping",
   "@plantFeedPageMenuTopping": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plantFeedPageMenuCloning": "Cloning",
+  "@plantFeedPageMenuCloning": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
@@ -856,6 +874,12 @@
   "plantFeedPageStart": "START",
   "@plantFeedPageStart": {
     "description": "Button displayed under plantFeedPageAddFirstPlantPart2, opens the plant creation user flow",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plantQuickViewPageLoadingPlantData": "Loading plant data",
+  "@plantQuickViewPageLoadingPlantData": {
+    "description": "Products page loading plant data",
     "type": "text",
     "placeholders": {}
   },
@@ -1443,6 +1467,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "feedCloningCardPageTitle": "Cloning",
+  "@feedCloningCardPageTitle": {
+    "description": "Cloning card title",
+    "type": "text",
+    "placeholders": {}
+  },
   "feedCareCommonFormSaving": "Saving..",
   "@feedCareCommonFormSaving": {
     "description": "Displayd as a fullscreen loading",
@@ -1956,13 +1986,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "commentsFormPageReportButton": "Report",
+  "commentsFormPageReportButton": "Report&Block",
   "@commentsFormPageReportButton": {
     "description": "Comments page report button for comments",
     "type": "text",
     "placeholders": {}
   },
-  "commentsFormPageReportDialogBody": "Comment was: \"{comment}\"",
+  "commentsFormPageReportDialogBody": "Comment was: \"{comment}\". This will also block this user.",
   "@commentsFormPageReportDialogBody": {
     "description": "Comments page report dialog body",
     "type": "text",
@@ -2134,6 +2164,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "feedLifeEventFormPagePhaseLabelCloning": "Cloning date",
+  "@feedLifeEventFormPagePhaseLabelCloning": {
+    "description": "Life event cloning label",
+    "type": "text",
+    "placeholders": {}
+  },
   "feedLifeEventFormPagePhaseLabelGermination": "Germination date",
   "@feedLifeEventFormPagePhaseLabelGermination": {
     "description": "Life event germination label",
@@ -2191,6 +2227,12 @@
   "feedLifeEventCardPageTitle": "Life event",
   "@feedLifeEventCardPageTitle": {
     "description": "Life event card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageCloning": "Cloning!",
+  "@feedLifeEventCardPageCloning": {
+    "description": "Cloning life event",
     "type": "text",
     "placeholders": {}
   },
@@ -2258,7 +2300,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "formAllowAnalytics": "**Help us** discern what's **useful** from what's **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*",
+  "formAllowAnalytics": "**Help us** discern what's **useful** from what's **useless** by sharing **anonymous** usage data.",
   "@formAllowAnalytics": {
     "description": "Form allow analytics",
     "type": "text",

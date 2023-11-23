@@ -66,7 +66,7 @@ class CommentView extends StatelessWidget {
 
   static String get commentsFormPageReportButton {
     return Intl.message(
-      'Report',
+      'Report&Block',
       name: 'commentsFormPageReportButton',
       desc: 'Comments page report button for comments',
       locale: SGLLocalizations.current?.localeName,
@@ -75,7 +75,7 @@ class CommentView extends StatelessWidget {
 
   static String commentsFormPageReportDialogBody(String comment) {
     return Intl.message(
-      'Comment was: "$comment"',
+      'Comment was: "$comment". This will also block this user.',
       args: [comment],
       name: 'commentsFormPageReportDialogBody',
       desc: 'Comments page report dialog body',
