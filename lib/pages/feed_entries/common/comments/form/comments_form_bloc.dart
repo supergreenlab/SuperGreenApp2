@@ -201,7 +201,9 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
           event.comment.copyWith(liked: !event.comment.liked, nLikes: event.comment.nLikes + 1));
     } else if (event is CommentsFormBlocEventReport) {
       await BackendAPI().feedsAPI.reportComment(event.comment);
-      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      try {
+        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      } catch(e) {}
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventPostComment) {
       String tempID = Uuid().v4();

@@ -125,8 +125,8 @@ Future initApp() async {
 
   BackendAPI(); // force init
   if (BackendAPI().usersAPI.loggedIn) {
-    BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
     try {
+      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
       await BackendAPI().usersAPI.syncUserSettings();
     } catch (e, t) {
       Logger.logError(e, t);

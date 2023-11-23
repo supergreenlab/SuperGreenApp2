@@ -291,7 +291,7 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       await delegate.init(this.add);
       try {
         BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
-      } catch(e) {}
+      } catch (e) {}
       delegate.loadFeed();
     } else if (event is FeedBlocEventFeedLoaded) {
       feedState = event.feed;
@@ -367,7 +367,9 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       delegate.bookmarkFeedEntry(event.entry);
     } else if (event is FeedBlocEventReportEntry) {
       await BackendAPI().feedsAPI.reportFeedEntry(event.entry);
-      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      try {
+        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      } catch (e) {}
     } else {
       yield* delegate.mapEventToState(event);
     }
