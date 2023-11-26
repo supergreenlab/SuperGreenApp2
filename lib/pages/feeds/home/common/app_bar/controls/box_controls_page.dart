@@ -154,7 +154,7 @@ class BoxControlsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                 child: AppBarAction(
                   center: true,
                   icon: 'assets/app_bar/icon_ventilation.svg',
@@ -172,7 +172,7 @@ class BoxControlsPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                   child: AppBarAction(
                     center: true,
                     icon: 'assets/app_bar/icon_schedule.svg',
@@ -198,7 +198,7 @@ class BoxControlsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                   child: AppBarAction(
                       center: true,
                       icon: 'assets/app_bar/icon_light.svg',
@@ -220,7 +220,7 @@ class BoxControlsPage extends StatelessWidget {
                           ]))),
               plant != null
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                       child: AppBarAction(
                         center: true,
                         icon: 'assets/app_bar/icon_alerts.svg',

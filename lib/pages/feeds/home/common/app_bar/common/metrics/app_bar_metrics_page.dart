@@ -157,10 +157,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: _renderMetrics(24, 56, 11, 453, 45),
-        ),
+        _renderMetrics(24, 56, 11, 453, 45),
         Container(
           color: Colors.white.withAlpha(220),
           child: Padding(
