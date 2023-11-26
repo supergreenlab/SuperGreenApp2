@@ -84,7 +84,7 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.onPressed!(widget.value);
+        widget.onPressed!(!widget.value);
       },
       child: AnimatedContainer(
         height: 40,
