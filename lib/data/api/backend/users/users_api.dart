@@ -23,8 +23,8 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/user_settings.dart';
 import 'package:super_green_app/data/logger/logger.dart';
-import 'package:super_green_app/pages/feeds/home/common/settings/user_settings.dart';
 
 class User extends Equatable {
   final String? id;

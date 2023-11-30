@@ -34,6 +34,26 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _isControllerMeta =
+      const VerificationMeta('isController');
+  @override
+  late final GeneratedColumn<bool> isController = GeneratedColumn<bool>(
+      'is_controller', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_controller" IN (0, 1))'),
+      defaultValue: Constant(true));
+  static const VerificationMeta _isScreenMeta =
+      const VerificationMeta('isScreen');
+  @override
+  late final GeneratedColumn<bool> isScreen = GeneratedColumn<bool>(
+      'is_screen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_screen" IN (0, 1))'),
+      defaultValue: Constant(false));
   static const VerificationMeta _ipMeta = const VerificationMeta('ip');
   @override
   late final GeneratedColumn<String> ip = GeneratedColumn<String>(
@@ -108,6 +128,8 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         id,
         identifier,
         name,
+        isController,
+        isScreen,
         ip,
         mdns,
         isReachable,
@@ -143,6 +165,16 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('is_controller')) {
+      context.handle(
+          _isControllerMeta,
+          isController.isAcceptableOrUnknown(
+              data['is_controller']!, _isControllerMeta));
+    }
+    if (data.containsKey('is_screen')) {
+      context.handle(_isScreenMeta,
+          isScreen.isAcceptableOrUnknown(data['is_screen']!, _isScreenMeta));
     }
     if (data.containsKey('ip')) {
       context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip']!, _ipMeta));
@@ -196,6 +228,10 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           .read(DriftSqlType.string, data['${effectivePrefix}identifier'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      isController: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_controller'])!,
+      isScreen: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_screen'])!,
       ip: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}ip'])!,
       mdns: attachedDatabase.typeMapping
@@ -225,6 +261,8 @@ class Device extends DataClass implements Insertable<Device> {
   final int id;
   final String identifier;
   final String name;
+  final bool isController;
+  final bool isScreen;
   final String ip;
   final String mdns;
   final bool isReachable;
@@ -237,6 +275,8 @@ class Device extends DataClass implements Insertable<Device> {
       {required this.id,
       required this.identifier,
       required this.name,
+      required this.isController,
+      required this.isScreen,
       required this.ip,
       required this.mdns,
       required this.isReachable,
@@ -251,6 +291,8 @@ class Device extends DataClass implements Insertable<Device> {
     map['id'] = Variable<int>(id);
     map['identifier'] = Variable<String>(identifier);
     map['name'] = Variable<String>(name);
+    map['is_controller'] = Variable<bool>(isController);
+    map['is_screen'] = Variable<bool>(isScreen);
     map['ip'] = Variable<String>(ip);
     map['mdns'] = Variable<String>(mdns);
     map['is_reachable'] = Variable<bool>(isReachable);
@@ -271,6 +313,8 @@ class Device extends DataClass implements Insertable<Device> {
       id: Value(id),
       identifier: Value(identifier),
       name: Value(name),
+      isController: Value(isController),
+      isScreen: Value(isScreen),
       ip: Value(ip),
       mdns: Value(mdns),
       isReachable: Value(isReachable),
@@ -292,6 +336,8 @@ class Device extends DataClass implements Insertable<Device> {
       id: serializer.fromJson<int>(json['id']),
       identifier: serializer.fromJson<String>(json['identifier']),
       name: serializer.fromJson<String>(json['name']),
+      isController: serializer.fromJson<bool>(json['isController']),
+      isScreen: serializer.fromJson<bool>(json['isScreen']),
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
       isReachable: serializer.fromJson<bool>(json['isReachable']),
@@ -309,6 +355,8 @@ class Device extends DataClass implements Insertable<Device> {
       'id': serializer.toJson<int>(id),
       'identifier': serializer.toJson<String>(identifier),
       'name': serializer.toJson<String>(name),
+      'isController': serializer.toJson<bool>(isController),
+      'isScreen': serializer.toJson<bool>(isScreen),
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
       'isReachable': serializer.toJson<bool>(isReachable),
@@ -324,6 +372,8 @@ class Device extends DataClass implements Insertable<Device> {
           {int? id,
           String? identifier,
           String? name,
+          bool? isController,
+          bool? isScreen,
           String? ip,
           String? mdns,
           bool? isReachable,
@@ -336,6 +386,8 @@ class Device extends DataClass implements Insertable<Device> {
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
         name: name ?? this.name,
+        isController: isController ?? this.isController,
+        isScreen: isScreen ?? this.isScreen,
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
         isReachable: isReachable ?? this.isReachable,
@@ -351,6 +403,8 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('id: $id, ')
           ..write('identifier: $identifier, ')
           ..write('name: $name, ')
+          ..write('isController: $isController, ')
+          ..write('isScreen: $isScreen, ')
           ..write('ip: $ip, ')
           ..write('mdns: $mdns, ')
           ..write('isReachable: $isReachable, ')
@@ -364,8 +418,8 @@ class Device extends DataClass implements Insertable<Device> {
   }
 
   @override
-  int get hashCode => Object.hash(id, identifier, name, ip, mdns, isReachable,
-      isRemote, isSetup, config, serverID, synced);
+  int get hashCode => Object.hash(id, identifier, name, isController, isScreen,
+      ip, mdns, isReachable, isRemote, isSetup, config, serverID, synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -373,6 +427,8 @@ class Device extends DataClass implements Insertable<Device> {
           other.id == this.id &&
           other.identifier == this.identifier &&
           other.name == this.name &&
+          other.isController == this.isController &&
+          other.isScreen == this.isScreen &&
           other.ip == this.ip &&
           other.mdns == this.mdns &&
           other.isReachable == this.isReachable &&
@@ -387,6 +443,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<int> id;
   final Value<String> identifier;
   final Value<String> name;
+  final Value<bool> isController;
+  final Value<bool> isScreen;
   final Value<String> ip;
   final Value<String> mdns;
   final Value<bool> isReachable;
@@ -399,6 +457,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.id = const Value.absent(),
     this.identifier = const Value.absent(),
     this.name = const Value.absent(),
+    this.isController = const Value.absent(),
+    this.isScreen = const Value.absent(),
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
     this.isReachable = const Value.absent(),
@@ -412,6 +472,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.id = const Value.absent(),
     required String identifier,
     required String name,
+    this.isController = const Value.absent(),
+    this.isScreen = const Value.absent(),
     required String ip,
     required String mdns,
     this.isReachable = const Value.absent(),
@@ -428,6 +490,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     Expression<int>? id,
     Expression<String>? identifier,
     Expression<String>? name,
+    Expression<bool>? isController,
+    Expression<bool>? isScreen,
     Expression<String>? ip,
     Expression<String>? mdns,
     Expression<bool>? isReachable,
@@ -441,6 +505,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       if (id != null) 'id': id,
       if (identifier != null) 'identifier': identifier,
       if (name != null) 'name': name,
+      if (isController != null) 'is_controller': isController,
+      if (isScreen != null) 'is_screen': isScreen,
       if (ip != null) 'ip': ip,
       if (mdns != null) 'mdns': mdns,
       if (isReachable != null) 'is_reachable': isReachable,
@@ -456,6 +522,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       {Value<int>? id,
       Value<String>? identifier,
       Value<String>? name,
+      Value<bool>? isController,
+      Value<bool>? isScreen,
       Value<String>? ip,
       Value<String>? mdns,
       Value<bool>? isReachable,
@@ -468,6 +536,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
       name: name ?? this.name,
+      isController: isController ?? this.isController,
+      isScreen: isScreen ?? this.isScreen,
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
       isReachable: isReachable ?? this.isReachable,
@@ -490,6 +560,12 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (isController.present) {
+      map['is_controller'] = Variable<bool>(isController.value);
+    }
+    if (isScreen.present) {
+      map['is_screen'] = Variable<bool>(isScreen.value);
     }
     if (ip.present) {
       map['ip'] = Variable<String>(ip.value);
@@ -524,6 +600,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
           ..write('id: $id, ')
           ..write('identifier: $identifier, ')
           ..write('name: $name, ')
+          ..write('isController: $isController, ')
+          ..write('isScreen: $isScreen, ')
           ..write('ip: $ip, ')
           ..write('mdns: $mdns, ')
           ..write('isReachable: $isReachable, ')

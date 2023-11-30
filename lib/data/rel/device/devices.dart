@@ -29,6 +29,8 @@ class Devices extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get identifier => text().withLength(min: 1, max: 16)();
   TextColumn get name => text().withLength(min: 1, max: 24)();
+  BoolColumn get isController => boolean().withDefault(Constant(true))();
+  BoolColumn get isScreen => boolean().withDefault(Constant(false))();
   TextColumn get ip => text().withLength(min: 7, max: 15)();
   TextColumn get mdns => text().withLength(min: 1, max: 64)();
   BoolColumn get isReachable => boolean().withDefault(Constant(true))();
@@ -47,6 +49,8 @@ class Devices extends Table {
     return DevicesCompanion(
         identifier: Value(map['identifier'] as String),
         name: Value(map['name'] as String),
+        isController: Value(map['isController'] as bool),
+        isScreen: Value(map['isScreen'] as bool),
         ip: Value(map['ip'] as String),
         mdns: Value(map['mdns'] as String),
         isReachable: Value(false),
@@ -59,6 +63,8 @@ class Devices extends Table {
       'id': device.serverID,
       'identifier': device.identifier,
       'name': device.name,
+      'isController': device.isController,
+      'isScreen': device.isScreen,
       'ip': device.ip,
       'mdns': device.mdns,
     };

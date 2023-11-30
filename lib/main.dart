@@ -32,6 +32,7 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
+import 'package:super_green_app/data/kv/models/user_settings.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
@@ -44,7 +45,6 @@ import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 import 'data/config.dart';
-import 'pages/feeds/home/common/settings/user_settings.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -66,6 +66,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 Future initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Logger.init();
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Logger.logError(details.exception, details.stack);
+  };
+
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
@@ -99,11 +105,6 @@ Future initApp() async {
 
   RecaptchaHandler.instance.setupSiteKey(dataSiteKey: Config.recaptchaKey);
 
-  await Logger.init();
-  FlutterError.onError = (FlutterErrorDetails details) {
-    Logger.logError(details.exception, details.stack);
-  };
-
   final AppData appData = AppDB().getAppData();
 
   if (appData.storeGeo == null) {
@@ -126,8 +127,8 @@ Future initApp() async {
   BackendAPI(); // force init
   if (BackendAPI().usersAPI.loggedIn) {
     try {
-      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
       await BackendAPI().usersAPI.syncUserSettings();
+      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
     } catch (e, t) {
       Logger.logError(e, t);
     }

@@ -82,7 +82,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 17;
+  int get schemaVersion => 18;
 
   void reconnect() {
     _instance = RelDB();
@@ -170,6 +170,9 @@ class RelDB extends _$RelDB {
         Logger.logError(e, trace);
       }
       await m.createTable(checklistCollections);
+    } else if (fromVersion == 17) {
+      await m.addColumn(devices, devices.isController);
+      await m.addColumn(devices, devices.isScreen);
     }
   }
 
