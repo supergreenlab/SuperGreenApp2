@@ -161,7 +161,7 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
         final deviceName = await DeviceAPI.fetchStringParam(args.ip, "DEVICE_NAME", auth: auth);
         final mdnsDomain = await DeviceAPI.fetchStringParam(args.ip, "MDNS_DOMAIN", auth: auth);
 
-        final device =
+        final DevicesCompanion device =
             DevicesCompanion.insert(identifier: deviceIdentifier, name: deviceName, ip: args.ip, mdns: mdnsDomain);
         deviceID = await db.addDevice(device);
       } catch (e) {
@@ -186,7 +186,7 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
       final Param state = await db.getParam(deviceID, 'STATE');
 
       // Just got his device
-      if (state.ivalue == 0) {
+      if (state.ivalue == 0 && d.isController) {
         // set schedule to local timezone
         final Module boxes = await db.getModule(deviceID, 'box');
         for (int i = 0; i < boxes.arrayLen; ++i) {
@@ -200,11 +200,13 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
         }
 
         // set motors MAX parameter
-        final Module motors = await db.getModule(deviceID, 'motor');
-        for (int i = 0; i < motors.arrayLen; ++i) {
-          final Param max = await db.getParam(deviceID, 'MOTOR_${i}_MAX');
-          await DeviceHelper.updateIntParam(d, max, 50);
-        }
+        try {
+          final Module motors = await db.getModule(deviceID, 'motor');
+          for (int i = 0; i < motors.arrayLen; ++i) {
+            final Param max = await db.getParam(deviceID, 'MOTOR_${i}_MAX');
+            await DeviceHelper.updateIntParam(d, max, 50);
+          }
+        } catch (e) {}
       }
 
       final Param wifi = await db.getParam(deviceID, 'WIFI_STATUS');

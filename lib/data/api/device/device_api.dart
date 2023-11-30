@@ -342,6 +342,8 @@ class DeviceAPI {
       }
       await db.updateDevice(DevicesCompanion(
         id: Value(deviceID),
+        isController: Value((keys['isController'] ?? 'true') == 'true'),
+        isScreen: Value((keys['isScreen'] ?? 'false') == 'true'),
         isSetup: Value(true),
         config: Value(config),
       ));

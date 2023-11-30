@@ -1765,6 +1765,12 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   late final GeneratedColumn<int> deviceBox = GeneratedColumn<int>(
       'device_box', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _screenDeviceMeta =
+      const VerificationMeta('screenDevice');
+  @override
+  late final GeneratedColumn<int> screenDevice = GeneratedColumn<int>(
+      'screen_device', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -1800,8 +1806,17 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
           GeneratedColumn.constraintIsAlways('CHECK ("synced" IN (0, 1))'),
       defaultValue: Constant(false));
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, feed, device, deviceBox, name, settings, serverID, synced];
+  List<GeneratedColumn> get $columns => [
+        id,
+        feed,
+        device,
+        deviceBox,
+        screenDevice,
+        name,
+        settings,
+        serverID,
+        synced
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1826,6 +1841,12 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     if (data.containsKey('device_box')) {
       context.handle(_deviceBoxMeta,
           deviceBox.isAcceptableOrUnknown(data['device_box']!, _deviceBoxMeta));
+    }
+    if (data.containsKey('screen_device')) {
+      context.handle(
+          _screenDeviceMeta,
+          screenDevice.isAcceptableOrUnknown(
+              data['screen_device']!, _screenDeviceMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -1862,6 +1883,8 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
           .read(DriftSqlType.int, data['${effectivePrefix}device']),
       deviceBox: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}device_box']),
+      screenDevice: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}screen_device']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       settings: attachedDatabase.typeMapping
@@ -1884,6 +1907,7 @@ class Box extends DataClass implements Insertable<Box> {
   final int? feed;
   final int? device;
   final int? deviceBox;
+  final int? screenDevice;
   final String name;
   final String settings;
   final String? serverID;
@@ -1893,6 +1917,7 @@ class Box extends DataClass implements Insertable<Box> {
       this.feed,
       this.device,
       this.deviceBox,
+      this.screenDevice,
       required this.name,
       required this.settings,
       this.serverID,
@@ -1909,6 +1934,9 @@ class Box extends DataClass implements Insertable<Box> {
     }
     if (!nullToAbsent || deviceBox != null) {
       map['device_box'] = Variable<int>(deviceBox);
+    }
+    if (!nullToAbsent || screenDevice != null) {
+      map['screen_device'] = Variable<int>(screenDevice);
     }
     map['name'] = Variable<String>(name);
     map['settings'] = Variable<String>(settings);
@@ -1928,6 +1956,9 @@ class Box extends DataClass implements Insertable<Box> {
       deviceBox: deviceBox == null && nullToAbsent
           ? const Value.absent()
           : Value(deviceBox),
+      screenDevice: screenDevice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(screenDevice),
       name: Value(name),
       settings: Value(settings),
       serverID: serverID == null && nullToAbsent
@@ -1945,6 +1976,7 @@ class Box extends DataClass implements Insertable<Box> {
       feed: serializer.fromJson<int?>(json['feed']),
       device: serializer.fromJson<int?>(json['device']),
       deviceBox: serializer.fromJson<int?>(json['deviceBox']),
+      screenDevice: serializer.fromJson<int?>(json['screenDevice']),
       name: serializer.fromJson<String>(json['name']),
       settings: serializer.fromJson<String>(json['settings']),
       serverID: serializer.fromJson<String?>(json['serverID']),
@@ -1959,6 +1991,7 @@ class Box extends DataClass implements Insertable<Box> {
       'feed': serializer.toJson<int?>(feed),
       'device': serializer.toJson<int?>(device),
       'deviceBox': serializer.toJson<int?>(deviceBox),
+      'screenDevice': serializer.toJson<int?>(screenDevice),
       'name': serializer.toJson<String>(name),
       'settings': serializer.toJson<String>(settings),
       'serverID': serializer.toJson<String?>(serverID),
@@ -1971,6 +2004,7 @@ class Box extends DataClass implements Insertable<Box> {
           Value<int?> feed = const Value.absent(),
           Value<int?> device = const Value.absent(),
           Value<int?> deviceBox = const Value.absent(),
+          Value<int?> screenDevice = const Value.absent(),
           String? name,
           String? settings,
           Value<String?> serverID = const Value.absent(),
@@ -1980,6 +2014,8 @@ class Box extends DataClass implements Insertable<Box> {
         feed: feed.present ? feed.value : this.feed,
         device: device.present ? device.value : this.device,
         deviceBox: deviceBox.present ? deviceBox.value : this.deviceBox,
+        screenDevice:
+            screenDevice.present ? screenDevice.value : this.screenDevice,
         name: name ?? this.name,
         settings: settings ?? this.settings,
         serverID: serverID.present ? serverID.value : this.serverID,
@@ -1992,6 +2028,7 @@ class Box extends DataClass implements Insertable<Box> {
           ..write('feed: $feed, ')
           ..write('device: $device, ')
           ..write('deviceBox: $deviceBox, ')
+          ..write('screenDevice: $screenDevice, ')
           ..write('name: $name, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')
@@ -2001,8 +2038,8 @@ class Box extends DataClass implements Insertable<Box> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, feed, device, deviceBox, name, settings, serverID, synced);
+  int get hashCode => Object.hash(id, feed, device, deviceBox, screenDevice,
+      name, settings, serverID, synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2011,6 +2048,7 @@ class Box extends DataClass implements Insertable<Box> {
           other.feed == this.feed &&
           other.device == this.device &&
           other.deviceBox == this.deviceBox &&
+          other.screenDevice == this.screenDevice &&
           other.name == this.name &&
           other.settings == this.settings &&
           other.serverID == this.serverID &&
@@ -2022,6 +2060,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   final Value<int?> feed;
   final Value<int?> device;
   final Value<int?> deviceBox;
+  final Value<int?> screenDevice;
   final Value<String> name;
   final Value<String> settings;
   final Value<String?> serverID;
@@ -2031,6 +2070,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.feed = const Value.absent(),
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
+    this.screenDevice = const Value.absent(),
     this.name = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
@@ -2041,6 +2081,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.feed = const Value.absent(),
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
+    this.screenDevice = const Value.absent(),
     required String name,
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
@@ -2051,6 +2092,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     Expression<int>? feed,
     Expression<int>? device,
     Expression<int>? deviceBox,
+    Expression<int>? screenDevice,
     Expression<String>? name,
     Expression<String>? settings,
     Expression<String>? serverID,
@@ -2061,6 +2103,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       if (feed != null) 'feed': feed,
       if (device != null) 'device': device,
       if (deviceBox != null) 'device_box': deviceBox,
+      if (screenDevice != null) 'screen_device': screenDevice,
       if (name != null) 'name': name,
       if (settings != null) 'settings': settings,
       if (serverID != null) 'server_i_d': serverID,
@@ -2073,6 +2116,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       Value<int?>? feed,
       Value<int?>? device,
       Value<int?>? deviceBox,
+      Value<int?>? screenDevice,
       Value<String>? name,
       Value<String>? settings,
       Value<String?>? serverID,
@@ -2082,6 +2126,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       feed: feed ?? this.feed,
       device: device ?? this.device,
       deviceBox: deviceBox ?? this.deviceBox,
+      screenDevice: screenDevice ?? this.screenDevice,
       name: name ?? this.name,
       settings: settings ?? this.settings,
       serverID: serverID ?? this.serverID,
@@ -2103,6 +2148,9 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     }
     if (deviceBox.present) {
       map['device_box'] = Variable<int>(deviceBox.value);
+    }
+    if (screenDevice.present) {
+      map['screen_device'] = Variable<int>(screenDevice.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -2126,6 +2174,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
           ..write('feed: $feed, ')
           ..write('device: $device, ')
           ..write('deviceBox: $deviceBox, ')
+          ..write('screenDevice: $screenDevice, ')
           ..write('name: $name, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')

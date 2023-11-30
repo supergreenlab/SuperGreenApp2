@@ -92,6 +92,7 @@ class Boxes extends Table {
   IntColumn get feed => integer().nullable()();
   IntColumn get device => integer().nullable()();
   IntColumn get deviceBox => integer().nullable()();
+  IntColumn get screenDevice => integer().nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
 
   TextColumn get settings => text().withDefault(Constant('{}'))();
@@ -109,6 +110,12 @@ class Boxes extends Table {
       deviceID = device.id;
     }
 
+    int? screenDeviceID;
+    if (map['screenDeviceID'] != null) {
+      Device device = await RelDB.get().devicesDAO.getDeviceForServerID(map['screenDeviceID']);
+      screenDeviceID = device.id;
+    }
+
     int? feedID;
     if (map['feedID'] != null) {
       Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
@@ -118,6 +125,7 @@ class Boxes extends Table {
         feed: Value(feedID),
         device: Value(deviceID),
         deviceBox: Value(map['deviceBox'] as int?),
+        screenDevice: Value(screenDeviceID),
         name: Value(map['name'] as String),
         settings: Value(map['settings'] as String),
         synced: Value(true),
@@ -131,6 +139,7 @@ class Boxes extends Table {
       'settings': box.settings,
       'feedID': null,
       'deviceID': null,
+      'screenDeviceID': null,
     };
     if (box.device != null) {
       late Device device;
@@ -141,6 +150,15 @@ class Boxes extends Table {
       }
       obj['deviceID'] = device.serverID;
       obj['deviceBox'] = box.deviceBox;
+    }
+    if (box.screenDevice != null) {
+      late Device device;
+      try {
+        device = await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
+      } catch (e) {
+        Logger.throwError('Missing serverID for device relation', data: {"box": box, "device": box.device});
+      }
+      obj['screenDeviceID'] = device.serverID;
     }
     if (box.feed != null) {
       Feed feed = await RelDB.get().feedsDAO.getFeed(box.feed!);
@@ -238,7 +256,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<Plant> getLastPlant() {
-    return (select(plants)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])..limit(1)).getSingle();
+    return (select(plants)
+          ..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])
+          ..limit(1))
+        .getSingle();
   }
 
   Future<List<Plant>> getPlants() {

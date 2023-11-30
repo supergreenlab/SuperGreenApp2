@@ -173,6 +173,7 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 17) {
       await m.addColumn(devices, devices.isController);
       await m.addColumn(devices, devices.isScreen);
+      await m.addColumn(boxes, boxes.screenDevice);
     }
   }
 
