@@ -154,7 +154,7 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(isController: true, futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
         BlocProvider.of<CreateBoxBloc>(context)

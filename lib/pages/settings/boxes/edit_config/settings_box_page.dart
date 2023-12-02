@@ -212,7 +212,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   }
 
   void _handleChangeController(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(isController: true, futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
         setState(() {

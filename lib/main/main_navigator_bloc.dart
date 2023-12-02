@@ -47,14 +47,26 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   final Checklist? checklist;
   final ChecklistSeed? checklistSeed;
 
-  MainNavigateToHomeEvent({this.plant, this.feedEntry, this.commentID, this.replyTo, this.checklist, this.checklistSeed,});
+  MainNavigateToHomeEvent({
+    this.plant,
+    this.feedEntry,
+    this.commentID,
+    this.replyTo,
+    this.checklist,
+    this.checklistSeed,
+  });
 
   @override
-  List<Object?> get props => [plant, feedEntry, commentID, replyTo, checklistSeed,];
+  List<Object?> get props => [
+        plant,
+        feedEntry,
+        commentID,
+        replyTo,
+        checklistSeed,
+      ];
 }
 
 class MainNavigateToCreatePlantEvent extends MainNavigatorEvent {
-  
   MainNavigateToCreatePlantEvent({futureFn}) : super(futureFn: futureFn);
 
   @override
@@ -86,7 +98,14 @@ class MainNavigateToMotorPortEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToSelectDeviceEvent extends MainNavigatorEvent {
-  MainNavigateToSelectDeviceEvent({futureFn}) : super(futureFn: futureFn);
+  final bool? isScreen;
+  final bool? isController;
+
+  MainNavigateToSelectDeviceEvent({this.isScreen, this.isController, futureFn})
+      : super(futureFn: futureFn);
+
+  @override
+  List<Object?> get props => [isScreen, isController];
 }
 
 class MainNavigateToSelectDeviceBoxEvent extends MainNavigatorEvent {
@@ -109,10 +128,13 @@ class MainNavigateToSelectNewDeviceBoxEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
-  MainNavigateToAddDeviceEvent({futureFn}) : super(futureFn: futureFn);
+  final bool? isScreen;
+  final bool? isController;
+
+  MainNavigateToAddDeviceEvent({this.isScreen, this.isController, futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [isScreen, isController];
 }
 
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
@@ -526,7 +548,6 @@ class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
-
 class MainNavigateToRefreshParameters extends MainNavigatorEvent {
   final Device device;
 
@@ -636,7 +657,11 @@ class MainNavigateToChecklist extends MainNavigatorEvent {
   MainNavigateToChecklist(this.plant, this.box, this.checklist);
 
   @override
-  List<Object> get props => [plant, box, checklist,];
+  List<Object> get props => [
+        plant,
+        box,
+        checklist,
+      ];
 }
 
 class MainNavigateToCreateChecklist extends MainNavigatorEvent {
@@ -646,7 +671,10 @@ class MainNavigateToCreateChecklist extends MainNavigatorEvent {
   MainNavigateToCreateChecklist(this.checklist, {this.checklistSeed});
 
   @override
-  List<Object?> get props => [checklist, checklistSeed,];
+  List<Object?> get props => [
+        checklist,
+        checklistSeed,
+      ];
 }
 
 class MainNavigateToChecklistCollections extends MainNavigatorEvent {
@@ -716,7 +744,7 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/plant/box', arguments: event);
     } else if (event is MainNavigateToCreateBoxEvent) {
       future = _navigatorKey.currentState!.pushNamed('/plant/box/new', arguments: event);
-    }  else if (event is MainNavigateToSelectDeviceEvent) {
+    } else if (event is MainNavigateToSelectDeviceEvent) {
       future = _navigatorKey.currentState!.pushNamed('/box/device', arguments: event);
     } else if (event is MainNavigateToSelectDeviceBoxEvent) {
       future = _navigatorKey.currentState!.pushNamed('/box/device/box', arguments: event);
