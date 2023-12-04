@@ -31,6 +31,11 @@ class RefreshParametersBlocEventInit extends RefreshParametersBlocEvent {
   List<Object> get props => [];
 }
 
+class RefreshParametersBlocEventError extends RefreshParametersBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class RefreshParametersBlocEventRefreshing extends RefreshParametersBlocEvent {
   final double percent;
   RefreshParametersBlocEventRefreshing(this.percent);
@@ -51,6 +56,11 @@ class RefreshParametersBlocEventUpdate extends RefreshParametersBlocEvent {
 abstract class RefreshParametersBlocState extends Equatable {}
 
 class RefreshParametersBlocStateLoading extends RefreshParametersBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class RefreshParametersBlocStateError extends RefreshParametersBlocState {
   @override
   List<Object> get props => [];
 }
@@ -113,6 +123,8 @@ class RefreshParametersBloc extends LegacyBloc<RefreshParametersBlocEvent, Refre
         await Future.delayed(Duration(seconds: 2));
         yield RefreshParametersBlocStateLoaded(device);
       }
+    } else if (event is RefreshParametersBlocEventError) {
+      yield RefreshParametersBlocStateError();
     }
   }
 
@@ -122,9 +134,13 @@ class RefreshParametersBloc extends LegacyBloc<RefreshParametersBlocEvent, Refre
     final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN", auth: auth);
     await RelDB.get().devicesDAO.updateDevice(
         DevicesCompanion(id: Value(device.id), name: Value(deviceName), mdns: Value(mdnsDomain), synced: Value(false)));
-    await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
-      add(RefreshParametersBlocEventRefreshing(adv));
-    }, delete: delete, auth: auth);
+    try {
+      await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
+        add(RefreshParametersBlocEventRefreshing(adv));
+      }, delete: delete, auth: auth);
+    } catch (e) {
+      add(RefreshParametersBlocEventError());
+    }
     add(RefreshParametersBlocEventRefreshing(100));
   }
 }

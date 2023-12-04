@@ -107,6 +107,10 @@ class DeviceNamePageState extends State<DeviceNamePage> {
       listener: (BuildContext context, DeviceNameBlocState state) async {
         if (state is DeviceNameBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
+          if (state.device.nLeds == 0) {
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
+            return;
+          }
           FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigateToDeviceTestEvent(state.device, futureFn: ff.futureFn));

@@ -132,17 +132,21 @@ class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDev
       boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
       //}
     }
-    final ledModule = await ddb.getModule(device.id, 'led');
-    for (int i = 0; i < ledModule.arrayLen; ++i) {
-      final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
-      if (ledBox.ivalue! >= 0) {
-        SelectData? selectData = boxes.firstWhereOrNull((b) => b.box == ledBox.ivalue);
-        if (selectData != null) {
-          selectData.leds.add(i);
+    int nLeds = 0;
+    try {
+      final ledModule = await ddb.getModule(device.id, 'led');
+      for (int i = 0; i < ledModule.arrayLen; ++i) {
+        final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
+        if (ledBox.ivalue! >= 0) {
+          SelectData? selectData = boxes.firstWhereOrNull((b) => b.box == ledBox.ivalue);
+          if (selectData != null) {
+            selectData.leds.add(i);
+          }
         }
       }
-    }
-    yield SelectDeviceBoxBlocStateLoaded(boxes, ledModule.arrayLen, boxModule.arrayLen, device);
+      nLeds = ledModule.arrayLen;
+    } catch (e) {}
+    yield SelectDeviceBoxBlocStateLoaded(boxes, nLeds, boxModule.arrayLen, device);
   }
 }
 

@@ -116,7 +116,7 @@ class AppBarMissingController extends StatelessWidget {
                   title: AppBarMissingController.appBarMissingControllerSetupController,
                   onPressed: () {
                     BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSelectDeviceEvent(isScreen: false, futureFn: (future) async {
+                        .add(MainNavigateToSelectDeviceEvent(isController: true, futureFn: (future) async {
                       dynamic res = await future;
                       if (res is SelectBoxDeviceData) {
                         BlocProvider.of<BoxControlsBloc>(context).add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));

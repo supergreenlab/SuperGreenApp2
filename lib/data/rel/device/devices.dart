@@ -37,6 +37,12 @@ class Devices extends Table {
   BoolColumn get isRemote => boolean().withDefault(Constant(false))();
   BoolColumn get isSetup => boolean().withDefault(Constant(false))();
 
+  IntColumn get nBoxes => integer().withDefault(Constant(0))();
+  IntColumn get nSensorPorts => integer().withDefault(Constant(0))();
+  IntColumn get nLeds => integer().withDefault(Constant(0))();
+  IntColumn get nMotors => integer().withDefault(Constant(0))();
+  BoolColumn get needsRefresh => boolean().withDefault(Constant(false))();
+
   TextColumn get config => text().nullable()();
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();

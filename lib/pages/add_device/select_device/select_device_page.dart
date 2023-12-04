@@ -371,6 +371,10 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   }
 
   void _selectDevice(BuildContext context, Device device) {
+    if (!device.isController || device.nBoxes == 1) {
+      BlocProvider.of<SelectDeviceBloc>(context).add(SelectDeviceBlocEventSelect(device, 0));
+      return;
+    }
     BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToSelectDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;

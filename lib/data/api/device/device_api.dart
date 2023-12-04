@@ -340,11 +340,38 @@ class DeviceAPI {
         ++done;
         advancement(done / total);
       }
+      bool isController = (keys['isController'] ?? 'true') == 'true';
+      int nBoxes = 0;
+      int nSensorPorts = 0;
+      int nLeds = 0;
+      int nMotors = 0;
+      if (isController) {
+        try {
+          final boxModule = await RelDB.get().devicesDAO.getModule(deviceID, 'box');
+          nBoxes = boxModule.arrayLen;
+        } catch (e) {}
+        try {
+          final i2cModule = await RelDB.get().devicesDAO.getModule(deviceID, 'i2c');
+          nSensorPorts = i2cModule.arrayLen;
+        } catch (e) {}
+        try {
+          final ledModule = await RelDB.get().devicesDAO.getModule(deviceID, 'led');
+          nLeds = ledModule.arrayLen;
+        } catch (e) {}
+        try {
+          final motorModule = await RelDB.get().devicesDAO.getModule(deviceID, 'motor');
+          nMotors = motorModule.arrayLen;
+        } catch (e) {}
+      }
       await db.updateDevice(DevicesCompanion(
         id: Value(deviceID),
-        isController: Value((keys['isController'] ?? 'true') == 'true'),
+        isController: Value(isController),
         isScreen: Value((keys['isScreen'] ?? 'false') == 'true'),
         isSetup: Value(true),
+        nBoxes: Value(nBoxes),
+        nSensorPorts: Value(nSensorPorts),
+        nLeds: Value(nLeds),
+        nMotors: Value(nMotors),
         config: Value(config),
       ));
     } catch (e, trace) {

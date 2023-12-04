@@ -190,13 +190,17 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
         // set schedule to local timezone
         final Module boxes = await db.getModule(deviceID, 'box');
         for (int i = 0; i < boxes.arrayLen; ++i) {
-          final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
-          final Param onMin = await db.getParam(deviceID, 'BOX_${i}_ON_MIN');
-          await DeviceHelper.updateHourMinParams(d, onHour, onMin, onHour.ivalue!, onMin.ivalue!);
+          try {
+            final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
+            final Param onMin = await db.getParam(deviceID, 'BOX_${i}_ON_MIN');
+            await DeviceHelper.updateHourMinParams(d, onHour, onMin, onHour.ivalue!, onMin.ivalue!);
 
-          final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
-          final Param offMin = await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
-          await DeviceHelper.updateHourMinParams(d, offHour, offMin, offHour.ivalue!, offMin.ivalue!);
+            final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
+            final Param offMin = await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
+            await DeviceHelper.updateHourMinParams(d, offHour, offMin, offHour.ivalue!, offMin.ivalue!);
+          } catch (e, trace) {
+            Logger.logError(e, trace, data: {"ip": args.ip, "deviceID": deviceID});
+          }
         }
 
         // set motors MAX parameter

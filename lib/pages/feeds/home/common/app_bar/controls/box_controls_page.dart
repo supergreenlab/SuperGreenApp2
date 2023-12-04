@@ -26,6 +26,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/date_renderer.dart';
+import 'package:super_green_app/pages/add_device/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_missing_controller.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
@@ -131,15 +132,15 @@ class BoxControlsPage extends StatelessWidget {
       totalDimming *= state.metrics.light.ivalue / 100.0;
     }
     Widget buttons = _renderButtons(
-        context,
-        state.box,
-        state.plant,
-        '${state.metrics.blower.ivalue}%',
-        DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
-            state.metrics.offMin.param),
-        '${totalDimming.floor()}%',
-        '${state.plant!.alerts ? "ON" : "OFF"}',
-      );
+      context,
+      state.box,
+      state.plant,
+      '${state.metrics.blower.ivalue}%',
+      DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
+          state.metrics.offMin.param),
+      '${totalDimming.floor()}%',
+      '${state.plant!.alerts ? "ON" : "OFF"}',
+    );
     if (state.box.screenDevice == null) {
       buttons = Column(
         children: [
@@ -158,6 +159,18 @@ class BoxControlsPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         InkWell(
+          onTap: () {
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
+                isScreen: true,
+                isController: false,
+                futureFn: (future) async {
+                  dynamic res = await future;
+                  if (res is SelectBoxDeviceData) {
+                    BlocProvider.of<BoxControlsBloc>(context)
+                        .add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));
+                  }
+                }));
+          },
           child: Text('ADD A SCREEN'),
         ),
       ],

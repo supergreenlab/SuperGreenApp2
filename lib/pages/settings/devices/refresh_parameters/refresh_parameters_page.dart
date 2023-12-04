@@ -81,6 +81,11 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
               body = FullscreenLoading(
                 title: CommonL10N.loading,
               );
+            } else if (state is RefreshParametersBlocStateLoading) {
+              body = Fullscreen(
+                title: 'Error..',
+                child: Icon(Icons.error),
+              );
             } else if (state is RefreshParametersBlocStateRefreshing) {
               body = FullscreenLoading(
                 percent: state.percent,
@@ -91,7 +96,7 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
             }
             return WillPopScope(
               onWillPop: () async {
-                return state is RefreshParametersBlocStateRefreshed;
+                return state is RefreshParametersBlocStateRefreshed || state is RefreshParametersBlocStateError;
               },
               child: Scaffold(
                   appBar: SGLAppBar(

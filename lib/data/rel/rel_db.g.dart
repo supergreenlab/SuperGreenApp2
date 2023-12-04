@@ -100,6 +100,46 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("is_setup" IN (0, 1))'),
       defaultValue: Constant(false));
+  static const VerificationMeta _nBoxesMeta = const VerificationMeta('nBoxes');
+  @override
+  late final GeneratedColumn<int> nBoxes = GeneratedColumn<int>(
+      'n_boxes', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  static const VerificationMeta _nSensorPortsMeta =
+      const VerificationMeta('nSensorPorts');
+  @override
+  late final GeneratedColumn<int> nSensorPorts = GeneratedColumn<int>(
+      'n_sensor_ports', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  static const VerificationMeta _nLedsMeta = const VerificationMeta('nLeds');
+  @override
+  late final GeneratedColumn<int> nLeds = GeneratedColumn<int>(
+      'n_leds', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  static const VerificationMeta _nMotorsMeta =
+      const VerificationMeta('nMotors');
+  @override
+  late final GeneratedColumn<int> nMotors = GeneratedColumn<int>(
+      'n_motors', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  static const VerificationMeta _needsRefreshMeta =
+      const VerificationMeta('needsRefresh');
+  @override
+  late final GeneratedColumn<bool> needsRefresh = GeneratedColumn<bool>(
+      'needs_refresh', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("needs_refresh" IN (0, 1))'),
+      defaultValue: Constant(false));
   static const VerificationMeta _configMeta = const VerificationMeta('config');
   @override
   late final GeneratedColumn<String> config = GeneratedColumn<String>(
@@ -135,6 +175,11 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         isReachable,
         isRemote,
         isSetup,
+        nBoxes,
+        nSensorPorts,
+        nLeds,
+        nMotors,
+        needsRefresh,
         config,
         serverID,
         synced
@@ -201,6 +246,30 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
       context.handle(_isSetupMeta,
           isSetup.isAcceptableOrUnknown(data['is_setup']!, _isSetupMeta));
     }
+    if (data.containsKey('n_boxes')) {
+      context.handle(_nBoxesMeta,
+          nBoxes.isAcceptableOrUnknown(data['n_boxes']!, _nBoxesMeta));
+    }
+    if (data.containsKey('n_sensor_ports')) {
+      context.handle(
+          _nSensorPortsMeta,
+          nSensorPorts.isAcceptableOrUnknown(
+              data['n_sensor_ports']!, _nSensorPortsMeta));
+    }
+    if (data.containsKey('n_leds')) {
+      context.handle(
+          _nLedsMeta, nLeds.isAcceptableOrUnknown(data['n_leds']!, _nLedsMeta));
+    }
+    if (data.containsKey('n_motors')) {
+      context.handle(_nMotorsMeta,
+          nMotors.isAcceptableOrUnknown(data['n_motors']!, _nMotorsMeta));
+    }
+    if (data.containsKey('needs_refresh')) {
+      context.handle(
+          _needsRefreshMeta,
+          needsRefresh.isAcceptableOrUnknown(
+              data['needs_refresh']!, _needsRefreshMeta));
+    }
     if (data.containsKey('config')) {
       context.handle(_configMeta,
           config.isAcceptableOrUnknown(data['config']!, _configMeta));
@@ -242,6 +311,16 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           .read(DriftSqlType.bool, data['${effectivePrefix}is_remote'])!,
       isSetup: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_setup'])!,
+      nBoxes: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}n_boxes'])!,
+      nSensorPorts: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}n_sensor_ports'])!,
+      nLeds: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}n_leds'])!,
+      nMotors: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}n_motors'])!,
+      needsRefresh: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}needs_refresh'])!,
       config: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}config']),
       serverID: attachedDatabase.typeMapping
@@ -268,6 +347,11 @@ class Device extends DataClass implements Insertable<Device> {
   final bool isReachable;
   final bool isRemote;
   final bool isSetup;
+  final int nBoxes;
+  final int nSensorPorts;
+  final int nLeds;
+  final int nMotors;
+  final bool needsRefresh;
   final String? config;
   final String? serverID;
   final bool synced;
@@ -282,6 +366,11 @@ class Device extends DataClass implements Insertable<Device> {
       required this.isReachable,
       required this.isRemote,
       required this.isSetup,
+      required this.nBoxes,
+      required this.nSensorPorts,
+      required this.nLeds,
+      required this.nMotors,
+      required this.needsRefresh,
       this.config,
       this.serverID,
       required this.synced});
@@ -298,6 +387,11 @@ class Device extends DataClass implements Insertable<Device> {
     map['is_reachable'] = Variable<bool>(isReachable);
     map['is_remote'] = Variable<bool>(isRemote);
     map['is_setup'] = Variable<bool>(isSetup);
+    map['n_boxes'] = Variable<int>(nBoxes);
+    map['n_sensor_ports'] = Variable<int>(nSensorPorts);
+    map['n_leds'] = Variable<int>(nLeds);
+    map['n_motors'] = Variable<int>(nMotors);
+    map['needs_refresh'] = Variable<bool>(needsRefresh);
     if (!nullToAbsent || config != null) {
       map['config'] = Variable<String>(config);
     }
@@ -320,6 +414,11 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: Value(isReachable),
       isRemote: Value(isRemote),
       isSetup: Value(isSetup),
+      nBoxes: Value(nBoxes),
+      nSensorPorts: Value(nSensorPorts),
+      nLeds: Value(nLeds),
+      nMotors: Value(nMotors),
+      needsRefresh: Value(needsRefresh),
       config:
           config == null && nullToAbsent ? const Value.absent() : Value(config),
       serverID: serverID == null && nullToAbsent
@@ -343,6 +442,11 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: serializer.fromJson<bool>(json['isReachable']),
       isRemote: serializer.fromJson<bool>(json['isRemote']),
       isSetup: serializer.fromJson<bool>(json['isSetup']),
+      nBoxes: serializer.fromJson<int>(json['nBoxes']),
+      nSensorPorts: serializer.fromJson<int>(json['nSensorPorts']),
+      nLeds: serializer.fromJson<int>(json['nLeds']),
+      nMotors: serializer.fromJson<int>(json['nMotors']),
+      needsRefresh: serializer.fromJson<bool>(json['needsRefresh']),
       config: serializer.fromJson<String?>(json['config']),
       serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
@@ -362,6 +466,11 @@ class Device extends DataClass implements Insertable<Device> {
       'isReachable': serializer.toJson<bool>(isReachable),
       'isRemote': serializer.toJson<bool>(isRemote),
       'isSetup': serializer.toJson<bool>(isSetup),
+      'nBoxes': serializer.toJson<int>(nBoxes),
+      'nSensorPorts': serializer.toJson<int>(nSensorPorts),
+      'nLeds': serializer.toJson<int>(nLeds),
+      'nMotors': serializer.toJson<int>(nMotors),
+      'needsRefresh': serializer.toJson<bool>(needsRefresh),
       'config': serializer.toJson<String?>(config),
       'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
@@ -379,6 +488,11 @@ class Device extends DataClass implements Insertable<Device> {
           bool? isReachable,
           bool? isRemote,
           bool? isSetup,
+          int? nBoxes,
+          int? nSensorPorts,
+          int? nLeds,
+          int? nMotors,
+          bool? needsRefresh,
           Value<String?> config = const Value.absent(),
           Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
@@ -393,6 +507,11 @@ class Device extends DataClass implements Insertable<Device> {
         isReachable: isReachable ?? this.isReachable,
         isRemote: isRemote ?? this.isRemote,
         isSetup: isSetup ?? this.isSetup,
+        nBoxes: nBoxes ?? this.nBoxes,
+        nSensorPorts: nSensorPorts ?? this.nSensorPorts,
+        nLeds: nLeds ?? this.nLeds,
+        nMotors: nMotors ?? this.nMotors,
+        needsRefresh: needsRefresh ?? this.needsRefresh,
         config: config.present ? config.value : this.config,
         serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
@@ -410,6 +529,11 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('isReachable: $isReachable, ')
           ..write('isRemote: $isRemote, ')
           ..write('isSetup: $isSetup, ')
+          ..write('nBoxes: $nBoxes, ')
+          ..write('nSensorPorts: $nSensorPorts, ')
+          ..write('nLeds: $nLeds, ')
+          ..write('nMotors: $nMotors, ')
+          ..write('needsRefresh: $needsRefresh, ')
           ..write('config: $config, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -418,8 +542,25 @@ class Device extends DataClass implements Insertable<Device> {
   }
 
   @override
-  int get hashCode => Object.hash(id, identifier, name, isController, isScreen,
-      ip, mdns, isReachable, isRemote, isSetup, config, serverID, synced);
+  int get hashCode => Object.hash(
+      id,
+      identifier,
+      name,
+      isController,
+      isScreen,
+      ip,
+      mdns,
+      isReachable,
+      isRemote,
+      isSetup,
+      nBoxes,
+      nSensorPorts,
+      nLeds,
+      nMotors,
+      needsRefresh,
+      config,
+      serverID,
+      synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -434,6 +575,11 @@ class Device extends DataClass implements Insertable<Device> {
           other.isReachable == this.isReachable &&
           other.isRemote == this.isRemote &&
           other.isSetup == this.isSetup &&
+          other.nBoxes == this.nBoxes &&
+          other.nSensorPorts == this.nSensorPorts &&
+          other.nLeds == this.nLeds &&
+          other.nMotors == this.nMotors &&
+          other.needsRefresh == this.needsRefresh &&
           other.config == this.config &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
@@ -450,6 +596,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<bool> isReachable;
   final Value<bool> isRemote;
   final Value<bool> isSetup;
+  final Value<int> nBoxes;
+  final Value<int> nSensorPorts;
+  final Value<int> nLeds;
+  final Value<int> nMotors;
+  final Value<bool> needsRefresh;
   final Value<String?> config;
   final Value<String?> serverID;
   final Value<bool> synced;
@@ -464,6 +615,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.isReachable = const Value.absent(),
     this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
+    this.nBoxes = const Value.absent(),
+    this.nSensorPorts = const Value.absent(),
+    this.nLeds = const Value.absent(),
+    this.nMotors = const Value.absent(),
+    this.needsRefresh = const Value.absent(),
     this.config = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -479,6 +635,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.isReachable = const Value.absent(),
     this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
+    this.nBoxes = const Value.absent(),
+    this.nSensorPorts = const Value.absent(),
+    this.nLeds = const Value.absent(),
+    this.nMotors = const Value.absent(),
+    this.needsRefresh = const Value.absent(),
     this.config = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -497,6 +658,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     Expression<bool>? isReachable,
     Expression<bool>? isRemote,
     Expression<bool>? isSetup,
+    Expression<int>? nBoxes,
+    Expression<int>? nSensorPorts,
+    Expression<int>? nLeds,
+    Expression<int>? nMotors,
+    Expression<bool>? needsRefresh,
     Expression<String>? config,
     Expression<String>? serverID,
     Expression<bool>? synced,
@@ -512,6 +678,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       if (isReachable != null) 'is_reachable': isReachable,
       if (isRemote != null) 'is_remote': isRemote,
       if (isSetup != null) 'is_setup': isSetup,
+      if (nBoxes != null) 'n_boxes': nBoxes,
+      if (nSensorPorts != null) 'n_sensor_ports': nSensorPorts,
+      if (nLeds != null) 'n_leds': nLeds,
+      if (nMotors != null) 'n_motors': nMotors,
+      if (needsRefresh != null) 'needs_refresh': needsRefresh,
       if (config != null) 'config': config,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
@@ -529,6 +700,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<bool>? isReachable,
       Value<bool>? isRemote,
       Value<bool>? isSetup,
+      Value<int>? nBoxes,
+      Value<int>? nSensorPorts,
+      Value<int>? nLeds,
+      Value<int>? nMotors,
+      Value<bool>? needsRefresh,
       Value<String?>? config,
       Value<String?>? serverID,
       Value<bool>? synced}) {
@@ -543,6 +719,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       isReachable: isReachable ?? this.isReachable,
       isRemote: isRemote ?? this.isRemote,
       isSetup: isSetup ?? this.isSetup,
+      nBoxes: nBoxes ?? this.nBoxes,
+      nSensorPorts: nSensorPorts ?? this.nSensorPorts,
+      nLeds: nLeds ?? this.nLeds,
+      nMotors: nMotors ?? this.nMotors,
+      needsRefresh: needsRefresh ?? this.needsRefresh,
       config: config ?? this.config,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
@@ -582,6 +763,21 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     if (isSetup.present) {
       map['is_setup'] = Variable<bool>(isSetup.value);
     }
+    if (nBoxes.present) {
+      map['n_boxes'] = Variable<int>(nBoxes.value);
+    }
+    if (nSensorPorts.present) {
+      map['n_sensor_ports'] = Variable<int>(nSensorPorts.value);
+    }
+    if (nLeds.present) {
+      map['n_leds'] = Variable<int>(nLeds.value);
+    }
+    if (nMotors.present) {
+      map['n_motors'] = Variable<int>(nMotors.value);
+    }
+    if (needsRefresh.present) {
+      map['needs_refresh'] = Variable<bool>(needsRefresh.value);
+    }
     if (config.present) {
       map['config'] = Variable<String>(config.value);
     }
@@ -607,6 +803,11 @@ class DevicesCompanion extends UpdateCompanion<Device> {
           ..write('isReachable: $isReachable, ')
           ..write('isRemote: $isRemote, ')
           ..write('isSetup: $isSetup, ')
+          ..write('nBoxes: $nBoxes, ')
+          ..write('nSensorPorts: $nSensorPorts, ')
+          ..write('nLeds: $nLeds, ')
+          ..write('nMotors: $nMotors, ')
+          ..write('needsRefresh: $needsRefresh, ')
           ..write('config: $config, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
