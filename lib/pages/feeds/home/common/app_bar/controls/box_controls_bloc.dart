@@ -17,7 +17,9 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -72,8 +74,11 @@ class BoxControlParamsController extends ParamsController {
 abstract class BoxControlsBlocEvent extends Equatable {}
 
 class BoxControlsBlocEventInit extends BoxControlsBlocEvent {
+
+  final int rand = Random().nextInt(1 << 32);
+  
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [rand];
 }
 
 class BoxControlsBlocEventLoaded extends BoxControlsBlocEvent {
@@ -83,6 +88,16 @@ class BoxControlsBlocEventLoaded extends BoxControlsBlocEvent {
 
   @override
   List<Object?> get props => [state];
+}
+
+class BoxControlsBlocEventSetDevice extends BoxControlsBlocEvent {
+  final Device device;
+  final int deviceBox;
+
+  BoxControlsBlocEventSetDevice(this.device, this.deviceBox);
+
+  @override
+  List<Object?> get props => [device, deviceBox];
 }
 
 abstract class BoxControlsBlocState extends Equatable {}
@@ -124,7 +139,7 @@ class BoxControlsBlocStateLoaded extends BoxControlsBlocState {
 
 class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocState> {
   final Plant? plant;
-  final Box box;
+  Box box;
   Device? device;
   BoxControlParamsController? metrics;
 
@@ -149,6 +164,15 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       metrics!.refreshParams(device!);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
+    } else if (event is BoxControlsBlocEventSetDevice) {
+      final db = RelDB.get();
+      await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
+          id: Value(box.id),
+          device: Value(event.device.id),
+          deviceBox: Value(event.deviceBox),
+          synced: Value(false)));
+      this.box = await db.plantsDAO.getBox(box.id);
+      add(BoxControlsBlocEventInit());
     }
   }
 

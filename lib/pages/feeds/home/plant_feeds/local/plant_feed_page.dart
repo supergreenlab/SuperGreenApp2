@@ -743,7 +743,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           actions: actions,
           bottomPadding: true,
           titleWidget: _renderName(context, state),
-          appBarHeight: 400,
+          appBarHeight: 410,
           appBar: _renderAppBar(context, state),
           firstItem: PlantFeedFilterPage(
             filters: filters,

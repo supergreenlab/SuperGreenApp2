@@ -256,7 +256,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 subtitle: Text(SettingsDevicePage.settingsDevicePageWifiSettingsLabel),
                 onTap: () {
                   BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToDeviceWifiEvent(state.device, futureFn: (Future future) async {
+                      .add(MainNavigateToDeviceWifiEvent(state.device, futureFn: (future) async {
                     dynamic error = await future;
                     if (error == null) {
                       return;

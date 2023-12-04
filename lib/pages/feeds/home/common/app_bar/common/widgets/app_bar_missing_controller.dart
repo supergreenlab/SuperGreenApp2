@@ -22,6 +22,8 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/add_device/select_device/select_device_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -113,7 +115,13 @@ class AppBarMissingController extends StatelessWidget {
                 GreenButton(
                   title: AppBarMissingController.appBarMissingControllerSetupController,
                   onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(box));
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSelectDeviceEvent(isScreen: false, futureFn: (future) async {
+                      dynamic res = await future;
+                      if (res is SelectBoxDeviceData) {
+                        BlocProvider.of<BoxControlsBloc>(context).add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));
+                      }
+                    }));
                   },
                 ),
               ],

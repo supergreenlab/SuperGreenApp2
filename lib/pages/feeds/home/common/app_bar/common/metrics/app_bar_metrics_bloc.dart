@@ -101,6 +101,7 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
 
   AppBarMetricsParamsController? metrics;
 
+  StreamSubscription<Box>? boxSubscription;
   List<StreamSubscription<Param>>? subscriptions;
 
   AppBarMetricsBloc(this.plant) : super(AppBarMetricsBlocStateInit(plant)) {
@@ -113,6 +114,7 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(this.plant.box);
       if (box.device == null) {
+        boxSubscription = db.plantsDAO.watchBox(this.plant.box).listen(onBoxUpdate);
         yield AppBarMetricsBlocStateNoDevice(plant);
         return;
       }
@@ -128,6 +130,14 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
       yield AppBarMetricsBlocStateLoaded(plant, metrics!);
     } else if (event is AppBarMetricsBlocEventLoaded) {
       yield event.state;
+    }
+  }
+
+  void onBoxUpdate(Box box) async {
+    if (box.device != null) {
+      await boxSubscription!.cancel();
+      boxSubscription = null;
+      add(AppBarMetricsBlocEventInit());
     }
   }
 
@@ -150,6 +160,9 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
     }
     if (metrics != null) {
       await metrics!.closeSubscriptions(subscriptions!);
+    }
+    if (boxSubscription != null) {
+      await boxSubscription!.cancel();
     }
     return super.close();
   }

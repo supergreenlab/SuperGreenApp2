@@ -130,8 +130,15 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     return (select(devices)..where((d) => d.synced.equals(false))).get();
   }
 
-  Stream<List<Device>> watchDevices() {
-    return (select(devices)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])).watch();
+  Stream<List<Device>> watchDevices({bool? isController, bool? isScreen}) {
+    SimpleSelectStatement<Devices, Device> query = select(devices)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)]);
+    if (isController != null) {
+      query = (query..where((tbl) => tbl.isController.equals(isController)));
+    }
+    if (isScreen != null) {
+      query = (query..where((tbl) => tbl.isScreen.equals(isScreen)));
+    }
+    return (query).watch();
   }
 
   Future updateDevice(DevicesCompanion device) {

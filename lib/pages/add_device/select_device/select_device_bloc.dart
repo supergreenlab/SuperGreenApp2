@@ -99,7 +99,7 @@ class SelectDeviceBloc extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlo
   Stream<SelectDeviceBlocState> mapEventToState(SelectDeviceBlocEvent event) async* {
     if (event is SelectDeviceBlocEventLoadDevices) {
       final ddb = RelDB.get().devicesDAO;
-      final watcher = ddb.watchDevices();
+      final watcher = ddb.watchDevices(isController: args.isController, isScreen: args.isScreen);
       _stream = watcher.listen(_onDeviceListChanged);
     } else if (event is SelectDeviceBlocEventDeviceListUpdated) {
       _devices = event.devices;

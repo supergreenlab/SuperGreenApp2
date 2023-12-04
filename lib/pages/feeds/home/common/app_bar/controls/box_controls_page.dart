@@ -130,8 +130,7 @@ class BoxControlsPage extends StatelessWidget {
       totalDimming /= dimmings.length;
       totalDimming *= state.metrics.light.ivalue / 100.0;
     }
-    return Expanded(
-      child: _renderButtons(
+    Widget buttons = _renderButtons(
         context,
         state.box,
         state.plant,
@@ -140,7 +139,28 @@ class BoxControlsPage extends StatelessWidget {
             state.metrics.offMin.param),
         '${totalDimming.floor()}%',
         '${state.plant!.alerts ? "ON" : "OFF"}',
-      ),
+      );
+    if (state.box.screenDevice == null) {
+      buttons = Column(
+        children: [
+          _renderScreenButton(context),
+          Expanded(child: buttons),
+        ],
+      );
+    }
+    return Expanded(
+      child: buttons,
+    );
+  }
+
+  Widget _renderScreenButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        InkWell(
+          child: Text('ADD A SCREEN'),
+        ),
+      ],
     );
   }
 

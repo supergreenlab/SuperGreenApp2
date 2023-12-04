@@ -24,50 +24,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
 
-class AppBarMetric extends StatelessWidget {
-  final Widget icon;
-  final String? value;
-  final String? unit;
-  final double unitSize;
-  final Color color;
-
-  const AppBarMetric({Key? key, required this.icon, this.value, this.unit, this.unitSize = 20, required this.color})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Align(
-          child: icon,
-          alignment: Alignment.bottomLeft,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
-          children: [
-            Text(value == null ? 'N/A' : value!,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                )),
-            unit != null
-                ? Text(unit!,
-                    style: TextStyle(
-                      fontSize: unitSize,
-                      color: color,
-                    ))
-                : Container(),
-          ],
-        )
-      ],
-    );
-  }
-}
-
 class AppBarBoxMetricsPage extends StatefulWidget {
   const AppBarBoxMetricsPage({Key? key}) : super(key: key);
 
@@ -161,7 +117,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
         Container(
           color: Colors.white.withAlpha(220),
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(25.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -227,45 +183,83 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           unit: weightUnit,
           color: Color(0xFF483581)),
     ];
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
-        height: 35,
-        child: Stack(
+    return Container(
+      height: 55,
+      child: Stack(
+        children: [
+          ListView(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            children: widgets
+                .map<Widget>((w) => Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: w,
+                    ))
+                .toList(),
+          ),
+          showLeftArrow
+              ? Positioned(
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  child: Image.asset(
+                    "assets/left_scroll_arrow.png",
+                  ),
+                )
+              : Container(),
+          showRightArrow
+              ? Positioned(
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Image.asset(
+                    "assets/right_scroll_arrow.png",
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+}
+
+class AppBarMetric extends StatelessWidget {
+  final Widget icon;
+  final String? value;
+  final String? unit;
+  final double unitSize;
+  final Color color;
+
+  const AppBarMetric({Key? key, required this.icon, this.value, this.unit, this.unitSize = 20, required this.color})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        icon,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          textBaseline: TextBaseline.alphabetic,
           children: [
-            ListView(
-              controller: scrollController,
-              scrollDirection: Axis.horizontal,
-              children: widgets
-                  .map<Widget>((w) => Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: w,
-                      ))
-                  .toList(),
-            ),
-            showLeftArrow
-                ? Positioned(
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    child: Image.asset(
-                      "assets/left_scroll_arrow.png",
-                    ),
-                  )
-                : Container(),
-            showRightArrow
-                ? Positioned(
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Image.asset(
-                      "assets/right_scroll_arrow.png",
-                    ),
-                  )
+            Text(value == null ? 'N/A' : value!,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                )),
+            unit != null
+                ? Text(unit!,
+                    style: TextStyle(
+                      fontSize: unitSize,
+                      color: color,
+                    ))
                 : Container(),
           ],
-        ),
-      ),
+        )
+      ],
     );
   }
 }
