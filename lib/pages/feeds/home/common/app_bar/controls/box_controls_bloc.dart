@@ -53,16 +53,18 @@ class BoxControlParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'OFF_HOUR', 'offHour');
     await c.loadBoxParam(device, box, 'OFF_MIN', 'offMin');
 
-    Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
     int nLights = 0;
-    for (int i = 0; i < lightModule.arrayLen; ++i) {
-      Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
-      if (boxParam.ivalue != box.deviceBox!) {
-        continue;
+    try {
+      Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
+      for (int i = 0; i < lightModule.arrayLen; ++i) {
+        Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+        if (boxParam.ivalue != box.deviceBox!) {
+          continue;
+        }
+        await c.loadParam(device, "LED_${i}_DIM", 'dim$nLights');
+        nLights++;
       }
-      await c.loadParam(device, "LED_${i}_DIM", 'dim$nLights');
-      nLights++;
-    }
+    } catch (e) {}
     c.nLights = nLights;
     return c;
   }
@@ -74,9 +76,8 @@ class BoxControlParamsController extends ParamsController {
 abstract class BoxControlsBlocEvent extends Equatable {}
 
 class BoxControlsBlocEventInit extends BoxControlsBlocEvent {
-
   final int rand = Random().nextInt(1 << 32);
-  
+
   @override
   List<Object?> get props => [rand];
 }
@@ -167,10 +168,7 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
     } else if (event is BoxControlsBlocEventSetDevice) {
       final db = RelDB.get();
       await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
-          id: Value(box.id),
-          device: Value(event.device.id),
-          deviceBox: Value(event.deviceBox),
-          synced: Value(false)));
+          id: Value(box.id), device: Value(event.device.id), deviceBox: Value(event.deviceBox), synced: Value(false)));
       this.box = await db.plantsDAO.getBox(box.id);
       add(BoxControlsBlocEventInit());
     }

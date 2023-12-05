@@ -117,7 +117,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
         Container(
           color: Colors.white.withAlpha(220),
           child: Padding(
-            padding: EdgeInsets.all(25.0),
+            padding: EdgeInsets.all(20.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +139,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
     AppBarMetricsParamsController metrics = state.metrics;
     return _renderMetrics(metrics.temp.ivalue, metrics.humidity.ivalue, metrics.vpd?.ivalue.toDouble(),
-        metrics.co2?.ivalue, metrics.weight?.ivalue.toDouble());
+        metrics.co2?.ivalue, !(metrics.weight?.available == true) ? null : metrics.weight?.ivalue.toDouble());
   }
 
   Widget _renderMetrics(int temp, int humidity, double? vpd, int? co2, double? weight) {
@@ -171,15 +171,15 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
           value: vpd == null || vpd == 0 ? 'n/a' : '${vpd / 10.0}',
           color: Color(0xFF115D87)),
-      AppBarMetric(
+      co2 == null ? Container() : AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
-          value: co2 == null || co2 == 0 ? 'n/a' : '$co2',
+          value: co2 == 0 ? 'n/a' : '$co2',
           unit: 'ppm',
           unitSize: 12,
           color: Color(0xFF595959)),
-      AppBarMetric(
+      weight == null ? Container() : AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-          value: weight == null || weight == 0 ? 'n/a' : '${(weight / 1000.0).toStringAsFixed(3)}',
+          value: weight == 0 ? 'n/a' : '${(weight / 1000.0).toStringAsFixed(3)}',
           unit: weightUnit,
           color: Color(0xFF483581)),
     ];

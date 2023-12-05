@@ -19,6 +19,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -84,8 +85,11 @@ class BoxControlsPage extends StatelessWidget {
                 context,
                 state.box,
                 state.plant,
+                true,
                 '12%',
+                true,
                 '18/6',
+                true,
                 '66%',
                 'ON',
               ),
@@ -135,10 +139,15 @@ class BoxControlsPage extends StatelessWidget {
       context,
       state.box,
       state.plant,
-      '${state.metrics.blower.ivalue}%',
-      DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
-          state.metrics.offMin.param),
-      '${totalDimming.floor()}%',
+      state.metrics.blower.available,
+      state.metrics.blower.available ? '${state.metrics.blower.ivalue}%' : 'N/A%',
+      state.metrics.onHour.available && state.metrics.offHour.available,
+      state.metrics.onHour.available && state.metrics.offHour.available
+          ? DateRenderer.renderSchedule(state.metrics.onHour.param!, state.metrics.onMin.param!,
+              state.metrics.offHour.param!, state.metrics.offMin.param!)
+          : 'N/A',
+      state.metrics.nLights > 0,
+      state.metrics.nLights > 0 ? '${totalDimming.floor()}%' : 'N/A%',
       '${state.plant!.alerts ? "ON" : "OFF"}',
     );
     if (state.box.screenDevice == null) {
@@ -155,30 +164,37 @@ class BoxControlsPage extends StatelessWidget {
   }
 
   Widget _renderScreenButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        InkWell(
-          onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
-                isScreen: true,
-                isController: false,
-                futureFn: (future) async {
-                  dynamic res = await future;
-                  if (res is SelectBoxDeviceData) {
-                    BlocProvider.of<BoxControlsBloc>(context)
-                        .add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));
-                  }
-                }));
-          },
-          child: Text('ADD A SCREEN'),
-        ),
-      ],
-    );
+    return InkWell(
+        onTap: () {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
+              isScreen: true,
+              isController: false,
+              futureFn: (future) async {
+                dynamic res = await future;
+                if (res is SelectBoxDeviceData) {
+                  BlocProvider.of<BoxControlsBloc>(context)
+                      .add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));
+                }
+              }));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
+          ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
+              child: Text('ADD A SCREEN!',
+                  style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+            ),
+          ],
+        ));
   }
 
-  Widget _renderButtons(
-      BuildContext context, Box box, Plant? plant, String blower, String schedule, String light, String alerts) {
+  Widget _renderButtons(BuildContext context, Box box, Plant? plant, bool blowerAvailable, String blower,
+      bool scheduleAvailable, String schedule, bool lightAvailable, String light, String alerts) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -190,6 +206,7 @@ class BoxControlsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                 child: AppBarAction(
                   center: true,
+                  disabled: !blowerAvailable,
                   icon: 'assets/app_bar/icon_ventilation.svg',
                   color: Color(0xFF8EB5FF),
                   title: 'VENTILATION',
@@ -198,16 +215,19 @@ class BoxControlsPage extends StatelessWidget {
                     maxLines: 1,
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                   ),
-                  action: _onEnvironmentControlTapped(
-                      context,
-                      ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
-                          pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
+                  action: !blowerAvailable
+                      ? null
+                      : _onEnvironmentControlTapped(
+                          context,
+                          ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
+                              pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
                 ),
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                   child: AppBarAction(
                     center: true,
+                    disabled: !scheduleAvailable,
                     icon: 'assets/app_bar/icon_schedule.svg',
                     color: Color(0xFF61A649),
                     title: 'SCHEDULE',
@@ -216,12 +236,14 @@ class BoxControlsPage extends StatelessWidget {
                       maxLines: 1,
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                     ),
-                    action: _onEnvironmentControlTapped(
-                        context,
-                        ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
-                            pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                        tipID: 'TIP_BLOOM',
-                        tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
+                    action: !scheduleAvailable
+                        ? null
+                        : _onEnvironmentControlTapped(
+                            context,
+                            ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
+                                pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                            tipID: 'TIP_BLOOM',
+                            tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
                   )),
             ],
           ),
@@ -234,6 +256,7 @@ class BoxControlsPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                   child: AppBarAction(
                       center: true,
+                      disabled: !lightAvailable,
                       icon: 'assets/app_bar/icon_light.svg',
                       color: Color(0xFFDABA48),
                       title: 'LIGHT',
@@ -242,15 +265,17 @@ class BoxControlsPage extends StatelessWidget {
                         maxLines: 1,
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
-                      action: _onEnvironmentControlTapped(
-                          context,
-                          ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(box,
-                              pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                          tipID: 'TIP_STRETCH',
-                          tipPaths: [
-                            't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
-                            't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
-                          ]))),
+                      action: !lightAvailable
+                          ? null
+                          : _onEnvironmentControlTapped(
+                              context,
+                              ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(box,
+                                  pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                              tipID: 'TIP_STRETCH',
+                              tipPaths: [
+                                  't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
+                                  't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
+                                ]))),
               plant != null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),

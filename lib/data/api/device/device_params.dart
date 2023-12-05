@@ -23,47 +23,53 @@ import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ParamController extends Equatable {
-  final Param param;
+  final Param? param;
   final int value;
   final int initialValue;
 
-  int get ivalue => param.ivalue!;
+  int get ivalue => param!.ivalue!;
 
   bool get isChanged => value != initialValue;
 
-  ParamController(this.param, this.value, this.initialValue);
+  final bool available;
 
-  ParamController copyWith({Param? param, int? value, int? initialValue}) =>
-      ParamController(param ?? this.param, value ?? this.value, initialValue ?? this.initialValue);
+  ParamController(this.param, this.value, this.initialValue, this.available);
+
+  ParamController copyWith({Param? param, int? value, int? initialValue, bool? available}) => ParamController(
+      param ?? this.param, value ?? this.value, initialValue ?? this.initialValue, available ?? this.available);
 
   Future<ParamController> refreshParam(Device device) async {
-    Param param = await DeviceHelper.refreshIntParam(device, this.param);
+    Param param = await DeviceHelper.refreshIntParam(device, this.param!);
     return this.copyWith(param: param, value: param.ivalue, initialValue: param.ivalue);
   }
 
   Future<ParamController> syncParam(Device device) async {
-    if (value != param.ivalue) {
-      Param p = await DeviceHelper.updateIntParam(device, param, value);
-      return this.copyWith(param: p, value: p.ivalue, initialValue: param.ivalue);
+    if (value != param!.ivalue) {
+      Param p = await DeviceHelper.updateIntParam(device, param!, value);
+      return this.copyWith(param: p, value: p.ivalue, initialValue: param!.ivalue);
     }
     return this;
   }
 
   Future<ParamController> cancelParam(Device device) async {
-    if (initialValue != param.ivalue) {
-      Param p = await DeviceHelper.updateIntParam(device, param, initialValue);
+    if (initialValue != param!.ivalue) {
+      Param p = await DeviceHelper.updateIntParam(device, param!, initialValue);
       return this.copyWith(param: p, value: p.ivalue);
     }
     return this;
   }
 
   StreamSubscription<Param> listenParam(Device device, void Function(Param?) fn) {
-    return RelDB.get().devicesDAO.watchParam(device.id, param.key).listen(fn);
+    return RelDB.get().devicesDAO.watchParam(device.id, param!.key).listen(fn);
   }
 
   static Future<ParamController> loadFromDB(Device device, String key) async {
-    Param p = await RelDB.get().devicesDAO.getParam(device.id, key);
-    return ParamController(p, p.ivalue!, p.ivalue!);
+    try {
+      Param p = await RelDB.get().devicesDAO.getParam(device.id, key);
+      return ParamController(p, p.ivalue!, p.ivalue!, true);
+    } catch (e) {
+      return ParamController(null, 0, 0, false);
+    }
   }
 
   @override
@@ -86,23 +92,27 @@ abstract class ParamsController extends Equatable {
   }
 
   List<StreamSubscription<Param>> listenParams(Device device, void Function(ParamsController) fn) {
-    List<StreamSubscription<Param>> subscriptions = params.keys.map<StreamSubscription<Param>>((String key) {
+    List<StreamSubscription<Param>> subscriptions = [];
+    params.keys.forEach((String key) {
       ParamController p = params[key]!;
-      return p.listenParam(device, (p0) {
+      if (!p.available) {
+        return;
+      }
+      subscriptions.add(p.listenParam(device, (p0) {
         if (p0!.ivalue == p.ivalue) {
           return;
         }
         p = p.copyWith(param: p0, value: p0.ivalue);
         params[key] = p;
         fn(this.copyWith(params: {...this.params}));
-      });
-    }).toList();
+      }));
+    });
     return subscriptions;
   }
 
   Future<ParamsController> refreshParams(Device device) async {
     Map<String, ParamController> p = {};
-    await Future.wait(params.keys.map<Future>((String key) async {
+    await Future.wait(params.keys.where((k) => params[k]!.available).map<Future>((String key) async {
       p[key] = await params[key]!.refreshParam(device);
     }).toList());
     return this.copyWith(params: p);
@@ -110,7 +120,7 @@ abstract class ParamsController extends Equatable {
 
   Future<ParamsController> syncParams(Device device) async {
     Map<String, ParamController> p = {};
-    await Future.wait(params.keys.map<Future>((String key) async {
+    await Future.wait(params.keys.where((k) => params[k]!.available).map<Future>((String key) async {
       p[key] = await params[key]!.syncParam(device);
     }).toList());
     return this.copyWith(params: p);
@@ -118,7 +128,7 @@ abstract class ParamsController extends Equatable {
 
   Future<ParamsController> cancelParams(Device device) async {
     Map<String, ParamController> p = {};
-    await Future.wait(params.keys.map<Future>((String key) async {
+    await Future.wait(params.keys.where((k) => params[k]!.available).map<Future>((String key) async {
       p[key] = await params[key]!.cancelParam(device);
     }).toList());
     return this.copyWith(params: p);

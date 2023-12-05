@@ -368,6 +368,7 @@ class DeviceAPI {
         isController: Value(isController),
         isScreen: Value((keys['isScreen'] ?? 'false') == 'true'),
         isSetup: Value(true),
+        needsRefresh: Value(false),
         nBoxes: Value(nBoxes),
         nSensorPorts: Value(nSensorPorts),
         nLeds: Value(nLeds),

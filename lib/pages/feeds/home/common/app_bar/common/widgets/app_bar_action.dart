@@ -34,6 +34,7 @@ class AppBarAction extends StatelessWidget {
   final bool shadowed;
   final bool addIcon;
   final Widget? child;
+  final bool disabled;
 
   final Function()? onCheck;
   final Function()? onSkip;
@@ -57,6 +58,7 @@ class AppBarAction extends StatelessWidget {
     this.onCheck,
     this.onSkip,
     this.child,
+    this.disabled = false,
   }) : super(key: key);
 
   @override
@@ -98,6 +100,10 @@ class AppBarAction extends StatelessWidget {
         child: bodyContent,
       ),
     );
+
+    if (this.disabled) {
+      body = Opacity(opacity: 0.5, child: body,);
+    }
 
     if (onCheck != null && onSkip != null) {
       List<Widget> items = [

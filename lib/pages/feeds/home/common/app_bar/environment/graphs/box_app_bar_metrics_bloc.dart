@@ -118,22 +118,30 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
 
       charts.Series<Metric, DateTime> ventilation = await TimeSeriesAPI.fetchTimeSeries(
           box!, identifier, 'Ventilation', 'BOX_${deviceBox}_BLOWER_DUTY', charts.MaterialPalette.cyan.shadeDefault);
-      List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
-      List<List<dynamic>> dims = [];
-      Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
-      for (int i = 0; i < lightModule.arrayLen; ++i) {
-        Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
-        if (boxParam.ivalue != box!.deviceBox!) {
-          continue;
+
+      late charts.Series<Metric, DateTime> light;
+      try {
+        List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+        List<List<dynamic>> dims = [];
+        Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
+        for (int i = 0; i < lightModule.arrayLen; ++i) {
+          Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+          if (boxParam.ivalue != box!.deviceBox!) {
+            continue;
+          }
+          List<dynamic> dim = await TimeSeriesAPI.fetchMetric(box!, identifier, 'LED_${i}_DIM');
+          dims.add(dim);
         }
-        List<dynamic> dim = await TimeSeriesAPI.fetchMetric(box!, identifier, 'LED_${i}_DIM');
-        dims.add(dim);
+        List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
+        light = TimeSeriesAPI.toTimeSeries(
+            TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', charts.MaterialPalette.yellow.shadeDefault);
+      } catch (e) {
+        light = light = TimeSeriesAPI.toTimeSeries([], 'Light', charts.MaterialPalette.yellow.shadeDefault);
       }
-      List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
-      charts.Series<Metric, DateTime> light = TimeSeriesAPI.toTimeSeries(
-          TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', charts.MaterialPalette.yellow.shadeDefault);
+
       charts.Series<Metric, DateTime> co2 = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault);
+          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault,
+          transform: _co2);
       charts.Series<Metric, DateTime> weight = await TimeSeriesAPI.fetchTimeSeries(
           box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault,
           transform: _weight);
@@ -247,6 +255,10 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       return weight / 1000 * 2.20462;
     }
     return weight / 1000;
+  }
+
+  double _co2(double co2) {
+    return co2 / 20;
   }
 
   @override

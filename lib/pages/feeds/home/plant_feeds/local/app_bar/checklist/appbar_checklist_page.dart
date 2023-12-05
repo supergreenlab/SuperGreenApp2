@@ -160,10 +160,11 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             .add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
       },
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(child: Container()),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
           ),
           Padding(

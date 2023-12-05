@@ -48,10 +48,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
               textColor: Color(0xFF494949),
             );
           } else if (state is PlantFeedAppBarBlocStateLoaded) {
-            if (state.graphData[0].data.length == 0 &&
-                state.graphData[1].data.length == 0 &&
-                state.graphData[2].data.length == 0 &&
-                state.graphData[3].data.length == 0) {
+            if (state.graphData.where((g) => g.data.length != 0).length == 0) { // TODO replace with firstWhere when they fix it to return null
               body = Fullscreen(
                 title: 'Not enough data to display metrics yet',
                 subtitle: 'try again in a few minutes',
@@ -131,10 +128,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
         ),
       ),
     );
-    if (state.graphData[0].data.length < minCharPoints &&
-        state.graphData[1].data.length < minCharPoints &&
-        state.graphData[2].data.length < minCharPoints &&
-        state.graphData[3].data.length < minCharPoints) {
+    if (state.graphData.where((g) => g.data.length > minCharPoints).length == 0) {
       graphs = Stack(children: [
         graphs,
         Container(
@@ -145,7 +139,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           ),
           child: Fullscreen(
             title: 'Still not enough data\nto show a graph',
-            subtitle: 'try again in a few hours',
+            subtitle: 'try again in a few minutes',
             fontSize: 20,
             fontWeight: FontWeight.normal,
             child: Container(),
@@ -180,7 +174,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Container(width: 4),
-                    _renderMetric(
+                    state.graphData[0].data.length == 0 ? Container() : _renderMetric(
                         Colors.green,
                         'Temp',
                         '${state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
@@ -190,7 +184,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         disabledGraphs[0] = !(disabledGraphs[0] ?? false);
                       });
                     }, disabledGraphs[0] ?? false),
-                    _renderMetric(
+                    state.graphData[1].data.length == 0 ? Container() : _renderMetric(
                         Colors.blue,
                         'Humi',
                         '${state.graphData[1].data[selectedGraphIndex ?? state.graphData[1].data.length - 1].metric.toInt()}%',
@@ -200,7 +194,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         disabledGraphs[1] = !(disabledGraphs[1] ?? false);
                       });
                     }, disabledGraphs[1] ?? false),
-                    _renderMetric(
+                    state.graphData[2].data.length == 0 ? Container() : _renderMetric(
                         Colors.orange,
                         'VPD',
                         '${state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric / 40}',
@@ -210,7 +204,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         disabledGraphs[2] = !(disabledGraphs[2] ?? false);
                       });
                     }, disabledGraphs[2] ?? false),
-                    _renderMetric(
+                    state.graphData[4].data.length == 0 ? Container() : _renderMetric(
                         Colors.cyan,
                         'Ventilation',
                         '${state.graphData[4].data[selectedGraphIndex ?? state.graphData[4].data.length - 1].metric.toInt()}%',
@@ -220,7 +214,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         disabledGraphs[4] = !(disabledGraphs[4] ?? false);
                       });
                     }, disabledGraphs[4] ?? false),
-                    state.graphData[3].data.length > 0 ? _renderMetric(
+                    state.graphData[3].data.length == 0 ? Container() : _renderMetric(
                         Color(0xffB3B634),
                         'Light',
                         '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
@@ -229,27 +223,18 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                       setState(() {
                         disabledGraphs[3] = !(disabledGraphs[3] ?? false);
                       });
-                    }, disabledGraphs[3] ?? false) : _renderMetric(
-                        Color(0xffB3B634),
-                        'Light',
-                        '0',
-                        'n/a%',
-                        'n/a%', () {
-                      setState(() {
-                        disabledGraphs[3] = !(disabledGraphs[3] ?? false);
-                      });
                     }, disabledGraphs[3] ?? false),
-                    _renderMetric(
+                    state.graphData[5].data.length == 0 ? Container() : _renderMetric(
                         Color(0xff595959),
                         'CO2',
-                        '${state.graphData[5].data[selectedGraphIndex ?? state.graphData[5].data.length - 1].metric.toInt()}',
-                        '${TimeSeriesAPI.min(state.graphData[5].data).metric.toInt()}',
-                        '${TimeSeriesAPI.max(state.graphData[5].data).metric.toInt()}', () {
+                        '${(state.graphData[5].data[selectedGraphIndex ?? state.graphData[5].data.length - 1].metric * 20).toInt()}',
+                        '${(TimeSeriesAPI.min(state.graphData[5].data).metric * 20).toInt()}',
+                        '${(TimeSeriesAPI.max(state.graphData[5].data).metric * 20).toInt()}', () {
                       setState(() {
                         disabledGraphs[5] = !(disabledGraphs[5] ?? false);
                       });
                     }, disabledGraphs[5] ?? false),
-                    _renderMetric(
+                    state.graphData[6].data.length == 0 ? Container() : _renderMetric(
                         Color(0xFF483581),
                         'Weight ($weightUnit)',
                         '${state.graphData[6].data[selectedGraphIndex ?? state.graphData[6].data.length - 1].metric.toStringAsFixed(3)}',
@@ -268,8 +253,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           Expanded(
             child: graphs,
           ),
-          Text("*VPD chart is experimental, please report any inconsistencies",
-              style: TextStyle(fontSize: 9, color: Color(0xFF494949))),
+          // Text("*VPD chart is experimental, please report any inconsistencies",
+          //     style: TextStyle(fontSize: 9, color: Color(0xFF494949))),
         ],
       ),
     );
