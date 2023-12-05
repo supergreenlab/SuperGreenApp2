@@ -171,23 +171,27 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
           value: vpd == null || vpd == 0 ? 'n/a' : '${vpd / 10.0}',
           color: Color(0xFF115D87)),
-      co2 == null ? Container() : AppBarMetric(
+    ];
+    if (co2 != null && co2 != 0) {
+      widgets.add(AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
-          value: co2 == 0 ? 'n/a' : '$co2',
+          value: '$co2',
           unit: 'ppm',
           unitSize: 12,
-          color: Color(0xFF595959)),
-      weight == null ? Container() : AppBarMetric(
+          color: Color(0xFF595959)));
+    }
+    if (weight != null && weight != 0) {
+      widgets.add(AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-          value: weight == 0 ? 'n/a' : '${(weight / 1000.0).toStringAsFixed(3)}',
+          value: '${(weight / 1000.0).toStringAsFixed(3)}',
           unit: weightUnit,
-          color: Color(0xFF483581)),
-    ];
+          color: Color(0xFF483581)));
+    }
     return Container(
       height: 55,
       child: Stack(
         children: [
-          ListView(
+          widgets.length > 3 ? ListView(
             controller: scrollController,
             scrollDirection: Axis.horizontal,
             children: widgets
@@ -196,8 +200,16 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
                       child: w,
                     ))
                 .toList(),
+          ) : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: widgets
+                .map<Widget>((w) => Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: w,
+                    ))
+                .toList(),
           ),
-          showLeftArrow
+          showLeftArrow && widgets.length > 3
               ? Positioned(
                   top: 0,
                   left: 0,
@@ -207,7 +219,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
                   ),
                 )
               : Container(),
-          showRightArrow
+          showRightArrow && widgets.length > 3
               ? Positioned(
                   top: 0,
                   right: 0,

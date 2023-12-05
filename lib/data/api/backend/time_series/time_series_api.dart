@@ -65,6 +65,9 @@ class TimeSeriesAPI {
       Box box, String controllerID, String graphID, String name, charts.Color color,
       {Function(double)? transform}) async {
     List<dynamic> values = await fetchMetric(box, controllerID, name);
+    if (values.where((v) => v[1] != 0).length == 0) {
+      values = [];
+    }
     return toTimeSeries(values, graphID, color, transform: transform);
   }
 
