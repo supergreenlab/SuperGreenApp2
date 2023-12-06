@@ -148,9 +148,9 @@ class BoxControlsPage extends StatelessWidget {
           : 'N/A',
       state.metrics.nLights > 0,
       state.metrics.nLights > 0 ? '${totalDimming.floor()}%' : 'N/A%',
-      '${state.plant!.alerts ? "ON" : "OFF"}',
+      state.plant == null ? '' : '${state.plant!.alerts ? "ON" : "OFF"}',
     );
-    if (state.box.screenDevice == null) {
+    if (state.box.device != null && !state.device.isScreen && state.box.screenDevice == null) {
       buttons = Column(
         children: [
           _renderScreenButton(context),
@@ -173,7 +173,7 @@ class BoxControlsPage extends StatelessWidget {
                 dynamic res = await future;
                 if (res is SelectBoxDeviceData) {
                   BlocProvider.of<BoxControlsBloc>(context)
-                      .add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));
+                      .add(BoxControlsBlocEventSetScreenDevice(res.device, res.deviceBox));
                 }
               }));
         },
@@ -200,7 +200,6 @@ class BoxControlsPage extends StatelessWidget {
       children: [
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
@@ -250,7 +249,6 @@ class BoxControlsPage extends StatelessWidget {
         ),
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),

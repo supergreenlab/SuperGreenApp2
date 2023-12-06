@@ -56,7 +56,7 @@ class LocalBoxFeedBlocStateInit extends LocalBoxFeedBlocState {
 }
 
 class LocalBoxFeedBlocStateLoaded extends LocalBoxFeedBlocState {
-  final Box? box;
+  final Box box;
 
   LocalBoxFeedBlocStateLoaded(this.box);
 
@@ -94,7 +94,7 @@ class LocalBoxFeedBloc extends LegacyBloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlo
         yield LocalBoxFeedBlocStateBoxRemoved();
         return;
       }
-      yield LocalBoxFeedBlocStateLoaded(box);
+      yield LocalBoxFeedBlocStateLoaded(box!);
     } else if (event is LocalBoxFeedBlocEventCreateFeed) {
       FeedsCompanion feedsCompanion = FeedsCompanion.insert(name: box!.name);
       int feedID = await RelDB.get().feedsDAO.addFeed(feedsCompanion);

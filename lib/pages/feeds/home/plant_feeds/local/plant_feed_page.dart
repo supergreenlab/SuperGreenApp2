@@ -938,7 +938,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(state.plant, state.box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.plant)),
+        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.box)),
       ],
       child: PlantQuickViewPage(),
     );
@@ -948,7 +948,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<BoxControlsBloc>(create: (context) => BoxControlsBloc(state.plant, state.box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.plant)),
+        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.box)),
       ],
       child: BoxControlsPage(
         futureFn: futureFn(context, state),

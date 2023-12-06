@@ -269,7 +269,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(plant, box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(plant)),
+        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(box)),
       ],
       child: PlantQuickViewPage(),
     );
@@ -279,7 +279,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<BoxControlsBloc>(create: (context) => BoxControlsBloc(plant, box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(plant)),
+        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(box)),
       ],
       child: BoxControlsPage(
         futureFn: futureFn(context, plant),

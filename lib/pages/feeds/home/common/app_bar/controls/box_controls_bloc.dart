@@ -91,11 +91,11 @@ class BoxControlsBlocEventLoaded extends BoxControlsBlocEvent {
   List<Object?> get props => [state];
 }
 
-class BoxControlsBlocEventSetDevice extends BoxControlsBlocEvent {
+class BoxControlsBlocEventSetScreenDevice extends BoxControlsBlocEvent {
   final Device device;
   final int deviceBox;
 
-  BoxControlsBlocEventSetDevice(this.device, this.deviceBox);
+  BoxControlsBlocEventSetScreenDevice(this.device, this.deviceBox);
 
   @override
   List<Object?> get props => [device, deviceBox];
@@ -124,14 +124,16 @@ class BoxControlsBlocStateInit extends BoxControlsBlocState {
 }
 
 class BoxControlsBlocStateLoaded extends BoxControlsBlocState {
+  final Device device;
   final Plant? plant;
   final Box box;
   final BoxControlParamsController metrics;
 
-  BoxControlsBlocStateLoaded(this.plant, this.box, this.metrics);
+  BoxControlsBlocStateLoaded(this.device, this.plant, this.box, this.metrics);
 
   @override
   List<Object?> get props => [
+        this.device,
         this.plant,
         this.box,
         metrics,
@@ -161,14 +163,15 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       device = await db.devicesDAO.getDevice(box.device!);
       metrics = await BoxControlParamsController.load(device!, box);
       subscriptions = metrics!.listenParams(device!, onParamUpdate);
-      yield BoxControlsBlocStateLoaded(plant, box, metrics!);
+      yield BoxControlsBlocStateLoaded(device!, plant, box, metrics!);
       metrics!.refreshParams(device!);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
-    } else if (event is BoxControlsBlocEventSetDevice) {
+    } else if (event is BoxControlsBlocEventSetScreenDevice) {
       final db = RelDB.get();
-      await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
-          id: Value(box.id), device: Value(event.device.id), deviceBox: Value(event.deviceBox), synced: Value(false)));
+      await RelDB.get()
+          .plantsDAO
+          .updateBox(BoxesCompanion(id: Value(box.id), screenDevice: Value(event.device.id), synced: Value(false)));
       this.box = await db.plantsDAO.getBox(box.id);
       add(BoxControlsBlocEventInit());
     }
@@ -176,7 +179,7 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
 
   void onParamUpdate(ParamsController newValue) {
     metrics = newValue as BoxControlParamsController;
-    add(BoxControlsBlocEventLoaded(BoxControlsBlocStateLoaded(plant, box, metrics!)));
+    add(BoxControlsBlocEventLoaded(BoxControlsBlocStateLoaded(device!, plant, box, metrics!)));
   }
 
   @override
