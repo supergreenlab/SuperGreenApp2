@@ -17,6 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -35,11 +36,12 @@ class SettingsBoxBlocEventUpdate extends SettingsBoxBlocEvent {
   final String name;
   final Device? device;
   final int? deviceBox;
+  final Device? screenDevice;
 
-  SettingsBoxBlocEventUpdate(this.name, this.device, this.deviceBox);
+  SettingsBoxBlocEventUpdate(this.name, this.device, this.deviceBox, this.screenDevice);
 
   @override
-  List<Object?> get props => [name, device];
+  List<Object?> get props => [name, device, screenDevice];
 }
 
 abstract class SettingsBoxBlocState extends Equatable {}
@@ -53,19 +55,21 @@ class SettingsBoxBlocStateLoaded extends SettingsBoxBlocState {
   final Box box;
   final Device? device;
   final int? deviceBox;
+  final Device? screenDevice;
 
-  SettingsBoxBlocStateLoaded(this.box, this.device, this.deviceBox);
+  SettingsBoxBlocStateLoaded(this.box, this.device, this.deviceBox, this.screenDevice);
 
   @override
-  List<Object?> get props => [box, device, deviceBox];
+  List<Object?> get props => [box, device, deviceBox, screenDevice];
 }
 
 class SettingsBoxBlocStateDone extends SettingsBoxBlocState {
   final Box box;
   final Device? device;
   final int? deviceBox;
+  final Device? screenDevice;
 
-  SettingsBoxBlocStateDone(this.box, this.device, this.deviceBox);
+  SettingsBoxBlocStateDone(this.box, this.device, this.deviceBox, this.screenDevice);
 
   @override
   List<Object?> get props => [box, device, deviceBox];
@@ -77,6 +81,7 @@ class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocSt
   late Box box;
   Device? device;
   int? deviceBox;
+  Device? screenDevice;
 
   SettingsBoxBloc(this.args) : super(SettingsBoxBlocStateLoading()) {
     add(SettingsBoxBlocEventInit());
@@ -90,31 +95,41 @@ class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocSt
         device = await RelDB.get().devicesDAO.getDevice(box.device!);
         deviceBox = box.deviceBox;
       }
-      yield SettingsBoxBlocStateLoaded(box, device, deviceBox);
+      if (box.screenDevice != null) {
+        screenDevice = await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
+      }
+      yield SettingsBoxBlocStateLoaded(box, device, deviceBox, screenDevice);
     } else if (event is SettingsBoxBlocEventUpdate) {
       yield SettingsBoxBlocStateLoading();
       if ((event.device != null && event.device != device) ||
-          (event.deviceBox != null && event.deviceBox != deviceBox)) {
+          (event.deviceBox != null && event.deviceBox != deviceBox) ||
+          event.screenDevice != null) {
         BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
         Map<String, dynamic> schedule = boxSettings.schedules[boxSettings.schedule];
 
-        Param onHourParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_HOUR');
-        Param onMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_MIN');
-        await DeviceHelper.updateHourMinParams(
-            event.device!, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
+        try {
+          Param onHourParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_HOUR');
+          Param onMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_MIN');
+          await DeviceHelper.updateHourMinParams(
+              event.device!, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
 
-        Param offHourParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_HOUR');
-        Param offMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_MIN');
-        await DeviceHelper.updateHourMinParams(
-            event.device!, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+          Param offHourParam =
+              await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_HOUR');
+          Param offMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_MIN');
+          await DeviceHelper.updateHourMinParams(
+              event.device!, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+        } catch (e, t) {
+          Logger.logError(e, t);
+        }
       }
       await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),
           name: Value(event.name),
           device: Value(event.device?.id),
           deviceBox: Value(event.deviceBox),
+          screenDevice: Value(event.screenDevice?.id),
           synced: Value(false)));
-      yield SettingsBoxBlocStateDone(box, event.device ?? device, event.deviceBox ?? deviceBox);
+      yield SettingsBoxBlocStateDone(box, event.device, event.deviceBox, event.screenDevice);
     }
   }
 }

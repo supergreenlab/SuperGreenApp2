@@ -24,6 +24,17 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:collection/collection.dart';
 
 class PlantHelper {
+  static Future setBoxDevice(Box box, { Device? device, int? deviceBox, Device? screenDevice}) async {
+    BoxesCompanion boxC = BoxesCompanion(id: Value(box.id), synced: Value(false));
+    if (device != null && deviceBox != null && device.isController) {
+      boxC = boxC.copyWith(device: Value(device.id), deviceBox: Value(deviceBox));
+    }
+    if (screenDevice != null && screenDevice.isScreen) {
+      boxC = boxC.copyWith(screenDevice: Value(screenDevice.id));
+    }
+    await RelDB.get().plantsDAO.updateBox(boxC);
+  }
+
   static Future deletePlant(Plant plant, {addDeleted = true}) async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     await RelDB.get().plantsDAO.deletePlant(plant);

@@ -42,6 +42,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   late TextEditingController _nameController;
   late Device? _device;
   late int? _deviceBox;
+  late Device? _screenDevice;
 
   final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
@@ -75,6 +76,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           _nameController = TextEditingController(text: state.box.name);
           _device = state.device;
           _deviceBox = state.deviceBox;
+          _screenDevice = state.screenDevice;
         } else if (state is SettingsBoxBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
             BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
@@ -188,10 +190,36 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                   : ListTile(
                       leading: SvgPicture.asset('assets/settings/icon_nocontroller.svg'),
                       title: Text('Lab isn\'t linked to any controller'),
-                      subtitle: Text('Tap to add one'),
+                      subtitle: Text('Tap to link one'),
                       trailing: Icon(Icons.edit),
                       onTap: () {
                         _handleChangeController(context);
+                      },
+                    ),
+              SectionTitle(
+                title: 'Lab screen',
+                icon: 'assets/box_setup/icon_controller.svg',
+                backgroundColor: Color(0xff0b6ab3),
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              _screenDevice != null
+                  ? ListTile(
+                      leading: SvgPicture.asset('assets/box_setup/icon_controller.svg'),
+                      title: Text('${_screenDevice!.name}'),
+                      subtitle: Text('Tap to change'),
+                      trailing: Icon(Icons.edit),
+                      onTap: () {
+                        _handleChangeScreen(context);
+                      },
+                    )
+                  : ListTile(
+                      leading: SvgPicture.asset('assets/settings/icon_nocontroller.svg'),
+                      title: Text('Lab isn\'t linked to any screen'),
+                      subtitle: Text('Tap to link one'),
+                      trailing: Icon(Icons.edit),
+                      onTap: () {
+                        _handleChangeScreen(context);
                       },
                     ),
             ],
@@ -212,20 +240,45 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   }
 
   void _handleChangeController(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(isController: true, futureFn: (future) async {
-      dynamic res = await future;
-      if (res is SelectBoxDeviceData) {
-        setState(() {
-          _device = res.device;
-          _deviceBox = res.deviceBox;
-        });
-      } else if (res is bool && res == false) {
-        setState(() {
-          _device = null;
-          _deviceBox = null;
-        });
-      }
-    }));
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
+        isController: true,
+        futureFn: (future) async {
+          dynamic res = await future;
+          if (res is SelectBoxDeviceData) {
+            setState(() {
+              _device = res.device;
+              _deviceBox = res.deviceBox;
+              if (_screenDevice == null && _device!.isScreen == true) {
+                _screenDevice = _device;
+              }
+            });
+          } else if (res is bool && res == false) {
+            setState(() {
+              if (_device != null && _screenDevice != null && _device!.id == _screenDevice!.id) {
+                _screenDevice = null;
+              }
+              _device = null;
+              _deviceBox = null;
+            });
+          }
+        }));
+  }
+
+  void _handleChangeScreen(BuildContext context) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
+        isScreen: true,
+        futureFn: (future) async {
+          dynamic res = await future;
+          if (res is SelectBoxDeviceData) {
+            setState(() {
+              _screenDevice = res.device;
+            });
+          } else if (res is bool && res == false) {
+            setState(() {
+              _screenDevice = null;
+            });
+          }
+        }));
   }
 
   void _handleInput(BuildContext context) async {
@@ -233,6 +286,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
       _nameController.text,
       _device,
       _deviceBox,
+      _screenDevice,
     ));
   }
 

@@ -21,6 +21,7 @@ import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -101,6 +102,16 @@ class BoxControlsBlocEventSetScreenDevice extends BoxControlsBlocEvent {
   List<Object?> get props => [device, deviceBox];
 }
 
+class BoxControlsBlocEventSetDevice extends BoxControlsBlocEvent {
+  final Device device;
+  final int deviceBox;
+
+  BoxControlsBlocEventSetDevice(this.device, this.deviceBox);
+
+  @override
+  List<Object?> get props => [device, deviceBox];
+}
+
 abstract class BoxControlsBlocState extends Equatable {}
 
 class BoxControlsBlocStateNoDevice extends BoxControlsBlocState {
@@ -169,9 +180,12 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       yield event.state;
     } else if (event is BoxControlsBlocEventSetScreenDevice) {
       final db = RelDB.get();
-      await RelDB.get()
-          .plantsDAO
-          .updateBox(BoxesCompanion(id: Value(box.id), screenDevice: Value(event.device.id), synced: Value(false)));
+      await PlantHelper.setBoxDevice(box, screenDevice: event.device);
+      this.box = await db.plantsDAO.getBox(box.id);
+      add(BoxControlsBlocEventInit());
+    } else if (event is BoxControlsBlocEventSetDevice) {
+      final db = RelDB.get();
+      await PlantHelper.setBoxDevice(box, device: event.device, deviceBox: event.deviceBox, screenDevice: event.device.isScreen ? event.device : null);
       this.box = await db.plantsDAO.getBox(box.id);
       add(BoxControlsBlocEventInit());
     }

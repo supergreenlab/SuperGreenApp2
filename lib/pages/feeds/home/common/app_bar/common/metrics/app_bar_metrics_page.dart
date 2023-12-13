@@ -214,6 +214,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
                   top: 0,
                   left: 0,
                   bottom: 0,
+                  width: 28,
                   child: Image.asset(
                     "assets/left_scroll_arrow.png",
                   ),
@@ -224,6 +225,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
                   top: 0,
                   right: 0,
                   bottom: 0,
+                  width: 28,
                   child: Image.asset(
                     "assets/right_scroll_arrow.png",
                   ),
