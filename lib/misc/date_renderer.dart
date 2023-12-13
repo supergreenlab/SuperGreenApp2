@@ -64,9 +64,9 @@ class DateRenderer {
     if (plantSettings.germinationDate == null && plantSettings.cloningDate == null) {
       return 'Germination date not set.';
     }
-    DateTime date = plantSettings.germinationDate ?? plantSettings.cloningDate!;
+    DateTime date2 = plantSettings.germinationDate ?? plantSettings.cloningDate!;
     String label = plantSettings.germinationDate != null ? "Germinated" : "Cloned";
-    Duration diff = date.difference(date);
+    Duration diff = date.difference(date2);
     return '$label ${renderDuration(diff)}';
   }
 
