@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:drift/drift.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
@@ -27,6 +28,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class DeviceSetupBlocEvent extends Equatable {}
 
@@ -178,7 +180,22 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
         add(DeviceSetupBlocEventLoadingError());
       }
 
-      final d = await db.getDevice(deviceID);
+      Device d = await db.getDevice(deviceID);
+
+      if (d.isScreen) {
+        try {
+          String key = Uuid().v4();
+          final Param encKey = await db.getParam(deviceID, 'BROKER_ENCKEY');
+          await DeviceHelper.updateStringParam(d, encKey, key, forceLocal: true);
+          d = d.copyWith(encKey: Value(key));
+          await db.updateDevice(d.toCompanion(false).copyWith(synced: Value(false),));
+
+          final Param token = await RelDB.get().devicesDAO.getParam(d.id, 'SGL_TOKEN');
+          await DeviceHelper.updateStringParam(d, token, AppDB().getAppData().jwt!, forceLocal: true);
+        } catch(e, t) {
+          Logger.logError(e, t);
+        }
+      }
 
       final Param time = await db.getParam(deviceID, 'TIME');
       await DeviceHelper.updateIntParam(d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);

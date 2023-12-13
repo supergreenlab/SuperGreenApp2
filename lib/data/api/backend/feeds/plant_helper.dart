@@ -18,19 +18,23 @@
 
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:collection/collection.dart';
 
 class PlantHelper {
-  static Future setBoxDevice(Box box, { Device? device, int? deviceBox, Device? screenDevice}) async {
+  static Future setBoxDevice(Box box, {Device? device, int? deviceBox, Device? screenDevice}) async {
     BoxesCompanion boxC = BoxesCompanion(id: Value(box.id), synced: Value(false));
     if (device != null && deviceBox != null && device.isController) {
       boxC = boxC.copyWith(device: Value(device.id), deviceBox: Value(deviceBox));
     }
     if (screenDevice != null && screenDevice.isScreen) {
       boxC = boxC.copyWith(screenDevice: Value(screenDevice.id));
+
+      final Param token = await RelDB.get().devicesDAO.getParam(screenDevice.id, 'BROKER_SCRTOKEN');
+      await DeviceHelper.updateStringParam(screenDevice, token, box.serverID!, forceLocal: true);
     }
     await RelDB.get().plantsDAO.updateBox(boxC);
   }
