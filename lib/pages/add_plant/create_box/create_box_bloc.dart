@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/feeds/box_helper.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -48,19 +49,14 @@ class CreateBoxBloc extends LegacyBloc<CreateBoxBlocEvent, CreateBoxBlocState> {
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
       final feedID = await fdb.addFeed(feed);
-      BoxesCompanion box;
-      if (event.device == null && event.deviceBox == null) {
-        box = BoxesCompanion.insert(feed: Value(feedID), name: event.name, settings: Value(BoxSettings().toJSON()));
-      } else {
-        box = BoxesCompanion.insert(
-            feed: Value(feedID),
-            name: event.name,
-            device: Value(event.device!.id),
-            deviceBox: Value(event.deviceBox),
-            settings: Value(BoxSettings().toJSON()));
-      }
+      BoxesCompanion box = BoxesCompanion.insert(feed: Value(feedID), name: event.name, settings: Value(BoxSettings().toJSON()));
       final boxID = await bdb.addBox(box);
-      final b = await bdb.getBox(boxID);
+      Box b = await bdb.getBox(boxID);
+
+      if (event.device != null && event.deviceBox != null) {
+        await BoxHelper.setBoxDevice(b, device: event.device, deviceBox: event.deviceBox, screenDevice: event.device!.isScreen ? event.device : null);
+      }
+      b = await bdb.getBox(boxID);
       yield CreateBoxBlocStateDone(b);
     }
   }

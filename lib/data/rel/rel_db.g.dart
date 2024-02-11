@@ -140,14 +140,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("needs_refresh" IN (0, 1))'),
       defaultValue: Constant(false));
-  static const VerificationMeta _encKeyMeta = const VerificationMeta('encKey');
-  @override
-  late final GeneratedColumn<String> encKey = GeneratedColumn<String>(
-      'enc_key', aliasedName, true,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
-      type: DriftSqlType.string,
-      requiredDuringInsert: false);
   static const VerificationMeta _configMeta = const VerificationMeta('config');
   @override
   late final GeneratedColumn<String> config = GeneratedColumn<String>(
@@ -188,7 +180,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         nLeds,
         nMotors,
         needsRefresh,
-        encKey,
         config,
         serverID,
         synced
@@ -279,10 +270,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           needsRefresh.isAcceptableOrUnknown(
               data['needs_refresh']!, _needsRefreshMeta));
     }
-    if (data.containsKey('enc_key')) {
-      context.handle(_encKeyMeta,
-          encKey.isAcceptableOrUnknown(data['enc_key']!, _encKeyMeta));
-    }
     if (data.containsKey('config')) {
       context.handle(_configMeta,
           config.isAcceptableOrUnknown(data['config']!, _configMeta));
@@ -334,8 +321,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           .read(DriftSqlType.int, data['${effectivePrefix}n_motors'])!,
       needsRefresh: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}needs_refresh'])!,
-      encKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}enc_key']),
       config: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}config']),
       serverID: attachedDatabase.typeMapping
@@ -367,7 +352,6 @@ class Device extends DataClass implements Insertable<Device> {
   final int nLeds;
   final int nMotors;
   final bool needsRefresh;
-  final String? encKey;
   final String? config;
   final String? serverID;
   final bool synced;
@@ -387,7 +371,6 @@ class Device extends DataClass implements Insertable<Device> {
       required this.nLeds,
       required this.nMotors,
       required this.needsRefresh,
-      this.encKey,
       this.config,
       this.serverID,
       required this.synced});
@@ -409,9 +392,6 @@ class Device extends DataClass implements Insertable<Device> {
     map['n_leds'] = Variable<int>(nLeds);
     map['n_motors'] = Variable<int>(nMotors);
     map['needs_refresh'] = Variable<bool>(needsRefresh);
-    if (!nullToAbsent || encKey != null) {
-      map['enc_key'] = Variable<String>(encKey);
-    }
     if (!nullToAbsent || config != null) {
       map['config'] = Variable<String>(config);
     }
@@ -439,8 +419,6 @@ class Device extends DataClass implements Insertable<Device> {
       nLeds: Value(nLeds),
       nMotors: Value(nMotors),
       needsRefresh: Value(needsRefresh),
-      encKey:
-          encKey == null && nullToAbsent ? const Value.absent() : Value(encKey),
       config:
           config == null && nullToAbsent ? const Value.absent() : Value(config),
       serverID: serverID == null && nullToAbsent
@@ -469,7 +447,6 @@ class Device extends DataClass implements Insertable<Device> {
       nLeds: serializer.fromJson<int>(json['nLeds']),
       nMotors: serializer.fromJson<int>(json['nMotors']),
       needsRefresh: serializer.fromJson<bool>(json['needsRefresh']),
-      encKey: serializer.fromJson<String?>(json['encKey']),
       config: serializer.fromJson<String?>(json['config']),
       serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
@@ -494,7 +471,6 @@ class Device extends DataClass implements Insertable<Device> {
       'nLeds': serializer.toJson<int>(nLeds),
       'nMotors': serializer.toJson<int>(nMotors),
       'needsRefresh': serializer.toJson<bool>(needsRefresh),
-      'encKey': serializer.toJson<String?>(encKey),
       'config': serializer.toJson<String?>(config),
       'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
@@ -517,7 +493,6 @@ class Device extends DataClass implements Insertable<Device> {
           int? nLeds,
           int? nMotors,
           bool? needsRefresh,
-          Value<String?> encKey = const Value.absent(),
           Value<String?> config = const Value.absent(),
           Value<String?> serverID = const Value.absent(),
           bool? synced}) =>
@@ -537,7 +512,6 @@ class Device extends DataClass implements Insertable<Device> {
         nLeds: nLeds ?? this.nLeds,
         nMotors: nMotors ?? this.nMotors,
         needsRefresh: needsRefresh ?? this.needsRefresh,
-        encKey: encKey.present ? encKey.value : this.encKey,
         config: config.present ? config.value : this.config,
         serverID: serverID.present ? serverID.value : this.serverID,
         synced: synced ?? this.synced,
@@ -560,7 +534,6 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('nLeds: $nLeds, ')
           ..write('nMotors: $nMotors, ')
           ..write('needsRefresh: $needsRefresh, ')
-          ..write('encKey: $encKey, ')
           ..write('config: $config, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -585,7 +558,6 @@ class Device extends DataClass implements Insertable<Device> {
       nLeds,
       nMotors,
       needsRefresh,
-      encKey,
       config,
       serverID,
       synced);
@@ -608,7 +580,6 @@ class Device extends DataClass implements Insertable<Device> {
           other.nLeds == this.nLeds &&
           other.nMotors == this.nMotors &&
           other.needsRefresh == this.needsRefresh &&
-          other.encKey == this.encKey &&
           other.config == this.config &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
@@ -630,7 +601,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<int> nLeds;
   final Value<int> nMotors;
   final Value<bool> needsRefresh;
-  final Value<String?> encKey;
   final Value<String?> config;
   final Value<String?> serverID;
   final Value<bool> synced;
@@ -650,7 +620,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.nLeds = const Value.absent(),
     this.nMotors = const Value.absent(),
     this.needsRefresh = const Value.absent(),
-    this.encKey = const Value.absent(),
     this.config = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -671,7 +640,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.nLeds = const Value.absent(),
     this.nMotors = const Value.absent(),
     this.needsRefresh = const Value.absent(),
-    this.encKey = const Value.absent(),
     this.config = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -695,7 +663,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     Expression<int>? nLeds,
     Expression<int>? nMotors,
     Expression<bool>? needsRefresh,
-    Expression<String>? encKey,
     Expression<String>? config,
     Expression<String>? serverID,
     Expression<bool>? synced,
@@ -716,7 +683,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       if (nLeds != null) 'n_leds': nLeds,
       if (nMotors != null) 'n_motors': nMotors,
       if (needsRefresh != null) 'needs_refresh': needsRefresh,
-      if (encKey != null) 'enc_key': encKey,
       if (config != null) 'config': config,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
@@ -739,7 +705,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<int>? nLeds,
       Value<int>? nMotors,
       Value<bool>? needsRefresh,
-      Value<String?>? encKey,
       Value<String?>? config,
       Value<String?>? serverID,
       Value<bool>? synced}) {
@@ -759,7 +724,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       nLeds: nLeds ?? this.nLeds,
       nMotors: nMotors ?? this.nMotors,
       needsRefresh: needsRefresh ?? this.needsRefresh,
-      encKey: encKey ?? this.encKey,
       config: config ?? this.config,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
@@ -814,9 +778,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     if (needsRefresh.present) {
       map['needs_refresh'] = Variable<bool>(needsRefresh.value);
     }
-    if (encKey.present) {
-      map['enc_key'] = Variable<String>(encKey.value);
-    }
     if (config.present) {
       map['config'] = Variable<String>(config.value);
     }
@@ -847,7 +808,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
           ..write('nLeds: $nLeds, ')
           ..write('nMotors: $nMotors, ')
           ..write('needsRefresh: $needsRefresh, ')
-          ..write('encKey: $encKey, ')
           ..write('config: $config, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -2012,6 +1972,23 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   late final GeneratedColumn<int> screenDevice = GeneratedColumn<int>(
       'screen_device', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _screenDeviceTokenMeta =
+      const VerificationMeta('screenDeviceToken');
+  @override
+  late final GeneratedColumn<String> screenDeviceToken =
+      GeneratedColumn<String>('screen_device_token', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 36, maxTextLength: 36),
+          type: DriftSqlType.string,
+          requiredDuringInsert: false);
+  static const VerificationMeta _encKeyMeta = const VerificationMeta('encKey');
+  @override
+  late final GeneratedColumn<String> encKey = GeneratedColumn<String>(
+      'enc_key', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -2053,6 +2030,8 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
         device,
         deviceBox,
         screenDevice,
+        screenDeviceToken,
+        encKey,
         name,
         settings,
         serverID,
@@ -2088,6 +2067,16 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
           _screenDeviceMeta,
           screenDevice.isAcceptableOrUnknown(
               data['screen_device']!, _screenDeviceMeta));
+    }
+    if (data.containsKey('screen_device_token')) {
+      context.handle(
+          _screenDeviceTokenMeta,
+          screenDeviceToken.isAcceptableOrUnknown(
+              data['screen_device_token']!, _screenDeviceTokenMeta));
+    }
+    if (data.containsKey('enc_key')) {
+      context.handle(_encKeyMeta,
+          encKey.isAcceptableOrUnknown(data['enc_key']!, _encKeyMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -2126,6 +2115,10 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
           .read(DriftSqlType.int, data['${effectivePrefix}device_box']),
       screenDevice: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}screen_device']),
+      screenDeviceToken: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}screen_device_token']),
+      encKey: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}enc_key']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       settings: attachedDatabase.typeMapping
@@ -2149,6 +2142,8 @@ class Box extends DataClass implements Insertable<Box> {
   final int? device;
   final int? deviceBox;
   final int? screenDevice;
+  final String? screenDeviceToken;
+  final String? encKey;
   final String name;
   final String settings;
   final String? serverID;
@@ -2159,6 +2154,8 @@ class Box extends DataClass implements Insertable<Box> {
       this.device,
       this.deviceBox,
       this.screenDevice,
+      this.screenDeviceToken,
+      this.encKey,
       required this.name,
       required this.settings,
       this.serverID,
@@ -2178,6 +2175,12 @@ class Box extends DataClass implements Insertable<Box> {
     }
     if (!nullToAbsent || screenDevice != null) {
       map['screen_device'] = Variable<int>(screenDevice);
+    }
+    if (!nullToAbsent || screenDeviceToken != null) {
+      map['screen_device_token'] = Variable<String>(screenDeviceToken);
+    }
+    if (!nullToAbsent || encKey != null) {
+      map['enc_key'] = Variable<String>(encKey);
     }
     map['name'] = Variable<String>(name);
     map['settings'] = Variable<String>(settings);
@@ -2200,6 +2203,11 @@ class Box extends DataClass implements Insertable<Box> {
       screenDevice: screenDevice == null && nullToAbsent
           ? const Value.absent()
           : Value(screenDevice),
+      screenDeviceToken: screenDeviceToken == null && nullToAbsent
+          ? const Value.absent()
+          : Value(screenDeviceToken),
+      encKey:
+          encKey == null && nullToAbsent ? const Value.absent() : Value(encKey),
       name: Value(name),
       settings: Value(settings),
       serverID: serverID == null && nullToAbsent
@@ -2218,6 +2226,9 @@ class Box extends DataClass implements Insertable<Box> {
       device: serializer.fromJson<int?>(json['device']),
       deviceBox: serializer.fromJson<int?>(json['deviceBox']),
       screenDevice: serializer.fromJson<int?>(json['screenDevice']),
+      screenDeviceToken:
+          serializer.fromJson<String?>(json['screenDeviceToken']),
+      encKey: serializer.fromJson<String?>(json['encKey']),
       name: serializer.fromJson<String>(json['name']),
       settings: serializer.fromJson<String>(json['settings']),
       serverID: serializer.fromJson<String?>(json['serverID']),
@@ -2233,6 +2244,8 @@ class Box extends DataClass implements Insertable<Box> {
       'device': serializer.toJson<int?>(device),
       'deviceBox': serializer.toJson<int?>(deviceBox),
       'screenDevice': serializer.toJson<int?>(screenDevice),
+      'screenDeviceToken': serializer.toJson<String?>(screenDeviceToken),
+      'encKey': serializer.toJson<String?>(encKey),
       'name': serializer.toJson<String>(name),
       'settings': serializer.toJson<String>(settings),
       'serverID': serializer.toJson<String?>(serverID),
@@ -2246,6 +2259,8 @@ class Box extends DataClass implements Insertable<Box> {
           Value<int?> device = const Value.absent(),
           Value<int?> deviceBox = const Value.absent(),
           Value<int?> screenDevice = const Value.absent(),
+          Value<String?> screenDeviceToken = const Value.absent(),
+          Value<String?> encKey = const Value.absent(),
           String? name,
           String? settings,
           Value<String?> serverID = const Value.absent(),
@@ -2257,6 +2272,10 @@ class Box extends DataClass implements Insertable<Box> {
         deviceBox: deviceBox.present ? deviceBox.value : this.deviceBox,
         screenDevice:
             screenDevice.present ? screenDevice.value : this.screenDevice,
+        screenDeviceToken: screenDeviceToken.present
+            ? screenDeviceToken.value
+            : this.screenDeviceToken,
+        encKey: encKey.present ? encKey.value : this.encKey,
         name: name ?? this.name,
         settings: settings ?? this.settings,
         serverID: serverID.present ? serverID.value : this.serverID,
@@ -2270,6 +2289,8 @@ class Box extends DataClass implements Insertable<Box> {
           ..write('device: $device, ')
           ..write('deviceBox: $deviceBox, ')
           ..write('screenDevice: $screenDevice, ')
+          ..write('screenDeviceToken: $screenDeviceToken, ')
+          ..write('encKey: $encKey, ')
           ..write('name: $name, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')
@@ -2280,7 +2301,7 @@ class Box extends DataClass implements Insertable<Box> {
 
   @override
   int get hashCode => Object.hash(id, feed, device, deviceBox, screenDevice,
-      name, settings, serverID, synced);
+      screenDeviceToken, encKey, name, settings, serverID, synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2290,6 +2311,8 @@ class Box extends DataClass implements Insertable<Box> {
           other.device == this.device &&
           other.deviceBox == this.deviceBox &&
           other.screenDevice == this.screenDevice &&
+          other.screenDeviceToken == this.screenDeviceToken &&
+          other.encKey == this.encKey &&
           other.name == this.name &&
           other.settings == this.settings &&
           other.serverID == this.serverID &&
@@ -2302,6 +2325,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   final Value<int?> device;
   final Value<int?> deviceBox;
   final Value<int?> screenDevice;
+  final Value<String?> screenDeviceToken;
+  final Value<String?> encKey;
   final Value<String> name;
   final Value<String> settings;
   final Value<String?> serverID;
@@ -2312,6 +2337,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
     this.screenDevice = const Value.absent(),
+    this.screenDeviceToken = const Value.absent(),
+    this.encKey = const Value.absent(),
     this.name = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
@@ -2323,6 +2350,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
     this.screenDevice = const Value.absent(),
+    this.screenDeviceToken = const Value.absent(),
+    this.encKey = const Value.absent(),
     required String name,
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
@@ -2334,6 +2363,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     Expression<int>? device,
     Expression<int>? deviceBox,
     Expression<int>? screenDevice,
+    Expression<String>? screenDeviceToken,
+    Expression<String>? encKey,
     Expression<String>? name,
     Expression<String>? settings,
     Expression<String>? serverID,
@@ -2345,6 +2376,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       if (device != null) 'device': device,
       if (deviceBox != null) 'device_box': deviceBox,
       if (screenDevice != null) 'screen_device': screenDevice,
+      if (screenDeviceToken != null) 'screen_device_token': screenDeviceToken,
+      if (encKey != null) 'enc_key': encKey,
       if (name != null) 'name': name,
       if (settings != null) 'settings': settings,
       if (serverID != null) 'server_i_d': serverID,
@@ -2358,6 +2391,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       Value<int?>? device,
       Value<int?>? deviceBox,
       Value<int?>? screenDevice,
+      Value<String?>? screenDeviceToken,
+      Value<String?>? encKey,
       Value<String>? name,
       Value<String>? settings,
       Value<String?>? serverID,
@@ -2368,6 +2403,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       device: device ?? this.device,
       deviceBox: deviceBox ?? this.deviceBox,
       screenDevice: screenDevice ?? this.screenDevice,
+      screenDeviceToken: screenDeviceToken ?? this.screenDeviceToken,
+      encKey: encKey ?? this.encKey,
       name: name ?? this.name,
       settings: settings ?? this.settings,
       serverID: serverID ?? this.serverID,
@@ -2393,6 +2430,12 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     if (screenDevice.present) {
       map['screen_device'] = Variable<int>(screenDevice.value);
     }
+    if (screenDeviceToken.present) {
+      map['screen_device_token'] = Variable<String>(screenDeviceToken.value);
+    }
+    if (encKey.present) {
+      map['enc_key'] = Variable<String>(encKey.value);
+    }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
@@ -2416,6 +2459,8 @@ class BoxesCompanion extends UpdateCompanion<Box> {
           ..write('device: $device, ')
           ..write('deviceBox: $deviceBox, ')
           ..write('screenDevice: $screenDevice, ')
+          ..write('screenDeviceToken: $screenDeviceToken, ')
+          ..write('encKey: $encKey, ')
           ..write('name: $name, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')

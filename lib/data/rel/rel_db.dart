@@ -177,7 +177,8 @@ class RelDB extends _$RelDB {
       await m.addColumn(devices, devices.nSensorPorts);
       await m.addColumn(devices, devices.nLeds);
       await m.addColumn(devices, devices.nMotors);
-      await m.addColumn(devices, devices.encKey);
+      await m.addColumn(boxes, boxes.encKey);
+      await m.addColumn(boxes, boxes.screenDeviceToken);
       await m.addColumn(boxes, boxes.screenDevice);
       await m.issueCustomQuery(
           "update devices set needs_refresh=true");

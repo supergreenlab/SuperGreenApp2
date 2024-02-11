@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/feeds/box_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -179,12 +180,12 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       yield event.state;
     } else if (event is BoxControlsBlocEventSetScreenDevice) {
       final db = RelDB.get();
-      await PlantHelper.setBoxDevice(box, screenDevice: event.device);
+      await BoxHelper.setBoxDevice(box, screenDevice: event.device);
       this.box = await db.plantsDAO.getBox(box.id);
       add(BoxControlsBlocEventInit());
     } else if (event is BoxControlsBlocEventSetDevice) {
       final db = RelDB.get();
-      await PlantHelper.setBoxDevice(box, device: event.device, deviceBox: event.deviceBox, screenDevice: event.device.isScreen ? event.device : null);
+      await BoxHelper.setBoxDevice(box, device: event.device, deviceBox: event.deviceBox, screenDevice: event.device.isScreen ? event.device : null);
       this.box = await db.plantsDAO.getBox(box.id);
       add(BoxControlsBlocEventInit());
     }

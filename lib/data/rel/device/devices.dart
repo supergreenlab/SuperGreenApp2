@@ -43,8 +43,6 @@ class Devices extends Table {
   IntColumn get nMotors => integer().withDefault(Constant(0))();
   BoolColumn get needsRefresh => boolean().withDefault(Constant(false))();
 
-  TextColumn get encKey => text().withLength(min: 36, max: 36).nullable()();
-
   TextColumn get config => text().nullable()();
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
@@ -75,7 +73,6 @@ class Devices extends Table {
       'isScreen': device.isScreen,
       'ip': device.ip,
       'mdns': device.mdns,
-      'encKey': device.encKey,
     };
   }
 }

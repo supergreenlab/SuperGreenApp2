@@ -182,21 +182,6 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
 
       Device d = await db.getDevice(deviceID);
 
-      if (d.isScreen) {
-        try {
-          String key = Uuid().v4();
-          final Param encKey = await db.getParam(deviceID, 'BROKER_ENCKEY');
-          await DeviceHelper.updateStringParam(d, encKey, key, forceLocal: true);
-          d = d.copyWith(encKey: Value(key));
-          await db.updateDevice(d.toCompanion(false).copyWith(synced: Value(false),));
-
-          final Param token = await RelDB.get().devicesDAO.getParam(d.id, 'SGL_TOKEN');
-          await DeviceHelper.updateStringParam(d, token, AppDB().getAppData().jwt!, forceLocal: true);
-        } catch(e, t) {
-          Logger.logError(e, t);
-        }
-      }
-
       final Param time = await db.getParam(deviceID, 'TIME');
       await DeviceHelper.updateIntParam(d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
 

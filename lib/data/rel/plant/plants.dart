@@ -93,6 +93,9 @@ class Boxes extends Table {
   IntColumn get device => integer().nullable()();
   IntColumn get deviceBox => integer().nullable()();
   IntColumn get screenDevice => integer().nullable()();
+
+  TextColumn get screenDeviceToken => text().withLength(min: 36, max: 36).nullable()();
+  TextColumn get encKey => text().withLength(min: 36, max: 36).nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
 
   TextColumn get settings => text().withDefault(Constant('{}'))();
@@ -139,6 +142,8 @@ class Boxes extends Table {
       'settings': box.settings,
       'feedID': null,
       'deviceID': null,
+      'screenDeviceToken': box.screenDeviceToken,
+      'encKey': box.encKey,
       'screenDeviceID': null,
     };
     if (box.device != null) {

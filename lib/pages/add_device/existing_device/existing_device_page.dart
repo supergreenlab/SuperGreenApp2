@@ -111,8 +111,10 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
         if (state is ExistingDeviceBlocStateFound) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigateToDeviceSetupEvent(state.ip, futureFn: (future) async {
-            Device device = await future;
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+            Device? device = await future;
+            if (device != null) {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+            }
           }));
         }
       },
