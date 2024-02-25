@@ -348,6 +348,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
         .write(BoxesCompanion(device: Value(null), synced: Value(false)));
   }
 
+  Future cleanScreenDeviceIDs(int deviceID) {
+    return (update(boxes)..where((b) => b.screenDevice.equals(deviceID)))
+        .write(BoxesCompanion(screenDevice: Value(null), synced: Value(false)));
+  }
+
   Future<int> addChartCache(ChartCachesCompanion chartCache) {
     return into(chartCaches).insert(chartCache);
   }

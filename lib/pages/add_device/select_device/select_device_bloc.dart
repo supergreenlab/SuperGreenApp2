@@ -106,6 +106,7 @@ class SelectDeviceBloc extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlo
       yield SelectDeviceBlocStateDeviceListUpdated(_devices);
     } else if (event is SelectDeviceBlocEventDelete) {
       await RelDB.get().plantsDAO.cleanDeviceIDs(event.device.id);
+      await RelDB.get().plantsDAO.cleanScreenDeviceIDs(event.device.id);
       await DeviceHelper.deleteDevice(event.device);
     } else if (event is SelectDeviceBlocEventSelect) {
       final ddb = RelDB.get().devicesDAO;
