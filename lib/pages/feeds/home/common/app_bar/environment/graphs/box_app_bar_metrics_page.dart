@@ -197,9 +197,9 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                     state.graphData[2].data.length == 0 ? Container() : _renderMetric(
                         Colors.orange,
                         'VPD',
-                        '${state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric / 40}',
-                        '${TimeSeriesAPI.min(state.graphData[2].data).metric / 40}',
-                        '${TimeSeriesAPI.max(state.graphData[2].data).metric / 40}', () {
+                        '${(state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric / 40).toStringAsFixed(2)}',
+                        '${(TimeSeriesAPI.min(state.graphData[2].data).metric / 40).toStringAsFixed(2)}',
+                        '${(TimeSeriesAPI.max(state.graphData[2].data).metric / 40).toStringAsFixed(2)}', () {
                       setState(() {
                         disabledGraphs[2] = !(disabledGraphs[2] ?? false);
                       });

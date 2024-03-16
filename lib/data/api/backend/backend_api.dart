@@ -63,7 +63,7 @@ class BackendAPI {
       websocketServerHost = 'wss://api2.supergreenlab.com';
       storageServerHost = 'https://storage.supergreenlab.com';
       storageServerHostHeader = 'storage.supergreenlab.com';
-      // serverHost = 'http://192.168.1.87:8080';
+      // serverHost = 'http://192.168.1.87:8090';
       // storageServerHost = 'http://192.168.1.87:9000';
       // storageServerHostHeader = 'minio:9000';
     } else {
@@ -75,13 +75,13 @@ class BackendAPI {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (true || (await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
-      serverHost = local ? 'http://192.168.1.49:8080' : 'https://devapi2.supergreenlab.com';
-      websocketServerHost = local ? 'ws://192.168.1.49:8080' : 'wss://devapi2.supergreenlab.com';
+      serverHost = local ? 'http://192.168.1.49:8090' : 'https://devapi2.supergreenlab.com';
+      websocketServerHost = local ? 'ws://192.168.1.49:8090' : 'wss://devapi2.supergreenlab.com';
       storageServerHost = local ? 'http://192.168.1.49:9000' : 'https://devstorage.supergreenlab.com';
       storageServerHostHeader = local ? 'minio:9000' : 'devstorage.supergreenlab.com';
     } else {
-      serverHost = 'http://10.0.2.2:8080';
-      websocketServerHost = 'ws://10.0.2.2:8080';
+      serverHost = 'http://10.0.2.2:8090';
+      websocketServerHost = 'ws://10.0.2.2:8090';
       storageServerHost = 'http://10.0.2.2:9000';
       storageServerHostHeader = 'minio:9000';
     }

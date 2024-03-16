@@ -169,7 +169,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           color: Color(0xFFD7352B)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
-          value: vpd == null || vpd == 0 ? 'n/a' : '${vpd / 10.0}',
+          value: vpd == null || vpd == 0 ? 'n/a' : '${(vpd / 100.0).toStringAsFixed(2)}',
           color: Color(0xFF115D87)),
     ];
     if (co2 != null && co2 != 0) {

@@ -247,7 +247,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   }
 
   double _vpd(double vpd) {
-    return min(140, max(vpd * 4, 0));
+    return min(140, max(vpd * 0.4, 0));
   }
 
   double _weight(double weight) {
