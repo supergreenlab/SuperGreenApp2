@@ -23,6 +23,35 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 import 'package:uuid/uuid.dart';
 
 class BoxHelper {
+  static Future removeBoxDevice(Box box, {bool removeDevice = false, bool removeScreenDevice = false}) async {
+    BoxesCompanion boxC = BoxesCompanion(id: Value(box.id), synced: Value(false));
+    if (removeDevice && box.device != null && box.deviceBox != null) {
+      final Device device = await RelDB.get().devicesDAO.getDevice(box.device!);
+      final boxEnabled = await RelDB.get().devicesDAO.getParam(box.device!, 'BOX_${box.deviceBox}_ENABLED');
+      await DeviceHelper.updateIntParam(device, boxEnabled, 0);
+
+      final ledModule = await RelDB.get().devicesDAO.getModule(device.id, 'led');
+      for (int i = 0; i < ledModule.arrayLen; ++i) {
+        final ledBox = await RelDB.get().devicesDAO.getParam(device.id, 'LED_${i}_BOX');
+        if (ledBox.ivalue == box.deviceBox) {
+          await DeviceHelper.updateIntParam(device, ledBox, -1);
+        }
+      }
+
+      boxC = boxC.copyWith(device: Value(null), deviceBox: Value(null));
+    }
+    if (removeScreenDevice) {
+      final Device device = await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
+      final Param encKey = await RelDB.get().devicesDAO.getParam(box.screenDevice!, 'BROKER_ENCKEY');
+      await DeviceHelper.updateStringParam(device, encKey, "", forceLocal: true);
+
+      final Param token = await RelDB.get().devicesDAO.getParam(device.id, 'BROKER_SCRTOKEN');
+      await DeviceHelper.updateStringParam(device, token, "", forceLocal: true);
+      boxC = boxC.copyWith(screenDevice: Value(null));
+    }
+    await RelDB.get().plantsDAO.updateBox(boxC);
+  }
+
   static Future setBoxDevice(Box box, {Device? device, int? deviceBox, Device? screenDevice}) async {
     BoxesCompanion boxC = BoxesCompanion(id: Value(box.id), synced: Value(false));
     if (device != null &&

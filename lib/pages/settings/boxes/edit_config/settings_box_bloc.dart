@@ -102,6 +102,8 @@ class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocSt
       yield SettingsBoxBlocStateLoaded(box, device, deviceBox, screenDevice);
     } else if (event is SettingsBoxBlocEventUpdate) {
       yield SettingsBoxBlocStateLoading();
+      await BoxHelper.removeBoxDevice(box,
+          removeDevice: event.device == null, removeScreenDevice: event.screenDevice == null);
       await BoxHelper.setBoxDevice(box,
           device: event.device, deviceBox: event.deviceBox, screenDevice: event.screenDevice);
       if (event.name != box.name) {
