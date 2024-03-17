@@ -17,6 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/feeds/box_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:drift/drift.dart';
@@ -101,34 +102,13 @@ class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocSt
       yield SettingsBoxBlocStateLoaded(box, device, deviceBox, screenDevice);
     } else if (event is SettingsBoxBlocEventUpdate) {
       yield SettingsBoxBlocStateLoading();
-      if ((event.device != null && event.device != device) ||
-          (event.deviceBox != null && event.deviceBox != deviceBox) ||
-          event.screenDevice != null) {
-        BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
-        Map<String, dynamic> schedule = boxSettings.schedules[boxSettings.schedule];
-
-        try {
-          Param onHourParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_HOUR');
-          Param onMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_MIN');
-          await DeviceHelper.updateHourMinParams(
-              event.device!, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
-
-          Param offHourParam =
-              await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_HOUR');
-          Param offMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_MIN');
-          await DeviceHelper.updateHourMinParams(
-              event.device!, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
-        } catch (e, t) {
-          Logger.logError(e, t);
-        }
+      await BoxHelper.setBoxDevice(box,
+          device: event.device, deviceBox: event.deviceBox, screenDevice: event.screenDevice);
+      if (event.name != box.name) {
+        await RelDB.get()
+            .plantsDAO
+            .updateBox(BoxesCompanion(id: Value(box.id), name: Value(event.name), synced: Value(false)));
       }
-      await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
-          id: Value(box.id),
-          name: Value(event.name),
-          device: Value(event.device?.id),
-          deviceBox: Value(event.deviceBox),
-          screenDevice: Value(event.screenDevice?.id),
-          synced: Value(false)));
       yield SettingsBoxBlocStateDone(box, event.device, event.deviceBox, event.screenDevice);
     }
   }

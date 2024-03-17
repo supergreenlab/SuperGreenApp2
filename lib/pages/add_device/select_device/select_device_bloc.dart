@@ -109,13 +109,6 @@ class SelectDeviceBloc extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlo
       await RelDB.get().plantsDAO.cleanScreenDeviceIDs(event.device.id);
       await DeviceHelper.deleteDevice(event.device);
     } else if (event is SelectDeviceBlocEventSelect) {
-      final ddb = RelDB.get().devicesDAO;
-      final Device device = event.device;
-      final stateParam = await ddb.getParam(device.id, 'STATE');
-      // TODO declare Param enums when possible
-      if (stateParam.ivalue != 2) {
-        await DeviceHelper.updateIntParam(device, stateParam, 2);
-      }
       yield SelectDeviceBlocStateDone(_devices, event.device, event.deviceBox);
     }
   }

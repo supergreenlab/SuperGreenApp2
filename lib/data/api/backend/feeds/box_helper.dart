@@ -19,15 +19,43 @@
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 import 'package:uuid/uuid.dart';
 
 class BoxHelper {
   static Future setBoxDevice(Box box, {Device? device, int? deviceBox, Device? screenDevice}) async {
     BoxesCompanion boxC = BoxesCompanion(id: Value(box.id), synced: Value(false));
-    if (device != null && deviceBox != null && device.isController) {
+    if (device != null &&
+        deviceBox != null &&
+        device.isController &&
+        (device.id != box.device || deviceBox != box.deviceBox)) {
+      BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
+      Map<String, dynamic> schedule = boxSettings.schedules[boxSettings.schedule];
+
+      Param onHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_HOUR');
+      Param onMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_MIN');
+      await DeviceHelper.updateHourMinParams(device, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
+
+      Param offHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_HOUR');
+      Param offMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_MIN');
+      await DeviceHelper.updateHourMinParams(
+          device, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+
+      final timerTypeParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_TIMER_TYPE');
+      // TODO declare Param enums when possible
+      if (timerTypeParam.ivalue != 1) {
+        await DeviceHelper.updateIntParam(device, timerTypeParam, 1);
+      }
+
+      final stateParam = await RelDB.get().devicesDAO.getParam(device.id, 'STATE');
+      // TODO declare Param enums when possible
+      if (stateParam.ivalue != 2) {
+        await DeviceHelper.updateIntParam(device, stateParam, 2);
+      }
+
       boxC = boxC.copyWith(device: Value(device.id), deviceBox: Value(deviceBox));
     }
-    if (screenDevice != null && screenDevice.isScreen) {
+    if (screenDevice != null && screenDevice.isScreen && screenDevice.id != box.screenDevice) {
       boxC = boxC.copyWith(screenDevice: Value(screenDevice.id));
 
       String key = Uuid().v4();
@@ -38,6 +66,12 @@ class BoxHelper {
       final Param token = await RelDB.get().devicesDAO.getParam(screenDevice.id, 'BROKER_SCRTOKEN');
       await DeviceHelper.updateStringParam(screenDevice, token, scrToken, forceLocal: true);
       boxC = boxC.copyWith(screenDeviceToken: Value(scrToken), encKey: Value(key));
+
+      final stateParam = await RelDB.get().devicesDAO.getParam(screenDevice.id, 'STATE');
+      // TODO declare Param enums when possible
+      if (stateParam.ivalue != 2) {
+        await DeviceHelper.updateIntParam(screenDevice, stateParam, 2);
+      }
     }
     await RelDB.get().plantsDAO.updateBox(boxC);
   }
