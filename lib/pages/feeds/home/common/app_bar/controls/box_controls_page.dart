@@ -157,9 +157,33 @@ class BoxControlsPage extends StatelessWidget {
           Expanded(child: buttons),
         ],
       );
+    } else {
+      buttons = Column(
+        children: [
+          _renderScreenStatus(context, state),
+          Expanded(child: buttons),
+        ],
+      );
     }
     return Expanded(
       child: buttons,
+    );
+  }
+
+  Widget _renderScreenStatus(BuildContext context, BoxControlsBlocStateLoaded state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: SizedBox(child: SvgPicture.asset('assets/app_bar/icon_screen.svg'), width: 40, height: 40, ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
+          child:
+              Text('SCREEN LINKED.', style: TextStyle(color: Color(0xff3bb30b),)),
+        ),
+      ],
     );
   }
 
@@ -181,9 +205,9 @@ class BoxControlsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
-          ),
+              padding: const EdgeInsets.only(right: 8.0),
+              child: SizedBox(child: SvgPicture.asset('assets/app_bar/icon_screen.svg'), width: 40, height: 40, ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
               child: Text('ADD A SCREEN!',

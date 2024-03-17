@@ -269,7 +269,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   }));
                 },
               ),
-              ListTile(
+              state.device.isScreen && state.device.isController == false ? Container() : ListTile(
                 leading: SvgPicture.asset('assets/settings/icon_boxslot.svg'),
                 trailing: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -281,7 +281,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceBoxEvent(state.device));
                 },
               ),
-              ListTile(
+              state.device.isScreen && state.device.isController == false ? Container() : ListTile(
                 leading: SvgPicture.asset('assets/settings/icon_motor.svg'),
                 trailing: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -315,7 +315,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 titleColor: Colors.white,
                 elevation: 5,
               ),
-              Padding(
+              state.device.isScreen && state.device.isController == false ? Container() : Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
                   leading: SvgPicture.asset('assets/settings/icon_remotecontrol.svg'),
