@@ -82,6 +82,9 @@ class BoxHelper {
         await DeviceHelper.updateIntParam(device, stateParam, 2);
       }
 
+      final boxEnabled = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_ENABLED');
+      await DeviceHelper.updateIntParam(device, boxEnabled, 1);
+
       boxC = boxC.copyWith(device: Value(device.id), deviceBox: Value(deviceBox));
     }
     if (screenDevice != null && screenDevice.isScreen && screenDevice.id != box.screenDevice) {

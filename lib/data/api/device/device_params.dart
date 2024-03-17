@@ -81,6 +81,15 @@ abstract class ParamsController extends Equatable {
 
   ParamsController({required this.params});
 
+  bool isAvailable() {
+    for(ParamController p in params.values) {
+      if (!p.available) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<ParamController> loadParam(Device device, String key, name) async {
     ParamController pc = await ParamController.loadFromDB(device, key);
     params[name] = pc;
