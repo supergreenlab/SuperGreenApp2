@@ -24,9 +24,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/feed_entry_draft.dart';
@@ -46,14 +46,18 @@ class FeedMediaDraft extends FeedEntryDraftState {
   final String message;
   final bool helpRequest;
 
-  FeedMediaDraft(int? draftID, this.time, this.medias, this.message, this.helpRequest) : super(draftID);
+  FeedMediaDraft(
+      int? draftID, this.time, this.medias, this.message, this.helpRequest)
+      : super(draftID);
 
   factory FeedMediaDraft.fromJSON(int draftID, String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedMediaDraft(
       draftID,
       map['time'],
-      map['medias'].map<MediaDraftState>((m) => MediaDraftState.fromMap(m)).toList(),
+      map['medias']
+          .map<MediaDraftState>((m) => MediaDraftState.fromMap(m))
+          .toList(),
       map['message'],
       map['helpRequest'],
     );
@@ -148,7 +152,8 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
   FeedMediaDraft? draft;
 
-  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  final KeyboardVisibilityController _keyboardVisibility =
+      KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
@@ -197,7 +202,8 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           } else if (state is FeedMediaFormBlocStateCurrentDraft) {
             draft = state.draft;
           } else if (state is FeedMediaFormBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
@@ -206,7 +212,8 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
               String title = '🧐';
               Widget body;
               if (state is FeedMediaFormBlocStateLoadingDraft) {
-                body = Scaffold(body: FullscreenLoading(title: CommonL10N.loading));
+                body = Scaffold(
+                    body: FullscreenLoading(title: CommonL10N.loading));
               } else if (state is FeedMediaFormBlocStateLoading) {
                 body = Scaffold(
                     appBar: SGLAppBar(
@@ -228,25 +235,32 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                 body = FeedFormLayout(
                   title: title,
                   fontSize: 35,
-                  changed: _medias.length != 0 || _textController.value.text != '',
-                  valid: _medias.length != 0 || _textController.value.text != '',
-                  onOK: () => BlocProvider.of<FeedMediaFormBloc>(context)
-                      .add(FeedMediaFormBlocEventCreate(date, _medias, _textController.text, _helpRequest, draft)),
+                  changed:
+                      _medias.length != 0 || _textController.value.text != '',
+                  valid:
+                      _medias.length != 0 || _textController.value.text != '',
+                  onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
+                      FeedMediaFormBlocEventCreate(date, _medias,
+                          _textController.text, _helpRequest, draft)),
                   onCancel: () async {
                     for (FeedMediasCompanion media in _medias) {
                       await _deleteFileIfExists(media.filePath.value);
                       await _deleteFileIfExists(media.thumbnailPath.value);
                     }
                     if (draft != null) {
-                      BlocProvider.of<FeedMediaFormBloc>(context).add(FeedMediaFormBlocEventDeleteDraft(draft!));
+                      BlocProvider.of<FeedMediaFormBloc>(context)
+                          .add(FeedMediaFormBlocEventDeleteDraft(draft!));
                     }
                   },
                   body: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: _keyboardVisible ? [_renderTextrea(context, state)] : _renderBody(context, state)),
+                      children: _keyboardVisible
+                          ? [_renderTextrea(context, state)]
+                          : _renderBody(context, state)),
                 );
               }
-              return AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body);
+              return AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body);
             }));
   }
 
@@ -277,8 +291,9 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(FeedMediaFormPage.feedMediaFormPageDeletePicDialogTitle),
+                  return AlertDialog.adaptive(
+                    title: Text(FeedMediaFormPage
+                        .feedMediaFormPageDeletePicDialogTitle),
                     content: Text(CommonL10N.confirmUnRevertableChange),
                     actions: <Widget>[
                       TextButton(
@@ -313,9 +328,11 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                 });
               }
             } else {
-              FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+              FutureFn ff =
+                  BlocProvider.of<MainNavigatorBloc>(context).futureFn();
               BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value, futureFn: ff.futureFn, okButton: 'OK'));
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                      futureFn: ff.futureFn, okButton: 'OK'));
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
@@ -339,7 +356,8 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
   Future<List<FeedMediasCompanion>?> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
     List<FeedMediasCompanion>? feedMedias = await futureFn.future;
     return feedMedias;
   }
@@ -362,7 +380,9 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   Widget _renderOptions(BuildContext context, FeedMediaFormBlocState state) {
     return Row(
       children: <Widget>[
-        _renderOptionCheckbx(context, state, FeedMediaFormPage.feedMediaFormPageHelpRequest, (bool? newValue) {
+        _renderOptionCheckbx(
+            context, state, FeedMediaFormPage.feedMediaFormPageHelpRequest,
+            (bool? newValue) {
           setState(() {
             _helpRequest = newValue!;
           });
@@ -372,7 +392,11 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   }
 
   Widget _renderOptionCheckbx(
-      BuildContext context, FeedMediaFormBlocState state, String text, Function(bool?) onChanged, bool value) {
+      BuildContext context,
+      FeedMediaFormBlocState state,
+      String text,
+      Function(bool?) onChanged,
+      bool value) {
     return Row(
       children: <Widget>[
         Checkbox(
@@ -389,9 +413,11 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogTitle),
-            content: Text(FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogBody),
+          return AlertDialog.adaptive(
+            title: Text(
+                FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogTitle),
+            content: Text(
+                FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogBody),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -413,12 +439,14 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         await _deleteFileIfExists(media.filePath);
         await _deleteFileIfExists(media.thumbnailPath);
       }
-      BlocProvider.of<FeedMediaFormBloc>(context).add(FeedMediaFormBlocEventDeleteDraft(newDraft));
+      BlocProvider.of<FeedMediaFormBloc>(context)
+          .add(FeedMediaFormBlocEventDeleteDraft(newDraft));
     } else {
       draft = newDraft;
       setState(() {
         date = DateTime.fromMillisecondsSinceEpoch(draft!.time * 1000);
-        _medias.addAll(draft!.medias.map((e) => e.toFeedMediaCompanion()).toList());
+        _medias.addAll(
+            draft!.medias.map((e) => e.toFeedMediaCompanion()).toList());
         _textController.text = draft!.message;
         _helpRequest = draft!.helpRequest;
       });
@@ -429,10 +457,14 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
     draft = FeedMediaDraft(
         draft?.draftID,
         date.millisecondsSinceEpoch ~/ 1000,
-        _medias.map<MediaDraftState>((e) => MediaDraftState.fromFeedMediaCompanion(e)).toList(),
+        _medias
+            .map<MediaDraftState>(
+                (e) => MediaDraftState.fromFeedMediaCompanion(e))
+            .toList(),
         _textController.text,
         _helpRequest);
-    BlocProvider.of<FeedMediaFormBloc>(context).add(FeedMediaFormBlocEventSaveDraft(draft!));
+    BlocProvider.of<FeedMediaFormBloc>(context)
+        .add(FeedMediaFormBlocEventSaveDraft(draft!));
   }
 
   Future _deleteFileIfExists(String filePath) async {

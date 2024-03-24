@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -28,10 +28,10 @@ import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_page.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/plant_feed_filter_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/single_feed_entry.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/plant_infos_bloc_delegate.dart';
@@ -44,7 +44,8 @@ class PublicPlantPage extends StatefulWidget {
     return Intl.message(
       'Viewing single log entry',
       name: 'publicPlantPageSingleEntry',
-      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Label for the button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -53,7 +54,8 @@ class PublicPlantPage extends StatefulWidget {
     return Intl.message(
       'View complete diary',
       name: 'publicPlantPageSingleEntryButton',
-      desc: 'Button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -92,7 +94,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
         title: PublicPlantPage.publicPlantPageSingleEntry,
         button: PublicPlantPage.publicPlantPageSingleEntryButton,
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToPublicPlant(
             state.plantID,
           ));
         },
@@ -105,7 +108,9 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           color: Colors.white,
         ),
         onPressed: () async {
-          await ShareExtend.share("https://supergreenlab.com/public/plant?id=${state.plantID}", 'text');
+          await ShareExtend.share(
+              "https://supergreenlab.com/public/plant?id=${state.plantID}",
+              'text');
         },
       ),
     ];
@@ -116,7 +121,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
             highlightColor: Colors.transparent,
             onTap: () {
               if (BackendAPI().usersAPI.loggedIn) {
-                BlocProvider.of<PublicPlantBloc>(context).add(PublicPlantBlocEventFollowPlant());
+                BlocProvider.of<PublicPlantBloc>(context)
+                    .add(PublicPlantBlocEventFollowPlant());
               } else {
                 _login(context);
               }
@@ -130,8 +136,11 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
                     color: Color(0xff3bb30b),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                    child: Text(state.follows! ? 'Following (${state.nFollows})' : 'Follow'),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 10.0),
+                    child: Text(state.follows!
+                        ? 'Following (${state.nFollows})'
+                        : 'Follow'),
                   ),
                 ),
               ],
@@ -164,7 +173,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
                   return tabs[index](context, state);
                 },
                 pagination: SwiperPagination(
-                  builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
+                  builder: new DotSwiperPaginationBuilder(
+                      color: Colors.white, activeColor: Color(0xff3bb30b)),
                 ),
                 loop: false,
               ),
@@ -185,12 +195,15 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
 
   Widget _renderPlantInfos(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-        create: (context) => PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)), child: PlantInfosPage());
+        create: (context) =>
+            PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)),
+        child: PlantInfosPage());
   }
 
   Widget _renderProducts(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-      create: (context) => ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
+      create: (context) =>
+          ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
       child: ProductsPage(
         editable: false,
       ),
@@ -202,7 +215,7 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
@@ -222,7 +235,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 }

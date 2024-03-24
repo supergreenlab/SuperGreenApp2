@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_portal/flutter_portal.dart';
@@ -42,13 +43,13 @@ import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:tuple/tuple.dart';
-import 'package:collection/collection.dart';
 
 class AppearAnimated extends StatefulWidget {
   final bool visible;
   final Widget child;
 
-  const AppearAnimated({Key? key, required this.child, required this.visible}) : super(key: key);
+  const AppearAnimated({Key? key, required this.child, required this.visible})
+      : super(key: key);
 
   @override
   State<AppearAnimated> createState() => _AppearAnimatedState();
@@ -107,7 +108,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             if (loadingAutoChecklist) {
               AppDB().setCloseAutoChecklist(state.checklist.id);
             }
-            showAutoChecklist = !AppDB().isCloseAutoChecklist(state.checklist.id);
+            showAutoChecklist =
+                !AppDB().isCloseAutoChecklist(state.checklist.id);
             loadingAutoChecklist = false;
           });
         }
@@ -121,12 +123,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
             if (state is ChecklistBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is ChecklistBlocStateLoaded) {
-              if (state.checklistSeeds.length != 0 || _searchController.text != '') {
+              if (state.checklistSeeds.length != 0 ||
+                  _searchController.text != '') {
                 body = _renderLoaded(context, state);
               } else {
                 body = _renderEmpty(context, state);
               }
-              if (showCreateTimeReminder || showCreateMonitoring || showCreateWateringReminder) {
+              if (showCreateTimeReminder ||
+                  showCreateMonitoring ||
+                  showCreateWateringReminder) {
                 body = Stack(
                   children: [
                     body,
@@ -187,7 +192,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
-  Widget _renderCreateMenu(BuildContext context, ChecklistBlocStateLoaded state) {
+  Widget _renderCreateMenu(
+      BuildContext context, ChecklistBlocStateLoaded state) {
     return AppearAnimated(
         visible: showCreateMenu,
         child: TapRegion(
@@ -216,7 +222,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', () {
+                  _renderCreateMenuItem(
+                      context,
+                      'assets/checklist/icon_watering.svg',
+                      'Watering reminder', () {
                     setState(() {
                       showCreateMonitoring = false;
                       showCreateTimeReminder = false;
@@ -226,7 +235,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     });
                   }),
                   SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', () {
+                  _renderCreateMenuItem(
+                      context,
+                      'assets/checklist/icon_reminder.svg',
+                      'Time reminder', () {
                     setState(() {
                       showCreateWateringReminder = false;
                       showCreateMonitoring = false;
@@ -236,7 +248,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     });
                   }),
                   SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', () {
+                  _renderCreateMenuItem(
+                      context,
+                      'assets/checklist/icon_monitoring.svg',
+                      'Metric alert', () {
                     setState(() {
                       showCreateWateringReminder = false;
                       showCreateTimeReminder = false;
@@ -246,8 +261,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     });
                   }),
                   SvgPicture.asset('assets/checklist/line_separator.svg'),
-                  _renderCreateMenuItem(context, 'assets/checklist/icon_custom.svg', 'Custom checklist seed', () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist));
+                  _renderCreateMenuItem(
+                      context,
+                      'assets/checklist/icon_custom.svg',
+                      'Custom checklist seed', () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToCreateChecklist(state.checklist));
                     setState(() {
                       showCreateMenu = false;
                     });
@@ -257,9 +276,13 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       : SvgPicture.asset('assets/checklist/line_separator.svg'),
                   state.checklist.serverID == null
                       ? Container()
-                      : _renderCreateMenuItem(context, 'assets/checklist/icon_collections.svg', 'Collections', () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToChecklistCollections(state.checklist));
+                      : _renderCreateMenuItem(
+                          context,
+                          'assets/checklist/icon_collections.svg',
+                          'Collections', () {
+                          BlocProvider.of<MainNavigatorBloc>(context).add(
+                              MainNavigateToChecklistCollections(
+                                  state.checklist));
                         }),
                 ],
               ),
@@ -268,7 +291,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ));
   }
 
-  Widget _renderCreateMenuItem(BuildContext context, String icon, String title, Function()? onTap) {
+  Widget _renderCreateMenuItem(
+      BuildContext context, String icon, String title, Function()? onTap) {
     Widget body = Row(
       children: [
         SizedBox(
@@ -281,7 +305,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
           ),
         ),
         Expanded(child: Text(title)),
-        onTap == null ? Container() : SvgPicture.asset('assets/checklist/icon_menu_add.svg'),
+        onTap == null
+            ? Container()
+            : SvgPicture.asset('assets/checklist/icon_menu_add.svg'),
       ],
     );
     if (onTap == null) {
@@ -307,7 +333,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
             children: [
               Text(
                 'Your checklist is empty.\nPress the button below to start using it.',
-                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 18,
+                    color: Color(0xff454545)),
                 textAlign: TextAlign.center,
               ),
               Padding(
@@ -333,7 +362,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         children: [
                           Text(
                             'Or checkout our pre-made\nchecklist collections:',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18,
+                                color: Color(0xff454545)),
                             textAlign: TextAlign.center,
                           ),
                           Padding(
@@ -341,8 +373,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                             child: GreenButton(
                               color: 0xFF673AB7,
                               onPressed: () {
-                                BlocProvider.of<MainNavigatorBloc>(context)
-                                    .add(MainNavigateToChecklistCollections(state.checklist));
+                                BlocProvider.of<MainNavigatorBloc>(context).add(
+                                    MainNavigateToChecklistCollections(
+                                        state.checklist));
                               },
                               title: '🦜 View collections',
                             ),
@@ -364,9 +397,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
     } else {
       DateTime? currentDate;
       int? currentChecklistSeedID;
-      for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action in state.actions!) {
+      for (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action
+          in state.actions!) {
         if (currentDate == null ||
-            DateFormat('E MMM d k').format(currentDate) != DateFormat('E MMM d k').format(action.item3.date)) {
+            DateFormat('E MMM d k').format(currentDate) !=
+                DateFormat('E MMM d k').format(action.item3.date)) {
           currentDate = action.item3.date;
           String formattedDate = DateFormat('E MMM d').format(currentDate);
           actions.add(Padding(
@@ -375,7 +410,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  formattedDate == DateFormat('E MMM d').format(DateTime.now()) ? 'Today' : formattedDate,
+                  formattedDate == DateFormat('E MMM d').format(DateTime.now())
+                      ? 'Today'
+                      : formattedDate,
                   style: TextStyle(
                     fontSize: 19,
                     color: Color(0xff959595),
@@ -386,7 +423,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             ),
           ));
         }
-        if (currentChecklistSeedID == null || currentChecklistSeedID != action.item1.id) {
+        if (currentChecklistSeedID == null ||
+            currentChecklistSeedID != action.item1.id) {
           currentChecklistSeedID = action.item1.id;
           int days = DateTime.now().difference(action.item3.date).inDays;
           Color color = Color(0xff3bb30b);
@@ -430,10 +468,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
               checklistAction: action.item2,
               summarize: true,
               onCheck: () {
-                BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventCheckChecklistLog(action.item3));
+                BlocProvider.of<ChecklistBloc>(context)
+                    .add(ChecklistBlocEventCheckChecklistLog(action.item3));
               },
               onSkip: () {
-                BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventSkipChecklistLog(action.item3));
+                BlocProvider.of<ChecklistBloc>(context)
+                    .add(ChecklistBlocEventSkipChecklistLog(action.item3));
               }),
         ));
       }
@@ -451,83 +491,94 @@ class _ChecklistPageState extends State<ChecklistPage> {
           child: CreateChecklistSection(
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 8.0,
-                    right: 8.0,
-                    top: 24.0,
-                    bottom: 8.0,
-                  ),
-                  child: Text('To-Do',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff454545),
-                        fontSize: 24,
-                      )),
-                ),
-                ...actions,
-                Container(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 16.0,
-                  ),
-                  child: Text('Future items (${state.checklistSeeds.length})',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff454545),
-                        fontSize: 24,
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _renderSearchField(context),
-                ),
-                ...state.checklistSeeds.map((cks) {
-                  ChecklistCollection? collection = state.collections.firstWhereOrNull((c) => c.id == cks.collection);
-                  Widget body = ChecklistItemPage(
-                    plant: state.plant,
-                    box: state.box,
-                    checklistSeed: cks,
-                    collection: collection,
-                    onSelect: cks.mine == false
-                        ? null
-                        : () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
-                          },
-                    onDelete: cks.mine == false
-                        ? null
-                        : () {
-                            _deleteChecklistSeed(context, cks);
-                          },
-                  );
-                  if (currentMine != cks.mine) {
-                    body = Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Text(cks.mine ? 'Your items' : 'Collection items',
-                              style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff454545), fontSize: 18)),
-                        ),
-                        body,
-                      ],
-                    );
-                    currentMine = cks.mine;
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: body,
-                  );
-                }).toList(),
-                Container(
-                  height: 30.0,
-                ),
-              ]),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        right: 8.0,
+                        top: 24.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text('To-Do',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff454545),
+                            fontSize: 24,
+                          )),
+                    ),
+                    ...actions,
+                    Container(
+                      height: 10.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 16.0,
+                      ),
+                      child:
+                          Text('Future items (${state.checklistSeeds.length})',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff454545),
+                                fontSize: 24,
+                              )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _renderSearchField(context),
+                    ),
+                    ...state.checklistSeeds.map((cks) {
+                      ChecklistCollection? collection = state.collections
+                          .firstWhereOrNull((c) => c.id == cks.collection);
+                      Widget body = ChecklistItemPage(
+                        plant: state.plant,
+                        box: state.box,
+                        checklistSeed: cks,
+                        collection: collection,
+                        onSelect: cks.mine == false
+                            ? null
+                            : () {
+                                BlocProvider.of<MainNavigatorBloc>(context).add(
+                                    MainNavigateToCreateChecklist(
+                                        state.checklist,
+                                        checklistSeed: cks));
+                              },
+                        onDelete: cks.mine == false
+                            ? null
+                            : () {
+                                _deleteChecklistSeed(context, cks);
+                              },
+                      );
+                      if (currentMine != cks.mine) {
+                        body = Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Text(
+                                  cks.mine ? 'Your items' : 'Collection items',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff454545),
+                                      fontSize: 18)),
+                            ),
+                            body,
+                          ],
+                        );
+                        currentMine = cks.mine;
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: body,
+                      );
+                    }).toList(),
+                    Container(
+                      height: 30.0,
+                    ),
+                  ]),
             ),
           ),
         ),
@@ -546,7 +597,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
         onTap: () {
           setState(() {
             _searchController.text = '';
-            BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventFilter(''));
+            BlocProvider.of<ChecklistBloc>(context)
+                .add(ChecklistBlocEventFilter(''));
             _searchFocus.unfocus();
           });
         },
@@ -576,7 +628,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
               onChanged: (value) {
                 autocompleteTimer?.cancel();
                 autocompleteTimer = Timer(Duration(milliseconds: 500), () {
-                  BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventFilter(value));
+                  BlocProvider.of<ChecklistBloc>(context)
+                      .add(ChecklistBlocEventFilter(value));
                   autocompleteTimer = null;
                 });
               },
@@ -588,7 +641,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
-  Widget _renderNoActions(BuildContext context, ChecklistBlocStateLoaded state) {
+  Widget _renderNoActions(
+      BuildContext context, ChecklistBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -603,22 +657,29 @@ class _ChecklistPageState extends State<ChecklistPage> {
           padding: EdgeInsets.all(8.0),
           child: Text(
             'You\'re all set for today 👌',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff808080)),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff808080)),
           ),
         ),
       ],
     );
   }
 
-  Widget _renderCreatePopup(BuildContext context, ChecklistBlocStateLoaded state) {
+  Widget _renderCreatePopup(
+      BuildContext context, ChecklistBlocStateLoaded state) {
     Widget popupBody = Container();
     double? height;
     if (showCreateTimeReminder) {
-      height = MediaQuery.of(context).size.height - MediaQuery.of(context).viewInsets.bottom - 150;
+      height = MediaQuery.of(context).size.height -
+          MediaQuery.of(context).viewInsets.bottom -
+          150;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
-          child: _renderCreateMenuItem(context, 'assets/checklist/icon_reminder.svg', 'Time reminder', null),
+          child: _renderCreateMenuItem(context,
+              'assets/checklist/icon_reminder.svg', 'Time reminder', null),
         ),
         Expanded(
           child: CreateTimerReminder(
@@ -634,11 +695,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ),
       ]);
     } else if (showCreateMonitoring) {
-      height = MediaQuery.of(context).size.height - MediaQuery.of(context).viewInsets.bottom - 150;
+      height = MediaQuery.of(context).size.height -
+          MediaQuery.of(context).viewInsets.bottom -
+          150;
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
-          child: _renderCreateMenuItem(context, 'assets/checklist/icon_monitoring.svg', 'Metric alert', null),
+          child: _renderCreateMenuItem(context,
+              'assets/checklist/icon_monitoring.svg', 'Metric alert', null),
         ),
         Expanded(
           child: CreateMonitoring(
@@ -657,7 +721,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
       popupBody = Column(children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0),
-          child: _renderCreateMenuItem(context, 'assets/checklist/icon_watering.svg', 'Watering reminder', null),
+          child: _renderCreateMenuItem(context,
+              'assets/checklist/icon_watering.svg', 'Watering reminder', null),
         ),
         CreateWateringReminder(
           checklist: state.checklist,
@@ -700,10 +765,13 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
-  Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
+  Widget _renderAutoChecklistPopulate(
+      BuildContext context, ChecklistBlocStateLoaded state) {
     if (!showAutoChecklist ||
         state.checklist.serverID == null ||
-        state.collections.indexWhere((c) => c.serverID == BackendAPI().checklistCollectionTheBasics) != -1) {
+        state.collections.indexWhere((c) =>
+                c.serverID == BackendAPI().checklistCollectionTheBasics) !=
+            -1) {
       return Container(
         height: 12.0,
       );
@@ -735,7 +803,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: SvgPicture.asset(ChecklistCollectionCategoryIcons[CO_BASICS]!),
+                child: SvgPicture.asset(
+                    ChecklistCollectionCategoryIcons[CO_BASICS]!),
               ),
               Text('Add daily checks?',
                   maxLines: 3,
@@ -772,7 +841,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       setState(() {
                         this.loadingAutoChecklist = true;
                       });
-                      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventAutoChecklist());
+                      BlocProvider.of<ChecklistBloc>(context)
+                          .add(ChecklistBlocEventAutoChecklist());
                     },
                     title: 'Add collection',
                   ),
@@ -785,12 +855,13 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
-  void _deleteChecklistSeed(BuildContext context, ChecklistSeed checklistSeed) async {
+  void _deleteChecklistSeed(
+      BuildContext context, ChecklistSeed checklistSeed) async {
     bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text('Delete item "${checklistSeed.title}"?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
@@ -810,7 +881,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<ChecklistBloc>(context).add(ChecklistBlocEventDeleteChecklistSeed(checklistSeed));
+      BlocProvider.of<ChecklistBloc>(context)
+          .add(ChecklistBlocEventDeleteChecklistSeed(checklistSeed));
     }
   }
 }

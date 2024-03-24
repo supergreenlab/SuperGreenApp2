@@ -99,7 +99,8 @@ class CreatePlantPageState extends State<CreatePlantPage> {
   final _nameController = TextEditingController();
   bool _isSingle = true;
 
-  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  final KeyboardVisibilityController _keyboardVisibility =
+      KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
@@ -128,9 +129,11 @@ class CreatePlantPageState extends State<CreatePlantPage> {
       bloc: BlocProvider.of<CreatePlantBloc>(context),
       listener: (BuildContext context, CreatePlantBlocState state) async {
         if (state is CreatePlantBlocStateDone) {
-          BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventPlantCreated(state.plant));
+          BlocProvider.of<TowelieBloc>(context)
+              .add(TowelieBlocEventPlantCreated(state.plant));
           Timer(const Duration(milliseconds: 3000), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: true));
           });
         }
       },
@@ -153,15 +156,19 @@ class CreatePlantPageState extends State<CreatePlantPage> {
                   iconColor: Colors.white,
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
   Widget _renderDone(CreatePlantBlocStateDone state) {
-    String subtitle = CreatePlantPage.createPlantPageDoneMessage(_nameController.value.text, state.box.name);
+    String subtitle = CreatePlantPage.createPlantPageDoneMessage(
+        _nameController.value.text, state.box.name);
     return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+        title: CommonL10N.done,
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm() {
@@ -183,7 +190,8 @@ class CreatePlantPageState extends State<CreatePlantPage> {
               elevation: 5,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
                   hintText: CreatePlantPage.createPlantPageNameHint,
                   controller: _nameController,
@@ -192,13 +200,16 @@ class CreatePlantPageState extends State<CreatePlantPage> {
                   }),
             ),
             SectionTitle(
-              title: CreatePlantPage.createPlantPageSinglePlantDiarySectionTitle,
+              title:
+                  CreatePlantPage.createPlantPageSinglePlantDiarySectionTitle,
               icon: 'assets/settings/icon_plants.svg',
               backgroundColor: Color(0xff0bb354),
               titleColor: Colors.white,
               elevation: 5,
             ),
-            _renderOptionCheckbx(context, CreatePlantPage.createPlantPageSinglePlantDiaryLabel, (bool? newValue) {
+            _renderOptionCheckbx(
+                context, CreatePlantPage.createPlantPageSinglePlantDiaryLabel,
+                (bool? newValue) {
               setState(() {
                 _isSingle = newValue!;
               });
@@ -206,12 +217,16 @@ class CreatePlantPageState extends State<CreatePlantPage> {
           ]),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(right: 8.0),
           child: Align(
             alignment: Alignment.centerRight,
-            child: GreenButton(
-              title: CreatePlantPage.createPlantPageCreatePlantButton,
-              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+            child: SafeArea(
+              child: GreenButton(
+                title: CreatePlantPage.createPlantPageCreatePlantButton,
+                onPressed: _nameController.value.text != ''
+                    ? () => _handleInput(context)
+                    : null,
+              ),
             ),
           ),
         ),
@@ -219,7 +234,8 @@ class CreatePlantPageState extends State<CreatePlantPage> {
     );
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
+  Widget _renderOptionCheckbx(BuildContext context, String text,
+      Function(bool?) onChanged, bool value) {
     return Row(
       children: <Widget>[
         Checkbox(
@@ -233,7 +249,8 @@ class CreatePlantPageState extends State<CreatePlantPage> {
           child: MarkdownBody(
             fitContent: true,
             data: text,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 14)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Color(0xff454545), fontSize: 14)),
           ),
         ),
       ],
@@ -241,10 +258,12 @@ class CreatePlantPageState extends State<CreatePlantPage> {
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectBoxEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectBoxEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is Box) {
-        BlocProvider.of<CreatePlantBloc>(context).add(CreatePlantBlocEventCreate(
+        BlocProvider.of<CreatePlantBloc>(context)
+            .add(CreatePlantBlocEventCreate(
           _nameController.text,
           _isSingle,
           res.id,

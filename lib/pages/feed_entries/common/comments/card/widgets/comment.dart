@@ -30,7 +30,11 @@ class SmallCommentView extends StatelessWidget {
   final Comment comment;
   final bool loggedIn;
 
-  const SmallCommentView({Key? key, required this.feedEntry, required this.comment, required this.loggedIn})
+  const SmallCommentView(
+      {Key? key,
+      required this.feedEntry,
+      required this.comment,
+      required this.loggedIn})
       : super(key: key);
 
   @override
@@ -40,7 +44,8 @@ class SmallCommentView extends StatelessWidget {
         Expanded(
           child: MarkdownBody(
             data: '**${comment.from}** ${comment.text}',
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         InkWell(
@@ -49,11 +54,16 @@ class SmallCommentView extends StatelessWidget {
               createAccountOrLogin(context);
               return;
             }
-            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLikeComment(comment, feedEntry));
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventLikeComment(comment, feedEntry));
           },
           child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 4.0, top: 4.0, bottom: 8.0),
-            child: Image.asset('assets/feed_card/button_like${comment.liked ? '_on' : ''}.png', width: 20, height: 20),
+            padding: const EdgeInsets.only(
+                left: 8.0, right: 4.0, top: 4.0, bottom: 8.0),
+            child: Image.asset(
+                'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
+                width: 20,
+                height: 20),
           ),
         ),
       ],
@@ -65,7 +75,7 @@ class SmallCommentView extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
@@ -85,7 +95,8 @@ class SmallCommentView extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 }

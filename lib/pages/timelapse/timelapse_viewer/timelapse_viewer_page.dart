@@ -58,11 +58,13 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                 iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         });
   }
 
-  Widget _renderTimelapses(BuildContext context, TimelapseViewerBlocStateLoaded state) {
+  Widget _renderTimelapses(
+      BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return ListView.builder(
       itemCount: state.images.length + 1,
       itemBuilder: (context, index) {
@@ -71,8 +73,9 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
         }
         return InkWell(
             onTap: () {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToFullscreenPicture(state.timelapses[index].id, state.images[index]));
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToFullscreenPicture(
+                      state.timelapses[index].id, state.images[index]));
             },
             onLongPress: () {
               _deleteTimelapse(context, state.timelapses[index]);
@@ -94,15 +97,19 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                               strokeWidth: 4.0,
                             ),
                           ),
-                          Text('Pictures are uploaded every 10min,\nPlease wait..',
-                              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+                          Text(
+                              'Pictures are uploaded every 10min,\nPlease wait..',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey)),
                         ],
                       ))
                     ],
                   ),
                   Center(
                     child: Container(
-                        decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(7)),
+                        decoration: BoxDecoration(
+                            color: Colors.black12,
+                            borderRadius: BorderRadius.circular(7)),
                         clipBehavior: Clip.hardEdge,
                         child: Image.memory(
                           state.images[index],
@@ -116,7 +123,8 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
     );
   }
 
-  Widget _renderAdd(BuildContext context, TimelapseViewerBlocStateLoaded state) {
+  Widget _renderAdd(
+      BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Column(
@@ -126,11 +134,13 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
             child: Column(
               children: <Widget>[
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 24),
                     child: MarkdownBody(
                         data: 'Want another one?',
                         styleSheet: MarkdownStyleSheet(
-                            textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
+                            textAlign: WrapAlignment.center,
+                            p: TextStyle(fontSize: 22, color: Colors.black)))),
                 GreenButton(
                   title: 'SHOP NOW',
                   onPressed: () {
@@ -145,7 +155,8 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
     );
   }
 
-  Widget _renderEmpty(BuildContext context, TimelapseViewerBlocStateLoaded state) {
+  Widget _renderEmpty(
+      BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -154,16 +165,19 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
             children: <Widget>[
               Text("🎥", style: TextStyle(fontSize: 90)),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 24),
                   child: MarkdownBody(
                       data:
                           '**Keep an eye on your grow**, setup a **live cam**! The system will post **daily and weekly timelapses** of your plants in the feed. Timelapse videos are a **very efficient** way to **spot problems before they appear**.',
                       styleSheet: MarkdownStyleSheet(
-                          textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
+                          textAlign: WrapAlignment.center,
+                          p: TextStyle(fontSize: 22, color: Colors.black)))),
               GreenButton(
                 title: 'VIEW GUIDE',
                 onPressed: () {
-                  launchUrl(Uri.parse('https://www.supergreenlab.com/guide/how-to-setup-a-remote-live-camera'));
+                  launchUrl(Uri.parse(
+                      'https://www.supergreenlab.com/guide/how-to-setup-a-remote-live-camera'));
                 },
               ),
             ],
@@ -178,7 +192,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text('Delete timelapse ${timelapse.uploadName}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
@@ -198,7 +212,8 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<TimelapseViewerBloc>(context).add(TimelapseViewerBlocEventDelete(timelapse));
+      BlocProvider.of<TimelapseViewerBloc>(context)
+          .add(TimelapseViewerBlocEventDelete(timelapse));
     }
   }
 }

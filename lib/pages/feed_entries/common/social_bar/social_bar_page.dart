@@ -44,7 +44,8 @@ class SocialBarPage extends StatelessWidget {
   final FeedEntryState state;
   final FeedState feedState;
 
-  const SocialBarPage({Key? key, required this.state, required this.feedState}) : super(key: key);
+  const SocialBarPage({Key? key, required this.state, required this.feedState})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +63,23 @@ class SocialBarPage extends StatelessWidget {
               renderButton(
                   context,
                   state.socialState is FeedEntrySocialStateLoaded &&
-                          (state.socialState as FeedEntrySocialStateLoaded).isLiked
+                          (state.socialState as FeedEntrySocialStateLoaded)
+                              .isLiked
                       ? 'button_like_on'
                       : 'button_like',
                   () => onLike(context)),
               renderButton(context, 'button_comment', () => onComment(context)),
               renderButton(context, 'button_share', () => onShare(context)),
-              state.feedEntryID is String ? renderButton(context, 'button_report', () => createReport(context)) : Container(),
+              state.feedEntryID is String
+                  ? renderButton(
+                      context, 'button_report', () => createReport(context))
+                  : Container(),
               Expanded(child: Container()),
               renderButton(
                   context,
                   state.socialState is FeedEntrySocialStateLoaded &&
-                          (state.socialState as FeedEntrySocialStateLoaded).isBookmarked
+                          (state.socialState as FeedEntrySocialStateLoaded)
+                              .isBookmarked
                       ? 'button_bookmark_on'
                       : 'button_bookmark',
                   () => onBookmark(context),
@@ -85,7 +91,9 @@ class SocialBarPage extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(left: 4.0, top: 4.0),
                   child: Text(
-                    SocialBarPage.socialBarPagePageLikedBy((state.socialState as FeedEntrySocialStateLoaded).nLikes),
+                    SocialBarPage.socialBarPagePageLikedBy(
+                        (state.socialState as FeedEntrySocialStateLoaded)
+                            .nLikes),
                     style: TextStyle(color: Color(0xff565656), fontSize: 15),
                   ),
                 )
@@ -95,11 +103,13 @@ class SocialBarPage extends StatelessWidget {
     );
   }
 
-  Widget renderButton(BuildContext context, String icon, Function()? onClick, {bool last = false}) {
+  Widget renderButton(BuildContext context, String icon, Function()? onClick,
+      {bool last = false}) {
     if (!feedState.loggedIn) {
       onClick = () => createAccountOrLogin(context);
     } else {
-      onClick = state.socialState is FeedEntrySocialStateLoaded ? onClick : null;
+      onClick =
+          state.socialState is FeedEntrySocialStateLoaded ? onClick : null;
     }
     return InkWell(
       onTap: onClick,
@@ -107,7 +117,8 @@ class SocialBarPage extends StatelessWidget {
         padding: EdgeInsets.only(right: last ? 0 : 8),
         child: Opacity(
             opacity: onClick == null ? 0.4 : 1,
-            child: Image.asset('assets/feed_card/$icon.png', width: 30, height: 30)),
+            child: Image.asset('assets/feed_card/$icon.png',
+                width: 30, height: 30)),
       ),
     );
   }
@@ -117,8 +128,8 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void onComment(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToCommentFormEvent(true, state as FeedEntryStateLoaded));
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToCommentFormEvent(true, state as FeedEntryStateLoaded));
   }
 
   void onShare(BuildContext context) async {
@@ -126,7 +137,8 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void onBookmark(BuildContext context) {
-    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventBookmarkFeedEntry(state));
+    BlocProvider.of<FeedBloc>(context)
+        .add(FeedBlocEventBookmarkFeedEntry(state));
   }
 
   void createAccountOrLogin(BuildContext context) async {
@@ -134,7 +146,7 @@ class SocialBarPage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
@@ -154,7 +166,8 @@ class SocialBarPage extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 
@@ -163,8 +176,10 @@ class SocialBarPage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Report this post?',),
+          return AlertDialog.adaptive(
+            title: Text(
+              'Report this post?',
+            ),
             content: Text('This will also block this user.'),
             actions: <Widget>[
               TextButton(
@@ -183,7 +198,8 @@ class SocialBarPage extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<FeedBloc>(context).add(FeedBlocEventReportEntry(state.feedEntryID));
+      BlocProvider.of<FeedBloc>(context)
+          .add(FeedBlocEventReportEntry(state.feedEntryID));
     }
   }
 }

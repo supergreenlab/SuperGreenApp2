@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,7 +31,6 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
-import 'package:collection/collection.dart';
 
 class SelectNewProductPage extends StatefulWidget {
   @override
@@ -75,7 +75,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
               }
             }
           }
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: selectedProducts));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: selectedProducts));
         }
       },
       child: BlocBuilder<SelectNewProductBloc, SelectNewProductBlocState>(
@@ -83,7 +84,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           Widget body;
           if (state is SelectNewProductBlocStateCreatingProduct) {
             body = renderCreatingProduct(context);
-          } else if (state is SelectNewProductBlocStateCreatingProductSuppliers) {
+          } else if (state
+              is SelectNewProductBlocStateCreatingProductSuppliers) {
             body = renderCreatingProductSuppliers(context);
           } else if (state is SelectNewProductBlocStateDone) {
             body = renderDone(context);
@@ -92,8 +94,10 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
             if (products.length == 0 && controller.text == '') {
               content.add(renderNoProducts(context));
             } else {
-              List<Product> added = difference(selectedProducts, initialProducts);
-              List<Product> removed = difference(initialProducts, selectedProducts);
+              List<Product> added =
+                  difference(selectedProducts, initialProducts);
+              List<Product> removed =
+                  difference(initialProducts, selectedProducts);
               content.add(renderProductsList(context, state));
               content.add(
                 Padding(
@@ -108,9 +112,12 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text('${initialProducts.length} item${initialProducts.length > 1 ? 's' : ''}'),
+                                  Text(
+                                      '${initialProducts.length} item${initialProducts.length > 1 ? 's' : ''}'),
                                   Text(' in your toolbox',
-                                      style: TextStyle(color: Color(0xff3bb30b), fontWeight: FontWeight.bold)),
+                                      style: TextStyle(
+                                          color: Color(0xff3bb30b),
+                                          fontWeight: FontWeight.bold)),
                                 ],
                               ),
                               Row(
@@ -118,14 +125,19 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                                 children: [
                                   Text('${added.length}'),
                                   Text(' added',
-                                      style: TextStyle(color: Color(0xff3bb30b), fontWeight: FontWeight.bold))
+                                      style: TextStyle(
+                                          color: Color(0xff3bb30b),
+                                          fontWeight: FontWeight.bold))
                                 ],
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text('${removed.length}'),
-                                  Text(' removed', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))
+                                  Text(' removed',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold))
                                 ],
                               ),
                             ],
@@ -134,24 +146,31 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                       ),
                       GreenButton(
                         title: 'NEXT',
-                        onPressed: selectedProducts.length == 0 && initialProducts.length == 0
+                        onPressed: selectedProducts.length == 0 &&
+                                initialProducts.length == 0
                             ? null
                             : () {
-                                List<Product> added = difference(selectedProducts, initialProducts);
+                                List<Product> added = difference(
+                                    selectedProducts, initialProducts);
                                 if (added.length == 0) {
                                   BlocProvider.of<MainNavigatorBloc>(context)
-                                      .add(MainNavigatorActionPop(param: selectedProducts));
+                                      .add(MainNavigatorActionPop(
+                                          param: selectedProducts));
                                   return;
                                 }
-                                BlocProvider.of<MainNavigatorBloc>(context)
-                                    .add(MainNavigateToProductSupplierEvent(added.toList(), futureFn: (future) async {
+                                BlocProvider.of<MainNavigatorBloc>(context).add(
+                                    MainNavigateToProductSupplierEvent(
+                                        added.toList(),
+                                        futureFn: (future) async {
                                   List<Product>? products = await future;
                                   if (products == null) {
                                     return;
                                   }
 
                                   BlocProvider.of<SelectNewProductBloc>(context)
-                                      .add(SelectNewProductBlocEventCreateProductSuppliers(products));
+                                      .add(
+                                          SelectNewProductBlocEventCreateProductSuppliers(
+                                              products));
                                 }));
                               },
                       ),
@@ -161,7 +180,9 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
               );
             }
 
-            body = Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: content);
+            body = Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: content);
           }
           if (userLoggedIn) {
             body = Stack(
@@ -180,7 +201,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('User loggedin\nsuccessfully.',
-                                    textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20)),
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: CircularProgressIndicator(
@@ -197,9 +219,13 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                           decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
-                                BoxShadow(color: Colors.black12, blurRadius: 4, spreadRadius: 2),
+                                BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    spreadRadius: 2),
                               ],
-                              borderRadius: BorderRadius.all(Radius.circular(5))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
                         ))
                       ],
                     )),
@@ -213,32 +239,39 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                 backgroundColor: Color(0xff0EA9DA),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
-                hideBackButton: state is SelectNewProductBlocStateCreatingProduct,
+                hideBackButton:
+                    state is SelectNewProductBlocStateCreatingProduct,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
   }
 
-  Widget renderSearchField(BuildContext context, SelectNewProductBlocState state) {
+  Widget renderSearchField(
+      BuildContext context, SelectNewProductBlocState state) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 8, bottom: 16),
+      padding:
+          const EdgeInsets.only(left: 24.0, right: 24.0, top: 8, bottom: 16),
       child: Stack(
         children: [
           TextFormField(
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               hintText: 'Ex: BioBizz',
               hintStyle: TextStyle(color: Colors.black38),
               labelText: 'Item search',
               labelStyle: TextStyle(
                 color: Colors.black,
               ),
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black)),
             ),
-            style: TextStyle(color: Colors.black, decoration: TextDecoration.none),
+            style:
+                TextStyle(color: Colors.black, decoration: TextDecoration.none),
             controller: controller,
             onChanged: (value) {
               setState(() {
@@ -246,7 +279,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
               });
               autocompleteTimer?.cancel();
               autocompleteTimer = Timer(Duration(milliseconds: 500), () {
-                BlocProvider.of<SelectNewProductBloc>(context).add(SelectNewProductBlocEventSearchTerms(value));
+                BlocProvider.of<SelectNewProductBloc>(context)
+                    .add(SelectNewProductBlocEventSearchTerms(value));
                 autocompleteTimer = null;
                 setState(() {
                   preLoading = false;
@@ -282,11 +316,15 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset('assets/products/toolbox/toolbox.svg', width: 90, height: 90),
+                child: SvgPicture.asset('assets/products/toolbox/toolbox.svg',
+                    width: 90, height: 90),
               ),
               Text('Search or create\ntoolbox item',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xffDFDFDF), fontWeight: FontWeight.bold, fontSize: 20)),
+                  style: TextStyle(
+                      color: Color(0xffDFDFDF),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20)),
             ],
           )),
         ],
@@ -294,7 +332,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     );
   }
 
-  Widget renderProductsList(BuildContext context, SelectNewProductBlocState state) {
+  Widget renderProductsList(
+      BuildContext context, SelectNewProductBlocState state) {
     List<Product> added = difference(selectedProducts, initialProducts);
     List<Product> removed = difference(initialProducts, selectedProducts);
     List<Widget> children = products.map<Widget>((p) {
@@ -329,7 +368,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         },
         leading: SvgPicture.asset(categoryUI.icon),
         title: Text(categoryUI.name),
-        subtitle: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: subtitle),
+        subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch, children: subtitle),
         trailing: Icon(Icons.add_box, size: 30, color: iconColor),
       );
     }).toList();
@@ -347,7 +387,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     children.add(ListTile(
       trailing: Icon(Icons.note_add, size: 30),
       title: Text('Not found?'),
-      subtitle: Text('Create new toolbox item', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
+      subtitle: Text('Create new toolbox item',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
       onTap: () async {
         if (!BackendAPI().usersAPI.loggedIn) {
           int? choice = await showAccountCreationPopup();
@@ -374,10 +415,12 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
             userLoggedIn = false;
           });
         }
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToProductTypeEvent(futureFn: (future) async {
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToProductTypeEvent(futureFn: (future) async {
           Product? product = await future;
           if (product != null) {
-            BlocProvider.of<SelectNewProductBloc>(context).add(SelectNewProductBlocEventCreateProduct(product));
+            BlocProvider.of<SelectNewProductBloc>(context)
+                .add(SelectNewProductBlocEventCreateProduct(product));
           }
         }));
       },
@@ -417,7 +460,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text('Create an account'),
             content: Text(
                 'Hey thanks for taking the time to add a missing product, it requires a sgl account tho, please create one or login first.\n\nThanks:)'),
@@ -446,7 +489,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     return choice;
   }
 
-  bool contains(List<Product> l, Product p) => l.firstWhereOrNull((a) => a.id == p.id) != null;
+  bool contains(List<Product> l, Product p) =>
+      l.firstWhereOrNull((a) => a.id == p.id) != null;
 
   List<Product> difference(List<Product> l1, List<Product> l2) {
     List<Product> diff = [];

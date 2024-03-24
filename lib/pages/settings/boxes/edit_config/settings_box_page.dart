@@ -44,7 +44,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   late int? _deviceBox;
   late Device? _screenDevice;
 
-  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  final KeyboardVisibilityController _keyboardVisibility =
+      KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
@@ -79,7 +80,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           _screenDevice = state.screenDevice;
         } else if (state is SettingsBoxBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true));
           });
         }
       },
@@ -104,9 +106,10 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return AlertDialog.adaptive(
                             title: Text('Unsaved changes'),
-                            content: Text('Changes will not be saved. Continue?'),
+                            content:
+                                Text('Changes will not be saved. Continue?'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
@@ -135,7 +138,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                     hideBackButton: state is SettingsBoxBlocStateDone,
                   ),
                   backgroundColor: Colors.white,
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
@@ -145,7 +149,10 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
     String subtitle = _device != null
         ? 'Lab ${_nameController.value.text} on controller ${_device!.name} updated:)'
         : 'Lab ${_nameController.value.text}';
-    return Fullscreen(title: 'Done!', subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+    return Fullscreen(
+        title: 'Done!',
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm(BuildContext context, SettingsBoxBlocStateLoaded state) {
@@ -162,7 +169,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                 elevation: 5,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                     hintText: 'Ex: Gorilla Kush',
                     controller: _nameController,
@@ -179,7 +187,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
               ),
               _device != null
                   ? ListTile(
-                      leading: SvgPicture.asset('assets/box_setup/icon_controller.svg'),
+                      leading: SvgPicture.asset(
+                          'assets/box_setup/icon_controller.svg'),
                       title: Text('${_device!.name} box #${_deviceBox! + 1}'),
                       subtitle: Text('Tap to change'),
                       trailing: Icon(Icons.edit),
@@ -188,7 +197,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                       },
                     )
                   : ListTile(
-                      leading: SvgPicture.asset('assets/settings/icon_nocontroller.svg'),
+                      leading: SvgPicture.asset(
+                          'assets/settings/icon_nocontroller.svg'),
                       title: Text('Lab isn\'t linked to any controller'),
                       subtitle: Text('Tap to link one'),
                       trailing: Icon(Icons.edit),
@@ -205,7 +215,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
               ),
               _screenDevice != null
                   ? ListTile(
-                      leading: SvgPicture.asset('assets/box_setup/icon_controller.svg'),
+                      leading: SvgPicture.asset(
+                          'assets/box_setup/icon_controller.svg'),
                       title: Text('${_screenDevice!.name}'),
                       subtitle: Text('Tap to change'),
                       trailing: Icon(Icons.edit),
@@ -214,7 +225,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                       },
                     )
                   : ListTile(
-                      leading: SvgPicture.asset('assets/settings/icon_nocontroller.svg'),
+                      leading: SvgPicture.asset(
+                          'assets/settings/icon_nocontroller.svg'),
                       title: Text('Lab isn\'t linked to any screen'),
                       subtitle: Text('Tap to link one'),
                       trailing: Icon(Icons.edit),
@@ -226,12 +238,16 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(right: 8.0),
           child: Align(
             alignment: Alignment.centerRight,
-            child: GreenButton(
-              title: 'UPDATE LAB',
-              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+            child: SafeArea(
+              child: GreenButton(
+                title: 'UPDATE LAB',
+                onPressed: _nameController.value.text != ''
+                    ? () => _handleInput(context)
+                    : null,
+              ),
             ),
           ),
         ),
@@ -240,45 +256,49 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   }
 
   void _handleChangeController(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
-        isController: true,
-        futureFn: (future) async {
-          dynamic res = await future;
-          if (res is SelectBoxDeviceData) {
-            setState(() {
-              _device = res.device;
-              _deviceBox = res.deviceBox;
-              if (_screenDevice == null && _device!.isScreen == true) {
-                _screenDevice = _device;
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectDeviceEvent(
+            isController: true,
+            futureFn: (future) async {
+              dynamic res = await future;
+              if (res is SelectBoxDeviceData) {
+                setState(() {
+                  _device = res.device;
+                  _deviceBox = res.deviceBox;
+                  if (_screenDevice == null && _device!.isScreen == true) {
+                    _screenDevice = _device;
+                  }
+                });
+              } else if (res is bool && res == false) {
+                setState(() {
+                  if (_device != null &&
+                      _screenDevice != null &&
+                      _device!.id == _screenDevice!.id) {
+                    _screenDevice = null;
+                  }
+                  _device = null;
+                  _deviceBox = null;
+                });
               }
-            });
-          } else if (res is bool && res == false) {
-            setState(() {
-              if (_device != null && _screenDevice != null && _device!.id == _screenDevice!.id) {
-                _screenDevice = null;
-              }
-              _device = null;
-              _deviceBox = null;
-            });
-          }
-        }));
+            }));
   }
 
   void _handleChangeScreen(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
-        isScreen: true,
-        futureFn: (future) async {
-          dynamic res = await future;
-          if (res is SelectBoxDeviceData) {
-            setState(() {
-              _screenDevice = res.device;
-            });
-          } else if (res is bool && res == false) {
-            setState(() {
-              _screenDevice = null;
-            });
-          }
-        }));
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectDeviceEvent(
+            isScreen: true,
+            futureFn: (future) async {
+              dynamic res = await future;
+              if (res is SelectBoxDeviceData) {
+                setState(() {
+                  _screenDevice = res.device;
+                });
+              } else if (res is bool && res == false) {
+                setState(() {
+                  _screenDevice = null;
+                });
+              }
+            }));
   }
 
   void _handleInput(BuildContext context) async {
