@@ -125,17 +125,20 @@ class CommentView extends StatelessWidget {
                     color: Colors.white,
                     border: Border.all(color: Color(0xffcdcdcd), width: 1),
                     borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(commentTypes[comment.type]!['pic']!, width: 30, height: 30),
+                child: Image.asset(commentTypes[comment.type]!['pic']!,
+                    width: 30, height: 30),
               )),
         ],
       );
     }
     Widget recommendations = Container();
     if (comment.type == CommentType.RECOMMEND) {
-      CommentParam params = CommentParam.fromMap(JsonDecoder().convert(comment.params));
+      CommentParam params =
+          CommentParam.fromMap(JsonDecoder().convert(comment.params));
       recommendations = Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           ...params.recommend!.map((p) {
             return Row(
               children: [
@@ -168,7 +171,10 @@ class CommentView extends StatelessWidget {
     }
     return Padding(
       padding: EdgeInsets.only(
-          left: comment.replyTo != null ? 24 : 8.0, right: 8.0, top: this.first ? 16.0 : 4.0, bottom: 4.0),
+          left: comment.replyTo != null ? 24 : 8.0,
+          right: 8.0,
+          top: this.first ? 16.0 : 4.0,
+          bottom: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -181,7 +187,8 @@ class CommentView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 4.0, left: 4.0),
                   child: MarkdownBody(
                     data: '**${comment.from}** ${comment.text}',
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Color(0xff454545), fontSize: 16)),
                   ),
                 ),
                 recommendations,
@@ -200,7 +207,8 @@ class CommentView extends StatelessWidget {
                           ? Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: Text(
-                                CommentView.commentsFormPageCommentLikeCount(comment.nLikes),
+                                CommentView.commentsFormPageCommentLikeCount(
+                                    comment.nLikes),
                                 style: TextStyle(color: Color(0xffababab)),
                               ),
                             )
@@ -238,7 +246,9 @@ class CommentView extends StatelessWidget {
                         child: Container(),
                       ),
                       this.comment.isNew == true
-                          ? Text(CommentView.commentsFormPageSendingCommentLoading, style: TextStyle(color: Colors.red))
+                          ? Text(
+                              CommentView.commentsFormPageSendingCommentLoading,
+                              style: TextStyle(color: Colors.red))
                           : Container(),
                     ],
                   ),
@@ -252,12 +262,15 @@ class CommentView extends StatelessWidget {
                 createAccountOrLogin(context);
                 return;
               }
-              BlocProvider.of<CommentsFormBloc>(context).add(CommentsFormBlocEventLike(comment));
+              BlocProvider.of<CommentsFormBloc>(context)
+                  .add(CommentsFormBlocEventLike(comment));
             },
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child:
-                  Image.asset('assets/feed_card/button_like${comment.liked ? '_on' : ''}.png', width: 20, height: 20),
+              child: Image.asset(
+                  'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
+                  width: 20,
+                  height: 20),
             ),
           ),
         ],
@@ -270,7 +283,7 @@ class CommentView extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
@@ -290,7 +303,8 @@ class CommentView extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 
@@ -303,7 +317,7 @@ class CommentView extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(CommentView.commentsFormPageReportDialogTitle),
             content: Text(CommentView.commentsFormPageReportDialogBody(c)),
             actions: <Widget>[
@@ -323,7 +337,8 @@ class CommentView extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<CommentsFormBloc>(context).add(CommentsFormBlocEventReport(comment));
+      BlocProvider.of<CommentsFormBloc>(context)
+          .add(CommentsFormBlocEventReport(comment));
     }
   }
 }

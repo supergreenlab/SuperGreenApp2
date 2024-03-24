@@ -36,16 +36,25 @@ class FollowsFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   FeedEntryState postProcess(FeedEntryState state) {
     return state.copyWith(
-        shareLink: 'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
+        shareLink:
+            'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicFollowedFeedEntries(n, offset);
-    return entriesMap.map<FeedEntryState>((dynamic em) {
-      Map<String, dynamic> entryMap = em;
-      return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap).copyWith(showPlantInfos: true);
-    }).toList();
+  Future<List<FeedEntryState>> loadEntries(
+      int n, int offset, List<String>? filters) async {
+    try {
+      List<dynamic> entriesMap =
+          await BackendAPI().feedsAPI.publicFollowedFeedEntries(n, offset);
+      return entriesMap.map<FeedEntryState>((dynamic em) {
+        Map<String, dynamic> entryMap = em;
+        return loaderForType(entryMap['type'])
+            .stateForFeedEntryMap(entryMap)
+            .copyWith(showPlantInfos: true);
+      }).toList();
+    } catch (_) {
+      return [];
+    }
   }
 
   @override

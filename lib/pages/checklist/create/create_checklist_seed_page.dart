@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
@@ -47,7 +47,8 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class CreateChecklistSeedPage extends StatefulWidget {
   @override
-  _CreateChecklistSeedPageState createState() => _CreateChecklistSeedPageState();
+  _CreateChecklistSeedPageState createState() =>
+      _CreateChecklistSeedPageState();
 }
 
 class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
@@ -86,19 +87,23 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
           setState(() {
             _titleController.text = state.checklistSeed.title.value;
             _descriptionController.text = state.checklistSeed.description.value;
-            category = state.checklistSeed.category.value == '' ? null : state.checklistSeed.category.value;
+            category = state.checklistSeed.category.value == ''
+                ? null
+                : state.checklistSeed.category.value;
 
             this.public = state.checklistSeed.public.value;
             this.repeat = state.checklistSeed.repeat.value;
 
-            this.conditions.addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions.value)));
-            this
-                .exitConditions
-                .addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.exitConditions.value)));
-            this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
+            this.conditions.addAll(ChecklistCondition.fromMapArray(
+                json.decode(state.checklistSeed.conditions.value)));
+            this.exitConditions.addAll(ChecklistCondition.fromMapArray(
+                json.decode(state.checklistSeed.exitConditions.value)));
+            this.actions.addAll(ChecklistAction.fromMapArray(
+                json.decode(state.checklistSeed.actions.value)));
           });
         } else if (state is CreateChecklistSeedBlocStateCreated) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<CreateChecklistSeedBloc, CreateChecklistSeedBlocState>(
@@ -119,11 +124,15 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                   category: drift.Value(category!),
                   public: drift.Value(public),
                   repeat: drift.Value(repeat),
-                  conditions: drift.Value(json.encode(conditions.map((c) => c.toMap()).toList())),
-                  exitConditions: drift.Value(json.encode(exitConditions.map((c) => c.toMap()).toList())),
-                  actions: drift.Value(json.encode(actions.map((a) => a.toMap()).toList())),
+                  conditions: drift.Value(
+                      json.encode(conditions.map((c) => c.toMap()).toList())),
+                  exitConditions: drift.Value(json
+                      .encode(exitConditions.map((c) => c.toMap()).toList())),
+                  actions: drift.Value(
+                      json.encode(actions.map((a) => a.toMap()).toList())),
                 );
-                BlocProvider.of<CreateChecklistSeedBloc>(context).add(CreateChecklistSeedBlocEventSave(cks));
+                BlocProvider.of<CreateChecklistSeedBloc>(context)
+                    .add(CreateChecklistSeedBlocEventSave(cks));
                 SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
                 Future.delayed(const Duration(milliseconds: 200), () {
                   syncerBloc.add(SyncerBlocEventForceSyncChecklists());
@@ -136,9 +145,10 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return AlertDialog.adaptive(
                             title: Text('Unsaved changes'),
-                            content: Text('Changes will not be saved. Continue?'),
+                            content:
+                                Text('Changes will not be saved. Continue?'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
@@ -166,7 +176,9 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                   iconColor: Colors.white,
                   actions: [
                     IconButton(
-                      icon: Icon(Icons.check, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
+                      icon: Icon(Icons.check,
+                          color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff),
+                          size: 40),
                       onPressed: !this.valid ? null : onSave,
                     ),
                   ],
@@ -178,7 +190,8 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
+  Widget _renderLoaded(
+      BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
     Widget body = ListView(
       key: listKey,
       children: [
@@ -250,8 +263,9 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 showNewExitCondition = false;
               });
             },
-            filteredValues:
-                showNewCondition ? conditions.map((a) => a.type).toList() : exitConditions.map((a) => a.type).toList(),
+            filteredValues: showNewCondition
+                ? conditions.map((a) => a.type).toList()
+                : exitConditions.map((a) => a.type).toList(),
           ),
         ],
       );
@@ -259,13 +273,15 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     return body;
   }
 
-  Widget _renderInfos(BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
+  Widget _renderInfos(
+      BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12.0, bottom: 24),
+          padding: const EdgeInsets.only(
+              top: 8.0, left: 12.0, right: 12.0, bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -276,12 +292,18 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   'Checklist basic infos',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xff6A6A6A)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color(0xff6A6A6A)),
                 ),
               ),
               Text(
                 'Category:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Color(0xff6A6A6A)),
               ),
               ChecklistCategory(
                 category: category,
@@ -295,7 +317,10 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   'Title',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff6A6A6A)),
                 ),
               ),
               FeedFormTextarea(
@@ -308,13 +333,17 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   'Description',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff6A6A6A)),
                 ),
               ),
               SizedBox(
                 height: 150,
                 child: FeedFormTextarea(
-                  placeholder: 'ex: When the temperature gets too high, some fungus might develop on your leaves.',
+                  placeholder:
+                      'ex: When the temperature gets too high, some fungus might develop on your leaves.',
                   noPadding: true,
                   textEditingController: _descriptionController,
                 ),
@@ -329,7 +358,8 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                   },
                   value: repeat),
               CheckboxLabel(
-                  text: 'Make this checklist entry public so others can add it to their checklist too.',
+                  text:
+                      'Make this checklist entry public so others can add it to their checklist too.',
                   onChanged: (p0) {
                     setState(() {
                       public = p0 ?? false;
@@ -343,14 +373,20 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     );
   }
 
-  Widget _renderConditions(BuildContext context, String title, String instructions, String buttonText,
-      List<ChecklistCondition> conditions, void Function() onNewCondition) {
+  Widget _renderConditions(
+      BuildContext context,
+      String title,
+      String instructions,
+      String buttonText,
+      List<ChecklistCondition> conditions,
+      void Function() onNewCondition) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12.0, bottom: 24),
+          padding: const EdgeInsets.only(
+              top: 8.0, left: 12.0, right: 12.0, bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -358,7 +394,10 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Color(0xff6A6A6A)),
                 ),
               ),
               conditions.length == 0
@@ -372,12 +411,15 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                         shrinkWrap: true,
                         data: instructions,
                         styleSheet: MarkdownStyleSheet(
-                            p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
+                            p: TextStyle(
+                                color: Color(0xff636363), fontSize: 14),
+                            textAlign: WrapAlignment.center),
                       ),
                     )
                   : Container(),
               ...conditions.map((c) {
-                Function(ChecklistCondition nc) onUpdate = (ChecklistCondition nc) {
+                Function(ChecklistCondition nc) onUpdate =
+                    (ChecklistCondition nc) {
                   setState(() {
                     conditions[conditions.indexOf(c)] = nc;
                   });
@@ -432,13 +474,15 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     );
   }
 
-  Widget _renderActions(BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
+  Widget _renderActions(
+      BuildContext context, CreateChecklistSeedBlocStateLoaded state) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12.0, bottom: 24),
+          padding: const EdgeInsets.only(
+              top: 8.0, left: 12.0, right: 12.0, bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -446,7 +490,10 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   'Actions',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Color(0xff6A6A6A)),
                 ),
               ),
               actions.length == 0
@@ -461,7 +508,9 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                         data:
                             'Here you can set the actions required to complete this checklist item.\n\nActions can be things like “Add watering entry to diary” or “Read this webpage”',
                         styleSheet: MarkdownStyleSheet(
-                            p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
+                            p: TextStyle(
+                                color: Color(0xff636363), fontSize: 14),
+                            textAlign: WrapAlignment.center),
                       ),
                     )
                   : Container(),
@@ -520,7 +569,8 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
     );
   }
 
-  Widget _renderAddButton(BuildContext context, String title, Function() onTap) {
+  Widget _renderAddButton(
+      BuildContext context, String title, Function() onTap) {
     return InkWell(
       onTap: onTap,
       child: Container(

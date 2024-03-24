@@ -23,10 +23,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_humidity_form_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_manual_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_humidity_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_legacy_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_manual_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_temperature_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_timer_form_page.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
@@ -35,7 +35,8 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedVentilationFormPage extends StatefulWidget {
   @override
-  _FeedVentilationFormPageState createState() => _FeedVentilationFormPageState();
+  _FeedVentilationFormPageState createState() =>
+      _FeedVentilationFormPageState();
 }
 
 class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
@@ -50,12 +51,14 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         if (state is FeedVentilationFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceReachableListenerBloc>(context)
-                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
+              BlocProvider.of<DeviceReachableListenerBloc>(context).add(
+                  DeviceReachableListenerBlocEventLoadDevice(
+                      state.box.device!));
             });
           }
         } else if (state is FeedVentilationFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigatorActionPop(param: state.feedEntry, mustPop: true));
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
@@ -73,7 +76,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
               if (_reachable == false) {
                 String title = 'Looking for device..';
                 if (_usingWifi == false) {
-                  title = 'Device unreachable!\n(You\'re not connected to any wifi)';
+                  title =
+                      'Device unreachable!\n(You\'re not connected to any wifi)';
                 }
                 content = Stack(
                   children: <Widget>[
@@ -85,16 +89,23 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                             ? Icon(Icons.error, color: Colors.red, size: 100)
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(width: 50, height: 50, child: CircularProgressIndicator()),
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator()),
                               )),
                   ],
                 );
               }
-              body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-                  listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
-                    if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
+              body = BlocListener<DeviceReachableListenerBloc,
+                      DeviceReachableListenerBlocState>(
+                  listener: (BuildContext context,
+                      DeviceReachableListenerBlocState reachableState) {
+                    if (reachableState
+                            is DeviceReachableListenerBlocStateDeviceReachable &&
                         reachableState.device.id == state.box.device) {
-                      if (_reachable == reachableState.reachable && _usingWifi == reachableState.usingWifi) return;
+                      if (_reachable == reachableState.reachable &&
+                          _usingWifi == reachableState.usingWifi) return;
                       setState(() {
                         _reachable = reachableState.reachable;
                         _usingWifi = reachableState.usingWifi;
@@ -103,62 +114,82 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   },
                   child: content);
             }
-            bool changed = state is FeedVentilationFormBlocStateLoaded && state.paramsController.isChanged();
+            bool changed = state is FeedVentilationFormBlocStateLoaded &&
+                state.paramsController.isChanged();
             return FeedFormLayout(
                 title: '💨',
                 fontSize: 35,
                 changed: changed,
                 valid: changed && _reachable,
-                hideBackButton: ((_reachable == false && changed) || state is FeedVentilationFormBlocStateLoading),
+                hideBackButton: ((_reachable == false && changed) ||
+                    state is FeedVentilationFormBlocStateLoading),
                 onOK: () {
-                  BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocEventCreate());
+                  BlocProvider.of<FeedVentilationFormBloc>(context)
+                      .add(FeedVentilationFormBlocEventCreate());
                 },
-                onSettings: state is FeedVentilationFormBlocStateLoaded ? () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToMotorPortEvent(state.device!, null));
-                } : null,
+                onSettings: state is FeedVentilationFormBlocStateLoaded
+                    ? () {
+                        BlocProvider.of<MainNavigatorBloc>(context).add(
+                            MainNavigateToMotorPortEvent(state.device!, null));
+                      }
+                    : null,
                 body: WillPopScope(
                   onWillPop: () async {
                     if (_reachable == false && changed) {
                       return false;
                     }
-                    if (state is FeedVentilationFormBlocStateLoaded && state.device == null) {
+                    if (state is FeedVentilationFormBlocStateLoaded &&
+                        state.device == null) {
                       return true;
                     }
                     if (changed) {
-                      BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocEventCancelEvent());
+                      BlocProvider.of<FeedVentilationFormBloc>(context)
+                          .add(FeedVentilationFormBlocEventCancelEvent());
                       return false;
                     }
                     return true;
                   },
-                  child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+                  child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body),
                 ));
           }),
     );
   }
 
-  Widget _renderParams(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
+  Widget _renderParams(
+      BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     if (state.paramsController is LegacyBlowerParamsController) {
-      return FeedVentilationLegacyFormPage(state.paramsController as LegacyBlowerParamsController);
+      return FeedVentilationLegacyFormPage(
+          state.paramsController as LegacyBlowerParamsController);
     }
     return _renderV3Params(
-        context, state.box, state.humidity, state.temperature, state.paramsController as VentilationParamsController);
+        context,
+        state.box,
+        state.humidity,
+        state.temperature,
+        state.paramsController as VentilationParamsController);
   }
 
-  Widget _renderV3Params(
-      BuildContext context, Box box, Param humidity, Param temperature, VentilationParamsController paramsController) {
+  Widget _renderV3Params(BuildContext context, Box box, Param humidity,
+      Param temperature, VentilationParamsController paramsController) {
     Widget body;
     if (isTimerSource(paramsController.refSource.value)) {
-      body = FeedVentilationTimerFormPage(humidity, temperature, paramsController);
+      body =
+          FeedVentilationTimerFormPage(humidity, temperature, paramsController);
     } else if (isTempSource(paramsController.refSource.value)) {
-      body = FeedVentilationTemperatureFormPage(humidity, temperature, paramsController);
+      body = FeedVentilationTemperatureFormPage(
+          humidity, temperature, paramsController);
     } else if (isHumiSource(paramsController.refSource.value)) {
-      body = FeedVentilationHumidityFormPage(humidity, temperature, paramsController);
+      body = FeedVentilationHumidityFormPage(
+          humidity, temperature, paramsController);
     } else if (paramsController.refSource.value == 0) {
-      body = FeedVentilationManualFormPage(humidity, temperature, paramsController);
+      body = FeedVentilationManualFormPage(
+          humidity, temperature, paramsController);
     } else {
       body = Fullscreen(
         child: Icon(Icons.upgrade),
-        title: 'Unknown blower reference source, you might need to upgrade the app.',
+        title:
+            'Unknown blower reference source, you might need to upgrade the app.',
       );
     }
     List<bool> selection = [
@@ -204,11 +235,14 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           ),
         ],
       )),
-      Expanded(child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body))
+      Expanded(
+          child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 200), child: body))
     ]);
   }
 
-  void _changeRefSource(BuildContext context, Box box, VentilationParamsController paramsController, int index) async {
+  void _changeRefSource(BuildContext context, Box box,
+      VentilationParamsController paramsController, int index) async {
     List<String> modeNames = [
       'Timer mode',
       'Manual mode',
@@ -249,7 +283,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text('Change to ${modeNames[index]}?'),
             content: Text(
                 'This might override some values, but you can always cancel the changes with the arrow top left, continue?'),
@@ -270,17 +304,20 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index]());
+      BlocProvider.of<FeedVentilationFormBloc>(context)
+          .add(eventFactory[index]());
     }
   }
 
-  void _changeFanMotor(BuildContext context, Box box, VentilationParamsController paramsController, int index) async {
+  void _changeFanMotor(BuildContext context, Box box,
+      VentilationParamsController paramsController, int index) async {
     List<String> modeNames = [
       'Blower',
       'Fan',
     ];
     List<FeedVentilationFormBlocEvent Function(bool)> eventFactory = [
-      (bool savePrevious) => FeedVentilationFormBlocBlowerModeEvent(savePrevious),
+      (bool savePrevious) =>
+          FeedVentilationFormBlocBlowerModeEvent(savePrevious),
       (bool savePrevious) => FeedVentilationFormBlocFanModeEvent(savePrevious),
     ];
     if (paramsController.isChanged()) {
@@ -288,9 +325,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            return AlertDialog(
+            return AlertDialog.adaptive(
               title: Text('Change to ${modeNames[index]}?'),
-              content: Text('You have unsaved changes, save before switching to ${modeNames[index]} configuration?'),
+              content: Text(
+                  'You have unsaved changes, save before switching to ${modeNames[index]} configuration?'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -307,9 +345,11 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
               ],
             );
           });
-      BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index](confirm ?? false));
+      BlocProvider.of<FeedVentilationFormBloc>(context)
+          .add(eventFactory[index](confirm ?? false));
       return;
     }
-    BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index](false));
+    BlocProvider.of<FeedVentilationFormBloc>(context)
+        .add(eventFactory[index](false));
   }
 }

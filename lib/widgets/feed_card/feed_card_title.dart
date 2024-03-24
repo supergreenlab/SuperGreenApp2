@@ -45,8 +45,12 @@ class FeedCardTitle extends StatelessWidget {
     List<Widget> content = <Widget>[
       Padding(
         padding: const EdgeInsets.only(right: 8.0),
-        child:
-            SizedBox(width: 40, height: 40, child: icon.endsWith('svg') ? SvgPicture.asset(icon) : Image.asset(icon)),
+        child: SizedBox(
+            width: 40,
+            height: 40,
+            child: icon.endsWith('svg')
+                ? SvgPicture.asset(icon)
+                : Image.asset(icon)),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -54,13 +58,20 @@ class FeedCardTitle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(title,
-                style:
-                    TextStyle(fontSize: title2 != null ? 17 : 20, fontWeight: FontWeight.w300, color: Colors.black87)),
+                style: TextStyle(
+                    fontSize: title2 != null ? 17 : 20,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black87)),
             title2 != null
-                ? Text(title2!, style: TextStyle(color: Color(0xff2c820a), fontSize: 19, fontWeight: FontWeight.bold))
+                ? Text(title2!,
+                    style: TextStyle(
+                        color: Color(0xff2c820a),
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold))
                 : Container(),
             showSyncStatus
-                ? Text(synced ? 'Synced' : 'Not synced', style: TextStyle(color: synced ? Colors.green : Colors.red))
+                ? Text(synced ? 'Synced' : 'Not synced',
+                    style: TextStyle(color: synced ? Colors.green : Colors.red))
                 : Container(),
           ],
         ),
@@ -106,7 +117,8 @@ class FeedCardTitle extends StatelessWidget {
     }
     content.addAll(actions ?? []);
     return Padding(
-      padding: const EdgeInsets.only(left: 12.0, right: 0, top: 3.0, bottom: 3.0),
+      padding:
+          const EdgeInsets.only(left: 12.0, right: 0, top: 3.0, bottom: 3.0),
       child: Row(
         children: content,
       ),
@@ -118,7 +130,7 @@ class FeedCardTitle extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text('Delete this card?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[

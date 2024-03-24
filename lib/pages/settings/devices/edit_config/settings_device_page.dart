@@ -117,7 +117,8 @@ class SettingsDevicePage extends StatefulWidget {
 class _SettingsDevicePageState extends State<SettingsDevicePage> {
   late TextEditingController _nameController;
 
-  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  final KeyboardVisibilityController _keyboardVisibility =
+      KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
@@ -149,7 +150,8 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
           _nameController = TextEditingController(text: state.device.name);
         } else if (state is SettingsDeviceBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true));
           });
         }
       },
@@ -174,7 +176,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return AlertDialog.adaptive(
                             title: Text(CommonL10N.unsavedChangeDialogTitle),
                             content: Text(CommonL10N.unsavedChangeDialogBody),
                             actions: <Widget>[
@@ -205,33 +207,40 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     hideBackButton: state is SettingsDeviceBlocStateDone,
                   ),
                   backgroundColor: Colors.white,
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
   }
 
   Widget _renderDone(SettingsDeviceBlocStateDone state) {
-    String subtitle = SettingsDevicePage.settingsDevicePageControllerDone(_nameController.value.text);
+    String subtitle = SettingsDevicePage.settingsDevicePageControllerDone(
+        _nameController.value.text);
     return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+        title: CommonL10N.done,
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
-  Widget _renderForm(BuildContext context, SettingsDeviceBlocStateLoaded state) {
+  Widget _renderForm(
+      BuildContext context, SettingsDeviceBlocStateLoaded state) {
     return Column(
       children: <Widget>[
         Expanded(
           child: ListView(
             children: <Widget>[
               SectionTitle(
-                title: SettingsDevicePage.settingsDevicePageControllerNameSection,
+                title:
+                    SettingsDevicePage.settingsDevicePageControllerNameSection,
                 icon: 'assets/settings/icon_controller.svg',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 elevation: 5,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                     hintText: 'Ex: SuperGreenController',
                     controller: _nameController,
@@ -240,7 +249,8 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     }),
               ),
               SectionTitle(
-                title: SettingsDevicePage.settingsDevicePageControllerSettingsSection,
+                title: SettingsDevicePage
+                    .settingsDevicePageControllerSettingsSection,
                 icon: 'assets/settings/icon_controller.svg',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
@@ -252,47 +262,64 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: SvgPicture.asset('assets/settings/icon_go.svg'),
                 ),
-                title: Text(SettingsDevicePage.settingsDevicePageWifiSettingsSection),
-                subtitle: Text(SettingsDevicePage.settingsDevicePageWifiSettingsLabel),
+                title: Text(
+                    SettingsDevicePage.settingsDevicePageWifiSettingsSection),
+                subtitle: Text(
+                    SettingsDevicePage.settingsDevicePageWifiSettingsLabel),
                 onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToDeviceWifiEvent(state.device, futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToDeviceWifiEvent(state.device,
+                          futureFn: (future) async {
                     dynamic error = await future;
                     if (error == null) {
                       return;
                     }
                     if (error != true) {
-                      await Fluttertoast.showToast(msg: SettingsDevicePage.settingsDevicePageWifiConfigSuccess);
+                      await Fluttertoast.showToast(
+                          msg: SettingsDevicePage
+                              .settingsDevicePageWifiConfigSuccess);
                     } else {
-                      await Fluttertoast.showToast(msg: SettingsDevicePage.settingsDevicePageWifiConfigFailed);
+                      await Fluttertoast.showToast(
+                          msg: SettingsDevicePage
+                              .settingsDevicePageWifiConfigFailed);
                     }
                   }));
                 },
               ),
-              state.device.isScreen && state.device.isController == false ? Container() : ListTile(
-                leading: SvgPicture.asset('assets/settings/icon_boxslot.svg'),
-                trailing: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: SvgPicture.asset('assets/settings/icon_go.svg'),
-                ),
-                title: Text('View box slots'),
-                subtitle: Text('Tap to view this controller\'s box slots'),
-                onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceBoxEvent(state.device));
-                },
-              ),
-              state.device.isScreen && state.device.isController == false ? Container() : ListTile(
-                leading: SvgPicture.asset('assets/settings/icon_motor.svg'),
-                trailing: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: SvgPicture.asset('assets/settings/icon_go.svg'),
-                ),
-                title: Text('View motor ports'),
-                subtitle: Text('Tap to view this controller\'s motor ports'),
-                onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToMotorPortEvent(state.device, null));
-                },
-              ),
+              state.device.isScreen && state.device.isController == false
+                  ? Container()
+                  : ListTile(
+                      leading:
+                          SvgPicture.asset('assets/settings/icon_boxslot.svg'),
+                      trailing: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                      ),
+                      title: Text('View box slots'),
+                      subtitle:
+                          Text('Tap to view this controller\'s box slots'),
+                      onTap: () {
+                        BlocProvider.of<MainNavigatorBloc>(context).add(
+                            MainNavigateToSelectDeviceBoxEvent(state.device));
+                      },
+                    ),
+              state.device.isScreen && state.device.isController == false
+                  ? Container()
+                  : ListTile(
+                      leading:
+                          SvgPicture.asset('assets/settings/icon_motor.svg'),
+                      trailing: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                      ),
+                      title: Text('View motor ports'),
+                      subtitle:
+                          Text('Tap to view this controller\'s motor ports'),
+                      onTap: () {
+                        BlocProvider.of<MainNavigatorBloc>(context).add(
+                            MainNavigateToMotorPortEvent(state.device, null));
+                      },
+                    ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
@@ -302,9 +329,11 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     child: SvgPicture.asset('assets/settings/icon_go.svg'),
                   ),
                   title: Text('Refresh params'),
-                  subtitle: Text('Use this button if there were changes made to the controller outside the app.'),
+                  subtitle: Text(
+                      'Use this button if there were changes made to the controller outside the app.'),
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToRefreshParameters(state.device));
                   },
                 ),
               ),
@@ -315,22 +344,28 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 titleColor: Colors.white,
                 elevation: 5,
               ),
-              state.device.isScreen && state.device.isController == false ? Container() : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ListTile(
-                  leading: SvgPicture.asset('assets/settings/icon_remotecontrol.svg'),
-                  trailing: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: SvgPicture.asset('assets/settings/icon_go.svg'),
-                  ),
-                  title: Text('Remote control'),
-                  subtitle: Text(
-                      'Remote control allows you to change your controller parameters from anywhere on the planet.'),
-                  onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsRemoteControl(state.device));
-                  },
-                ),
-              ),
+              state.device.isScreen && state.device.isController == false
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        leading: SvgPicture.asset(
+                            'assets/settings/icon_remotecontrol.svg'),
+                        trailing: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child:
+                              SvgPicture.asset('assets/settings/icon_go.svg'),
+                        ),
+                        title: Text('Remote control'),
+                        subtitle: Text(
+                            'Remote control allows you to change your controller parameters from anywhere on the planet.'),
+                        onTap: () {
+                          BlocProvider.of<MainNavigatorBloc>(context).add(
+                              MainNavigateToSettingsRemoteControl(
+                                  state.device));
+                        },
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
@@ -340,9 +375,11 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     child: SvgPicture.asset('assets/settings/icon_go.svg'),
                   ),
                   title: Text('Password lock'),
-                  subtitle: Text('Prevent unsollicited access from your roommate/siblings.'),
+                  subtitle: Text(
+                      'Prevent unsollicited access from your roommate/siblings.'),
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsDeviceAuth(state.device));
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsDeviceAuth(state.device));
                   },
                 ),
               ),
@@ -355,14 +392,16 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     child: SvgPicture.asset('assets/settings/icon_go.svg'),
                   ),
                   title: Text('Firmware upgrade'),
-                  subtitle:
-                      Text('Check and perform controller firmware upgrade. Requires the controller to be reachable.'),
+                  subtitle: Text(
+                      'Check and perform controller firmware upgrade. Requires the controller to be reachable.'),
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsUpgradeDevice(state.device, futureFn: (future) async {
+                    BlocProvider.of<MainNavigatorBloc>(context).add(
+                        MainNavigateToSettingsUpgradeDevice(state.device,
+                            futureFn: (future) async {
                       dynamic ret = await future;
                       if (ret is bool && ret == true) {
-                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToRefreshParameters(state.device));
                       }
                     }));
                   },
@@ -380,7 +419,8 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   subtitle: Text(
                       'Open the controller\'s admin interface. Make sure you know what you\'re doing before going there.'),
                   onTap: () {
-                    launchUrl(Uri.parse('http://${state.device.ip}/fs/app.html'));
+                    launchUrl(
+                        Uri.parse('http://${state.device.ip}/fs/app.html'));
                   },
                 ),
               ),
@@ -393,7 +433,9 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
             alignment: Alignment.centerRight,
             child: GreenButton(
               title: 'UPDATE CONTROLLER',
-              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+              onPressed: _nameController.value.text != ''
+                  ? () => _handleInput(context)
+                  : null,
             ),
           ),
         ),
@@ -402,7 +444,8 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<SettingsDeviceBloc>(context).add(SettingsDeviceBlocEventUpdate(
+    BlocProvider.of<SettingsDeviceBloc>(context)
+        .add(SettingsDeviceBlocEventUpdate(
       _nameController.text,
     ));
   }

@@ -49,7 +49,8 @@ class CreateBoxPage extends StatefulWidget {
 class _CreateBoxPageState extends State<CreateBoxPage> {
   final _nameController = TextEditingController();
 
-  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  final KeyboardVisibilityController _keyboardVisibility =
+      KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
@@ -78,7 +79,8 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
       bloc: BlocProvider.of<CreateBoxBloc>(context),
       listener: (BuildContext context, CreateBoxBlocState state) async {
         if (state is CreateBoxBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.box));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.box));
         }
       },
       child: BlocBuilder<CreateBoxBloc, CreateBoxBlocState>(
@@ -100,13 +102,16 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
                   iconColor: Colors.green,
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
   Widget _renderDone(CreateBoxBlocStateDone state) {
-    return Fullscreen(title: 'Done!', child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+    return Fullscreen(
+        title: 'Done!',
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm() {
@@ -129,7 +134,8 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
                   hintText: CreateBoxPage.createBoxPageNewLabHint,
                   controller: _nameController,
@@ -140,12 +146,16 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
           ],
         )),
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(right: 8.0),
           child: Align(
             alignment: Alignment.centerRight,
-            child: GreenButton(
-              title: CreateBoxPage.createBoxPageNewLabButton,
-              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+            child: SafeArea(
+              child: GreenButton(
+                title: CreateBoxPage.createBoxPageNewLabButton,
+                onPressed: _nameController.value.text != ''
+                    ? () => _handleInput(context)
+                    : null,
+              ),
             ),
           ),
         ),
@@ -154,15 +164,20 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(isController: true, futureFn: (future) async {
-      dynamic res = await future;
-      if (res is SelectBoxDeviceData) {
-        BlocProvider.of<CreateBoxBloc>(context)
-            .add(CreateBoxBlocEventCreate(_nameController.text, device: res.device, deviceBox: res.deviceBox));
-      } else if (res == false) {
-        BlocProvider.of<CreateBoxBloc>(context).add(CreateBoxBlocEventCreate(_nameController.text));
-      }
-    }));
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectDeviceEvent(
+            isController: true,
+            futureFn: (future) async {
+              dynamic res = await future;
+              if (res is SelectBoxDeviceData) {
+                BlocProvider.of<CreateBoxBloc>(context).add(
+                    CreateBoxBlocEventCreate(_nameController.text,
+                        device: res.device, deviceBox: res.deviceBox));
+              } else if (res == false) {
+                BlocProvider.of<CreateBoxBloc>(context)
+                    .add(CreateBoxBlocEventCreate(_nameController.text));
+              }
+            }));
   }
 
   @override

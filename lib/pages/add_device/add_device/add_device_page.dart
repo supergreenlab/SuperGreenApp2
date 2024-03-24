@@ -76,11 +76,13 @@ class AddDevicePage extends StatelessWidget {
                     'Choose this option if the controller is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
                     'CONNECT CONTROLLER',
                     () => _login(context, state, () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
+                          BlocProvider.of<MainNavigatorBloc>(context).add(
+                              MainNavigateToNewDeviceEvent(false,
+                                  futureFn: (future) async {
                             Device? device = await future;
                             if (device != null) {
-                              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                              BlocProvider.of<MainNavigatorBloc>(context)
+                                  .add(MainNavigatorActionPop(param: device));
                             }
                           }));
                         })),
@@ -90,11 +92,13 @@ class AddDevicePage extends StatelessWidget {
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is already running and connected to your home wifi.',
                     'SEARCH CONTROLLER', () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToExistingDeviceEvent(
+                          futureFn: (future) async {
                     Device? device = await future;
                     if (device != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop(param: device));
                     }
                   }));
                 }),
@@ -102,8 +106,8 @@ class AddDevicePage extends StatelessWidget {
             )));
   }
 
-  Widget _renderChoice(
-      BuildContext context, String title, String icon, String description, String buttonTitle, Function onPressed) {
+  Widget _renderChoice(BuildContext context, String title, String icon,
+      String description, String buttonTitle, Function onPressed) {
     return Column(children: [
       SectionTitle(
         title: title,
@@ -129,7 +133,8 @@ class AddDevicePage extends StatelessWidget {
     ]);
   }
 
-  void _login(BuildContext context, AddDeviceBlocState state, Function doneFn) async {
+  void _login(
+      BuildContext context, AddDeviceBlocState state, Function doneFn) async {
     if (state.loggedIn) {
       doneFn();
       return;
@@ -138,7 +143,7 @@ class AddDevicePage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(AddDevicePage.addDevicePagePleaseLoginDialogTitle),
             content: Text(AddDevicePage.addDevicePagePleaseLoginDialogBody),
             actions: <Widget>[
@@ -158,7 +163,8 @@ class AddDevicePage extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {
           doneFn();

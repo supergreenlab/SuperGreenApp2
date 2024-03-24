@@ -41,9 +41,10 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     return BlocListener<AppbarChecklistBloc, AppbarChecklistBlocState>(
       listener: (BuildContext context, AppbarChecklistBlocState state) {
         if (state is AppbarChecklistBlocStateCreated) {
-          BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventForceSyncChecklists());
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToChecklist(state.plant, state.box, state.checklist));
+          BlocProvider.of<SyncerBloc>(context)
+              .add(SyncerBlocEventForceSyncChecklists());
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToChecklist(state.plant, state.box, state.checklist));
         }
       },
       child: BlocBuilder<AppbarChecklistBloc, AppbarChecklistBlocState>(
@@ -68,7 +69,8 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     );
   }
 
-  Widget _renderEmpty(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+  Widget _renderEmpty(
+      BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return Column(
       children: [
         _checklistButton(context, state),
@@ -78,7 +80,10 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             children: [
               Text(
                 "Nothing for today. 👌",
-                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 18,
+                    color: Color(0xff454545)),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -88,13 +93,17 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     );
   }
 
-  Widget _renderCreateChecklist(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+  Widget _renderCreateChecklist(
+      BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           "Your checklist is empty.\n\nPress the button below to start using it.",
-          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+          style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 18,
+              color: Color(0xff454545)),
           textAlign: TextAlign.center,
         ),
         Padding(
@@ -105,7 +114,8 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
               if (state.requiresLogin) {
                 _login(context);
               } else {
-                BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
+                BlocProvider.of<AppbarChecklistBloc>(context)
+                    .add(AppbarChecklistBlocEventCreate());
               }
             },
           ),
@@ -114,7 +124,8 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+  Widget _renderLoaded(
+      BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return Column(
       children: [
         Padding(
@@ -126,10 +137,14 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             padding: const EdgeInsets.only(top: 5.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: state.actions!.map<Widget>((Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog> action) {
+              children: state.actions!.map<Widget>(
+                  (Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>
+                      action) {
                 int index = state.actions!.indexOf(action);
                 return Padding(
-                  padding: index == 0 ? EdgeInsets.zero : const EdgeInsets.only(top: 9.0),
+                  padding: index == 0
+                      ? EdgeInsets.zero
+                      : const EdgeInsets.only(top: 9.0),
                   child: ChecklistActionButton.getActionPage(
                       plant: state.plant,
                       box: state.box,
@@ -137,12 +152,14 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
                       checklistAction: action.item2,
                       summarize: true,
                       onCheck: () {
-                        BlocProvider.of<AppbarChecklistBloc>(context)
-                            .add(AppbarChecklistBlocEventCheckChecklistLog(action.item3));
+                        BlocProvider.of<AppbarChecklistBloc>(context).add(
+                            AppbarChecklistBlocEventCheckChecklistLog(
+                                action.item3));
                       },
                       onSkip: () {
-                        BlocProvider.of<AppbarChecklistBloc>(context)
-                            .add(AppbarChecklistBlocEventSkipChecklistLog(action.item3));
+                        BlocProvider.of<AppbarChecklistBloc>(context).add(
+                            AppbarChecklistBlocEventSkipChecklistLog(
+                                action.item3));
                       }),
                 );
               }).toList(),
@@ -153,11 +170,12 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
     );
   }
 
-  Widget _checklistButton(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+  Widget _checklistButton(
+      BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
+        BlocProvider.of<MainNavigatorBloc>(context).add(
+            MainNavigateToChecklist(state.plant, state.box, state.checklist!));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,7 +188,9 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
           Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
             child: Text('OPEN CHECKLIST (${state.nPendingLogs})',
-                style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+                style: TextStyle(
+                    color: Color(0xff3bb30b),
+                    decoration: TextDecoration.underline)),
           ),
         ],
       ),
@@ -182,9 +202,10 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text('Please login'),
-            content: Text('The checklist feature requires a SGL account to work for you when you\'re not there:)'),
+            content: Text(
+                'The checklist feature requires a SGL account to work for you when you\'re not there:)'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -202,11 +223,14 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {
-          BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventInit());
-          BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
+          BlocProvider.of<AppbarChecklistBloc>(context)
+              .add(AppbarChecklistBlocEventInit());
+          BlocProvider.of<AppbarChecklistBloc>(context)
+              .add(AppbarChecklistBlocEventCreate());
         }
       }));
     }
