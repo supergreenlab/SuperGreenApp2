@@ -59,7 +59,7 @@ class SettingsDevicesPage extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     leading:
-                        SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_controller.svg')),
+                        SizedBox(width: 40, height: 40, child: SvgPicture.asset(state.devices[index].isScreen && state.devices[index].isController == false ? 'assets/app_bar/icon_screen.svg' : 'assets/settings/icon_controller.svg')),
                     onLongPress: () {
                       _deleteBox(context, state.devices[index]);
                     },

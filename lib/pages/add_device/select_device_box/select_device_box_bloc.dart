@@ -110,13 +110,6 @@ class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDev
       }
       yield* _loadAll();
     } else if (event is SelectDeviceBoxBlocEventSelectBox) {
-      final ddb = RelDB.get().devicesDAO;
-      final Device device = await ddb.getDevice(args.device.id);
-      final timerTypeParam = await ddb.getParam(device.id, 'BOX_${event.box}_TIMER_TYPE');
-      // TODO declare Param enums when possible
-      if (timerTypeParam.ivalue != 1) {
-        await DeviceHelper.updateIntParam(args.device, timerTypeParam, 1);
-      }
       yield SelectDeviceBoxBlocStateDone(event.box);
     }
   }

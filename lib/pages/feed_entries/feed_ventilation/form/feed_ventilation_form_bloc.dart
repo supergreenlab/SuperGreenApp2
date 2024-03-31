@@ -322,9 +322,8 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       temperature = await DeviceHelper.loadBoxParam(device, box, 'TEMP', asyncRefresh: true);
       humidity = await DeviceHelper.loadBoxParam(device, box, 'HUMI', asyncRefresh: true);
 
-      try {
-        paramsController = await LegacyBlowerParamsController.load(device, box);
-      } catch (e) {
+      paramsController = await LegacyBlowerParamsController.load(device, box);
+      if (!paramsController.isAvailable()) {
         paramsController = await BlowerParamsController.load(device, box);
       }
       paramsController.refreshParams(device); // no await
