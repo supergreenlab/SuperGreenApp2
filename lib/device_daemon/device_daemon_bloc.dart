@@ -123,7 +123,7 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
           identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
         } catch (e) {}
         if (identifier == device.identifier) {
-          if (device.isSetup == false) {
+          if (device.isSetup == false || device.needsRefresh) {
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null, auth: auth);
           }
           await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(true)));

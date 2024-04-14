@@ -341,6 +341,7 @@ class DeviceAPI {
         advancement(done / total);
       }
       bool isController = (keys['isController'] ?? 'true') == 'true';
+      bool isScreen = (keys['isScreen'] ?? 'false') == 'true';
       int nBoxes = 0;
       int nSensorPorts = 0;
       int nLeds = 0;
@@ -366,7 +367,7 @@ class DeviceAPI {
       await db.updateDevice(DevicesCompanion(
         id: Value(deviceID),
         isController: Value(isController),
-        isScreen: Value((keys['isScreen'] ?? 'false') == 'true'),
+        isScreen: Value(isScreen),
         isSetup: Value(true),
         needsRefresh: Value(false),
         nBoxes: Value(nBoxes),
