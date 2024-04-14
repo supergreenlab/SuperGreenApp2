@@ -129,12 +129,27 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
       await DeviceHelper.updateStringParam(args.device, otaServerIP, myip, forceLocal: true);
       await DeviceHelper.updateIntParam(args.device, otaServerPort, server!.port, forceLocal: true);
 
-      yield SettingsUpgradeDeviceBlocStateUpgrading('Rebooting controller..');
-      Param reboot = await RelDB.get().devicesDAO.getParam(args.device.id, 'REBOOT');
+      bool hasStart = true;
+      late Param start;
       try {
-        await DeviceHelper.updateIntParam(args.device, reboot, 1, nRetries: 1, forceLocal: true);
+        start = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_START');
       } catch (e) {
-        print(e);
+        hasStart = false;
+      }
+      if (hasStart) {
+        try {
+          await DeviceHelper.updateIntParam(args.device, start, 1, nRetries: 1, forceLocal: true);
+        } catch (e) {
+          print(e);
+        }
+      } else {
+        Param reboot = await RelDB.get().devicesDAO.getParam(args.device.id, 'REBOOT');
+        yield SettingsUpgradeDeviceBlocStateUpgrading('Rebooting controller..');
+        try {
+          await DeviceHelper.updateIntParam(args.device, reboot, 1, nRetries: 1, forceLocal: true);
+        } catch (e) {
+          print(e);
+        }
       }
       yield SettingsUpgradeDeviceBlocStateUpgrading('Waiting controller connection..');
     } else if (event is SettingsUpgradeDeviceBlocEventUpgrading) {
@@ -172,7 +187,7 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
       request.response.add(firmwareBin.buffer.asInt8List());
       await request.response.flush();
       await request.response.close();
-      await Future.delayed(Duration(seconds: 4));
+      await Future.delayed(Duration(seconds: 6));
       add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
       return;
     }
