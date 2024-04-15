@@ -53,6 +53,8 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
             body = renderUpgrading(context, state);
           } else if (state is SettingsUpgradeDeviceBlocStateUpgradeDone) {
             body = renderUpgradeDone(context, state);
+          } else if (state is SettingsUpgradeDeviceBlocStateUpgradeError) {
+            body = renderError(context, state);
           }
           return Scaffold(
               appBar: SGLAppBar(
@@ -111,5 +113,10 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
   Widget renderUpgradeDone(BuildContext context, SettingsUpgradeDeviceBlocStateUpgradeDone state) {
     String subtitle = 'Controller upgraded!';
     return Fullscreen(title: 'Done!', subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+  }
+
+  Widget renderError(BuildContext context, SettingsUpgradeDeviceBlocStateUpgradeError state) {
+    String subtitle = 'Couldn\'t find the controller on the network, wait a bit then try to do a "Refresh parameter" from the settings.';
+    return Fullscreen(title: 'Error', subtitle: subtitle, child: Icon(Icons.error, color: Color(0xff3bb30b), size: 100));
   }
 }

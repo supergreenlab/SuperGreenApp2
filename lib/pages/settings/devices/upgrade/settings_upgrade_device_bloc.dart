@@ -21,6 +21,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -85,6 +86,13 @@ class SettingsUpgradeDeviceBlocStateUpgrading extends SettingsUpgradeDeviceBlocS
 
 class SettingsUpgradeDeviceBlocStateUpgradeDone extends SettingsUpgradeDeviceBlocState {
   SettingsUpgradeDeviceBlocStateUpgradeDone();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SettingsUpgradeDeviceBlocStateUpgradeError extends SettingsUpgradeDeviceBlocState {
+  SettingsUpgradeDeviceBlocStateUpgradeError();
 
   @override
   List<Object> get props => [];
@@ -156,16 +164,12 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
       yield SettingsUpgradeDeviceBlocStateUpgrading(event.progressMessage);
     } else if (event is SettingsUpgradeDeviceBlocEventCheckUpgradeDone) {
       yield SettingsUpgradeDeviceBlocStateUpgrading('Firmware sent, waiting for controller..');
-      Param otaBaseDir = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
-      String localOTATimestamp = await rootBundle.loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
-      for (int i = 0; i < 3 && int.parse(localOTATimestamp) != otaTimestamp.ivalue; ++i) {
-        try {
-          otaTimestamp = await DeviceHelper.refreshIntParam(args.device, otaTimestamp, forceLocal: true);
-        } catch (e) {
-          await Future.delayed(Duration(seconds: 1));
-        }
+      try {
+        await waitFirmwareUpgraded();
+        yield SettingsUpgradeDeviceBlocStateUpgradeDone();
+      } catch (e) {
+        yield SettingsUpgradeDeviceBlocStateUpgradeError();
       }
-      yield SettingsUpgradeDeviceBlocStateUpgradeDone();
     }
   }
 
@@ -187,7 +191,7 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
       request.response.add(firmwareBin.buffer.asInt8List());
       await request.response.flush();
       await request.response.close();
-      await waitFirmwareUpgraded();
+      await Future.delayed(Duration(seconds: 10));
       add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
       return;
     }
@@ -201,14 +205,19 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
     String localOTATimestamp = await rootBundle.loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
     int ts = int.parse(localOTATimestamp);
     String? auth = AppDB().getDeviceAuth(args.device.identifier);
-    for (int i = 0; i < 5; ++i) {
+    int nRetries = 10;
+    for (int i = 0; i < nRetries; ++i) {
       await Future.delayed(Duration(seconds: 5));
       try {
-        int value = await DeviceAPI.fetchIntParam(args.device.ip, 'OTA_TIMESTAMP', timeout: 1, nRetries: 0, auth: auth);
+        int value = await DeviceAPI.fetchIntParam(args.device.ip, 'OTA_TIMESTAMP', timeout: 5, nRetries: 1, auth: auth);
         if (value == ts) {
           break;
         }
-      } catch (e) {}
+      } catch (e, trace) {
+        if (i == nRetries-1) {
+          Logger.logError(e, trace, data: {"ip": args.device.ip, "deviceID": args.device.identifier}, fwdThrow: true);
+        }
+      }
     }
   }
 

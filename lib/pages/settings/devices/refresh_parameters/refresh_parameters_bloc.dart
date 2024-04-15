@@ -140,6 +140,7 @@ class RefreshParametersBloc extends LegacyBloc<RefreshParametersBlocEvent, Refre
       }, delete: delete, auth: auth);
     } catch (e) {
       add(RefreshParametersBlocEventError());
+      return;
     }
     add(RefreshParametersBlocEventRefreshing(100));
   }
