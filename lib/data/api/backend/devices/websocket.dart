@@ -126,6 +126,7 @@ class DeviceWebsocket {
     }
 
     sub = channel.stream.listen((message) async {
+      Logger.log(message);
       bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
       //if (device.isRemote == false && remoteEnabled) {
       // This could be a problem, why set isRemote to true? only pingTimer should be able to do that
@@ -191,6 +192,10 @@ class DeviceWebsocket {
       await Future.delayed(Duration(seconds: 3));
       connect();
     });
+    bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
+    if (remoteEnabled) {
+      await sendRemoteCommand('geti -k TIME', nRetries: 0);
+    }
   }
 
   Future sendRemoteCommand(String cmd, {int nRetries = 5, int tryN = 0, Completer? completer, String? uuid}) async {

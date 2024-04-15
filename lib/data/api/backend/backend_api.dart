@@ -56,7 +56,7 @@ class BackendAPI {
 
   factory BackendAPI() => _instance;
 
-  static bool forceProduction = true;
+  static bool forceProduction = false;
 
   BackendAPI._newInstance() {
     if (BackendAPI.forceProduction || kReleaseMode || Platform.isIOS) {
