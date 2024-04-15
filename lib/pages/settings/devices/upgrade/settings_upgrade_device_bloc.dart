@@ -187,13 +187,29 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
       request.response.add(firmwareBin.buffer.asInt8List());
       await request.response.flush();
       await request.response.close();
-      await Future.delayed(Duration(seconds: 6));
+      await waitFirmwareUpgraded();
       add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
       return;
     }
     request.response.statusCode = 404;
     request.response.write('Page not found');
     await request.response.close();
+  }
+
+  Future<void> waitFirmwareUpgraded() async {
+    Param otaBaseDir = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
+    String localOTATimestamp = await rootBundle.loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
+    int ts = int.parse(localOTATimestamp);
+    String? auth = AppDB().getDeviceAuth(args.device.identifier);
+    for (int i = 0; i < 5; ++i) {
+      await Future.delayed(Duration(seconds: 5));
+      try {
+        int value = await DeviceAPI.fetchIntParam(args.device.ip, 'OTA_TIMESTAMP', timeout: 1, nRetries: 0, auth: auth);
+        if (value == ts) {
+          break;
+        }
+      } catch (e) {}
+    }
   }
 
   @override
