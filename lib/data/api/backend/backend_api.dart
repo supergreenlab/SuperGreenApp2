@@ -56,9 +56,10 @@ class BackendAPI {
 
   factory BackendAPI() => _instance;
 
+  static bool forceProduction = true;
+
   BackendAPI._newInstance() {
-    bool forceProduction = false;
-    if (forceProduction || kReleaseMode || Platform.isIOS) {
+    if (BackendAPI.forceProduction || kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
       websocketServerHost = 'wss://api2.supergreenlab.com';
       storageServerHost = 'https://storage.supergreenlab.com';
