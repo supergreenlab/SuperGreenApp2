@@ -81,10 +81,11 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
               body = FullscreenLoading(
                 title: CommonL10N.loading,
               );
-            } else if (state is RefreshParametersBlocStateLoading) {
+            } else if (state is RefreshParametersBlocStateError) {
               body = Fullscreen(
-                title: 'Error..',
-                child: Icon(Icons.error),
+                title: 'Error',
+                subtitle: 'Check your wifi connection and try again.',
+                child: Icon(Icons.error, color: Color(0xff3bb30b), size: 100),
               );
             } else if (state is RefreshParametersBlocStateRefreshing) {
               body = FullscreenLoading(

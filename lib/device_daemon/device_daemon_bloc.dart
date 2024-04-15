@@ -171,7 +171,7 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
               }
             }
           } catch (e, trace) {
-            Logger.logError(e, trace, data: {"device": device});
+            Logger.logError(e, trace, data: {"device": device.identifier});
             await RelDB.get()
                 .devicesDAO
                 .updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
@@ -181,7 +181,7 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
         }
       }
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"device": device});
+      Logger.logError(e, trace, data: {"device": device.identifier});
     } finally {
       _deviceWorker[device.id] = false;
     }

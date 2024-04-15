@@ -66,14 +66,28 @@ class DeviceAPI {
   }
 
   static Future<String> fetchConfig(String controllerIP, {String? auth}) async {
-    Map<String, String>? headers;
+    final client = new HttpClient();
+    client.connectionTimeout = Duration(seconds: 10);
+    final req = await client.getUrl(Uri.parse('http://$controllerIP/fs/config.json'));
     if (auth != null) {
-      headers = {
-        'Authorization': 'Basic $auth',
-      };
+      req.headers.set('Authorization', 'Basic $auth');
     }
-    Response r = await get(Uri.parse('http://$controllerIP/fs/config.json'), headers: headers);
-    return r.body;
+    final HttpClientResponse resp = await req.close();
+    if (resp.contentLength == 0) {
+      Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+    }
+    if ((resp.statusCode / 100).floor() != 2) {
+      Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+    }
+    final completer = Completer<String>();
+    completer.future.whenComplete(() => client.close(force: true));
+    String contents = '';
+    resp.transform(utf8.decoder).listen((c) {
+      contents += c;
+    }, onDone: () {
+      completer.complete(contents);
+    }, onError: completer.completeError);
+    return completer.future;
   }
 
   static Future<String> fetchStringParam(String controllerIP, String paramName,
