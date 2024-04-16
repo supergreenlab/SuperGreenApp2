@@ -11,7 +11,7 @@ description: SuperGreenLab&#x27;s mobile app
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.39+115
+version: 1.2.39+117
 
 publish_to: none
 
@@ -142,8 +142,12 @@ flutter:
     - assets/firmware/SoloV2.1/
     - assets/firmware/PickleV2.1/
     - assets/firmware/DriverV2.1/
+    - assets/firmware/ScreenV1/
+    - assets/firmware/TipsV1/
     - assets/firmware/ControllerV2.1/html_app/
     - assets/firmware/ControllerV3/html_app/
     - assets/firmware/SoloV2.1/html_app/
     - assets/firmware/PickleV2.1/html_app/
     - assets/firmware/DriverV2.1/html_app/
+    - assets/firmware/ScreenV1/html_app/
+    - assets/firmware/TipsV1/html_app/
