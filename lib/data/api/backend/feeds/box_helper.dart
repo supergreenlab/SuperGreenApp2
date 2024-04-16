@@ -40,7 +40,7 @@ class BoxHelper {
 
       boxC = boxC.copyWith(device: Value(null), deviceBox: Value(null));
     }
-    if (removeScreenDevice) {
+    if (removeScreenDevice && box.screenDevice != null) {
       final Device device = await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
       final Param encKey = await RelDB.get().devicesDAO.getParam(box.screenDevice!, 'BROKER_ENCKEY');
       await DeviceHelper.updateStringParam(device, encKey, "", forceLocal: true);
