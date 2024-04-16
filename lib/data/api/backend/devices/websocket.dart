@@ -126,7 +126,7 @@ class DeviceWebsocket {
     }
 
     sub = channel.stream.listen((message) async {
-      Logger.log(message);
+      //Logger.log(message);
       bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
       //if (device.isRemote == false && remoteEnabled) {
       // This could be a problem, why set isRemote to true? only pingTimer should be able to do that
