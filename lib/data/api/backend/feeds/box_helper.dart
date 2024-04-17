@@ -61,19 +61,30 @@ class BoxHelper {
       BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
       Map<String, dynamic> schedule = boxSettings.schedules[boxSettings.schedule];
 
-      Param onHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_HOUR');
-      Param onMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_MIN');
-      await DeviceHelper.updateHourMinParams(device, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
+      bool hasTimerModule = false;
+      try {
+        await RelDB.get().devicesDAO.getModule(device.id, 'TIMER');
+        hasTimerModule = true;
+      } catch (e) {
+        hasTimerModule = false;
+      }
 
-      Param offHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_HOUR');
-      Param offMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_MIN');
-      await DeviceHelper.updateHourMinParams(
-          device, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+      if (hasTimerModule) {
+        Param onHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_HOUR');
+        Param onMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_MIN');
+        await DeviceHelper.updateHourMinParams(
+            device, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
 
-      final timerTypeParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_TIMER_TYPE');
-      // TODO declare Param enums when possible
-      if (timerTypeParam.ivalue != 1) {
-        await DeviceHelper.updateIntParam(device, timerTypeParam, 1);
+        Param offHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_HOUR');
+        Param offMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_MIN');
+        await DeviceHelper.updateHourMinParams(
+            device, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+
+        final timerTypeParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_TIMER_TYPE');
+        // TODO declare Param enums when possible
+        if (timerTypeParam.ivalue != 1) {
+          await DeviceHelper.updateIntParam(device, timerTypeParam, 1);
+        }
       }
 
       final stateParam = await RelDB.get().devicesDAO.getParam(device.id, 'STATE');
