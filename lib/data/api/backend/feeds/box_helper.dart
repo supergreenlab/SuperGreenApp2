@@ -63,7 +63,7 @@ class BoxHelper {
 
       bool hasTimerModule = false;
       try {
-        await RelDB.get().devicesDAO.getModule(device.id, 'TIMER');
+        await RelDB.get().devicesDAO.getModule(device.id, 'timer');
         hasTimerModule = true;
       } catch (e) {
         hasTimerModule = false;
