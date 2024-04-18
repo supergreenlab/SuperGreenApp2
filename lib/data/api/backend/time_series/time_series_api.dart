@@ -63,7 +63,7 @@ class TimeSeriesAPI {
 
   static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(
       Box box, String controllerID, String graphID, String name, charts.Color color,
-      {Function(double)? transform}) async {
+      {Function(double, int)? transform}) async {
     List<dynamic> values = await fetchMetric(box, controllerID, name);
     if (values.where((v) => v[1] != 0).length == 0) {
       values = [];
@@ -90,20 +90,20 @@ class TimeSeriesAPI {
   }
 
   static charts.Series<Metric, DateTime> toTimeSeries(List<dynamic> values, String graphID, charts.Color color,
-      {Function(double)? transform}) {
+      {Function(double, int)? transform}) {
     return charts.Series<Metric, DateTime>(
       id: graphID,
       strokeWidthPxFn: (_, __) => 3,
       colorFn: (_, __) => color,
       domainFn: (Metric metric, _) => metric.time,
       measureFn: (Metric metric, _) => metric.metric,
-      data: values.map<Metric>((v) {
+      data: values.asMap().map<int, Metric>((i, v) {
         double value = v[1].toDouble();
         if (transform != null) {
-          value = transform(value);
+          value = transform(value, i);
         }
-        return Metric(DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), value.toDouble());
-      }).toList(),
+        return MapEntry(i, Metric(DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), value.toDouble()));
+      }).values.toList(),
     );
   }
 
