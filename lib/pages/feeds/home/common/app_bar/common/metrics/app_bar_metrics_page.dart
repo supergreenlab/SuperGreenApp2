@@ -86,7 +86,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: _renderMetrics(24, 56, 11, 453, 45),
+          child: _renderMetrics(24, 56, 110, 453, 45, 0),
         ),
         Container(
           color: Colors.white.withAlpha(220),
@@ -113,7 +113,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
     return Stack(
       children: [
-        _renderMetrics(24, 56, 11, 453, 45),
+        _renderMetrics(24, 56, 110, 453, 45, 0),
         Container(
           color: Colors.white.withAlpha(220),
           child: Padding(
@@ -139,10 +139,10 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
     AppBarMetricsParamsController metrics = state.metrics;
     return _renderMetrics(metrics.temp.ivalue, metrics.humidity.ivalue, metrics.vpd?.ivalue.toDouble(),
-        metrics.co2?.ivalue, !(metrics.weight?.available == true) ? null : metrics.weight?.ivalue.toDouble());
+        metrics.co2?.ivalue, !(metrics.weight?.available == true) ? null : metrics.weight?.ivalue.toDouble(), metrics.version.ivalue);
   }
 
-  Widget _renderMetrics(int temp, int humidity, double? vpd, int? co2, double? weight) {
+  Widget _renderMetrics(int temp, int humidity, double? vpd, int? co2, double? weight, int version) {
     bool freedomUnits = AppDB().getUserSettings().freedomUnits!;
     String tempUnit = freedomUnits ? '°F' : '°C';
     if (freedomUnits) {
@@ -169,7 +169,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           color: Color(0xFFD7352B)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
-          value: vpd == null || vpd == 0 ? 'n/a' : '${(vpd / 100.0).toStringAsFixed(2)}',
+          value: vpd == null || vpd == 0 ? 'n/a' : '${(version != 0 && version <= 1700000000 ? vpd / 10 : vpd / 100.0).toStringAsFixed(2)}',
           color: Color(0xFF115D87)),
     ];
     if (co2 != null && co2 != 0) {

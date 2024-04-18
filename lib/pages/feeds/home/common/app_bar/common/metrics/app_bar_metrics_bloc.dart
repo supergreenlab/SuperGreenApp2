@@ -31,6 +31,7 @@ class AppBarMetricsParamsController extends ParamsController {
   ParamController? get vpd => this.params['vpd'];
   ParamController? get co2 => this.params['co2'];
   ParamController? get weight => this.params['weight'];
+  ParamController get version => this.params['version']!;
 
   static Future<AppBarMetricsParamsController> load(Device device, Box box) async {
     AppBarMetricsParamsController c = AppBarMetricsParamsController();
@@ -39,6 +40,7 @@ class AppBarMetricsParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'VPD', 'vpd');
     await c.loadBoxParam(device, box, 'CO2', 'co2');
     await c.loadBoxParam(device, box, 'WEIGHT', 'weight');
+    await c.loadParam(device, 'OTA_TIMESTAMP', 'version');
     return c;
   }
 
