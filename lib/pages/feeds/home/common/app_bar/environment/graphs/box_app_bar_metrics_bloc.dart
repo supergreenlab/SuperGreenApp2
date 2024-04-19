@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -48,20 +49,23 @@ class PlantFeedAppBarBlocStateInit extends PlantFeedAppBarBlocState {
 }
 
 class PlantFeedAppBarBlocStateLoaded extends PlantFeedAppBarBlocState {
+  final List<dynamic> version;
   final List<charts.Series<Metric, DateTime>> graphData;
   final Plant? plant;
   final Box box;
 
-  PlantFeedAppBarBlocStateLoaded(this.graphData, this.plant, this.box);
+  PlantFeedAppBarBlocStateLoaded(this.version, this.graphData, this.plant, this.box);
 
   @override
-  List<Object?> get props => [graphData, plant, box];
+  List<Object?> get props => [version, graphData, plant, box];
 }
 
 class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
   Timer? _timer;
   final Plant? plant;
   Box? box;
+
+  late List<dynamic> version;
 
   BoxAppBarMetricsBloc({this.plant, this.box}) : super(PlantFeedAppBarBlocStateInit()) {
     add(PlantFeedAppBarBlocEventLoadChart());
@@ -79,14 +83,14 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
           box = await db.plantsDAO.getBox(plant!.box);
         }
         List<charts.Series<Metric, DateTime>> graphData = await updateChart();
-        yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box!);
+        yield PlantFeedAppBarBlocStateLoaded(version, graphData, plant, box!);
       } catch (e) {
         print(e);
       }
     } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {
         List<charts.Series<Metric, DateTime>> graphData = await updateChart();
-        yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box!);
+        yield PlantFeedAppBarBlocStateLoaded(version, graphData, plant, box!);
       } catch (e) {
         print(e);
       }
@@ -107,6 +111,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       }
       String identifier = device.identifier;
       int deviceBox = box!.deviceBox!;
+      version = await TimeSeriesAPI.fetchMetric(box!, identifier, 'OTA_TIMESTAMP');
       charts.Series<Metric, DateTime> temp = await TimeSeriesAPI.fetchTimeSeries(
           box!, identifier, 'Temperature', 'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault,
           transform: _tempUnit);
@@ -153,7 +158,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
     final tempData = List.generate(
         50,
         (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            _tempUnit((cos(index / 100) * 20) + Random().nextInt(7) + 20).toDouble()));
+            _tempUnit((cos(index / 100) * 20) + Random().nextInt(7) + 20, index).toDouble()));
     final humiData = List.generate(
         50,
         (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
@@ -239,25 +244,25 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
     ];
   }
 
-  double _tempUnit(double temp) {
+  double _tempUnit(double temp, int i) {
     if (AppDB().getUserSettings().freedomUnits == true) {
       return temp * 9 / 5 + 32;
     }
     return temp;
   }
 
-  double _vpd(double vpd) {
-    return min(140, max(vpd * 0.4, 0));
+  double _vpd(double vpd, int i) {
+    return min(140, max(version[i][1] != 0 && version[i][1] < 1700000000 ? vpd * 4 :  vpd * 0.4, 0));
   }
 
-  double _weight(double weight) {
+  double _weight(double weight, int i) {
     if (AppDB().getUserSettings().freedomUnits == true) {
       return weight / 1000 * 2.20462;
     }
     return weight / 1000;
   }
 
-  double _co2(double co2) {
+  double _co2(double co2, int i) {
     return co2 / 20;
   }
 
