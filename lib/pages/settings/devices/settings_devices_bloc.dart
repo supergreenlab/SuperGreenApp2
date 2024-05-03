@@ -94,8 +94,6 @@ class SettingsDevicesBloc extends LegacyBloc<SettingsDevicesBlocEvent, SettingsD
     } else if (event is SettingsDevicesblocEventBoxListChanged) {
       yield SettingsDevicesBlocStateLoaded(event.devices);
     } else if (event is SettingsDevicesBlocEventDeleteDevice) {
-      await RelDB.get().plantsDAO.cleanDeviceIDs(event.device.id);
-      await RelDB.get().plantsDAO.cleanScreenDeviceIDs(event.device.id);
       await DeviceHelper.deleteDevice(event.device);
     }
   }

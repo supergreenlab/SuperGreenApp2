@@ -67,7 +67,7 @@ class DeviceHelper {
       if (!asyncRefresh) {
         return await future;
       }
-    } catch(e, trace) {
+    } catch (e, trace) {
       Logger.logError(e, trace, fwdThrow: !asyncRefresh);
     }
     return p;
@@ -179,6 +179,8 @@ class DeviceHelper {
 
   static Future deleteDevice(Device device, {addDeleted = true}) async {
     device = await RelDB.get().devicesDAO.getDevice(device.id);
+    await RelDB.get().plantsDAO.cleanDeviceIDs(device.id);
+    await RelDB.get().plantsDAO.cleanScreenDeviceIDs(device.id);
     await RelDB.get().devicesDAO.deleteDevice(device);
     if (addDeleted && device.serverID != null) {
       await RelDB.get()
