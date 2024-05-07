@@ -70,13 +70,13 @@ class BoxHelper {
       }
 
       if (hasTimerModule) {
-        Param onHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_HOUR');
-        Param onMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_ON_MIN');
+        Param onHourParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_ON_HOUR');
+        Param onMinParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_ON_MIN');
         await DeviceHelper.updateHourMinParams(
             device, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
 
-        Param offHourParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_HOUR');
-        Param offMinParam = await RelDB.get().devicesDAO.getParam(device!.id, 'BOX_${deviceBox}_OFF_MIN');
+        Param offHourParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_OFF_HOUR');
+        Param offMinParam = await RelDB.get().devicesDAO.getParam(device.id, 'BOX_${deviceBox}_OFF_MIN');
         await DeviceHelper.updateHourMinParams(
             device, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
 

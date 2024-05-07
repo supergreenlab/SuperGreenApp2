@@ -21,7 +21,6 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/feeds/box_helper.dart';
-import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';

@@ -20,7 +20,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';

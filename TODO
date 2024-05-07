@@ -1,0 +1,1 @@
+- We should check if the added device has the right isScreen or isController flags, when adding a device from the device selection screen for a lab
