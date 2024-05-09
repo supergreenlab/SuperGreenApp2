@@ -117,7 +117,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
         Container(
           color: Colors.white.withAlpha(220),
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(15.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:crisp_chat/crisp_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -154,26 +155,49 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
   }
 
   Widget _checklistButton(BuildContext context, AppbarChecklistBlocStateLoaded state) {
-    return InkWell(
-      onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
-      },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: SvgPicture.asset('assets/checklist/icon_checklist.svg'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
-            child: Text('OPEN CHECKLIST (${state.nPendingLogs})',
-                style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
-          ),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+            onTap: () async {
+              await FlutterCrispChat.openCrispChat(
+                  config: CrispConfig(
+                websiteID: '6896c73c-2437-44aa-bf22-c80d02a9e818',
+              ));
+            },
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: SvgPicture.asset('assets/home/icon_support.svg', height: 30,),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
+                  child:
+                      Text('SUPPORT', style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+                ),
+              ],
+            )),
+        InkWell(
+            onTap: () {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToChecklist(state.plant, state.box, state.checklist!));
+            },
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: SvgPicture.asset('assets/checklist/icon_checklist.svg', height: 20,),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
+                  child: Text('CHECKLIST (${state.nPendingLogs})',
+                      style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+                ),
+              ],
+            )),
+      ],
     );
   }
 

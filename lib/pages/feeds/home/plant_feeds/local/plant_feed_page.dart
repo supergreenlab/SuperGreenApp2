@@ -655,6 +655,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       label: label,
       labelStyle: TextStyle(fontWeight: FontWeight.bold),
       onTap: navigateTo,
+      backgroundColor: Colors.white,
     );
   }
 

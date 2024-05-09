@@ -226,7 +226,7 @@ class BoxControlsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.5),
                 child: AppBarAction(
                   center: true,
                   disabled: !blowerAvailable,
@@ -275,7 +275,7 @@ class BoxControlsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.5),
                   child: AppBarAction(
                       center: true,
                       disabled: !lightAvailable,
