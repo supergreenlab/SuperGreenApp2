@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -149,7 +150,17 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           filters: filters),
       child: FeedPage(
           automaticallyImplyLeading: true,
-          title: state.plantName ?? '',
+          titleWidget: AutoSizeText(
+            state.plantName ?? '',
+            maxLines: 2,
+            overflow: TextOverflow.fade,
+            softWrap: true,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
           pinned: true,
           color: Colors.indigo,
           appBarHeight: 380,

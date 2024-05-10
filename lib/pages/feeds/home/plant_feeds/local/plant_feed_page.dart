@@ -451,6 +451,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: Colors.white,
           onTap: () {
             setState(() {
               _speedDialType = SpeedDialType.general;
@@ -526,6 +527,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: Colors.white,
           onTap: () {
             setState(() {
               _speedDialType = SpeedDialType.general;
@@ -632,6 +634,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
           label: PlantFeedPage.plantFeedPageMenuPlantTraining,
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: Colors.white,
           onTap: () {
             setState(() {
               _speedDialType = SpeedDialType.trainings;
@@ -641,6 +644,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           child: SvgPicture.asset('assets/feed_card/icon_life_events.svg'),
           label: PlantFeedPage.plantFeedPageMenuLifeEvents,
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: Colors.white,
           onTap: () {
             setState(() {
               _speedDialType = SpeedDialType.lifeevents;
