@@ -195,6 +195,16 @@ class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   List<Object?> get props => [pushAsReplacement];
 }
 
+class MainNavigateToSimilarEntriesEvent extends MainNavigatorEvent {
+  final FeedEntryState feedEntryState;
+  final bool pushAsReplacement;
+
+  MainNavigateToSimilarEntriesEvent(this.feedEntryState, {this.pushAsReplacement = false, futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object?> get props => [feedEntryState, pushAsReplacement];
+}
+
 class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent implements DeviceNavigationArgHolder {
   final Box box;
 
@@ -866,6 +876,8 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/checklist/create', arguments: event);
     } else if (event is MainNavigateToChecklistCollections) {
       future = _navigatorKey.currentState!.pushNamed('/checklist/collections', arguments: event);
+    } else if (event is MainNavigateToSimilarEntriesEvent) {
+      future = _navigatorKey.currentState!.pushNamed('/entries/similar', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn!(future);

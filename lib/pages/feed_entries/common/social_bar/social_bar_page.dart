@@ -27,6 +27,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
+import 'package:super_green_app/pages/similar_entries/similar_entries_bloc.dart';
 
 class SocialBarPage extends StatelessWidget {
   static String socialBarPagePageLikedBy(int count) {
@@ -68,7 +69,10 @@ class SocialBarPage extends StatelessWidget {
                   () => onLike(context)),
               renderButton(context, 'button_comment', () => onComment(context)),
               renderButton(context, 'button_share', () => onShare(context)),
-              state.feedEntryID is String ? renderButton(context, 'button_report', () => createReport(context)) : Container(),
+              renderButton(context, 'button_similar', () => onShowSimilar(context)),
+              state.feedEntryID is String
+                  ? renderButton(context, 'button_report', () => createReport(context))
+                  : Container(),
               Expanded(child: Container()),
               renderButton(
                   context,
@@ -125,6 +129,10 @@ class SocialBarPage extends StatelessWidget {
     await ShareExtend.share(state.shareLink!, 'text');
   }
 
+  void onShowSimilar(BuildContext context) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSimilarEntriesEvent(this.state));
+  }
+
   void onBookmark(BuildContext context) {
     BlocProvider.of<FeedBloc>(context).add(FeedBlocEventBookmarkFeedEntry(state));
   }
@@ -164,7 +172,9 @@ class SocialBarPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Report this post?',),
+            title: Text(
+              'Report this post?',
+            ),
             content: Text('This will also block this user.'),
             actions: <Widget>[
               TextButton(

@@ -168,6 +168,8 @@ import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_page.dart';
+import 'package:super_green_app/pages/similar_entries/similar_entries_bloc.dart';
+import 'package:super_green_app/pages/similar_entries/similar_entries_page.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
@@ -787,6 +789,15 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                     ChecklistCollectionsBloc(settings.arguments as MainNavigateToChecklistCollections)),
           ],
           child: addOnPopCallBack(ChecklistCollectionsPage(), onPop),
+        );
+      case '/entries/similar':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) =>
+                    SimilarEntriesBloc(settings.arguments as MainNavigateToSimilarEntriesEvent)),
+          ],
+          child: addOnPopCallBack(SimilarEntriesPage(), onPop),
         );
     }
     return Text(MainPage.mainNavigatorUnknownRoute);
