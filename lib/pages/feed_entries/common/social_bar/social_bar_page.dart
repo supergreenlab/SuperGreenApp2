@@ -27,7 +27,6 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
-import 'package:super_green_app/pages/similar_entries/similar_entries_bloc.dart';
 
 class SocialBarPage extends StatelessWidget {
   static String socialBarPagePageLikedBy(int count) {

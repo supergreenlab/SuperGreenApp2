@@ -26,21 +26,15 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
-
-class SimilarEntriesFeedBlocDelegateFollowEvent extends FeedBlocEvent {
-  final FeedEntryState entry;
-
-  SimilarEntriesFeedBlocDelegateFollowEvent(this.entry);
-
-  @override
-  List<Object> get props => [entry];
-}
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
+import 'package:tuple/tuple.dart';
 
 class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
+  final FeedEntryState feedEntryState;
   late FeedState feedState;
   StreamSubscription<hive.BoxEvent>? appDataStream;
 
-  SimilarEntriesFeedBlocDelegate() : super();
+  SimilarEntriesFeedBlocDelegate(this.feedEntryState) : super();
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
@@ -55,7 +49,8 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(n, offset);
+    Tuple3<PlantPhases, DateTime, Duration> phaseDate = feedEntryState.plantSettings!.phaseAt(feedEntryState.date)!;
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(phaseDate.item1, phaseDate.item3.inDays, n, offset);
 
     entriesMap.removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));
 

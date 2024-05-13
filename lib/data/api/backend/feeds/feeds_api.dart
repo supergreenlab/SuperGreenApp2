@@ -19,6 +19,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:http/http.dart';
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -36,6 +37,7 @@ import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class FeedsAPI {
   Future createUserEnd({String? notificationToken}) async {
@@ -482,9 +484,9 @@ class FeedsAPI {
     }
   }
 
-  Future<List<dynamic>> similarFeedEntries(int n, int offset) async {
+  Future<List<dynamic>> similarFeedEntries(PlantPhases phase, int daysIn, int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/similar?limit=$n&offset=$offset');
+      Map<String, dynamic> results = await BackendAPI().get('/public/similar?limit=$n&offset=$offset&phase=${EnumToString.convertToString(phase)}&daysIn=$daysIn');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});

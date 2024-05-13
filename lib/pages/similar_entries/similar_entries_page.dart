@@ -18,24 +18,52 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/similar_entries/similar_entries_bloc.dart';
+import 'package:super_green_app/pages/similar_entries/similar_entries_feed_delegate.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class SimilarEntriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SimilarEntriesBloc, SimilarEntriesBlocState>(
         bloc: BlocProvider.of<SimilarEntriesBloc>(context),
-        builder: (context, state) => Scaffold(
-          appBar: SGLAppBar(
+        builder: (context, state) {
+          late Widget body;
+
+          if (state is SimilarEntriesBlocStateInit) {
+            body = renderLoading(context, state);
+          } else if (state is SimilarEntriesBlocStateLoaded) {
+            body = renderLoaded(context, state);
+          }
+          return Scaffold(
+            appBar: SGLAppBar(
               'Similar plants',
               backgroundColor: Colors.purple,
               titleColor: Colors.white,
               iconColor: Colors.white,
               elevation: 10,
             ),
-            body: Text('Pouet'),
-        ),
-    );
+            body: body,
+          );
+        });
+  }
+
+  Widget renderLoading(BuildContext context, SimilarEntriesBlocState state) {
+    return FullscreenLoading();
+  }
+
+  Widget renderLoaded(BuildContext context, SimilarEntriesBlocStateLoaded state) {
+    return BlocProvider(
+        create: (context) => FeedBloc(SimilarEntriesFeedBlocDelegate(state.feedEntryState)),
+        child: FeedPage(
+          title: '',
+          color: Colors.white,
+          feedColor: Colors.white,
+          elevate: false,
+          appBarEnabled: false,
+        ));
   }
 }

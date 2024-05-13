@@ -19,14 +19,29 @@
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class SimilarEntriesBlocEvent extends Equatable {}
+
+class SimilarEntriesBlocEventInit extends SimilarEntriesBlocEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 abstract class SimilarEntriesBlocState extends Equatable {}
 
 class SimilarEntriesBlocStateInit extends SimilarEntriesBlocState {
   @override
   List<Object?> get props => [];
+}
+
+class SimilarEntriesBlocStateLoaded extends SimilarEntriesBlocState {
+  final FeedEntryState feedEntryState;
+
+  SimilarEntriesBlocStateLoaded(this.feedEntryState);
+
+  @override
+  List<Object?> get props => [feedEntryState];
 }
 
 class SimilarEntriesBloc extends LegacyBloc<SimilarEntriesBlocEvent, SimilarEntriesBlocState> {
@@ -36,5 +51,8 @@ class SimilarEntriesBloc extends LegacyBloc<SimilarEntriesBlocEvent, SimilarEntr
 
   @override
   Stream<SimilarEntriesBlocState> mapEventToState(SimilarEntriesBlocEvent event) async* {
+    if (event is SimilarEntriesBlocEventInit) {
+      yield SimilarEntriesBlocStateLoaded(args.feedEntryState);
+    }
   }
 }
