@@ -18,6 +18,8 @@
 
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class FeedLifeEventState extends FeedEntryStateLoaded {
   FeedLifeEventState(
@@ -27,6 +29,8 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
     bool? isRemoteState = false,
     bool? followed,
     String? shareLink,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
@@ -34,6 +38,8 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
           isRemoteState: isRemoteState ?? from.isRemoteState,
           followed: followed ?? from.followed,
           shareLink: shareLink ?? from.shareLink,
+          plantSettings: plantSettings ?? from.plantSettings,
+          boxSettings: boxSettings ?? from.boxSettings,
         );
 
   FeedEntryState copyWith({
@@ -41,6 +47,8 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
     String? shareLink,
     bool? showPlantInfos,
     bool? followed,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
   }) {
     return FeedLifeEventState(
       this,
@@ -48,6 +56,8 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
       socialState: socialState ?? this.socialState,
       shareLink: shareLink ?? this.shareLink,
       followed: followed ?? this.followed,
+      plantSettings: plantSettings ?? this.plantSettings,
+      boxSettings: boxSettings ?? this.boxSettings,
     );
   }
 }

@@ -94,6 +94,8 @@ abstract class FeedEntryState extends Equatable {
     String shareLink,
     bool showPlantInfos,
     bool followed,
+    PlantSettings plantSettings,
+    BoxSettings boxSettings,
   });
 }
 
@@ -143,6 +145,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
     String? shareLink,
     bool? showPlantInfos,
     bool? followed,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
   }) {
     return FeedEntryStateNotLoaded(
       feedEntryID: this.feedEntryID,
@@ -154,8 +158,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
       params: this.params,
       plantID: this.plantID,
       plantName: this.plantName,
-      plantSettings: this.plantSettings,
-      boxSettings: this.boxSettings,
+      plantSettings: plantSettings ?? this.plantSettings,
+      boxSettings: boxSettings ?? this.boxSettings,
       followed: followed ?? this.followed,
       data: this.data,
       showPlantInfos: showPlantInfos ?? this.showPlantInfos,

@@ -19,6 +19,8 @@
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class FeedMediaState extends FeedEntryStateLoaded {
   final List<MediaState> medias;
@@ -31,6 +33,8 @@ class FeedMediaState extends FeedEntryStateLoaded {
     bool? isRemoteState,
     bool? followed,
     String? shareLink,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
@@ -38,6 +42,8 @@ class FeedMediaState extends FeedEntryStateLoaded {
           isRemoteState: isRemoteState ?? from.isRemoteState,
           followed: followed ?? from.followed,
           shareLink: shareLink ?? from.shareLink,
+          plantSettings: plantSettings ?? from.plantSettings,
+          boxSettings: boxSettings ?? from.boxSettings,
         );
 
   @override
@@ -48,6 +54,8 @@ class FeedMediaState extends FeedEntryStateLoaded {
     FeedEntrySocialState? socialState,
     bool? followed,
     String? shareLink,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
   }) {
     return FeedMediaState(
       this,
@@ -56,6 +64,8 @@ class FeedMediaState extends FeedEntryStateLoaded {
       socialState: socialState ?? this.socialState,
       followed: followed ?? this.followed,
       shareLink: shareLink ?? this.shareLink,
+      plantSettings: plantSettings ?? this.plantSettings,
+      boxSettings: boxSettings ?? this.boxSettings,
     );
   }
 }

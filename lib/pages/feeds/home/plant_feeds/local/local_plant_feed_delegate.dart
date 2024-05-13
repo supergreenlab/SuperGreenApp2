@@ -46,6 +46,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   @override
   FeedEntryState postProcess(FeedEntryState state) {
     FeedEntry feedEntry = state.data as FeedEntry;
+    state = state.copyWith(plantSettings: PlantSettings.fromJSON(plant.settings), boxSettings: BoxSettings.fromJSON(box.settings));
     if (plant.serverID == null || feedEntry.serverID == null) {
       return state;
     }

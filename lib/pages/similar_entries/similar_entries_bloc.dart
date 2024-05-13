@@ -47,7 +47,9 @@ class SimilarEntriesBlocStateLoaded extends SimilarEntriesBlocState {
 class SimilarEntriesBloc extends LegacyBloc<SimilarEntriesBlocEvent, SimilarEntriesBlocState> {
   final MainNavigateToSimilarEntriesEvent args;
 
-  SimilarEntriesBloc(this.args) : super(SimilarEntriesBlocStateInit());
+  SimilarEntriesBloc(this.args) : super(SimilarEntriesBlocStateInit()) {
+    add(SimilarEntriesBlocEventInit());
+  }
 
   @override
   Stream<SimilarEntriesBlocState> mapEventToState(SimilarEntriesBlocEvent event) async* {
