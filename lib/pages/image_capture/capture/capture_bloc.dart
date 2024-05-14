@@ -131,7 +131,7 @@ class CaptureBloc extends LegacyBloc<CaptureBlocEvent, CaptureBlocState> {
             String? jpegPath = await HeicToJpg.convert(file.path);
             yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
             filePath = '$fileName.jpg';
-            await File(jpegPath!).copy(FeedMedias.makeAbsoluteFilePath(filePath));
+            await File(jpegPath).copy(FeedMedias.makeAbsoluteFilePath(filePath));
             thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
             await optimizePicture(filePath, thumbnailPath);
           } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg') {

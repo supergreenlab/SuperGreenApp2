@@ -65,10 +65,6 @@ class _FeedCardDateState extends State<FeedCardDate> {
         onTap: () {
           int index = FeedCardDateDisplay.values.indexOf(display);
           index = (index + 1) % FeedCardDateDisplay.values.length;
-          if (FeedCardDateDisplay.values[index] == FeedCardDateDisplay.SINCE_PHASE &&
-              !(widget.feedState is PlantFeedState)) {
-            index = (index + 1) % FeedCardDateDisplay.values.length;
-          }
           setState(() {
             display = FeedCardDateDisplay.values[index];
           });
