@@ -196,7 +196,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
               },
               cardActions: (BuildContext context, FeedEntryState state) {
                 return [
-                  state.followed == false
+                  state.followed == null ? Container() : (state.followed == false
                       ? InkWell(
                           highlightColor: Colors.transparent,
                           onTap: () {
@@ -222,7 +222,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                             ],
                           ),
                         )
-                      : Text('Followed', style: TextStyle(color: Color(0xff3bb30b))),
+                      : Text('Followed', style: TextStyle(color: Color(0xff3bb30b)))),
                   IconButton(
                     icon: Text(
                       'Open plant',

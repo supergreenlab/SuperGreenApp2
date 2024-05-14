@@ -68,7 +68,7 @@ class SocialBarPage extends StatelessWidget {
                   () => onLike(context)),
               renderButton(context, 'button_comment', () => onComment(context)),
               renderButton(context, 'button_share', () => onShare(context)),
-              renderButton(context, 'button_similar', () => onShowSimilar(context)),
+              renderButton(context, 'button_similar', () => onShowSimilar(context), needsAccount: false, needsSocial: false),
               state.feedEntryID is String
                   ? renderButton(context, 'button_report', () => createReport(context))
                   : Container(),
@@ -98,10 +98,10 @@ class SocialBarPage extends StatelessWidget {
     );
   }
 
-  Widget renderButton(BuildContext context, String icon, Function()? onClick, {bool last = false}) {
-    if (!feedState.loggedIn) {
+  Widget renderButton(BuildContext context, String icon, Function()? onClick, {bool last = false, bool needsSocial = true, bool needsAccount = true}) {
+    if (!feedState.loggedIn && needsAccount) {
       onClick = () => createAccountOrLogin(context);
-    } else {
+    } else if (needsSocial) {
       onClick = state.socialState is FeedEntrySocialStateLoaded ? onClick : null;
     }
     return InkWell(

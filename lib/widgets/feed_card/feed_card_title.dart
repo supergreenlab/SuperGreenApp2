@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -57,7 +58,7 @@ class FeedCardTitle extends StatelessWidget {
                 style:
                     TextStyle(fontSize: title2 != null ? 17 : 20, fontWeight: FontWeight.w300, color: Colors.black87)),
             title2 != null
-                ? Text(title2!, style: TextStyle(color: Color(0xff2c820a), fontSize: 19, fontWeight: FontWeight.bold))
+                ? AutoSizeText(title2!, style: TextStyle(color: Color(0xff2c820a), fontSize: 19, fontWeight: FontWeight.bold))
                 : Container(),
             showSyncStatus
                 ? Text(synced ? 'Synced' : 'Not synced', style: TextStyle(color: synced ? Colors.green : Colors.red))
