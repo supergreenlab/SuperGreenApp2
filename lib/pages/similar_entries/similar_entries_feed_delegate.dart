@@ -50,7 +50,7 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
     Tuple3<PlantPhases, DateTime, Duration> phaseDate = feedEntryState.plantSettings!.phaseAt(feedEntryState.date)!;
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(phaseDate.item1, phaseDate.item3.inDays, n, offset);
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(phaseDate.item1, phaseDate.item3.inDays+1, n, offset);
 
     entriesMap.removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));
 

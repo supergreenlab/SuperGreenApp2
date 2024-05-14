@@ -40,7 +40,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
-    return state.copyWith(shareLink: 'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}');
+    return state.copyWith(shareLink: 'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}', plantSettings: (feedState as PlantFeedState).plantSettings, boxSettings: (feedState as PlantFeedState).boxSettings);
   }
 
   @override

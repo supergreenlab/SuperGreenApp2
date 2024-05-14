@@ -255,7 +255,7 @@ class _DashboardPageState extends State<DashboardPage> {
           p == state.plants.last ? Container() : Container(height: 2, color: Color(0xffdedede)),
         ];
         return Container(
-          height: 430,
+          height: 460,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: body,
