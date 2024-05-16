@@ -333,8 +333,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
             );
           }
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(children: [
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               Expanded(
                 child: TextFormField(
                   focusNode: searchFocus,

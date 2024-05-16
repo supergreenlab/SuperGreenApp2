@@ -484,9 +484,9 @@ class FeedsAPI {
     }
   }
 
-  Future<List<dynamic>> similarFeedEntries(String excludeFeedID, PlantPhases phase, int daysIn, int n, int offset) async {
+  Future<List<dynamic>> similarFeedEntries(String excludeFeedID, String? plantType, PlantPhases phase, int daysIn, int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/similar?limit=$n&offset=$offset&phase=${EnumToString.convertToString(phase)}&daysIn=$daysIn&excludeFeedID=$excludeFeedID');
+      Map<String, dynamic> results = await BackendAPI().get('/public/similar?limit=$n&offset=$offset&phase=${EnumToString.convertToString(phase)}&daysIn=$daysIn&excludeFeedID=$excludeFeedID&type=${plantType ?? ""}');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
