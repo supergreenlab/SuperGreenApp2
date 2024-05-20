@@ -110,22 +110,22 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       }
       String identifier = device.identifier;
       int deviceBox = box!.deviceBox!;
-      version = await TimeSeriesAPI.fetchMetric(box!, identifier, 'OTA_TIMESTAMP');
+      version = await TimeSeriesAPI.fetchMetric(box!, identifier, 'OTA_TIMESTAMP', 0, 10000000000);
       charts.Series<Metric, DateTime> temp = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Temperature', 'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault,
+          box!, identifier, 'Temperature', 'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault, 0, 50,
           transform: _tempUnit);
       charts.Series<Metric, DateTime> humi = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Humidity', 'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
+          box!, identifier, 'Humidity', 'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault, 0, 100);
       charts.Series<Metric, DateTime> vpd = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'VPD', 'BOX_${deviceBox}_VPD', charts.MaterialPalette.deepOrange.shadeDefault,
+          box!, identifier, 'VPD', 'BOX_${deviceBox}_VPD', charts.MaterialPalette.deepOrange.shadeDefault, 0, 254,
           transform: _vpd);
 
       charts.Series<Metric, DateTime> ventilation = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Ventilation', 'BOX_${deviceBox}_BLOWER_DUTY', charts.MaterialPalette.cyan.shadeDefault);
+          box!, identifier, 'Ventilation', 'BOX_${deviceBox}_BLOWER_DUTY', charts.MaterialPalette.cyan.shadeDefault, 0, 100);
 
       late charts.Series<Metric, DateTime> light;
       try {
-        List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+        List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT', 0, 100);
         List<List<dynamic>> dims = [];
         Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
         for (int i = 0; i < lightModule.arrayLen; ++i) {
@@ -133,7 +133,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
           if (boxParam.ivalue != box!.deviceBox!) {
             continue;
           }
-          List<dynamic> dim = await TimeSeriesAPI.fetchMetric(box!, identifier, 'LED_${i}_DIM');
+          List<dynamic> dim = await TimeSeriesAPI.fetchMetric(box!, identifier, 'LED_${i}_DIM', 0, 100);
           dims.add(dim);
         }
         List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
@@ -144,10 +144,10 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       }
 
       charts.Series<Metric, DateTime> co2 = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault,
+          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault, 0, 100000,
           transform: _co2);
       charts.Series<Metric, DateTime> weight = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault,
+          box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault, 0, 100000,
           transform: _weight);
       return [temp, humi, vpd, light, ventilation, co2, weight];
     }

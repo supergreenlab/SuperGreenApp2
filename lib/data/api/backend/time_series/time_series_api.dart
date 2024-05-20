@@ -62,23 +62,23 @@ class TimeSeriesAPI {
   }
 
   static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(
-      Box box, String controllerID, String graphID, String name, charts.Color color,
+      Box box, String controllerID, String graphID, String name, charts.Color color, int min, int max,
       {Function(double, int)? transform}) async {
-    List<dynamic> values = await fetchMetric(box, controllerID, name);
+    List<dynamic> values = await fetchMetric(box, controllerID, name, min, max);
     if (values.where((v) => v[1] != 0).length == 0) {
       values = [];
     }
     return toTimeSeries(values, graphID, color, transform: transform);
   }
 
-  static Future<List<dynamic>> fetchMetric(Box box, String controllerID, String name) async {
+  static Future<List<dynamic>> fetchMetric(Box box, String controllerID, String name, int min, int max,) async {
     List<dynamic> data;
     ChartCache? cache = await RelDB.get().plantsDAO.getChartCache(box.id, name);
     if (cache == null || -(cache.date.difference(DateTime.now()).inSeconds) >= 30) {
       if (cache != null) {
         await RelDB.get().plantsDAO.deleteChartCacheForBox(cache.box);
       }
-      Response resp = await get(Uri.parse('${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50'));
+      Response resp = await get(Uri.parse('${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50&min=$min&max=$max'));
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
       await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(
