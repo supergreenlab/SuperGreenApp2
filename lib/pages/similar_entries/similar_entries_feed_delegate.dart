@@ -77,7 +77,7 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
   }
 
   @override
-  void loadFeed() async {
+  Future<void> loadFeed() async {
     feedState = FeedState(
       BackendAPI().usersAPI.loggedIn,
       AppDB().getAppData().storeGeo,

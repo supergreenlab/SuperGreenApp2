@@ -57,7 +57,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   }
 
   @override
-  void loadFeed() async {
+  Future<void> loadFeed() async {
     Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
     feedState = PlantFeedState(
       BackendAPI().usersAPI.loggedIn,

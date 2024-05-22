@@ -292,7 +292,7 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       try {
         BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
       } catch (e) {}
-      delegate.loadFeed();
+      await delegate.loadFeed();
     } else if (event is FeedBlocEventFeedLoaded) {
       feedState = event.feed;
       yield FeedBlocStateFeedLoaded(event.feed);
@@ -430,7 +430,7 @@ abstract class FeedBlocDelegate {
   FeedEntryLoader loaderForType(String type);
 
   Future init(Function(FeedBlocEvent) add);
-  void loadFeed();
+  Future<void> loadFeed();
   Stream<FeedBlocState> onInitialLoad() async* {}
   FeedEntryState postProcess(FeedEntryState state);
   Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters);

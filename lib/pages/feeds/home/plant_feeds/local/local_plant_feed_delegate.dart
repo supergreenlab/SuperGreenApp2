@@ -60,7 +60,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   }
 
   @override
-  void loadFeed() async {
+  Future<void> loadFeed() async {
     plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
     box = await RelDB.get().plantsDAO.getBox(plant.box);
     AppData appData = AppDB().getAppData();

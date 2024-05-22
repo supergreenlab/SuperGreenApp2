@@ -47,7 +47,7 @@ class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
   }
 
   @override
-  void loadFeed() async {
+  Future<void> loadFeed() async {
     box = await RelDB.get().plantsDAO.getBoxWithFeed(feedID);
     AppData appData = AppDB().getAppData();
     feedState = BoxFeedState(appData.jwt != null, appData.storeGeo, BoxSettings.fromJSON(box.settings));
