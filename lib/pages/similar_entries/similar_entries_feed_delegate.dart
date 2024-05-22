@@ -61,6 +61,11 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
     } else if (feedEntryState.feedID is String) {
       feedID = feedEntryState.feedID;
     }
+    if (feedEntryState.plantSettings!.plantType == 'AUTO') {
+      DateTime date2 = feedEntryState.plantSettings!.germinationDate!;
+      Duration diff = feedEntryState.date.difference(date2);
+      phaseDate = Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.GERMINATING, date2, diff);
+    }
     List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(feedID, feedEntryState.plantSettings!.plantType, phaseDate.item1, phaseDate.item3.inDays+1, n, offset);
 
     entriesMap.removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));

@@ -68,7 +68,7 @@ class SocialBarPage extends StatelessWidget {
                   () => onLike(context)),
               renderButton(context, 'button_comment', () => onComment(context)),
               renderButton(context, 'button_share', () => onShare(context)),
-              renderButton(context, 'button_similar', () => onShowSimilar(context), needsAccount: false, needsSocial: false),
+              state.plantSettings != null ? renderButton(context, 'button_similar', () => onShowSimilar(context), needsAccount: false, needsSocial: false) : Container(),
               state.feedEntryID is String
                   ? renderButton(context, 'button_report', () => createReport(context))
                   : Container(),
