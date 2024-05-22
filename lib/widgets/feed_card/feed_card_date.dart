@@ -51,7 +51,7 @@ class FeedCardDate extends StatefulWidget {
 }
 
 class _FeedCardDateState extends State<FeedCardDate> {
-  FeedCardDateDisplay display = FeedCardDateDisplay.SINCE_NOW;
+  FeedCardDateDisplay display = FeedCardDateDisplay.SINCE_PHASE;
 
   @override
   Widget build(BuildContext context) {

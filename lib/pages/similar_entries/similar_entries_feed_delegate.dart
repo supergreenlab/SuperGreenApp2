@@ -22,6 +22,7 @@ import 'package:hive/hive.dart' as hive;
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -50,7 +51,17 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
     Tuple3<PlantPhases, DateTime, Duration> phaseDate = feedEntryState.plantSettings!.phaseAt(feedEntryState.date)!;
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(feedEntryState.feedID, feedEntryState.plantSettings!.plantType, phaseDate.item1, phaseDate.item3.inDays+1, n, offset);
+
+    String feedID = '00000000-0000-0000-0000-000000000000';
+    if (feedEntryState.feedID is int) {
+      Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntryState.feedID);
+      if (feed.serverID != null) {
+        feedID = feed.serverID!;
+      }
+    } else if (feedEntryState.feedID is String) {
+      feedID = feedEntryState.feedID;
+    }
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(feedID, feedEntryState.plantSettings!.plantType, phaseDate.item1, phaseDate.item3.inDays+1, n, offset);
 
     entriesMap.removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));
 
