@@ -126,12 +126,14 @@ Future initApp() async {
 
   BackendAPI(); // force init
   if (BackendAPI().usersAPI.loggedIn) {
-    try {
-      await BackendAPI().usersAPI.syncUserSettings();
-      BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
-    } catch (e, t) {
-      Logger.logError(e, t);
-    }
+    Future.microtask(() async {
+      try {
+        BackendAPI().usersAPI.syncUserSettings();
+        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      } catch (e, t) {
+        Logger.logError(e, t);
+      }
+    });
   }
 }
 

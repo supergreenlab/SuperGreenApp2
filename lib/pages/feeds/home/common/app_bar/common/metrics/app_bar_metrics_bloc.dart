@@ -28,9 +28,9 @@ class AppBarMetricsParamsController extends ParamsController {
 
   ParamController get temp => this.params['temp']!;
   ParamController get humidity => this.params['humidity']!;
-  ParamController? get vpd => this.params['vpd'];
-  ParamController? get co2 => this.params['co2'];
-  ParamController? get weight => this.params['weight'];
+  ParamController get vpd => this.params['vpd']!;
+  ParamController get co2 => this.params['co2']!;
+  ParamController get weight => this.params['weight']!;
   ParamController get version => this.params['version']!;
 
   static Future<AppBarMetricsParamsController> load(Device device, Box box) async {
@@ -103,6 +103,7 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
   AppBarMetricsParamsController? metrics;
 
   StreamSubscription<Box>? boxSubscription;
+  StreamSubscription<Device>? deviceSubscription;
   List<StreamSubscription<Param>>? subscriptions;
 
   AppBarMetricsBloc(this.box) : super(AppBarMetricsBlocStateInit(box)) {
@@ -121,6 +122,11 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
       }
 
       device = await db.devicesDAO.getDevice(box.device!);
+      if (device!.isSetup == false) {
+        deviceSubscription = db.devicesDAO.watchDevice(device!.id).listen(onDeviceUpdate);
+        yield AppBarMetricsBlocStateNoDevice(box);
+        return;
+      }
 
       timer = Timer.periodic(Duration(seconds: 10), (timer) {
         forceRefresh();
@@ -138,6 +144,14 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
     if (box.device != null) {
       await boxSubscription!.cancel();
       boxSubscription = null;
+      add(AppBarMetricsBlocEventInit());
+    }
+  }
+
+  void onDeviceUpdate(Device device) async {
+    if (device.isSetup) {
+      await deviceSubscription!.cancel();
+      deviceSubscription = null;
       add(AppBarMetricsBlocEventInit());
     }
   }
