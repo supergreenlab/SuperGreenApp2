@@ -138,8 +138,8 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
 
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
     AppBarMetricsParamsController metrics = state.metrics;
-    return _renderMetrics(metrics.temp?.ivalue, metrics.humidity?.ivalue, metrics.vpd?.ivalue.toDouble(),
-        metrics.co2?.ivalue, !(metrics.weight?.available == true) ? null : metrics.weight?.ivalue.toDouble(), metrics.version.ivalue);
+    return _renderMetrics(metrics.temp.ivalue, metrics.humidity?.ivalue, metrics.vpd.ivalue.toDouble(),
+        metrics.co2.ivalue, !(metrics.weight.available == true) ? null : metrics.weight.ivalue.toDouble(), metrics.version.ivalue);
   }
 
   Widget _renderMetrics(int? temp, int? humidity, double? vpd, int? co2, double? weight, int version) {

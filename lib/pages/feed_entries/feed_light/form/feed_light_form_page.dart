@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -92,7 +93,7 @@ class FeedLightFormPage extends StatefulWidget {
 }
 
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
-  List<int> values = [];
+  List<BoxLight> values = [];
   int loading = -1;
   bool _reachable = true;
   bool _usingWifi = false;
@@ -241,14 +242,15 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
     return SliderFormParam(
       key: Key('$i'),
       title: 'Light ${i + 1}',
-      icon: 'assets/feed_form/icon_${values[i] > 30 ? "sun" : "moon"}.svg',
-      value: values[i].toDouble(),
-      color: _color(values[i]),
+      icon: 'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
+      value: values[i].value.ivalue!.toDouble(),
+      color: _color(values[i].value.ivalue!),
       loading: loading == i,
       disable: loading != -1 && loading != i,
       onChanged: (double newValue) {
         setState(() {
-          values[i] = newValue.round();
+          BoxLight newBoxLight = values[i].copyWith(value: values[i].value.copyWith(ivalue: drift.Value(newValue.toInt())));
+          values[i] = newBoxLight;
           changed = true;
         });
       },

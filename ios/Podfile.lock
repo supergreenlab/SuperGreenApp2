@@ -293,7 +293,7 @@ SPEC CHECKSUMS:
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
-  fluttertoast: 77ff8760d90ff5041a97e3d0c0ecaaa8472524d2
+  fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: c56430aef51a1aa57b25da78c3f8397e522c67b7
   heic_to_jpg: c9381a4e2bc7a84cb3c75e8e7a29f9dba908e377
@@ -322,4 +322,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 31e3e7ca3fc35d86deb8507be61d0ca08882aeab
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2

@@ -42,6 +42,29 @@ const DEFAULT_SCHEDULES = {
   },
 };
 
+class LightSettings extends Equatable {
+  final String? name;
+
+  LightSettings({this.name});
+
+  @override
+  List<Object?> get props => [
+        name,
+      ];
+
+  factory LightSettings.fromMap(Map<String, dynamic> map) {
+    return LightSettings(
+      name: map['name'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+    };
+  }
+}
+
 class BoxSettings extends Equatable {
   final String schedule;
   final Map<String, dynamic> schedules;
@@ -53,17 +76,23 @@ class BoxSettings extends Equatable {
 
   final List<Product>? products;
 
-  BoxSettings(
-      {this.width,
-      this.height,
-      this.depth,
-      this.unit,
-      this.schedule = 'VEG',
-      this.schedules = DEFAULT_SCHEDULES,
-      this.products});
+  final List<LightSettings>? lightSettings;
+
+  BoxSettings({
+    this.width,
+    this.height,
+    this.depth,
+    this.unit,
+    this.schedule = 'VEG',
+    this.schedules = DEFAULT_SCHEDULES,
+    this.products,
+    this.lightSettings,
+  });
 
   factory BoxSettings.fromMap(Map<String, dynamic> map) {
     List<dynamic> products = map['products'] ?? [];
+    List<dynamic> lightSettings = map['lightSettings'] ?? [];
+
     return BoxSettings(
       width: map['width'],
       height: map['height'],
@@ -72,6 +101,7 @@ class BoxSettings extends Equatable {
       schedule: map['schedule'] ?? 'VEG',
       schedules: map['schedules'] ?? DEFAULT_SCHEDULES,
       products: products.map<Product>((p) => Product.fromMap(p)).toList(),
+      lightSettings: lightSettings.map<LightSettings>((l) => LightSettings.fromMap(l)).toList(),
     );
   }
 
@@ -84,6 +114,7 @@ class BoxSettings extends Equatable {
       'depth': depth,
       'unit': unit,
       'products': (products ?? []).map((p) => p.toMap()).toList(),
+      'lightSettings': (lightSettings ?? []).map((l) => l.toMap()).toList(),
     };
   }
 
@@ -107,6 +138,7 @@ class BoxSettings extends Equatable {
     int? depth,
     String? unit,
     List<Product>? products,
+    List<LightSettings>? lightSettings,
   }) =>
       BoxSettings(
         width: width ?? this.width,
@@ -116,5 +148,6 @@ class BoxSettings extends Equatable {
         schedule: schedule ?? this.schedule,
         schedules: schedules ?? this.schedules,
         products: products ?? this.products,
+        lightSettings: lightSettings ?? this.lightSettings,
       );
 }
