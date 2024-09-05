@@ -287,9 +287,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               for (int i = 0; i < values.length; i++) {
                 double newValue = (initialValues[i].value.ivalue! == 0 ? 1 : initialValues[i].value.ivalue!) * ratio;
                 int newLightValue = min(100, max(0, ratio < 1 ? newValue.floor() : newValue.ceil()));
-                print(newValue);
-                if (newValue >= 99) {
-                  newLightValue = newValue.round();
+                if (newLightValue >= 99) {
+                  newLightValue = newLightValue.round();
                 }
                 if (initialValues[i].value.ivalue! == 0) {
                   newLightValue = newValue.round();
