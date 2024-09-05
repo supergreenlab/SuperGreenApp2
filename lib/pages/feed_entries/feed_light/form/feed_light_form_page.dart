@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -93,12 +94,14 @@ class FeedLightFormPage extends StatefulWidget {
 }
 
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
+  List<BoxLight> initialValues = [];
   List<BoxLight> values = [];
   int loading = -1;
   bool _reachable = true;
   bool _usingWifi = false;
-
   bool changed = false;
+  double masterValue = 0.0;
+  double initialMasterValue = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +115,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
           });
           setState(() {
             values = List.from(state.values);
+            _updateMasterValue();
           });
         } else if (state is FeedLightFormBlocStateLightsLoading) {
           setState(() {
@@ -169,9 +173,16 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                 ],
               );
             } else if (state is FeedLightFormBlocStateLightsLoaded) {
-              Widget content = ListView.builder(
-                itemCount: values.length,
-                itemBuilder: _renderLightParam,
+              Widget content = Column(
+                children: [
+                  if (values.length > 1) _renderMasterLightControl(context),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: values.length,
+                      itemBuilder: _renderLightParam,
+                    ),
+                  ),
+                ],
               );
               if (_reachable == false) {
                 String title = 'Looking for device..';
@@ -238,6 +249,61 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
     );
   }
 
+  Widget _renderMasterLightControl(BuildContext context) {
+    return SliderFormParam(
+      key: Key('master'),
+      title: 'Master Light Control',
+      boldTitle: true,
+      icon: 'assets/feed_form/icon_sun.svg',
+      value: masterValue.round().toDouble(),
+      color: _color(masterValue.toInt()),
+      loading: false,
+      disable: loading != -1,
+      onChangeStart: (double startValue) {
+        initialMasterValue = masterValue;
+        initialValues = List.from(values);
+      },
+      onChanged: (double newValue) {
+        setState(() {
+          if (initialMasterValue != 0) {
+            double ratio = newValue / initialMasterValue;
+            for (int i = 0; i < values.length; i++) {
+              int newLightValue = min(100, max(0, (initialValues[i].value.ivalue! * ratio).round()));
+              print(newValue);
+              if (newValue >= 99) {
+                newLightValue = newValue.round();
+              }
+              if (initialValues[i].value.ivalue! == 0) {
+                newLightValue = newValue.round();
+              }
+              BoxLight newBoxLight = values[i].copyWith(
+                value: values[i].value.copyWith(ivalue: drift.Value(newLightValue)),
+              );
+              values[i] = newBoxLight;
+            }
+          } else {
+           for (int i = 0; i < values.length; i++) {
+              BoxLight newBoxLight = values[i].copyWith(
+                value: values[i].value.copyWith(ivalue: drift.Value(newValue.round())),
+              );
+              values[i] = newBoxLight;
+            }
+          }
+          masterValue = newValue;
+          changed = true;
+        });
+      },
+      onChangeEnd: (double value) {
+        for (int i = 0; i < values.length; i++) {
+          BlocProvider.of<FeedLightFormBloc>(context).add(
+            FeedLightFormBlocValueChangedEvent(i, values[i].value.ivalue!),
+          );
+        }
+        this._updateMasterValue();
+      },
+    );
+  }
+
   Widget _renderLightParam(BuildContext context, int i) {
     return SliderFormParam(
       key: Key('$i'),
@@ -247,7 +313,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         setState(() {
           values[i] = newBoxLight;
         });
-        BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocLightSettingsChangedEvent(i, newBoxLight.lightSettings));
+        BlocProvider.of<FeedLightFormBloc>(context)
+            .add(FeedLightFormBlocLightSettingsChangedEvent(i, newBoxLight.lightSettings));
       },
       icon: 'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
       value: values[i].value.ivalue!.toDouble(),
@@ -256,15 +323,22 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       disable: loading != -1 && loading != i,
       onChanged: (double newValue) {
         setState(() {
-          BoxLight newBoxLight = values[i].copyWith(value: values[i].value.copyWith(ivalue: drift.Value(newValue.toInt())));
+          BoxLight newBoxLight =
+              values[i].copyWith(value: values[i].value.copyWith(ivalue: drift.Value(newValue.toInt())));
           values[i] = newBoxLight;
           changed = true;
+          _updateMasterValue();
         });
       },
       onChangeEnd: (double value) {
         BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocValueChangedEvent(i, value.round()));
       },
     );
+  }
+
+  void _updateMasterValue() {
+    double sum = values.fold(0, (sum, light) => sum + light.value.ivalue!);
+    masterValue = sum / values.length;
   }
 
   Color _color(int value) {

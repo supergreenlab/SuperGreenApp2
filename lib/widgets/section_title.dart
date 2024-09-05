@@ -29,6 +29,7 @@ class SectionTitle extends StatefulWidget {
   final double iconPadding;
   final Widget? child;
   final Function(String)? onTitleEdited;
+  final bool bold;
 
   const SectionTitle({
     required this.title,
@@ -40,6 +41,7 @@ class SectionTitle extends StatefulWidget {
     this.iconPadding = 8,
     this.child,
     this.onTitleEdited,
+    this.bold = false,
   });
 
   @override
@@ -93,7 +95,11 @@ class _SectionTitleState extends State<SectionTitle> {
                   ? TextField(
                       controller: _titleController,
                       focusNode: _focusNode,
-                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: widget.large ? 20 : 16, color: widget.titleColor),
+                      style: TextStyle(
+                        fontWeight: widget.bold ? FontWeight.bold : FontWeight.w300,
+                        fontSize: widget.large ? 20 : 16,
+                        color: widget.titleColor,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'ex: Top light',
                         border: InputBorder.none,
@@ -102,7 +108,11 @@ class _SectionTitleState extends State<SectionTitle> {
                     )
                   : Text(
                       widget.title,
-                      style: TextStyle(fontWeight: FontWeight.w300, fontSize: widget.large ? 20 : 16, color: widget.titleColor),
+                      style: TextStyle(
+                        fontWeight: widget.bold ? FontWeight.bold : FontWeight.w300,
+                        fontSize: widget.large ? 20 : 16,
+                        color: widget.titleColor,
+                      ),
                     ),
             ),
             if (widget.onTitleEdited != null)
