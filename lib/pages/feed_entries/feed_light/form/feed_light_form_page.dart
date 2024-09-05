@@ -173,13 +173,28 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                 ],
               );
             } else if (state is FeedLightFormBlocStateLightsLoaded) {
-              Widget content = Column(
-                children: [
-                  if (values.length > 1) _renderMasterLightControl(context),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: values.length,
-                      itemBuilder: _renderLightParam,
+              Widget content = CustomScrollView(
+                slivers: [
+                  if (values.length > 1)
+                    SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      pinned: false,
+                      floating: true,
+                      expandedHeight: 225,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: _renderMasterLightControl(context),
+                      ),
+                    ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: values.length > 1 ? 0 : 16),
+                    sliver: SliverAnimatedList(
+                      initialItemCount: values.length,
+                      itemBuilder: (context, index, animation) {
+                        return SizeTransition(
+                          sizeFactor: animation,
+                          child: _renderLightParam(context, index),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -250,89 +265,96 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   }
 
   Widget _renderMasterLightControl(BuildContext context) {
-    return SliderFormParam(
-      key: Key('master'),
-      title: 'Master Light Control',
-      boldTitle: true,
-      icon: 'assets/feed_form/icon_sun.svg',
-      value: masterValue.round().toDouble(),
-      color: _color(masterValue.toInt()),
-      loading: false,
-      disable: loading != -1,
-      onChangeStart: (double startValue) {
-        initialMasterValue = masterValue;
-        initialValues = List.from(values);
-      },
-      onChanged: (double newValue) {
-        setState(() {
-          if (initialMasterValue != 0) {
-            double ratio = newValue / initialMasterValue;
-            for (int i = 0; i < values.length; i++) {
-              int newLightValue = min(100, max(0, (initialValues[i].value.ivalue! * ratio).round()));
-              print(newValue);
-              if (newValue >= 99) {
-                newLightValue = newValue.round();
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: SliderFormParam(
+        key: Key('master'),
+        title: 'Master Light Control',
+        boldTitle: true,
+        icon: 'assets/feed_form/icon_sun.svg',
+        value: masterValue.round().toDouble(),
+        color: _color(masterValue.toInt()),
+        loading: false,
+        disable: loading != -1,
+        onChangeStart: (double startValue) {
+          initialMasterValue = masterValue;
+          initialValues = List.from(values);
+        },
+        onChanged: (double newValue) {
+          setState(() {
+            if (initialMasterValue != 0) {
+              double ratio = newValue / initialMasterValue;
+              for (int i = 0; i < values.length; i++) {
+                double newValue = (initialValues[i].value.ivalue! == 0 ? 1 : initialValues[i].value.ivalue!) * ratio;
+                int newLightValue = min(100, max(0, ratio < 1 ? newValue.floor() : newValue.ceil()));
+                print(newValue);
+                if (newValue >= 99) {
+                  newLightValue = newValue.round();
+                }
+                if (initialValues[i].value.ivalue! == 0) {
+                  newLightValue = newValue.round();
+                }
+                BoxLight newBoxLight = values[i].copyWith(
+                  value: values[i].value.copyWith(ivalue: drift.Value(newLightValue)),
+                );
+                values[i] = newBoxLight;
               }
-              if (initialValues[i].value.ivalue! == 0) {
-                newLightValue = newValue.round();
+            } else {
+             for (int i = 0; i < values.length; i++) {
+                BoxLight newBoxLight = values[i].copyWith(
+                  value: values[i].value.copyWith(ivalue: drift.Value(newValue.round())),
+                );
+                values[i] = newBoxLight;
               }
-              BoxLight newBoxLight = values[i].copyWith(
-                value: values[i].value.copyWith(ivalue: drift.Value(newLightValue)),
-              );
-              values[i] = newBoxLight;
             }
-          } else {
-           for (int i = 0; i < values.length; i++) {
-              BoxLight newBoxLight = values[i].copyWith(
-                value: values[i].value.copyWith(ivalue: drift.Value(newValue.round())),
-              );
-              values[i] = newBoxLight;
-            }
+            masterValue = newValue;
+            changed = true;
+          });
+        },
+        onChangeEnd: (double value) {
+          for (int i = 0; i < values.length; i++) {
+            BlocProvider.of<FeedLightFormBloc>(context).add(
+              FeedLightFormBlocValueChangedEvent(i, values[i].value.ivalue!),
+            );
           }
-          masterValue = newValue;
-          changed = true;
-        });
-      },
-      onChangeEnd: (double value) {
-        for (int i = 0; i < values.length; i++) {
-          BlocProvider.of<FeedLightFormBloc>(context).add(
-            FeedLightFormBlocValueChangedEvent(i, values[i].value.ivalue!),
-          );
-        }
-        this._updateMasterValue();
-      },
+          this._updateMasterValue();
+        },
+      ),
     );
   }
 
   Widget _renderLightParam(BuildContext context, int i) {
-    return SliderFormParam(
-      key: Key('$i'),
-      title: values[i].lightSettings.name ?? 'Light ${i + 1}',
-      onTitleEdited: (String newTitle) {
-        BoxLight newBoxLight = values[i].copyWith(lightSettings: values[i].lightSettings.copyWith(name: newTitle));
-        setState(() {
-          values[i] = newBoxLight;
-        });
-        BlocProvider.of<FeedLightFormBloc>(context)
-            .add(FeedLightFormBlocLightSettingsChangedEvent(i, newBoxLight.lightSettings));
-      },
-      icon: 'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
-      value: values[i].value.ivalue!.toDouble(),
-      color: _color(values[i].value.ivalue!),
-      loading: loading == i,
-      disable: loading != -1 && loading != i,
-      onChanged: (double newValue) {
-        setState(() {
-          BoxLight newBoxLight =
-              values[i].copyWith(value: values[i].value.copyWith(ivalue: drift.Value(newValue.toInt())));
-          values[i] = newBoxLight;
-          changed = true;
-          _updateMasterValue();
-        });
-      },
-      onChangeEnd: (double value) {
-        BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocValueChangedEvent(i, value.round()));
-      },
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: SliderFormParam(
+        key: Key('$i'),
+        title: values[i].lightSettings.name ?? 'Light ${i + 1}',
+        onTitleEdited: (String newTitle) {
+          BoxLight newBoxLight = values[i].copyWith(lightSettings: values[i].lightSettings.copyWith(name: newTitle));
+          setState(() {
+            values[i] = newBoxLight;
+          });
+          BlocProvider.of<FeedLightFormBloc>(context)
+              .add(FeedLightFormBlocLightSettingsChangedEvent(i, newBoxLight.lightSettings));
+        },
+        icon: 'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
+        value: values[i].value.ivalue!.toDouble(),
+        color: _color(values[i].value.ivalue!),
+        loading: loading == i,
+        disable: loading != -1 && loading != i,
+        onChanged: (double newValue) {
+          setState(() {
+            BoxLight newBoxLight =
+                values[i].copyWith(value: values[i].value.copyWith(ivalue: drift.Value(newValue.toInt())));
+            values[i] = newBoxLight;
+            changed = true;
+            _updateMasterValue();
+          });
+        },
+        onChangeEnd: (double value) {
+          BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocValueChangedEvent(i, value.round()));
+        },
+      ),
     );
   }
 

@@ -70,6 +70,7 @@ class SliderFormParam extends StatelessWidget {
                     ? null
                     : () {
                         double newValue = math.max(min, value - 1);
+                        if (onChangeStart != null) onChangeStart!(newValue);
                         onChanged(newValue);
                         onChangeEnd(newValue);
                       },
@@ -81,6 +82,7 @@ class SliderFormParam extends StatelessWidget {
                     ? null
                     : () {
                         double newValue = math.min(max, value + 1);
+                        if (onChangeStart != null) onChangeStart!(newValue);
                         onChanged(newValue);
                         onChangeEnd(newValue);
                       },
