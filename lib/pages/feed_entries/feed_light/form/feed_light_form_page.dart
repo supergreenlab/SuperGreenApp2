@@ -291,7 +291,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   newLightValue = newValue.round();
                 }
                 if (initialValues[i].value.ivalue! == 0) {
-                  newLightValue = newValue.round();
+                  newLightValue = 0;
                 }
                 BoxLight newBoxLight = values[i].copyWith(
                   value: values[i].value.copyWith(ivalue: drift.Value(newLightValue)),
