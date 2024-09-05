@@ -182,7 +182,7 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
         lightSettings.add(LightSettings());
       }
       boxSettings = boxSettings.copyWith(lightSettings: lightSettings);
-      box = box.copyWith(settings: boxSettings.toJSON());
+      box = box.copyWith(settings: boxSettings.toJSON(), synced: false);
       db.plantsDAO.updateBox(box.toCompanion(true));
     }
     List<BoxLight> boxLights = [];
@@ -215,7 +215,7 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     List<LightSettings> lightSettings = boxSettings.lightSettings ?? [];
     lightSettings[event.i] = event.lightSetting;
     boxSettings = boxSettings.copyWith(lightSettings: lightSettings);
-    box = box.copyWith(settings: boxSettings.toJSON());
+    box = box.copyWith(settings: boxSettings.toJSON(), synced: false);
     db.plantsDAO.updateBox(box.toCompanion(true));
   }
 
