@@ -22,6 +22,7 @@ import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 
 class SliderFormParam extends StatelessWidget {
   final double value;
+  final void Function(String)? onTitleEdited;
   final void Function(double) onChanged;
   final void Function(double) onChangeEnd;
   final String title;
@@ -37,6 +38,7 @@ class SliderFormParam extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.value,
+    this.onTitleEdited,
     required this.onChanged,
     required this.onChangeEnd,
     required this.color,
@@ -49,6 +51,7 @@ class SliderFormParam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FeedFormParamLayout(
+      onTitleEdited: onTitleEdited,
       title: title,
       icon: icon,
       child: Column(

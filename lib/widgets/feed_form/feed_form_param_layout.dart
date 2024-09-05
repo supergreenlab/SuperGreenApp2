@@ -22,6 +22,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 class FeedFormParamLayout extends StatelessWidget {
   final Widget child;
   final String title;
+  final void Function(String)? onTitleEdited;
   final String icon;
   final Color? titleBackgroundColor;
   final Color? titleColor;
@@ -32,6 +33,7 @@ class FeedFormParamLayout extends StatelessWidget {
       required this.child,
       required this.icon,
       required this.title,
+    this.onTitleEdited,
       this.titleBackgroundColor,
       this.titleColor,
       this.largeTitle = false,
@@ -53,6 +55,7 @@ class FeedFormParamLayout extends StatelessWidget {
           children: <Widget>[
             SectionTitle(
               title: title,
+              onTitleEdited: onTitleEdited,
               icon: icon,
               backgroundColor: titleBackgroundColor,
               titleColor: titleColor,

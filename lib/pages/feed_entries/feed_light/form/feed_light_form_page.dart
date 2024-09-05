@@ -241,7 +241,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   Widget _renderLightParam(BuildContext context, int i) {
     return SliderFormParam(
       key: Key('$i'),
-      title: 'Light ${i + 1}',
+      title: values[i].lightSettings.name ?? 'Light ${i + 1}',
+      onTitleEdited: (String newTitle) {
+        BoxLight newBoxLight = values[i].copyWith(lightSettings: values[i].lightSettings.copyWith(name: newTitle));
+        setState(() {
+          values[i] = newBoxLight;
+        });
+        BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocLightSettingsChangedEvent(i, newBoxLight.lightSettings));
+      },
       icon: 'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
       value: values[i].value.ivalue!.toDouble(),
       color: _color(values[i].value.ivalue!),

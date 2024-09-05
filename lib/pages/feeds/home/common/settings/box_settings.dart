@@ -63,6 +63,10 @@ class LightSettings extends Equatable {
       'name': name,
     };
   }
+
+  LightSettings copyWith({String? name}) {
+    return LightSettings(name: name ?? this.name);
+  }
 }
 
 class BoxSettings extends Equatable {
