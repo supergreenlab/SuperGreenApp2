@@ -285,10 +285,10 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             if (initialMasterValue != 0) {
               double ratio = newValue / initialMasterValue;
               for (int i = 0; i < values.length; i++) {
-                double newValue = (initialValues[i].value.ivalue! == 0 ? 1 : initialValues[i].value.ivalue!) * ratio;
-                int newLightValue = min(100, max(0, ratio < 1 ? newValue.floor() : newValue.ceil()));
-                if (newLightValue >= 99) {
-                  newLightValue = newLightValue.round();
+                double nv = (initialValues[i].value.ivalue! == 0 ? 1 : initialValues[i].value.ivalue!) * ratio;
+                int newLightValue = min(100, max(0, ratio < 1 ? nv.floor() : nv.ceil()));
+                if (newValue >= 99) {
+                  newLightValue = newValue.round();
                 }
                 if (initialValues[i].value.ivalue! == 0) {
                   newLightValue = newValue.round();
