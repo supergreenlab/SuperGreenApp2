@@ -206,18 +206,48 @@ class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEven
     int ts = int.parse(localOTATimestamp);
     String? auth = AppDB().getDeviceAuth(args.device.identifier);
     int nRetries = 10;
+    int consecutiveMatches = 0;
+    bool converged = false;
     for (int i = 0; i < nRetries; ++i) {
       await Future.delayed(Duration(seconds: 5));
       try {
         int value = await DeviceAPI.fetchIntParam(args.device.ip, 'OTA_TIMESTAMP', timeout: 5, nRetries: 1, auth: auth);
         if (value == ts) {
-          break;
+          consecutiveMatches++;
+          if (consecutiveMatches >= 2) {
+            converged = true;
+            break;
+          }
+        } else {
+          consecutiveMatches = 0;
         }
       } catch (e, trace) {
         if (i == nRetries-1) {
           Logger.logError(e, trace, data: {"ip": args.device.ip, "deviceID": args.device.identifier}, fwdThrow: true);
         }
       }
+    }
+
+    if (!converged) {
+      Logger.throwError('OTA timestamp did not converge to target value.', data: {
+        "ip": args.device.ip,
+        "deviceID": args.device.identifier,
+        "targetTimestamp": ts
+      }, fwdThrow: true);
+    }
+
+    // Post-OTA liveness/readability check: controller must respond to core reads.
+    try {
+      await DeviceAPI.fetchIntParam(args.device.ip, 'TIME', timeout: 5, nRetries: 1, auth: auth);
+      String brokerClientId = await DeviceAPI.fetchStringParam(args.device.ip, 'BROKER_CLIENTID', timeout: 5, nRetries: 1, auth: auth);
+      if (brokerClientId.isEmpty) {
+        Logger.throwError('Post-OTA BROKER_CLIENTID read is empty.', data: {
+          "ip": args.device.ip,
+          "deviceID": args.device.identifier
+        }, fwdThrow: true);
+      }
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"ip": args.device.ip, "deviceID": args.device.identifier}, fwdThrow: true);
     }
   }
 

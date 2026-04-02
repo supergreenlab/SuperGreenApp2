@@ -46,3 +46,6 @@ ios/Runner/GoogleService-Info.plist
 
 .env
 lib/data/config.g.dart
+
+# FVM Version Cache
+.fvm/
