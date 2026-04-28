@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:share_extend/share_extend.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
@@ -121,11 +121,7 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
               title2: widget.state.showPlantInfos ? widget.state.plantName : null,
               onShare: () {
                 MediaState media = state.medias[mediaShown];
-                if (media.filePath.endsWith('.mp4')) {
-                  ShareExtend.share(media.filePath, "video");
-                } else if (media.filePath.endsWith('.jpg')) {
-                  ShareExtend.share(media.filePath, "image");
-                }
+                Share.shareXFiles([XFile(media.filePath)]);
               },
               showSyncStatus: !state.isRemoteState,
               showControls: !state.isRemoteState,

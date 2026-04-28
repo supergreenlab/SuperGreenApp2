@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:share_extend/share_extend.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -125,7 +125,7 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void onShare(BuildContext context) async {
-    await ShareExtend.share(state.shareLink!, 'text');
+    await Share.share(state.shareLink!);
   }
 
   void onShowSimilar(BuildContext context) async {

@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -80,7 +80,7 @@ class DeviceReachableListenerBloc
 
   late Device device;
 
-  StreamSubscription<ConnectivityResult>? connectivity;
+  StreamSubscription<List<ConnectivityResult>>? connectivity;
   bool _usingWifi = false;
 
   StreamSubscription? subscription;
@@ -92,9 +92,10 @@ class DeviceReachableListenerBloc
     if (event is DeviceReachableListenerBlocEventLoadDevice) {
       if (subscription == null) {
         device = await deviceArgHolder.getDevice() as Device;
-        _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
-        connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-          _usingWifi = (result == ConnectivityResult.wifi);
+        final results = await Connectivity().checkConnectivity();
+        _usingWifi = results.contains(ConnectivityResult.wifi);
+        connectivity = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
+          _usingWifi = results.contains(ConnectivityResult.wifi);
         });
         subscription = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device? newDevice) {
           add(DeviceReachableListenerBlocEventDeviceReachable(

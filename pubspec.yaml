@@ -16,28 +16,26 @@ version: 1.2.42+128
 publish_to: none
 
 environment:
-  sdk: ">=2.14.0 <3.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter_portal:
-  flutter_slidable:
+  flutter_slidable: ^3.1.1
   cached_network_image:
   favicon:
   flutter_datetime_picker_plus:
-  webview_flutter_plus: ^0.3.0+2
+  webview_flutter_plus: ^0.4.0
   envied:
-  envied_generator:
   qr_flutter:
   web_socket_channel:
   uuid:
   rive:
   animated_size_and_fade:
-  heic_to_jpg:
-    path: ./vendor/heic_to_jpg
+  flutter_heic_to_jpg:
   enum_to_string:
-  uni_links:
+  app_links:
   tuple:
-  share_extend:
+  share_plus:
   fluttertoast:
   flutter_email_sender:
   visibility_detector:
@@ -62,8 +60,7 @@ dependencies:
   equatable:
   url_launcher:
   basic_utils:
-  flutter_speed_dial:
-    path: ./vendor/flutter_speed_dial
+  flutter_speed_dial: ^7.0.0
   event_bus:
   video_player:
   flutter_keyboard_visibility:
@@ -73,15 +70,10 @@ dependencies:
   intl:
   intl_generator:
   card_swiper:
-  charts_flutter:
-    git: 
-      url: https://github.com/supergreenlab/charts.git
-      path: charts_flutter
+  fl_chart: ^0.69.0
   flutter_markdown:
-  youtube_player_flutter:
-  matrix_gesture_detector:
-    path: ./vendor/matrix_gesture_detector
-  connectivity:
+  youtube_player_flutter: ^9.1.0
+  connectivity_plus:
   firebase_messaging:
   firebase_core:
   flutter_local_notifications:
@@ -100,20 +92,21 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons:
-  package_info:
+  package_info_plus:
   shared_preferences:
-  flutter_screen_lock: ^9.0.1
+  flutter_screen_lock: ^9.2.0
   intl_translation:
   crisp_chat: ^2.0.2
 
-# dependency_overrides:
-  # analyzer: 0.39.14
-  # path: 1.7.0
+dependency_overrides:
+  intl: any
+  win32: ^5.9.0
 
 dev_dependencies:
   hive_generator:
   drift_dev:
   build_runner:
+  envied_generator:
   flutter_test:
     sdk: flutter
 

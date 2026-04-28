@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app_links/app_links.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
-import 'package:uni_links/uni_links.dart';
 
 abstract class DeepLinkBlocEvent extends Equatable {}
 
@@ -42,20 +42,20 @@ class DeepLinkBlocStateMainNavigation extends DeepLinkBlocState {
 
 class DeepLinkBloc extends LegacyBloc<DeepLinkBlocEvent, DeepLinkBlocState> {
   late StreamSubscription _sub;
+  final _appLinks = AppLinks();
 
   DeepLinkBloc() : super(DeepLinkBlocStateInit());
 
   Stream<DeepLinkBlocState> mapEventToState(DeepLinkBlocEvent event) async* {
     if (event is DeepLinkBlocEventInit) {
-      Uri? initialUri = await getInitialUri();
+      Uri? initialUri = await _appLinks.getInitialLink();
       if (initialUri != null) {
-        // TODO find something better
         Timer(Duration(seconds: 2), () {
           add(DeepLinkBlocEventUri(initialUri));
         });
       }
-      _sub = uriLinkStream.listen((Uri? uri) {
-        add(DeepLinkBlocEventUri(uri!));
+      _sub = _appLinks.uriLinkStream.listen((Uri uri) {
+        add(DeepLinkBlocEventUri(uri));
       });
     } else if (event is DeepLinkBlocEventUri) {
       if (event.uri.path == '/public/plant') {

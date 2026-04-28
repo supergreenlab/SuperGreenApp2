@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -48,7 +48,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
               textColor: Color(0xFF494949),
             );
           } else if (state is PlantFeedAppBarBlocStateLoaded) {
-            if (state.graphData.where((g) => g.data.length != 0).length == 0) { // TODO replace with firstWhere when they fix it to return null
+            if (state.graphData.where((g) => g.data.length != 0).length == 0) {
               body = Fullscreen(
                 title: 'Not enough data to display metrics yet',
                 subtitle: 'try again in a few minutes',
@@ -70,20 +70,15 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
   Widget _renderGraphs(BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
     String tempUnit = AppDB().getUserSettings().freedomUnits! ? '°F' : '°C';
 
-    charts.Series<Metric, DateTime> dateGraphData = state.graphData.firstWhere((g) => g.data.length != 0);
+    ChartSeries dateGraphData = state.graphData.firstWhere((g) => g.data.length != 0);
     DateTime metricDate = dateGraphData.data[selectedGraphIndex ?? dateGraphData.data.length - 1].time;
     
     String weightUnit = AppDB().getUserSettings().freedomUnits! ? 'lb' : 'kg';
     String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
         style: TextStyle(color: Color(0xFF494949), fontSize: 15, fontWeight: FontWeight.bold));
-    List<charts.LineAnnotationSegment<Object>>? annotations;
+    
     if (selectedGraphIndex != null) {
-      annotations = [
-        charts.LineAnnotationSegment(metricDate, charts.RangeAnnotationAxisType.domain,
-            labelStyleSpec: charts.TextStyleSpec(color: charts.MaterialPalette.white),
-            color: charts.MaterialPalette.gray.shade500)
-      ];
       dateText = Row(
         children: <Widget>[
           dateText,
@@ -97,40 +92,19 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
         ],
       );
     }
+    
     Widget graphs = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Colors.white70,
         border: Border.all(color: Color(0xffdedede), width: 1),
       ),
-      child: /*Stack(
-        children: [*/
-          Padding(
+      child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: charts.TimeSeriesChart(
-          state.graphData.where((gd) => !(disabledGraphs[state.graphData.indexOf(gd)] ?? false)).toList(),
-          animate: false,
-          behaviors: selectedGraphIndex != null
-              ? [
-                  charts.RangeAnnotation(annotations!),
-                ]
-              : null,
-          customSeriesRenderers: [charts.PointRendererConfig(customRendererId: 'customPoint')],
-          selectionModels: [
-            new charts.SelectionModelConfig(
-                type: charts.SelectionModelType.info,
-                changedListener: (charts.SelectionModel model) {
-                  if (!model.hasAnySelection) {
-                    return;
-                  }
-                  setState(() {
-                    selectedGraphIndex = model.selectedDatum[0].index;
-                  });
-                }),
-          ],
-        ),
+        child: _buildLineChart(state),
       ),
     );
+    
     if (state.graphData.where((g) => g.data.length > minCharPoints).length == 0) {
       graphs = Stack(children: [
         graphs,
@@ -173,7 +147,6 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                 child: ListView(
                   shrinkWrap: true,
                   controller: _scrollController,
-                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Container(width: 4),
@@ -256,9 +229,55 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           Expanded(
             child: graphs,
           ),
-          // Text("*VPD chart is experimental, please report any inconsistencies",
-          //     style: TextStyle(fontSize: 9, color: Color(0xFF494949))),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLineChart(PlantFeedAppBarBlocStateLoaded state) {
+    List<LineChartBarData> lineBars = [];
+    
+    for (int i = 0; i < state.graphData.length; i++) {
+      if (disabledGraphs[i] == true) continue;
+      ChartSeries series = state.graphData[i];
+      if (series.data.isEmpty) continue;
+      
+      lineBars.add(LineChartBarData(
+        spots: series.data.asMap().entries.map((e) {
+          return FlSpot(e.key.toDouble(), e.value.metric);
+        }).toList(),
+        isCurved: true,
+        color: series.color,
+        barWidth: 2,
+        isStrokeCapRound: true,
+        dotData: FlDotData(show: false),
+        belowBarData: BarAreaData(show: false),
+      ));
+    }
+
+    return LineChart(
+      LineChartData(
+        lineBarsData: lineBars,
+        gridData: FlGridData(show: true, drawVerticalLine: false),
+        titlesData: FlTitlesData(
+          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        ),
+        borderData: FlBorderData(show: false),
+        lineTouchData: LineTouchData(
+          touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+            if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
+              setState(() {
+                selectedGraphIndex = touchResponse.lineBarSpots!.first.x.toInt();
+              });
+            }
+          },
+          touchTooltipData: LineTouchTooltipData(
+            getTooltipColor: (touchedSpot) => Colors.blueGrey.withOpacity(0.8),
+          ),
+        ),
       ),
     );
   }

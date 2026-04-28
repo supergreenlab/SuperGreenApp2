@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:share_extend/share_extend.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
@@ -77,7 +77,7 @@ class _PlantPublicLinkState extends State<PlantPublicLink> {
       padding: const EdgeInsets.only(bottom: 30, top: 16.0, left: 16.0, right: 16.0),
       child: InkWell(
         onTap: () async {
-          await ShareExtend.share("https://supergreenlab.com/public/plant?id=${widget.state.plant.serverID}", 'text');
+          await Share.share("https://supergreenlab.com/public/plant?id=${widget.state.plant.serverID}");
           Navigator.of(context).pop();
         },
         child: Column(

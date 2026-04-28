@@ -20,7 +20,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
 import 'package:super_green_app/data/api/backend/userend/userend_helper.dart';
@@ -87,7 +87,7 @@ class SyncerBlocStateSyncing extends SyncerBlocState {
 class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   static late SyncerBloc instance;
 
-  late StreamSubscription<ConnectivityResult> _connectivity;
+  late StreamSubscription<List<ConnectivityResult>> _connectivity;
 
   Timer? _timerOut;
   bool _workingOut = false;
@@ -102,9 +102,10 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   @override
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {
     if (event is SyncerBlocEventInit) {
-      _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
-      _connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        _usingWifi = (result == ConnectivityResult.wifi);
+      final results = await Connectivity().checkConnectivity();
+      _usingWifi = results.contains(ConnectivityResult.wifi);
+      _connectivity = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
+        _usingWifi = results.contains(ConnectivityResult.wifi);
       });
       _timerOut = Timer.periodic(Duration(seconds: 5), (_) async {
         if (_workingOut == true) return;

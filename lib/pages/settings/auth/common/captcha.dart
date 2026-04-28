@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/red_button.dart';
-import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Captcha extends StatefulWidget {
   const Captcha({Key? key, required this.url, required this.onTokenReceived, this.webViewColor = Colors.transparent})
@@ -35,27 +35,42 @@ class Captcha extends StatefulWidget {
 
 class _CaptchaState extends State<Captcha> {
   bool loaded = false;
-  GlobalKey webviewKey = GlobalKey();
+  late WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(widget.webViewColor ?? Colors.transparent)
+      ..addJavaScriptChannel('readyCaptcha', onMessageReceived: (message) {})
+      ..addJavaScriptChannel('Captcha', onMessageReceived: (message) {
+        if (message.message == 'ready') {
+          setState(() {
+            loaded = true;
+          });
+          return;
+        } else if (message.message == 'error' || message.message == 'expired') {
+          Navigator.pop(context);
+          return;
+        }
+        widget.onTokenReceived(message.message);
+      })
+      ..setNavigationDelegate(NavigationDelegate(
+        onPageFinished: (url) {
+          RecaptchaHandler.instance.start();
+        },
+      ))
+      ..loadRequest(Uri.parse(widget.url));
+    RecaptchaHandler.instance.updateController(_controller);
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget webview = SingleChildScrollView(
       child: SizedBox(
         height: 600,
-        child: WebViewPlus(
-          key: webviewKey,
-          zoomEnabled: false,
-          backgroundColor: widget.webViewColor,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (controller) {
-            RecaptchaHandler.instance.updateController(controller);
-            controller.loadUrl(widget.url);
-          },
-          onPageFinished: (url) {
-            RecaptchaHandler.instance.start();
-          },
-          javascriptChannels: _initializeJavascriptChannels(),
-        ),
+        child: WebViewWidget(controller: _controller),
       ),
     );
     if (!loaded) {
@@ -100,57 +115,28 @@ class _CaptchaState extends State<Captcha> {
       ],
     );
   }
-
-  Set<JavascriptChannel> _initializeJavascriptChannels() {
-    return {
-      JavascriptChannel(
-        name: 'readyCaptcha',
-        onMessageReceived: (JavascriptMessage message) {},
-      ),
-      JavascriptChannel(
-        name: 'Captcha',
-        onMessageReceived: (JavascriptMessage message) {
-          if (message.message == 'ready') {
-            setState(() {
-              loaded = true;
-            });
-            return;
-          } else if (message.message == 'error' || message.message == 'expired') {
-            Navigator.pop(context);
-            return;
-          }
-          widget.onTokenReceived(message.message);
-        },
-      ),
-    };
-  }
 }
 
-// TODO remove this shit, comes from a shitty github repo. Makes no sense.
 class RecaptchaHandler {
   RecaptchaHandler._();
 
   static RecaptchaHandler? _instance;
-  late WebViewPlusController controller;
+  late WebViewController controller;
   late String _siteKey;
 
   String get siteKey => _siteKey;
 
-  /// Returns an instance using the default [Env].
   static RecaptchaHandler get instance => _instance ??= RecaptchaHandler._();
 
-  /// updates the Web view controller
-  updateController(WebViewPlusController controller) {
+  updateController(WebViewController controller) {
     _instance?.controller = controller;
   }
 
   start() {
-    controller.webViewController.runJavascript('readyCaptcha("${_instance?._siteKey}")');
+    controller.runJavaScript('readyCaptcha("${_instance?._siteKey}")');
   }
 
-  /// setups the data site key
   setupSiteKey({required String dataSiteKey}) => _instance?._siteKey = dataSiteKey;
 
-  /// Executes and call the  recaptcha API
-  static executeV3() => _instance?.controller.webViewController.runJavascript('readyCaptcha("${_instance?._siteKey}")');
+  static executeV3() => _instance?.controller.runJavaScript('readyCaptcha("${_instance?._siteKey}")');
 }

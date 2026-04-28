@@ -18,12 +18,21 @@
 
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:ui';
 
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart';
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+
+class ChartSeries {
+  final String id;
+  final Color color;
+  final List<Metric> data;
+
+  ChartSeries({required this.id, required this.color, required this.data});
+}
 
 class TimeSeriesAPI {
   static List<dynamic> multiplyMetric(List<dynamic> metric, List<int> values) {
@@ -61,8 +70,8 @@ class TimeSeriesAPI {
     return result;
   }
 
-  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(
-      Box box, String controllerID, String graphID, String name, charts.Color color, int min, int max,
+  static Future<ChartSeries> fetchTimeSeries(
+      Box box, String controllerID, String graphID, String name, Color color, int min, int max,
       {Function(double, int)? transform}) async {
     List<dynamic> values = await fetchMetric(box, controllerID, name, min, max);
     if (values.where((v) => v[1] != 0).length == 0) {
@@ -89,14 +98,11 @@ class TimeSeriesAPI {
     return data;
   }
 
-  static charts.Series<Metric, DateTime> toTimeSeries(List<dynamic> values, String graphID, charts.Color color,
+  static ChartSeries toTimeSeries(List<dynamic> values, String graphID, Color color,
       {Function(double, int)? transform}) {
-    return charts.Series<Metric, DateTime>(
+    return ChartSeries(
       id: graphID,
-      strokeWidthPxFn: (_, __) => 3,
-      colorFn: (_, __) => color,
-      domainFn: (Metric metric, _) => metric.time,
-      measureFn: (Metric metric, _) => metric.metric,
+      color: color,
       data: values.asMap().map<int, Metric>((i, v) {
         double value = v[1].toDouble();
         if (transform != null) {

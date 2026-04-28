@@ -30,7 +30,7 @@ import 'package:super_green_app/misc/screen_lock.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/theme.dart';
 import 'package:super_green_app/widgets/appbar.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

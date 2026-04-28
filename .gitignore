@@ -29,6 +29,7 @@
 .pub/
 /build/
 .flutter-plugins-dependencies
+ios/Flutter/ephemeral/
 
 # Web related
 lib/generated_plugin_registrant.dart

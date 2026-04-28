@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_bloc.dart';
 
@@ -29,7 +28,7 @@ class FullscreenPicturePage extends StatefulWidget {
 }
 
 class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
-  Matrix4 _matrix = Matrix4.identity();
+  final TransformationController _transformationController = TransformationController();
 
   @override
   void initState() {
@@ -75,22 +74,23 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
           state.image,
           fit: BoxFit.contain,
         ));
-    return MatrixGestureDetector(
-        onMatrixUpdate: (Matrix4 m, Matrix4 tm, Matrix4 sm, Matrix4 rm) {
-          setState(() {
-            _matrix = MatrixGestureDetector.compose(_matrix, tm, sm, null);
-          });
+    return Container(
+      color: Colors.black,
+      child: InteractiveViewer(
+        transformationController: _transformationController,
+        minScale: 0.5,
+        maxScale: 4.0,
+        onInteractionEnd: (details) {
+          _transformationController.value = Matrix4.identity();
         },
-        onGestureEnd: () {
-          setState(() {
-            _matrix = Matrix4.identity();
-          });
-        },
-        child: Transform(transform: _matrix, child: Container(color: Colors.black, child: picture)));
+        child: picture,
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _transformationController.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

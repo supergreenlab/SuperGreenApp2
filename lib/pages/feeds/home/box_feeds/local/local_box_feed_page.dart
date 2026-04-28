@@ -57,7 +57,7 @@ class LocalBoxFeedPage extends StatefulWidget {
 class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final _openCloseDial = ValueNotifier<int>(0);
+  final _openCloseDial = ValueNotifier<bool>(false);
   SpeedDialType _speedDialType = SpeedDialType.general;
 
   bool _speedDialOpen = false;
@@ -189,7 +189,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
       BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
       {String? tipID, List<String>? tipPaths}) {
     return () {
-      _openCloseDial.value = Random().nextInt(1 << 32);
+      _openCloseDial.value = !_openCloseDial.value;
       if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
             tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
@@ -253,7 +253,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return InkWell(
           onTap: () {
-            _openCloseDial.value = Random().nextInt(1 << 32);
+            _openCloseDial.value = !_openCloseDial.value;
           },
           child: Container(width: constraints.maxWidth, height: constraints.maxHeight, color: Colors.white60),
         );

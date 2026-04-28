@@ -21,7 +21,7 @@ import 'dart:io';
 
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:heic_to_jpg/heic_to_jpg.dart';
+import 'package:flutter_heic_to_jpg/flutter_heic_to_jpg.dart';
 import 'package:image/image.dart';
 import 'package:drift/drift.dart';
 import 'package:path/path.dart';
@@ -128,10 +128,10 @@ class CaptureBloc extends LegacyBloc<CaptureBlocEvent, CaptureBlocState> {
             await optimizePicture(thumbnailPath, thumbnailPath);
           } else if (ext == 'heic') {
             yield loadingEvent('Converting heic to jpg ${i + 1}/${files.length}', (i + 0.5) / (files.length));
-            String? jpegPath = await HeicToJpg.convert(file.path);
+            String? jpegPath = await FlutterHeicToJpg.convert(file.path);
             yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
             filePath = '$fileName.jpg';
-            await File(jpegPath).copy(FeedMedias.makeAbsoluteFilePath(filePath));
+            await File(jpegPath!).copy(FeedMedias.makeAbsoluteFilePath(filePath));
             thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
             await optimizePicture(filePath, thumbnailPath);
           } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg') {

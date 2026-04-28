@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:intl/intl.dart';
-import 'package:share_extend/share_extend.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/l10n.dart';
@@ -106,7 +106,7 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           color: Colors.white,
         ),
         onPressed: () async {
-          await ShareExtend.share("https://supergreenlab.com/public/plant?id=${state.plantID}", 'text');
+          await Share.share("https://supergreenlab.com/public/plant?id=${state.plantID}");
         },
       ),
     ];

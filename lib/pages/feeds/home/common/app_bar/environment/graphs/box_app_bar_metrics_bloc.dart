@@ -18,13 +18,14 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 abstract class PlantFeedAppBarBlocEvent extends Equatable {}
 
@@ -49,7 +50,7 @@ class PlantFeedAppBarBlocStateInit extends PlantFeedAppBarBlocState {
 
 class PlantFeedAppBarBlocStateLoaded extends PlantFeedAppBarBlocState {
   final List<dynamic> version;
-  final List<charts.Series<Metric, DateTime>> graphData;
+  final List<ChartSeries> graphData;
   final Plant? plant;
   final Box box;
 
@@ -81,14 +82,14 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
           final db = RelDB.get();
           box = await db.plantsDAO.getBox(plant!.box);
         }
-        List<charts.Series<Metric, DateTime>> graphData = await updateChart();
+        List<ChartSeries> graphData = await updateChart();
         yield PlantFeedAppBarBlocStateLoaded(version, graphData, plant, box!);
       } catch (e) {
         print(e);
       }
     } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {
-        List<charts.Series<Metric, DateTime>> graphData = await updateChart();
+        List<ChartSeries> graphData = await updateChart();
         yield PlantFeedAppBarBlocStateLoaded(version, graphData, plant, box!);
       } catch (e) {
         print(e);
@@ -96,7 +97,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
     }
   }
 
-  Future<List<charts.Series<Metric, DateTime>>> updateChart() async {
+  Future<List<ChartSeries>> updateChart() async {
     if (box?.device == null) {
       return _createDummyData();
     } else {
@@ -111,19 +112,19 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       String identifier = device.identifier;
       int deviceBox = box!.deviceBox!;
       version = await TimeSeriesAPI.fetchMetric(box!, identifier, 'OTA_TIMESTAMP', 0, 10000000000);
-      charts.Series<Metric, DateTime> temp = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Temperature', 'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault, 0, 50,
+      ChartSeries temp = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'Temperature', 'BOX_${deviceBox}_TEMP', Colors.green, 0, 50,
           transform: _tempUnit);
-      charts.Series<Metric, DateTime> humi = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Humidity', 'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault, 0, 100);
-      charts.Series<Metric, DateTime> vpd = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'VPD', 'BOX_${deviceBox}_VPD', charts.MaterialPalette.deepOrange.shadeDefault, 0, 254,
+      ChartSeries humi = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'Humidity', 'BOX_${deviceBox}_HUMI', Colors.blue, 0, 100);
+      ChartSeries vpd = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'VPD', 'BOX_${deviceBox}_VPD', Colors.deepOrange, 0, 254,
           transform: _vpd);
 
-      charts.Series<Metric, DateTime> ventilation = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Ventilation', 'BOX_${deviceBox}_BLOWER_DUTY', charts.MaterialPalette.cyan.shadeDefault, 0, 100);
+      ChartSeries ventilation = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'Ventilation', 'BOX_${deviceBox}_BLOWER_DUTY', Colors.cyan, 0, 100);
 
-      late charts.Series<Metric, DateTime> light;
+      late ChartSeries light;
       try {
         List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT', 0, 100);
         List<List<dynamic>> dims = [];
@@ -138,22 +139,22 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
         }
         List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
         light = TimeSeriesAPI.toTimeSeries(
-            TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', charts.MaterialPalette.yellow.shadeDefault);
+            TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', Colors.yellow.shade700);
       } catch (e) {
-        light = light = TimeSeriesAPI.toTimeSeries([], 'Light', charts.MaterialPalette.yellow.shadeDefault);
+        light = TimeSeriesAPI.toTimeSeries([], 'Light', Colors.yellow.shade700);
       }
 
-      charts.Series<Metric, DateTime> co2 = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault, 0, 100000,
+      ChartSeries co2 = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', Colors.grey, 0, 100000,
           transform: _co2);
-      charts.Series<Metric, DateTime> weight = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault, 0, 100000,
+      ChartSeries weight = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', Colors.purple, 0, 100000,
           transform: _weight);
       return [temp, humi, vpd, light, ventilation, co2, weight];
     }
   }
 
-  List<charts.Series<Metric, DateTime>> _createDummyData() {
+  List<ChartSeries> _createDummyData() {
     final tempData = List.generate(
         50,
         (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
@@ -184,62 +185,13 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
             ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
 
     return [
-      charts.Series<Metric, DateTime>(
-        id: 'Temperature',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: tempData,
-      ),
-      charts.Series<Metric, DateTime>(
-        id: 'Humidity',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: humiData,
-      ),
-      charts.Series<Metric, DateTime>(
-        id: 'VPD',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: vpdData,
-      ),
-      charts.Series<Metric, DateTime>(
-        id: 'Light',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: lightData,
-      ),
-      charts.Series<Metric, DateTime>(
-        id: 'Ventilation',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.cyan.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: ventilationData,
-      ),
-      charts.Series<Metric, DateTime>(
-        id: 'CO2',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.cyan.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: co2Data,
-      ),
-      charts.Series<Metric, DateTime>(
-        id: 'Weight',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.cyan.shadeDefault,
-        domainFn: (Metric metric, _) => metric.time,
-        measureFn: (Metric metric, _) => metric.metric,
-        data: weightData,
-      ),
+      ChartSeries(id: 'Temperature', color: Colors.green, data: tempData),
+      ChartSeries(id: 'Humidity', color: Colors.blue, data: humiData),
+      ChartSeries(id: 'VPD', color: Colors.deepOrange, data: vpdData),
+      ChartSeries(id: 'Light', color: Colors.yellow.shade700, data: lightData),
+      ChartSeries(id: 'Ventilation', color: Colors.cyan, data: ventilationData),
+      ChartSeries(id: 'CO2', color: Colors.grey, data: co2Data),
+      ChartSeries(id: 'Weight', color: Colors.purple, data: weightData),
     ];
   }
 
