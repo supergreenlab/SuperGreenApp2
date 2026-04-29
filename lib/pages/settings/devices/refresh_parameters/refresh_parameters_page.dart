@@ -95,11 +95,9 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
             } else if (state is RefreshParametersBlocStateRefreshed) {
               body = _renderRefreshDone(state);
             }
-            return WillPopScope(
-              onWillPop: () async {
-                return state is RefreshParametersBlocStateRefreshed ||
-                    state is RefreshParametersBlocStateError;
-              },
+            return PopScope(
+              canPop: state is RefreshParametersBlocStateRefreshed ||
+                  state is RefreshParametersBlocStateError,
               child: Scaffold(
                   appBar: SGLAppBar(
                     '🤖',

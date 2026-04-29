@@ -313,7 +313,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
             }
           },
           touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (touchedSpot) => Colors.blueGrey.withOpacity(0.8),
+            getTooltipColor: (touchedSpot) => Colors.blueGrey.withValues(alpha: 0.8),
           ),
         ),
       ),

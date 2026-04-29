@@ -72,7 +72,7 @@ class NotificationRequestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MediaQuery(
       data:
-          MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+          MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1), boldText: false),
       child: Container(
         height: 345,
         child: Padding(
@@ -130,7 +130,7 @@ class NotificationRequestPage extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(right: 16.0),
                     child: GreenButton(
-                      color: Colors.red.value,
+                      color: Colors.red.toARGB32(),
                       title: NotificationRequestPage
                           .notificationRequestButtonCancel,
                       onPressed: () async {

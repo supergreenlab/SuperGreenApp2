@@ -59,38 +59,40 @@ class FeedFormLayout extends StatelessWidget {
         onPressed: this.valid ? onOK : null,
       ));
     }
-    return WillPopScope(
-      onWillPop: () async {
-        if (this.changed) {
-          return (await showDialog<bool>(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Unsaved changes'),
-                      content: Text('Changes will not be saved. Continue?'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context, false);
-                          },
-                          child: Text('NO'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context, true);
-                            if (onCancel != null) {
-                              onCancel!();
-                            }
-                          },
-                          child: Text('YES'),
-                        ),
-                      ],
-                    );
-                  })) ??
-              false;
+    return PopScope(
+      canPop: !this.changed,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final shouldPop = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Unsaved changes'),
+              content: Text('Changes will not be saved. Continue?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('NO'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                    if (onCancel != null) {
+                      onCancel!();
+                    }
+                  },
+                  child: Text('YES'),
+                ),
+              ],
+            );
+          },
+        );
+        if (shouldPop == true && context.mounted) {
+          Navigator.pop(context);
         }
-        return true;
       },
       child: Scaffold(
           appBar: SGLAppBar(

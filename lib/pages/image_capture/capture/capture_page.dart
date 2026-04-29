@@ -91,13 +91,13 @@ class _CapturePageState extends State<CapturePage> {
           _videoMode = !_videoMode;
         });
       },
-      child: WillPopScope(
-        onWillPop: () async {
+      child: PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) async {
           if (_filePath != null) {
             await _deleteFileIfExists(
                 FeedMedias.makeAbsoluteFilePath(_filePath!));
           }
-          return true;
         },
         child: SafeArea(
           child: Stack(
@@ -177,13 +177,14 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Widget _renderCameraRecording(BuildContext context, CaptureBlocState state) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: _popDone && !(_cameraController?.value.isRecordingVideo ?? false),
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
         if (_cameraController!.value.isRecordingVideo) {
           await _cameraController!.stopVideoRecording();
           setState(() {});
         }
-        return _popDone;
       },
       child: Stack(
         children: [

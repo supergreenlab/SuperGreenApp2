@@ -170,32 +170,37 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
             } else if (state is SettingsDeviceBlocStateLoaded) {
               body = _renderForm(context, state);
             }
-            return WillPopScope(
-              onWillPop: () async {
-                return (await showDialog<bool>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(CommonL10N.unsavedChangeDialogTitle),
-                            content: Text(CommonL10N.unsavedChangeDialogBody),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: Text(CommonL10N.no),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: Text(CommonL10N.yes),
-                              ),
-                            ],
-                          );
-                        })) ??
-                    false;
+            return PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) async {
+                if (didPop) return;
+                final shouldPop = await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(CommonL10N.unsavedChangeDialogTitle),
+                      content: Text(CommonL10N.unsavedChangeDialogBody),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: Text(CommonL10N.no),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: Text(CommonL10N.yes),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (shouldPop == true && context.mounted) {
+                  Navigator.pop(context);
+                }
               },
               child: Scaffold(
                   appBar: SGLAppBar(

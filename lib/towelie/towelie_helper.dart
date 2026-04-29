@@ -35,11 +35,11 @@ class TowelieHelper extends StatefulWidget {
 
   static Widget wrapWidget(
       RouteSettings settings, BuildContext context, Widget widget) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
         BlocProvider.of<TowelieBloc>(context)
             .add(TowelieBlocEventRoutePop(settings));
-        return true;
       },
       child: Stack(children: [
         widget,

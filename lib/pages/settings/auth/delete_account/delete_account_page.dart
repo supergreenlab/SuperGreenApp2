@@ -232,7 +232,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
   }
 
   void _handleInput(BuildContext context) {
-    if (BackendAPI.forceProduction || kReleaseMode) {
+    if (Config.isProduction || kReleaseMode) {
       showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,

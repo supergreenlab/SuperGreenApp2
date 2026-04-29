@@ -103,9 +103,9 @@ class PickerWidgetState extends State<PickerWidget> {
                     width: 50,
                     child: TextButton(
                       style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith(
+                        padding: WidgetStateProperty.resolveWith(
                             (states) => EdgeInsets.all(0)),
-                        textStyle: MaterialStateProperty.resolveWith(
+                        textStyle: WidgetStateProperty.resolveWith(
                             (states) => TextStyle(
                                   color: Colors.blue,
                                 )),
@@ -121,9 +121,9 @@ class PickerWidgetState extends State<PickerWidget> {
                         constraints: BoxConstraints(maxWidth: 60),
                         child: TextButton(
                           style: ButtonStyle(
-                            padding: MaterialStateProperty.resolveWith(
+                            padding: WidgetStateProperty.resolveWith(
                                 (states) => EdgeInsets.all(0)),
-                            textStyle: MaterialStateProperty.resolveWith(
+                            textStyle: WidgetStateProperty.resolveWith(
                                 (states) => TextStyle(
                                       color: Colors.blue,
                                     )),

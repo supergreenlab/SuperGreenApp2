@@ -139,33 +139,37 @@ class _CreateChecklistSeedPageState extends State<CreateChecklistSeedPage> {
                 });
               };
             }
-            return WillPopScope(
-              onWillPop: () async {
-                return (await showDialog<bool>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Unsaved changes'),
-                            content:
-                                Text('Changes will not be saved. Continue?'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: Text('NO'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: Text('YES'),
-                              ),
-                            ],
-                          );
-                        })) ??
-                    false;
+            return PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) async {
+                if (didPop) return;
+                final shouldPop = await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Unsaved changes'),
+                      content: Text('Changes will not be saved. Continue?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: Text('NO'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: Text('YES'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (shouldPop == true && context.mounted) {
+                  Navigator.pop(context);
+                }
               },
               child: Scaffold(
                 backgroundColor: Color(0xffededed),

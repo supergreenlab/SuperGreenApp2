@@ -209,7 +209,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                         children: <Widget>[
                           TextButton(
                             style: ButtonStyle(
-                              textStyle: MaterialStateProperty.resolveWith(
+                              textStyle: WidgetStateProperty.resolveWith(
                                   (state) => TextStyle(
                                         color: Colors.red,
                                       )),
@@ -228,7 +228,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                           ),
                           TextButton(
                             style: ButtonStyle(
-                              textStyle: MaterialStateProperty.resolveWith(
+                              textStyle: WidgetStateProperty.resolveWith(
                                   (state) => TextStyle(
                                         color: Colors.blue,
                                       )),

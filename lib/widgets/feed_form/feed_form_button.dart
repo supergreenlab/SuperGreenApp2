@@ -44,7 +44,7 @@ class FeedFormButton extends StatelessWidget {
       child: TextButton(
         style: ButtonStyle(
           overlayColor:
-              MaterialStateColor.resolveWith((states) => Colors.white54),
+              WidgetStateColor.resolveWith((states) => Colors.white54),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         onPressed: onPressed,

@@ -147,10 +147,10 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
     AppBarMetricsParamsController metrics = state.metrics;
     return _renderMetrics(
         metrics.temp.ivalue,
-        metrics.humidity?.ivalue,
+        metrics.humidity.ivalue,
         metrics.vpd.ivalue.toDouble(),
         metrics.co2.ivalue,
-        !(metrics.weight.available == true)
+        !metrics.weight.available
             ? null
             : metrics.weight.ivalue.toDouble(),
         metrics.version.ivalue);

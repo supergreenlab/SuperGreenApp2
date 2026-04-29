@@ -114,11 +114,11 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(
+  Widget _renderButtonBar(
       BuildContext context, List<FeedTowelieParamsButton> buttons) {
-    return ButtonBar(
+    return OverflowBar(
       alignment: MainAxisAlignment.start,
-      buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+      spacing: 8.0,
       children: buttons.map((b) => _renderButton(context, b)).toList(),
     );
   }
@@ -128,7 +128,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
       style: ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         padding:
-            MaterialStateProperty.resolveWith((states) => EdgeInsets.all(0)),
+            WidgetStateProperty.resolveWith((states) => EdgeInsets.all(0)),
       ),
       child: Text(button.title.toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),

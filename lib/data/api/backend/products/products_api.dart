@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 
@@ -38,7 +37,7 @@ class ProductsAPI {
       {ProductCategoryID? categoryID}) async {
     String url = '/products/search?terms=${Uri.encodeQueryComponent(terms)}';
     if (categoryID != null) {
-      url += '&category=${describeEnum(categoryID)}';
+      url += '&category=${categoryID.name}';
     }
     Map<String, dynamic> productResults = await BackendAPI().get(url);
     List<dynamic> products = productResults['products'];

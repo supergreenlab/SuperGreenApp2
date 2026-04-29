@@ -46,4 +46,6 @@ android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 
 .env
+.env.dev
+.env.prod
 lib/data/config.g.dart

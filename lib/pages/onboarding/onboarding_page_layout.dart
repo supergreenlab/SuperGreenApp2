@@ -34,9 +34,9 @@ abstract class OnboardingPageLayout extends StatelessWidget {
           Center(
             child: ElevatedButton(
               style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith(
+                  shape: WidgetStateProperty.resolveWith(
                 (state) => RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
               )),
               onPressed: () => next(context),

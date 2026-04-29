@@ -98,8 +98,8 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
             } else {
               body = _renderLoading(context, state);
             }
-            return WillPopScope(
-              onWillPop: () async => canGoBack,
+            return PopScope(
+              canPop: canGoBack,
               child: Scaffold(
                 appBar: SGLAppBar(
                   'Add controller',

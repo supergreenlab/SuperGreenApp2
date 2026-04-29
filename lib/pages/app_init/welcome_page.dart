@@ -74,7 +74,7 @@ class _WelcomePageState extends State<WelcomePage> {
       },
       child: MediaQuery(
         data: MediaQuery.of(context)
-            .copyWith(textScaleFactor: 1, boldText: false),
+            .copyWith(textScaler: TextScaler.linear(1), boldText: false),
         child: Scaffold(
             body: Container(
           padding: EdgeInsets.all(4),

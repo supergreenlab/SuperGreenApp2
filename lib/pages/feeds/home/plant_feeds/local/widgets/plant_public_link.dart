@@ -105,7 +105,7 @@ class _PlantPublicLinkState extends State<PlantPublicLink> {
                   padding: const EdgeInsets.all(8.0),
                   child: SvgPicture.asset(
                     'assets/home/icon_share_link.svg',
-                    color: Color(0xff454545),
+                    colorFilter: ColorFilter.mode(Color(0xff454545), BlendMode.srcIn),
                     width: 20,
                     height: 20,
                   ),

@@ -33,7 +33,7 @@ class _TipVideoState extends State<TipVideo> {
 
   @override
   void initState() {
-    _videoPlayerController = VideoPlayerController.network(widget.path);
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.path));
     initVideo();
     super.initState();
   }

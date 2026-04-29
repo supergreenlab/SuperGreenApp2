@@ -18,7 +18,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
@@ -30,13 +29,13 @@ class FeedLifeEventParams extends FeedEntryParams {
   factory FeedLifeEventParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedLifeEventParams(
-        PlantPhases.values.firstWhere((p) => describeEnum(p) == map['phase']));
+        PlantPhases.values.firstWhere((p) => p.name == map['phase']));
   }
 
   @override
   String toJSON() {
     return JsonEncoder().convert({
-      'phase': describeEnum(phase),
+      'phase': phase.name,
     });
   }
 

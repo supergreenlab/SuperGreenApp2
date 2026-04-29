@@ -109,7 +109,7 @@ class RelDB extends _$RelDB {
       await m.addColumn(plants, plants.box);
       await m.addColumn(plants, plants.single);
       await m.createTable(boxes);
-      await m.issueCustomQuery(
+      await customStatement(
           "insert into boxes (name, device, device_box, settings) select name, device, device_box, id as settings from plants");
     } else if (fromVersion == 2) {
       await m.addColumn(feeds, feeds.isNewsFeed);
@@ -184,7 +184,7 @@ class RelDB extends _$RelDB {
       await m.addColumn(boxes, boxes.screenDeviceToken);
       await m.addColumn(boxes, boxes.screenDevice);
 
-      await m.issueCustomQuery("update devices set needs_refresh=true");
+      await customStatement("update devices set needs_refresh=true");
     }
   }
 

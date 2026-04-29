@@ -131,8 +131,8 @@ class DevicePairingPageState extends State<DevicePairingPage> {
               body =
                   _renderForm(context, state as DevicePairingBlocStateLoaded);
             }
-            return WillPopScope(
-              onWillPop: () async => false,
+            return PopScope(
+              canPop: false,
               child: Scaffold(
                   appBar: SGLAppBar(
                     DevicePairingPage.devicePairingPageTitle,

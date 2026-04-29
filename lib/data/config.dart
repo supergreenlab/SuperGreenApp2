@@ -27,4 +27,21 @@ abstract class Config {
 
   @EnviedField(varName: 'SKIP_CAPTCHA_TOKEN')
   static const String skipCaptchaToken = _Config.skipCaptchaToken;
+
+  @EnviedField(varName: 'API_SERVER_HOST')
+  static const String apiServerHost = _Config.apiServerHost;
+
+  @EnviedField(varName: 'WEBSOCKET_SERVER_HOST')
+  static const String websocketServerHost = _Config.websocketServerHost;
+
+  @EnviedField(varName: 'STORAGE_SERVER_HOST')
+  static const String storageServerHost = _Config.storageServerHost;
+
+  @EnviedField(varName: 'STORAGE_SERVER_HOST_HEADER')
+  static const String storageServerHostHeader = _Config.storageServerHostHeader;
+
+  @EnviedField(varName: 'IS_PRODUCTION', defaultValue: 'false')
+  static const String _isProductionStr = _Config._isProductionStr;
+  
+  static bool get isProduction => _isProductionStr.toLowerCase() == 'true';
 }

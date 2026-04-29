@@ -24,7 +24,7 @@ class GalleryWidgetItemState extends State<GalleryWidgetItem> {
         child: Container(
           width: 24,
           height: 24,
-          color: Colors.white.withOpacity(0.9),
+          color: Colors.white.withValues(alpha: 0.9),
         ),
       ),
       Icon(Icons.check_circle, color: Colors.blue)

@@ -282,12 +282,12 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                           child: ElevatedButton(
                             style: ButtonStyle(
                               foregroundColor:
-                                  MaterialStateProperty.resolveWith(
+                                  WidgetStateProperty.resolveWith(
                                       (state) => Colors.grey),
-                              elevation: MaterialStateProperty.resolveWith(
+                              elevation: WidgetStateProperty.resolveWith(
                                   (state) => 0),
                               backgroundColor:
-                                  MaterialStateProperty.resolveWith(
+                                  WidgetStateProperty.resolveWith(
                                       (state) => Colors.transparent),
                             ),
                             child: Icon(Icons.settings),

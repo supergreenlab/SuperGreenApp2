@@ -260,7 +260,6 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       },
       child: wrapListeners(
         MaterialApp(
-          useInheritedMediaQuery: true,
           //navigatorObservers: [_analyticsObserver,],
           localizationsDelegates: [
             const SGLLocalizationsDelegate(),
@@ -284,7 +283,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                 lastRouteContext = context;
                 return MediaQuery(
                   data: MediaQuery.of(context)
-                      .copyWith(textScaleFactor: 1, boldText: false),
+                      .copyWith(textScaler: TextScaler.linear(1), boldText: false),
                   child: wrapPinLock(
                     wrapSyncIndicator(TowelieHelper.wrapWidget(
                       settings,
@@ -891,12 +890,12 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   }
 
   Widget addOnPopCallBack(Widget widget, Function onPop) {
-    return WillPopScope(
-      child: widget,
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
         onPop();
-        return true;
       },
+      child: widget,
     );
   }
 

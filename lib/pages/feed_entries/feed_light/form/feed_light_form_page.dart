@@ -261,20 +261,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                 BlocProvider.of<FeedLightFormBloc>(context)
                     .add(FeedLightFormBlocEventCreate(values));
               },
-              body: WillPopScope(
-                onWillPop: () async {
-                  if (_reachable == false && changed) {
-                    return false;
-                  }
-                  if (state is FeedLightFormBlocStateNoDevice) {
-                    return true;
-                  }
-                  if (changed) {
+              body: PopScope(
+                canPop: (!changed || state is FeedLightFormBlocStateNoDevice) && !(_reachable == false && changed),
+                onPopInvokedWithResult: (didPop, result) {
+                  if (didPop) return;
+                  if (changed && _reachable != false && state is! FeedLightFormBlocStateNoDevice) {
                     BlocProvider.of<FeedLightFormBloc>(context)
                         .add(FeedLightFormBlocEventCancel());
-                    return false;
                   }
-                  return true;
                 },
                 child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 200), child: body),

@@ -208,7 +208,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey.withValues(alpha: 0.5),
                   spreadRadius: 2,
                   blurRadius: 3,
                   offset: Offset(0, 2), // changes position of shadow
@@ -748,7 +748,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey.withValues(alpha: 0.5),
                   spreadRadius: 2,
                   blurRadius: 3,
                   offset: Offset(0, 2), // changes position of shadow

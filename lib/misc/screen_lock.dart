@@ -8,16 +8,16 @@ ScreenLockConfig get screenLockConfig {
       textStyle: TextStyle(fontSize: 16),
       titleTextStyle: TextStyle(fontSize: 18),
       buttonStyle: ButtonStyle(
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(40))),
-        foregroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.pressed)) {
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
             return SglColor.inactive;
           }
           return Colors.white;
         }),
-        shadowColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.pressed)) {
+        shadowColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.pressed)) {
             return SglColor.inactive;
           }
           return Colors.white;
@@ -28,7 +28,7 @@ ScreenLockConfig get screenLockConfig {
 KeyPadConfig get screenLockKeyPadConfig {
   return KeyPadConfig(
     buttonConfig: KeyPadButtonConfig(
-      backgroundColor: Colors.white.withOpacity(0.2),
+      backgroundColor: Colors.white.withValues(alpha: 0.2),
       buttonStyle: OutlinedButton.styleFrom(
         side: BorderSide(width: 0, color: Colors.transparent),
       ),

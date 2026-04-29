@@ -133,25 +133,22 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                             MainNavigateToMotorPortEvent(state.device!, null));
                       }
                     : null,
-                body: WillPopScope(
-                  onWillPop: () async {
-                    if (_reachable == false && changed) {
-                      return false;
-                    }
-                    if (state is FeedVentilationFormBlocStateLoaded &&
-                        state.device == null) {
-                      return true;
-                    }
-                    if (changed) {
-                      BlocProvider.of<FeedVentilationFormBloc>(context)
-                          .add(FeedVentilationFormBlocEventCancelEvent());
-                      return false;
-                    }
-                    return true;
-                  },
-                  child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 200), child: body),
-                ));
+                body: Builder(builder: (context) {
+                  final loadedState = state is FeedVentilationFormBlocStateLoaded ? state : null;
+                  final noDevice = loadedState?.device == null;
+                  return PopScope(
+                    canPop: (!changed || noDevice) && !(_reachable == false && changed),
+                    onPopInvokedWithResult: (didPop, result) {
+                      if (didPop) return;
+                      if (changed && _reachable != false && !noDevice) {
+                        BlocProvider.of<FeedVentilationFormBloc>(context)
+                            .add(FeedVentilationFormBlocEventCancelEvent());
+                      }
+                    },
+                    child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 200), child: body),
+                  );
+                }));
           }),
     );
   }

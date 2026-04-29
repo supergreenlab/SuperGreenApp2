@@ -145,8 +145,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
             } else {
               body = _renderForm();
             }
-            return WillPopScope(
-              onWillPop: () async => false,
+            return PopScope(
+              canPop: false,
               child: Scaffold(
                   appBar: SGLAppBar(
                     DeviceNamePage.deviceNamePageTitle,

@@ -17,7 +17,6 @@
  */
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -345,13 +344,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !_speedDialOpen,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
         if (_speedDialOpen) {
           _openCloseDial.value = !_openCloseDial.value;
-          return false;
         }
-        return true;
       },
       child: BlocListener<PlantFeedBloc, PlantFeedBlocState>(
         listener: (BuildContext context, PlantFeedBlocState state) {

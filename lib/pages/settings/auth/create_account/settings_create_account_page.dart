@@ -181,7 +181,7 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
   }
 
   void _handleInput(BuildContext context) {
-    if (BackendAPI.forceProduction || kReleaseMode) {
+    if (Config.isProduction || kReleaseMode) {
       showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,

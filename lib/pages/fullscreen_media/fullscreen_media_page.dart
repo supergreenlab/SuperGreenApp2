@@ -59,7 +59,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             if (state.isVideo && _videoPlayerController == null) {
               if (state.filePath.startsWith('http')) {
                 _videoPlayerController =
-                    VideoPlayerController.network(state.filePath);
+                    VideoPlayerController.networkUrl(Uri.parse(state.filePath));
               } else {
                 _videoPlayerController =
                     VideoPlayerController.file(File(state.filePath));

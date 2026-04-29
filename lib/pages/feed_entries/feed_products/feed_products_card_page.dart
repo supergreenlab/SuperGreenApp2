@@ -236,11 +236,10 @@ class FeedProductsCardPage extends StatelessWidget {
     );
   }
 
-  // TODO maybe DRY with FeedTowelieInfoCardPage ?
-  ButtonBar _renderButtonBar(BuildContext context, List buttons) {
-    return ButtonBar(
+  Widget _renderButtonBar(BuildContext context, List buttons) {
+    return OverflowBar(
       alignment: MainAxisAlignment.start,
-      buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+      spacing: 8.0,
       children: buttons.map((b) => _renderButton(context, b)).toList(),
     );
   }

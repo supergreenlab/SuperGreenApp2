@@ -25,7 +25,7 @@ class RedButton extends ElevatedButton {
       : super(
           style: ButtonStyle(
             backgroundColor:
-                MaterialStateProperty.resolveWith((state) => Color(color)),
+                WidgetStateProperty.resolveWith((state) => Color(color)),
           ),
           child: Text(title,
               style: TextStyle(color: Colors.white, fontSize: fontSize)),

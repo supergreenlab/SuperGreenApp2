@@ -17,10 +17,7 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/checklist/checklist_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
@@ -28,6 +25,7 @@ import 'package:super_green_app/data/api/backend/products/products_api.dart';
 import 'package:super_green_app/data/api/backend/services/services_api.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
+import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 
@@ -42,10 +40,10 @@ class BackendAPI {
   ServicesAPI servicesAPI = ServicesAPI();
   ChecklistAPI checklistAPI = ChecklistAPI();
 
-  late String serverHost;
-  late String websocketServerHost;
-  late String storageServerHost;
-  late String storageServerHostHeader;
+  final String serverHost = Config.apiServerHost;
+  final String websocketServerHost = Config.websocketServerHost;
+  final String storageServerHost = Config.storageServerHost;
+  final String storageServerHostHeader = Config.storageServerHostHeader;
 
   final Client apiClient = Client();
   final Client storageClient = Client();
@@ -56,43 +54,7 @@ class BackendAPI {
 
   factory BackendAPI() => _instance;
 
-  static bool forceProduction = false;
-
-  BackendAPI._newInstance() {
-    if (BackendAPI.forceProduction || kReleaseMode || Platform.isIOS) {
-      serverHost = 'https://api2.supergreenlab.com';
-      websocketServerHost = 'wss://api2.supergreenlab.com';
-      storageServerHost = 'https://storage.supergreenlab.com';
-      storageServerHostHeader = 'storage.supergreenlab.com';
-      // serverHost = 'http://192.168.1.87:8090';
-      // storageServerHost = 'http://192.168.1.87:9000';
-      // storageServerHostHeader = 'minio:9000';
-    } else {
-      initAndroidDevUrls();
-    }
-  }
-
-  void initAndroidDevUrls() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (true || (await deviceInfo.androidInfo).isPhysicalDevice) {
-      bool local = true;
-      serverHost = local
-          ? 'http://192.168.1.53:8090'
-          : 'https://devapi2.supergreenlab.com';
-      websocketServerHost =
-          local ? 'ws://192.168.1.53:8090' : 'wss://devapi2.supergreenlab.com';
-      storageServerHost = local
-          ? 'http://192.168.1.53:9000'
-          : 'https://devstorage.supergreenlab.com';
-      storageServerHostHeader =
-          local ? 'minio:9000' : 'devstorage.supergreenlab.com';
-    } else {
-      serverHost = 'http://10.0.2.2:8090';
-      websocketServerHost = 'ws://10.0.2.2:8090';
-      storageServerHost = 'http://10.0.2.2:9000';
-      storageServerHostHeader = 'minio:9000';
-    }
-  }
+  BackendAPI._newInstance();
 
   Future<String?> postPut(String path, Map<String, dynamic> obj,
       {bool forcePut = false}) async {

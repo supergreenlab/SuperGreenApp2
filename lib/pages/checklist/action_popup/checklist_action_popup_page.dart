@@ -83,7 +83,7 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
 
           return MediaQuery(
             data: MediaQuery.of(context)
-                .copyWith(textScaleFactor: 1, boldText: false),
+                .copyWith(textScaler: TextScaler.linear(1), boldText: false),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.transparent,

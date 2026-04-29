@@ -94,33 +94,37 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             } else if (state is SettingsPlantBlocStateError) {
               body = _renderError(context, state);
             }
-            return WillPopScope(
-              onWillPop: () async {
-                return (await showDialog<bool>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Unsaved changes'),
-                            content:
-                                Text('Changes will not be saved. Continue?'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: Text('NO'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: Text('YES'),
-                              ),
-                            ],
-                          );
-                        })) ??
-                    false;
+            return PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) async {
+                if (didPop) return;
+                final shouldPop = await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Unsaved changes'),
+                      content: Text('Changes will not be saved. Continue?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: Text('NO'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: Text('YES'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                if (shouldPop == true && context.mounted) {
+                  Navigator.pop(context);
+                }
               },
               child: Scaffold(
                   appBar: SGLAppBar(
@@ -198,7 +202,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               ListTile(
                 leading: SvgPicture.asset(
                   'assets/home/icon_qrcode.svg',
-                  color: Color(0xff454545),
+                  colorFilter: ColorFilter.mode(Color(0xff454545), BlendMode.srcIn),
                   width: 35,
                   height: 35,
                 ),

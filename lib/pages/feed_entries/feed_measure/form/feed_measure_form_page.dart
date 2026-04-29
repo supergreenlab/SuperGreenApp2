@@ -121,15 +121,15 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !_showSelector,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
         if (_showSelector) {
           setState(() {
             _showSelector = false;
           });
-          return false;
         }
-        return true;
       },
       child: BlocListener(
           bloc: BlocProvider.of<FeedMeasureFormBloc>(context),

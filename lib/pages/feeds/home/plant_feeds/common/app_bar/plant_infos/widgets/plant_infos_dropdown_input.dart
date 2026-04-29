@@ -68,7 +68,7 @@ class PlantInfosDropdownInput extends StatelessWidget {
                       child: Text(i[1], style: TextStyle(color: Colors.white)),
                     ))
                 .toList(),
-            value: value,
+            initialValue: value,
             onChanged: onChanged),
       ),
     );
