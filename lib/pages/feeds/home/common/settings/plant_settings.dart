@@ -41,23 +41,36 @@ class PlantSettings extends Equatable {
 
   final List<Product>? products;
 
-  PlantSettings(this.plantType, this.isSingle, this.strain, this.seedbank, this.cloningDate, this.germinationDate, this.veggingStart,
-      this.bloomingStart, this.dryingStart, this.curingStart, this.medium, this.products);
+  PlantSettings(
+      this.plantType,
+      this.isSingle,
+      this.strain,
+      this.seedbank,
+      this.cloningDate,
+      this.germinationDate,
+      this.veggingStart,
+      this.bloomingStart,
+      this.dryingStart,
+      this.curingStart,
+      this.medium,
+      this.products);
 
   Tuple3<PlantPhases, DateTime, Duration>? phaseAt(DateTime date) {
     if (curingStart != null && curingStart!.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.CURING, curingStart!, date.difference(curingStart!));
-    } else if (dryingStart != null && dryingStart!.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.DRYING, dryingStart!, date.difference(dryingStart!));
-    } else if (bloomingStart != null && bloomingStart!.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.BLOOMING, bloomingStart!, date.difference(bloomingStart!));
+          PlantPhases.CURING, curingStart!, date.difference(curingStart!));
+    } else if (dryingStart != null && dryingStart!.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.DRYING, dryingStart!, date.difference(dryingStart!));
+    } else if (bloomingStart != null && bloomingStart!.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.BLOOMING,
+          bloomingStart!, date.difference(bloomingStart!));
     } else if (veggingStart != null && veggingStart!.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
           PlantPhases.VEGGING, veggingStart!, date.difference(veggingStart!));
     } else if (germinationDate != null && germinationDate!.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.GERMINATING, germinationDate!, date.difference(germinationDate!));
+      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.GERMINATING,
+          germinationDate!, date.difference(germinationDate!));
     } else if (cloningDate != null && cloningDate!.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
           PlantPhases.CLONING, cloningDate!, date.difference(cloningDate!));
@@ -123,12 +136,24 @@ class PlantSettings extends Equatable {
       map['isSingle'] ?? true,
       map['strain'],
       map['seedBank'],
-      map['cloningDate'] == null ? null : DateTime.parse(map['cloningDate'] as String).toLocal(),
-      map['germinationDate'] == null ? null : DateTime.parse(map['germinationDate'] as String).toLocal(),
-      map['veggingStart'] == null ? null : DateTime.parse(map['veggingStart'] as String).toLocal(),
-      map['bloomingStart'] == null ? null : DateTime.parse(map['bloomingStart'] as String).toLocal(),
-      map['dryingStart'] == null ? null : DateTime.parse(map['dryingStart'] as String).toLocal(),
-      map['curingStart'] == null ? null : DateTime.parse(map['curingStart'] as String).toLocal(),
+      map['cloningDate'] == null
+          ? null
+          : DateTime.parse(map['cloningDate'] as String).toLocal(),
+      map['germinationDate'] == null
+          ? null
+          : DateTime.parse(map['germinationDate'] as String).toLocal(),
+      map['veggingStart'] == null
+          ? null
+          : DateTime.parse(map['veggingStart'] as String).toLocal(),
+      map['bloomingStart'] == null
+          ? null
+          : DateTime.parse(map['bloomingStart'] as String).toLocal(),
+      map['dryingStart'] == null
+          ? null
+          : DateTime.parse(map['dryingStart'] as String).toLocal(),
+      map['curingStart'] == null
+          ? null
+          : DateTime.parse(map['curingStart'] as String).toLocal(),
       map['medium'],
       (products).map<Product>((p) => Product.fromMap(p)).toList(),
     );

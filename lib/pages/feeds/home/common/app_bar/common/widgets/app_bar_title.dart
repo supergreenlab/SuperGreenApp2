@@ -28,7 +28,13 @@ class AppBarTitle extends StatelessWidget {
 
   final bool showDate;
 
-  const AppBarTitle({Key? key, required this.title, this.plant, this.body, this.showDate = true}) : super(key: key);
+  const AppBarTitle(
+      {Key? key,
+      required this.title,
+      this.plant,
+      this.body,
+      this.showDate = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +46,17 @@ class AppBarTitle extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold, fontSize: 20)),
+              Text(title,
+                  style: TextStyle(
+                      color: Color(0xFF494949),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20)),
               plant != null
-                  ? Text(DateRenderer.renderSincePhase(PlantSettings.fromJSON(plant!.settings), DateTime.now()),
-                            style: TextStyle(fontSize: 16))
+                  ? Text(
+                      DateRenderer.renderSincePhase(
+                          PlantSettings.fromJSON(plant!.settings),
+                          DateTime.now()),
+                      style: TextStyle(fontSize: 16))
                   : Container(),
             ],
           ),

@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const TEMP='TEMP';
-const HUMI='HUMI';
-const CO2='CO2';
-const VPD='VPD';
-const WEIGHT='WEIGHT';
-const WATERING_LEFT='WATERING_LEFT';
+const TEMP = 'TEMP';
+const HUMI = 'HUMI';
+const CO2 = 'CO2';
+const VPD = 'VPD';
+const WEIGHT = 'WEIGHT';
+const WATERING_LEFT = 'WATERING_LEFT';
 
 const Map<String, String> LabMetricIcons = {
   TEMP: 'assets/app_bar/icon_temperature.svg',

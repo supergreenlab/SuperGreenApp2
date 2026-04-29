@@ -29,18 +29,23 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 class MotorSourceParamsController extends ParamsController {
   final int index;
 
-  MotorSourceParamsController({required this.index, Map<String, ParamController>? params}) : super(params: params ?? {});
+  MotorSourceParamsController(
+      {required this.index, Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get source => params['source']!;
 
-  static Future<MotorSourceParamsController> load(Device device, String key, int index) async {
+  static Future<MotorSourceParamsController> load(
+      Device device, String key, int index) async {
     MotorSourceParamsController c = MotorSourceParamsController(index: index);
     await c.loadParam(device, key, 'source');
     return c;
   }
 
   @override
-  ParamsController copyWith({Map<String, ParamController>? params}) => MotorSourceParamsController(index: this.index, params: params ?? this.params);
+  ParamsController copyWith({Map<String, ParamController>? params}) =>
+      MotorSourceParamsController(
+          index: this.index, params: params ?? this.params);
 }
 
 abstract class MotorPortBlocEvent extends Equatable {}
@@ -84,7 +89,7 @@ class MotorPortBlocStateLoaded extends MotorPortBlocState {
   final List<MotorSourceParamsController> sources;
 
   MotorPortBlocStateLoaded(this.values, this.helpers, this.sources) : super();
-  
+
   @override
   List<Object?> get props => [rand, values, helpers, sources];
 }
@@ -126,22 +131,27 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
     if (event is MotorPortBlocEventInit) {
       final ddb = RelDB.get().devicesDAO;
       deviceStream = ddb.watchDevice(args.device.id).listen(_onDeviceUpdated);
-    } if (event is MotorPortBlocEventUpdated) {
+    }
+    if (event is MotorPortBlocEventUpdated) {
       if (config == null) {
         yield MotorPortBlocStateMissingConfig(device);
         return;
       }
       sources = [];
       for (var k in config!.keys) {
-        if (k.array != null && k.array!.name == 'motor' && k.array!.param == 'source') {
+        if (k.array != null &&
+            k.array!.name == 'motor' &&
+            k.array!.param == 'source') {
           values = k.indir!.values;
           helpers = k.indir!.helpers;
-          sources.add(await MotorSourceParamsController.load(device, k.capsName, sources.length));
+          sources.add(await MotorSourceParamsController.load(
+              device, k.capsName, sources.length));
         }
       }
       yield MotorPortBlocStateLoaded(values, helpers, sources);
     } else if (event is MotorPortBlocEventSourceUpdated) {
-      sources[event.source.index] = await event.source.syncParams(device) as MotorSourceParamsController;
+      sources[event.source.index] =
+          await event.source.syncParams(device) as MotorSourceParamsController;
       yield MotorPortBlocStateLoaded(values, helpers, sources);
     }
   }

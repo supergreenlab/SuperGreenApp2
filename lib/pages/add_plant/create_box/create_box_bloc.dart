@@ -49,12 +49,18 @@ class CreateBoxBloc extends LegacyBloc<CreateBoxBlocEvent, CreateBoxBlocState> {
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
       final feedID = await fdb.addFeed(feed);
-      BoxesCompanion box = BoxesCompanion.insert(feed: Value(feedID), name: event.name, settings: Value(BoxSettings().toJSON()));
+      BoxesCompanion box = BoxesCompanion.insert(
+          feed: Value(feedID),
+          name: event.name,
+          settings: Value(BoxSettings().toJSON()));
       final boxID = await bdb.addBox(box);
       Box b = await bdb.getBox(boxID);
 
       if (event.device != null && event.deviceBox != null) {
-        await BoxHelper.setBoxDevice(b, device: event.device, deviceBox: event.deviceBox, screenDevice: event.device!.isScreen ? event.device : null);
+        await BoxHelper.setBoxDevice(b,
+            device: event.device,
+            deviceBox: event.deviceBox,
+            screenDevice: event.device!.isScreen ? event.device : null);
       }
       b = await bdb.getBox(boxID);
       yield CreateBoxBlocStateDone(b);

@@ -27,12 +27,17 @@ class PlantInfosDateInput extends StatelessWidget {
   final Function(DateTime?) onChange;
 
   const PlantInfosDateInput(
-      {Key? key, required this.hintText, required this.labelText, required this.date, required this.onChange})
+      {Key? key,
+      required this.hintText,
+      required this.labelText,
+      required this.date,
+      required this.onChange})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format =
+        AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(

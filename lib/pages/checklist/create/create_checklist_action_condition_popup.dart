@@ -21,13 +21,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 
 abstract class CreateChecklistActionConditionPopup extends StatelessWidget {
-
   final List<String> filteredValues;
 
   final String title;
   final Function() onClose;
 
-  const CreateChecklistActionConditionPopup({Key? key, required this.onClose, required this.title, required this.filteredValues}) : super(key: key);
+  const CreateChecklistActionConditionPopup(
+      {Key? key,
+      required this.onClose,
+      required this.title,
+      required this.filteredValues})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,8 @@ abstract class CreateChecklistActionConditionPopup extends StatelessWidget {
 
   Widget renderConditions(BuildContext context);
 
-  Widget renderCondition(BuildContext context, String icon, String title, String description, String expample, Function() onTap) {
+  Widget renderCondition(BuildContext context, String icon, String title,
+      String description, String expample, Function() onTap) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -86,7 +91,8 @@ abstract class CreateChecklistActionConditionPopup extends StatelessWidget {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0, bottom: 8.0, right: 16),
+                  padding: const EdgeInsets.only(
+                      top: 8.0, left: 8.0, bottom: 8.0, right: 16),
                   child: SvgPicture.asset(icon),
                 ),
                 Expanded(
@@ -105,7 +111,9 @@ abstract class CreateChecklistActionConditionPopup extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
                           expample,
-                          style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w300),
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w300),
                         ),
                       ),
                     ],

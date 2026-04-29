@@ -33,7 +33,8 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ChecklistActionPopupPage extends StatefulWidget {
   @override
-  State<ChecklistActionPopupPage> createState() => _ChecklistActionPopupPageState();
+  State<ChecklistActionPopupPage> createState() =>
+      _ChecklistActionPopupPageState();
 }
 
 class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
@@ -51,19 +52,25 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
+    return BlocListener<ChecklistActionPopupBloc,
+        ChecklistActionPopupBlocState>(
       listener: (BuildContext context, ChecklistActionPopupBlocState state) => {
         if (state is ChecklistActionPopupBlocStateLoaded)
           {
             setState(() {
-              noRepeat = AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
-              conditions = ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions));
-              exitConditions = ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.exitConditions));
-              actions = ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions));
+              noRepeat =
+                  AppDB().isNoRepeatChecklistSeed(state.checklistSeed.id);
+              conditions = ChecklistCondition.fromMapArray(
+                  json.decode(state.checklistSeed.conditions));
+              exitConditions = ChecklistCondition.fromMapArray(
+                  json.decode(state.checklistSeed.exitConditions));
+              actions = ChecklistAction.fromMapArray(
+                  json.decode(state.checklistSeed.actions));
             })
           }
       },
-      child: BlocBuilder<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
+      child:
+          BlocBuilder<ChecklistActionPopupBloc, ChecklistActionPopupBlocState>(
         builder: (BuildContext context, ChecklistActionPopupBlocState state) {
           if (state is ChecklistActionPopupBlocStateInit) {
             return InkWell(
@@ -75,7 +82,8 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
           }
 
           return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: 1, boldText: false),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.transparent,
@@ -86,13 +94,15 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 50.0, bottom: 20, left: 12, right: 12),
+                      padding: const EdgeInsets.only(
+                          top: 50.0, bottom: 20, left: 12, right: 12),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
-                        child: _renderBody(context, state as ChecklistActionPopupBlocStateLoaded),
+                        child: _renderBody(context,
+                            state as ChecklistActionPopupBlocStateLoaded),
                       ),
                     ),
                   ),
@@ -105,7 +115,8 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
     );
   }
 
-  Widget _renderBody(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+  Widget _renderBody(
+      BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     if (allSet) {
       return Fullscreen(
         title: 'All set!',
@@ -128,7 +139,10 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   "Actions (${state.checklistLogs.length})",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff454545)),
                 ),
               ),
         _renderRepeat(context, state),
@@ -137,30 +151,34 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
     );
   }
 
-  Widget _renderRepeat(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+  Widget _renderRepeat(
+      BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     if (!state.checklistSeed.repeat || state.checklistLogs.length == 0) {
       return Container();
     }
     Function() onChange = () {
-        setState(() {
-          noRepeat = !noRepeat;
-        });
-        AppDB().setNoRepeatChecklistSeed(state.checklistSeed.id, noRepeat);
-      };
+      setState(() {
+        noRepeat = !noRepeat;
+      });
+      AppDB().setNoRepeatChecklistSeed(state.checklistSeed.id, noRepeat);
+    };
     return InkWell(
       onTap: onChange,
       child: Row(
         children: [
-          Checkbox(value: noRepeat, onChanged: (bool? v) {
-            onChange();
-          }),
+          Checkbox(
+              value: noRepeat,
+              onChanged: (bool? v) {
+                onChange();
+              }),
           Text("Ok don't show this checklist again."),
         ],
       ),
     );
   }
 
-  Widget _renderTitle(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+  Widget _renderTitle(
+      BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -180,7 +198,10 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                   child: Text(
                     state.checklistSeed.title,
                     maxLines: 3,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff454545)),
                   ),
                 ),
               ],
@@ -200,7 +221,8 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
     );
   }
 
-  Widget _renderChecklistSeed(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+  Widget _renderChecklistSeed(
+      BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     double height = MediaQuery.of(context).size.height * 0.35;
     if (state.checklistLogs.length == 1) {
       height = height * 0.6;
@@ -215,22 +237,31 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(),
             ),
-            state.checklistSeed.description.length == 0 ? Container() : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: MarkdownBody(
-                data: state.checklistSeed.description,
-                styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Color(0xff454545), fontSize: 15),
-                  h1: TextStyle(color: Color(0xff454545), fontSize: 17, fontWeight: FontWeight.bold),
-                  h2: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            state.checklistSeed.description.length == 0
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: MarkdownBody(
+                      data: state.checklistSeed.description,
+                      styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Color(0xff454545), fontSize: 15),
+                        h1: TextStyle(
+                            color: Color(0xff454545),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                        h2: TextStyle(
+                            color: Color(0xff454545),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 'Trigger conditions',
-                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
               ),
             ),
             ...conditions.map((c) {
@@ -238,57 +269,67 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                 padding: const EdgeInsets.symmetric(
                   vertical: 8.0,
                 ),
-                child: Text((conditions.indexOf(c) != 0 ? 'AND ' : '') + c.asSentence,
+                child: Text(
+                    (conditions.indexOf(c) != 0 ? 'AND ' : '') + c.asSentence,
                     style: TextStyle(color: Color(0xff454545))),
               );
             }).toList(),
-            exitConditions.length == 0 ? Container() : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    'Exit conditions',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
+            exitConditions.length == 0
+                ? Container()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          'Exit conditions',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff3bb30b)),
+                        ),
+                      ),
+                      ...exitConditions.map((a) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8.0,
+                          ),
+                          child: Text(a.asSentence),
+                        );
+                      }),
+                    ],
                   ),
-                ),
-                ...exitConditions.map((a) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                    ),
-                    child: Text(a.asSentence),
-                  );
-                }),
-              ],
-            ),
-            state.checklistLogs.length != 0 ? Container() : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    'Actions',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
+            state.checklistLogs.length != 0
+                ? Container()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          'Actions',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff3bb30b)),
+                        ),
+                      ),
+                      ...actions.map((a) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8.0,
+                          ),
+                          child: Text(a.asSentence),
+                        );
+                      }),
+                    ],
                   ),
-                ),
-                ...actions.map((a) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                    ),
-                    child: Text(a.asSentence),
-                  );
-                }),
-              ],
-            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _renderActions(BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
+  Widget _renderActions(
+      BuildContext context, ChecklistActionPopupBlocStateLoaded state) {
     if (state.checklistLogs.length == 0) {
       return Container();
     }
@@ -310,8 +351,9 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                     checklistAction: action,
                     summarize: false,
                     onCheck: () async {
-                      BlocProvider.of<ChecklistActionPopupBloc>(context)
-                          .add(ChecklistActionPopupBlocEventCheckChecklistLog(log.copyWith(noRepeat: noRepeat)));
+                      BlocProvider.of<ChecklistActionPopupBloc>(context).add(
+                          ChecklistActionPopupBlocEventCheckChecklistLog(
+                              log.copyWith(noRepeat: noRepeat)));
                       if (state.checklistLogs.length == 1) {
                         setState(() {
                           allSet = true;
@@ -321,8 +363,9 @@ class _ChecklistActionPopupPageState extends State<ChecklistActionPopupPage> {
                       }
                     },
                     onSkip: () async {
-                      BlocProvider.of<ChecklistActionPopupBloc>(context)
-                          .add(ChecklistActionPopupBlocEventSkipChecklistLog(log.copyWith(noRepeat: noRepeat)));
+                      BlocProvider.of<ChecklistActionPopupBloc>(context).add(
+                          ChecklistActionPopupBlocEventSkipChecklistLog(
+                              log.copyWith(noRepeat: noRepeat)));
                       if (state.checklistLogs.length == 1) {
                         setState(() {
                           allSet = true;

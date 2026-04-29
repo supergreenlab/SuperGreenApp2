@@ -26,7 +26,8 @@ abstract class TowelieActionHelp extends TowelieAction {
 
   Stream<TowelieBlocState> idTrigger(TowelieBlocEventTrigger event) async* {}
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {}
-  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {}
+  Stream<TowelieBlocState> feedEntryTrigger(
+      TowelieBlocEventFeedEntryCreated event) async* {}
   Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {}
 
   @override
@@ -35,11 +36,13 @@ abstract class TowelieActionHelp extends TowelieAction {
       yield* getNext(event);
     } else if (event is TowelieBlocEventRoute && event.settings.name == route) {
       yield* routeTrigger(event);
-    } else if (event is TowelieBlocEventFeedEntryCreated && event.feedEntry.type == feedEntryType) {
+    } else if (event is TowelieBlocEventFeedEntryCreated &&
+        event.feedEntry.type == feedEntryType) {
       yield* feedEntryTrigger(event);
     } else if (event is TowelieBlocEventTrigger) {
       yield* idTrigger(event);
-    } else if (event is TowelieBlocEventRoutePop && event.settings.name == route) {
+    } else if (event is TowelieBlocEventRoutePop &&
+        event.settings.name == route) {
       yield TowelieBlocStateHelperPop(event.settings);
     }
   }

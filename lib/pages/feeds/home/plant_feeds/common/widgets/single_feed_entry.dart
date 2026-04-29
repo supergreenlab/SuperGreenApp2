@@ -23,7 +23,12 @@ class SingleFeedEntry extends StatelessWidget {
   final String button;
   final Function() onTap;
 
-  const SingleFeedEntry({Key? key, required this.title, required this.button, required this.onTap}) : super(key: key);
+  const SingleFeedEntry(
+      {Key? key,
+      required this.title,
+      required this.button,
+      required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,8 @@ class SingleFeedEntry extends StatelessWidget {
       child: Container(
         color: Color(0xff3bb30b),
         child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0, top: 8.0),
+          padding: const EdgeInsets.only(
+              left: 8.0, right: 8.0, bottom: 16.0, top: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

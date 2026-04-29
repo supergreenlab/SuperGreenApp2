@@ -122,7 +122,10 @@ class SelectBoxPage extends StatelessWidget {
                 backgroundColor: Colors.yellow,
                 titleColor: Colors.green,
                 iconColor: Colors.green,
-                elevation: state is SelectBoxBlocStateLoaded && state.boxes.length == 0 ? 4 : 0,
+                elevation:
+                    state is SelectBoxBlocStateLoaded && state.boxes.length == 0
+                        ? 4
+                        : 0,
               ),
               body: AnimatedSwitcher(
                 duration: Duration(milliseconds: 200),
@@ -139,19 +142,25 @@ class SelectBoxPage extends StatelessWidget {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: Text(SelectBoxPage.selectBoxPageNoLab,
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
                   Text(SelectBoxPage.selectBoxPageCreateFirst,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text(
                     SelectBoxPage.selectBoxPageCreateFirstLab,
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b)),
+                    style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w200,
+                        color: Color(0xff3bb30b)),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -184,10 +193,12 @@ class SelectBoxPage extends StatelessWidget {
         }
         return ListTile(
           leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
-          title: Text(state.boxes[index].name, style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(state.boxes[index].name,
+              style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text(SelectBoxPage.selectBoxPageTapSelect),
           onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.boxes[index]));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: state.boxes[index]));
           },
         );
       },
@@ -195,10 +206,12 @@ class SelectBoxPage extends StatelessWidget {
   }
 
   void _createNewBox(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateBoxEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToCreateBoxEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is Box) {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigatorActionPop(param: res));
       }
     }));
   }

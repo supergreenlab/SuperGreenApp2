@@ -57,17 +57,20 @@ class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
   ExistingDeviceBlocStateNotFound();
 }
 
-class ExistingDeviceBloc extends LegacyBloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
+class ExistingDeviceBloc
+    extends LegacyBloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToExistingDeviceEvent args;
 
   ExistingDeviceBloc(this.args) : super(ExistingDeviceBlocState());
 
   @override
-  Stream<ExistingDeviceBlocState> mapEventToState(ExistingDeviceBlocEvent event) async* {
+  Stream<ExistingDeviceBlocState> mapEventToState(
+      ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
       yield ExistingDeviceBlocStateResolving();
-      bool isIP = RegExp(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b').hasMatch(event.query);
+      bool isIP = RegExp(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b')
+          .hasMatch(event.query);
       String? ip;
       if (isIP) {
         ip = event.query;

@@ -31,7 +31,11 @@ class PlantInfosDimensions extends StatefulWidget {
   final Function(int width, int height, int depth, String unit) onSubmit;
 
   PlantInfosDimensions(
-      {required this.onCancel, required this.onSubmit, required this.width, required this.height, required this.depth});
+      {required this.onCancel,
+      required this.onSubmit,
+      required this.width,
+      required this.height,
+      required this.depth});
 
   @override
   _PlantInfosDimensionsState createState() => _PlantInfosDimensionsState();
@@ -47,8 +51,10 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
   @override
   void initState() {
     widthController = TextEditingController(text: widget.width?.toString());
-    heightController = TextEditingController(text: widget.height?.toString() ?? '');
-    depthController = TextEditingController(text: widget.depth?.toString() ?? '');
+    heightController =
+        TextEditingController(text: widget.height?.toString() ?? '');
+    depthController =
+        TextEditingController(text: widget.depth?.toString() ?? '');
     widthController.addListener(() {
       setState(() {});
     });
@@ -69,13 +75,17 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
       title: 'Lab dimensions',
       icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
-      onSubmit:
-          widthController.value.text != '' && heightController.value.text != '' && depthController.value.text != ''
-              ? () {
-                  widget.onSubmit(int.parse(widthController.text), int.parse(heightController.text),
-                      int.parse(depthController.text), unit);
-                }
-              : null,
+      onSubmit: widthController.value.text != '' &&
+              heightController.value.text != '' &&
+              depthController.value.text != ''
+          ? () {
+              widget.onSubmit(
+                  int.parse(widthController.text),
+                  int.parse(heightController.text),
+                  int.parse(depthController.text),
+                  unit);
+            }
+          : null,
       child: Container(
         height: 150,
         child: ListView(

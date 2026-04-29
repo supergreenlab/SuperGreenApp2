@@ -28,7 +28,8 @@ class FullscreenPicturePage extends StatefulWidget {
 }
 
 class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
-  final TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController =
+      TransformationController();
 
   @override
   void initState() {
@@ -52,11 +53,13 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
                 return Hero(
                     tag: 'Timelapse:${state.id}',
                     child: GestureDetector(onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop());
                     }, child: LayoutBuilder(
                       builder: (context, constraints) {
                         Widget body;
-                        body = _renderPicturePlayer(context, state, constraints);
+                        body =
+                            _renderPicturePlayer(context, state, constraints);
                         return body;
                       },
                     )));
@@ -66,7 +69,8 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
     );
   }
 
-  Widget _renderPicturePlayer(BuildContext context, FullscreenPictureBlocState state, BoxConstraints constraints) {
+  Widget _renderPicturePlayer(BuildContext context,
+      FullscreenPictureBlocState state, BoxConstraints constraints) {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,

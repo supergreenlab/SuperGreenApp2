@@ -41,70 +41,84 @@ class TutoItem extends StatelessWidget {
     return InkWell(
       onTap: this.action,
       child: Container(
-          margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10,),
+          margin: EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10,
+          ),
           decoration: BoxDecoration(
             border: Border.all(color: Color(0xFFDBDBDB)),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
-        children: [
-            Container(
-              width: 110,
-              height: 120,
-              alignment: Alignment.center, // This is needed
-              child: this.image.endsWith('svg') ?
-                        SvgPicture.asset(this.image, fit: BoxFit.contain,
-                          width: 70, height: 80,) :
-                        Image.asset(this.image, fit: BoxFit.contain,
-                          width: 70, height: 80,),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10, top: 10,),
-                    child: Text(
-                      this.title,
-                      style: TextStyle(
-                        color: Color(0xff5B5B5B),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-
+            children: [
+              Container(
+                width: 110,
+                height: 120,
+                alignment: Alignment.center, // This is needed
+                child: this.image.endsWith('svg')
+                    ? SvgPicture.asset(
+                        this.image,
+                        fit: BoxFit.contain,
+                        width: 70,
+                        height: 80,
+                      )
+                    : Image.asset(
+                        this.image,
+                        fit: BoxFit.contain,
+                        width: 70,
+                        height: 80,
                       ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 5),
-                    child: Text(
-                      this.description,
-                      maxLines: 10,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 5, right: 5,),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          this.label,
-                          style: TextStyle(
-                            color: Color(0xff909090)
-                          ),
-                        ),
-                    ],
-                    ),
-                  ),
-                ],
               ),
-            )
-          ],
-        )
-      ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: Text(
+                        this.title,
+                        style: TextStyle(
+                          color: Color(0xff5B5B5B),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 5),
+                      child: Text(
+                        this.description,
+                        maxLines: 10,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 10,
+                        bottom: 5,
+                        right: 5,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            this.label,
+                            style: TextStyle(color: Color(0xff909090)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )),
     );
   }
 }

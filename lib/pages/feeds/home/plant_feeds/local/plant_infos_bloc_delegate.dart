@@ -41,36 +41,46 @@ class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     box = await RelDB.get().plantsDAO.getBox(plant.box);
     this.plantInfos = PlantInfos(plant.name, null, null, null, null, true);
-    plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
+    plantStream =
+        RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
     boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
-    feedMediaStream = RelDB.get().feedsDAO.watchLastFeedMedia(plant.feed).listen(feedMediaUpdated);
+    feedMediaStream = RelDB.get()
+        .feedsDAO
+        .watchLastFeedMedia(plant.feed)
+        .listen(feedMediaUpdated);
   }
 
   @override
   Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos) async* {
     String plantSettingsJSON = plantInfos.plantSettings!.toJSON();
     if (plant.settings != plantSettingsJSON) {
-      PlantsCompanion plant =
-          PlantsCompanion(id: Value(this.plant.id), settings: Value(plantSettingsJSON), synced: Value(false));
+      PlantsCompanion plant = PlantsCompanion(
+          id: Value(this.plant.id),
+          settings: Value(plantSettingsJSON),
+          synced: Value(false));
       await RelDB.get().plantsDAO.updatePlant(plant);
     }
     String boxSettingsJSON = plantInfos.boxSettings!.toJSON();
     if (box.settings != boxSettingsJSON) {
-      BoxesCompanion box =
-          BoxesCompanion(id: Value(this.box.id), settings: Value(boxSettingsJSON), synced: Value(false));
+      BoxesCompanion box = BoxesCompanion(
+          id: Value(this.box.id),
+          settings: Value(boxSettingsJSON),
+          synced: Value(false));
       await RelDB.get().plantsDAO.updateBox(box);
     }
   }
 
   @override
-  Stream<PlantInfosBlocState> updatePhase(PlantPhases phase, DateTime date) async* {
+  Stream<PlantInfosBlocState> updatePhase(
+      PlantPhases phase, DateTime date) async* {
     await PlantHelper.updatePlantPhase(plant, phase, date);
   }
 
   void plantUpdated(Plant plant) {
     this.plant = plant;
     PlantSettings settings = PlantSettings.fromJSON(plant.settings);
-    plantInfosLoaded(plantInfos!.copyWith(name: plant.name, plantSettings: settings));
+    plantInfosLoaded(
+        plantInfos!.copyWith(name: plant.name, plantSettings: settings));
   }
 
   void boxUpdated(Box box) {
@@ -82,7 +92,8 @@ class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   void feedMediaUpdated(FeedMedia feedMedia) {
     plantInfosLoaded(plantInfos!.copyWith(
         filePath: FeedMedias.makeAbsoluteFilePath(feedMedia.filePath),
-        thumbnailPath: FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)));
+        thumbnailPath:
+            FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)));
   }
 
   @override

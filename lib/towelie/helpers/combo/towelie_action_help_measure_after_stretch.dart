@@ -37,12 +37,14 @@ class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
   String get feedEntryType => 'FE_LIGHT';
 
   @override
-  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {
+  Stream<TowelieBlocState> feedEntryTrigger(
+      TowelieBlocEventFeedEntryCreated event) async* {
     yield TowelieBlocStateHelper(
       RouteSettings(name: '/feed/plant', arguments: null),
       TowelieActionHelpMeasureAfterStretch.towelieHelperMeasureAfterStretch,
       buttons: [
-        TowelieButtonPushRouteMeasure.createButton('Take measure', event.plant.id),
+        TowelieButtonPushRouteMeasure.createButton(
+            'Take measure', event.plant.id),
       ],
     );
   }

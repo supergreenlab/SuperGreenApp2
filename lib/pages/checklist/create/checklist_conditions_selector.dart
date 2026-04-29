@@ -25,45 +25,63 @@ import 'package:uuid/uuid.dart';
 class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
   final void Function(ChecklistCondition action) onAdd;
 
-  ChecklistConditionsSelector({required this.onAdd, required Function() onClose, required List<String> filteredValues})
-      : super(onClose: onClose, title: 'Select new condition type', filteredValues: filteredValues);
+  ChecklistConditionsSelector(
+      {required this.onAdd,
+      required Function() onClose,
+      required List<String> filteredValues})
+      : super(
+            onClose: onClose,
+            title: 'Select new condition type',
+            filteredValues: filteredValues);
 
   Widget renderConditions(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        this.filteredValues.contains(ChecklistConditionTimer.TYPE) ? Container() : renderCondition(
-            context,
-            ChecklistConditionIcons[ChecklistConditionTimer.TYPE]!,
-            'Time reminder',
-            'Just a simple reminder, set a date and it will show up in your checklist at that date.',
-            'Ex: In X days.', () {
-          onAdd(ChecklistConditionTimer(id: Uuid().v4(), date: DateTime.now(),));
-        }),
+        this.filteredValues.contains(ChecklistConditionTimer.TYPE)
+            ? Container()
+            : renderCondition(
+                context,
+                ChecklistConditionIcons[ChecklistConditionTimer.TYPE]!,
+                'Time reminder',
+                'Just a simple reminder, set a date and it will show up in your checklist at that date.',
+                'Ex: In X days.', () {
+                onAdd(ChecklistConditionTimer(
+                  id: Uuid().v4(),
+                  date: DateTime.now(),
+                ));
+              }),
         renderCondition(
             context,
             ChecklistConditionIcons[ChecklistConditionMetric.TYPE]!,
             'Metric monitoring',
             'This checklist item will show up in your checklist if a metric is in or out of a given range.',
             'Ex: When temperature is >X° for 3 days.', () {
-          onAdd(ChecklistConditionMetric(id: Uuid().v4(), nDaysInRow: 4,));
+          onAdd(ChecklistConditionMetric(
+            id: Uuid().v4(),
+            nDaysInRow: 4,
+          ));
         }),
-        this.filteredValues.contains(ChecklistConditionAfterCard.TYPE) ? Container() : renderCondition(
-            context,
-            ChecklistConditionIcons[ChecklistConditionAfterCard.TYPE]!,
-            'After a diary entry is created',
-            'Choose a diary entry type and set a duration after which this checklist entry will show up in your checklist.',
-            'Ex: 5 days after last watering card', () {
-          onAdd(ChecklistConditionAfterCard(id: Uuid().v4()));
-        }),
-        this.filteredValues.contains(ChecklistConditionAfterPhase.TYPE) ? Container() : renderCondition(
-            context,
-            ChecklistConditionIcons[ChecklistConditionAfterPhase.TYPE]!,
-            'Plant phase',
-            'Select a phase and a duration. This checklist item will show up on time in your checklist.',
-            'Ex: after 2 weeks into bloom, start the next seeds', () {
-          onAdd(ChecklistConditionAfterPhase(id: Uuid().v4()));
-        }),
+        this.filteredValues.contains(ChecklistConditionAfterCard.TYPE)
+            ? Container()
+            : renderCondition(
+                context,
+                ChecklistConditionIcons[ChecklistConditionAfterCard.TYPE]!,
+                'After a diary entry is created',
+                'Choose a diary entry type and set a duration after which this checklist entry will show up in your checklist.',
+                'Ex: 5 days after last watering card', () {
+                onAdd(ChecklistConditionAfterCard(id: Uuid().v4()));
+              }),
+        this.filteredValues.contains(ChecklistConditionAfterPhase.TYPE)
+            ? Container()
+            : renderCondition(
+                context,
+                ChecklistConditionIcons[ChecklistConditionAfterPhase.TYPE]!,
+                'Plant phase',
+                'Select a phase and a duration. This checklist item will show up on time in your checklist.',
+                'Ex: after 2 weeks into bloom, start the next seeds', () {
+                onAdd(ChecklistConditionAfterPhase(id: Uuid().v4()));
+              }),
       ],
     );
   }

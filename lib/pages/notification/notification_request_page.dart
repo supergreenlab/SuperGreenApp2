@@ -71,7 +71,8 @@ class NotificationRequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+      data:
+          MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
       child: Container(
         height: 345,
         child: Padding(
@@ -85,7 +86,8 @@ class NotificationRequestPage extends StatelessWidget {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 8.0),
                     child: SvgPicture.asset(
                       'assets/home/icon_notification.svg',
                       width: 30,
@@ -106,7 +108,8 @@ class NotificationRequestPage extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                 child: ListView(
                   children: [
                     MarkdownBody(
@@ -114,7 +117,8 @@ class NotificationRequestPage extends StatelessWidget {
                       data: NotificationRequestPage.notificationPurposes,
                       styleSheet: MarkdownStyleSheet(
                           p: TextStyle(color: Color(0xff454545), fontSize: 16),
-                          strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16)),
+                          strong: TextStyle(
+                              color: Color(0xff3bb30b), fontSize: 16)),
                     ),
                   ],
                 ),
@@ -127,9 +131,11 @@ class NotificationRequestPage extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 16.0),
                     child: GreenButton(
                       color: Colors.red.value,
-                      title: NotificationRequestPage.notificationRequestButtonCancel,
+                      title: NotificationRequestPage
+                          .notificationRequestButtonCancel,
                       onPressed: () async {
-                        BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
+                        BlocProvider.of<NotificationRequestBloc>(context)
+                            .add(NotificationRequestBlocEventDone());
                       },
                     )),
                 Padding(
@@ -137,8 +143,10 @@ class NotificationRequestPage extends StatelessWidget {
                   child: GreenButton(
                     title: NotificationRequestPage.notificationRequestButton,
                     onPressed: () async {
-                      await NotificationsBloc.remoteNotifications.requestPermissions();
-                      BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
+                      await NotificationsBloc.remoteNotifications
+                          .requestPermissions();
+                      BlocProvider.of<NotificationRequestBloc>(context)
+                          .add(NotificationRequestBlocEventDone());
                     },
                   ),
                 ),

@@ -31,7 +31,8 @@ class FeedCareLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<dynamic> feedMediasMap = await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
+    List<dynamic> feedMediasMap =
+        await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
     List<MediaState> medias = [];
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));

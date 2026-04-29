@@ -23,7 +23,8 @@ import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dar
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/item_loading.dart';
 
-abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends StatefulWidget {
+abstract class SectionPage<BlocType extends SectionBloc, ItemType>
+    extends StatefulWidget {
   Widget itemBuilder(BuildContext context, ItemType item);
   Widget sectionTitle(BuildContext context);
 
@@ -33,11 +34,13 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
   @override
   _SectionPageState createState() => _SectionPageState<BlocType>();
 
-  Widget renderBody(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+  Widget renderBody(
+      BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return renderList(context, state, items);
   }
 
-  Widget renderList(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+  Widget renderList(
+      BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return Container(
         height: listHeight,
         child: ListView.builder(
@@ -46,7 +49,8 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
             itemBuilder: (BuildContext context, int index) {
               Widget body;
               if (index == items.length) {
-                BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
+                BlocProvider.of<BlocType>(context)
+                    .add(SectionBlocEventLoad(items.length));
                 body = Container(
                   width: listItemWidth,
                   child: ItemLoading(),
@@ -64,7 +68,8 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
             }));
   }
 
-  Widget renderGrid(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+  Widget renderGrid(
+      BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return Container(
         height: listHeight,
         child: GridView.builder(
@@ -73,7 +78,8 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
           itemBuilder: (BuildContext context, int index) {
             Widget body;
             if (index == items.length) {
-              BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
+              BlocProvider.of<BlocType>(context)
+                  .add(SectionBlocEventLoad(items.length));
               body = Container(
                 width: listItemWidth,
                 child: ItemLoading(),
@@ -87,7 +93,10 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
             return body;
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, mainAxisSpacing: 3, crossAxisSpacing: 3, childAspectRatio: 0.25),
+              crossAxisCount: 2,
+              mainAxisSpacing: 3,
+              crossAxisSpacing: 3,
+              childAspectRatio: 0.25),
         ));
   }
 
@@ -134,7 +143,8 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
           ),
           GreenButton(
             onPressed: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToSettingsAuth());
             },
             title: 'Login or create account',
           )
@@ -144,7 +154,8 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
   }
 }
 
-class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage> {
+class _SectionPageState<BlocType extends SectionBloc>
+    extends State<SectionPage> {
   List<dynamic> items = [];
   bool empty = false;
 
@@ -166,7 +177,8 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
         }
       },
       child: BlocBuilder<BlocType, SectionBlocState>(
-        buildWhen: (SectionBlocState s1, SectionBlocState s2) => !(s2 is SectionBlocStateClear),
+        buildWhen: (SectionBlocState s1, SectionBlocState s2) =>
+            !(s2 is SectionBlocStateClear),
         builder: (BuildContext context, SectionBlocState state) {
           Widget body;
           if (state is SectionBlocStateNotLogged) {
@@ -177,7 +189,8 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
             } else if (items.length == 0) {
               body = Container(height: widget.listHeight, child: ItemLoading());
             } else {
-              body = widget.renderBody(context, state as SectionBlocStateLoaded, items);
+              body = widget.renderBody(
+                  context, state as SectionBlocStateLoaded, items);
             }
           }
           return Column(

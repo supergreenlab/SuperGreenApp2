@@ -33,7 +33,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
             if (_scrollController.hasClients == false) {
               return;
             }
-            _scrollController.animateTo(50, duration: Duration(seconds: 15), curve: Curves.linear);
+            _scrollController.animateTo(50,
+                duration: Duration(seconds: 15), curve: Curves.linear);
           });
         }
       },
@@ -61,23 +62,32 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
               body = _renderGraphs(context, state);
             }
           }
-          return AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body);
+          return AnimatedSwitcher(
+              duration: Duration(milliseconds: 200), child: body);
         },
       ),
     );
   }
 
-  Widget _renderGraphs(BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
+  Widget _renderGraphs(
+      BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
     String tempUnit = AppDB().getUserSettings().freedomUnits! ? '°F' : '°C';
 
-    ChartSeries dateGraphData = state.graphData.firstWhere((g) => g.data.length != 0);
-    DateTime metricDate = dateGraphData.data[selectedGraphIndex ?? dateGraphData.data.length - 1].time;
-    
+    ChartSeries dateGraphData =
+        state.graphData.firstWhere((g) => g.data.length != 0);
+    DateTime metricDate = dateGraphData
+        .data[selectedGraphIndex ?? dateGraphData.data.length - 1].time;
+
     String weightUnit = AppDB().getUserSettings().freedomUnits! ? 'lb' : 'kg';
-    String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
+    String format = AppDB().getUserSettings().freedomUnits!
+        ? 'MM/dd/yyyy HH:mm'
+        : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
-        style: TextStyle(color: Color(0xFF494949), fontSize: 15, fontWeight: FontWeight.bold));
-    
+        style: TextStyle(
+            color: Color(0xFF494949),
+            fontSize: 15,
+            fontWeight: FontWeight.bold));
+
     if (selectedGraphIndex != null) {
       dateText = Row(
         children: <Widget>[
@@ -85,14 +95,16 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           Expanded(
             child: Text(
               'tap to reset',
-              style: TextStyle(color: Color(0xFF494949), decoration: TextDecoration.underline),
+              style: TextStyle(
+                  color: Color(0xFF494949),
+                  decoration: TextDecoration.underline),
               textAlign: TextAlign.right,
             ),
           ),
         ],
       );
     }
-    
+
     Widget graphs = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -104,8 +116,9 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
         child: _buildLineChart(state),
       ),
     );
-    
-    if (state.graphData.where((g) => g.data.length > minCharPoints).length == 0) {
+
+    if (state.graphData.where((g) => g.data.length > minCharPoints).length ==
+        0) {
       graphs = Stack(children: [
         graphs,
         Container(
@@ -150,76 +163,97 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Container(width: 4),
-                    state.graphData[0].data.length == 0 ? Container() : _renderMetric(
-                        Colors.green,
-                        'Temp',
-                        '${state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
-                        '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
-                        '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit', () {
-                      setState(() {
-                        disabledGraphs[0] = !(disabledGraphs[0] ?? false);
-                      });
-                    }, disabledGraphs[0] ?? false),
-                    state.graphData[1].data.length == 0 ? Container() : _renderMetric(
-                        Colors.blue,
-                        'Humi',
-                        '${state.graphData[1].data[selectedGraphIndex ?? state.graphData[1].data.length - 1].metric.toInt()}%',
-                        '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
-                        '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%', () {
-                      setState(() {
-                        disabledGraphs[1] = !(disabledGraphs[1] ?? false);
-                      });
-                    }, disabledGraphs[1] ?? false),
-                    state.graphData[2].data.length == 0 ? Container() : _renderMetric(
-                        Colors.orange,
-                        'VPD',
-                        '${(state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric / 40).toStringAsFixed(2)}',
-                        '${(TimeSeriesAPI.min(state.graphData[2].data).metric / 40).toStringAsFixed(2)}',
-                        '${(TimeSeriesAPI.max(state.graphData[2].data).metric / 40).toStringAsFixed(2)}', () {
-                      setState(() {
-                        disabledGraphs[2] = !(disabledGraphs[2] ?? false);
-                      });
-                    }, disabledGraphs[2] ?? false),
-                    state.graphData[4].data.length == 0 ? Container() : _renderMetric(
-                        Colors.cyan,
-                        'Ventilation',
-                        '${state.graphData[4].data[selectedGraphIndex ?? state.graphData[4].data.length - 1].metric.toInt()}%',
-                        '${TimeSeriesAPI.min(state.graphData[4].data).metric.toInt()}%',
-                        '${TimeSeriesAPI.max(state.graphData[4].data).metric.toInt()}%', () {
-                      setState(() {
-                        disabledGraphs[4] = !(disabledGraphs[4] ?? false);
-                      });
-                    }, disabledGraphs[4] ?? false),
-                    state.graphData[3].data.length == 0 ? Container() : _renderMetric(
-                        Color(0xffB3B634),
-                        'Light',
-                        '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
-                        '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
-                        '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%', () {
-                      setState(() {
-                        disabledGraphs[3] = !(disabledGraphs[3] ?? false);
-                      });
-                    }, disabledGraphs[3] ?? false),
-                    state.graphData[5].data.length == 0 ? Container() : _renderMetric(
-                        Color(0xff595959),
-                        'CO2',
-                        '${(state.graphData[5].data[selectedGraphIndex ?? state.graphData[5].data.length - 1].metric * 20).toInt()}',
-                        '${(TimeSeriesAPI.min(state.graphData[5].data).metric * 20).toInt()}',
-                        '${(TimeSeriesAPI.max(state.graphData[5].data).metric * 20).toInt()}', () {
-                      setState(() {
-                        disabledGraphs[5] = !(disabledGraphs[5] ?? false);
-                      });
-                    }, disabledGraphs[5] ?? false),
-                    state.graphData[6].data.length == 0 ? Container() : _renderMetric(
-                        Color(0xFF483581),
-                        'Weight ($weightUnit)',
-                        '${state.graphData[6].data[selectedGraphIndex ?? state.graphData[6].data.length - 1].metric.toStringAsFixed(3)}',
-                        '${TimeSeriesAPI.min(state.graphData[6].data).metric.toStringAsFixed(3)}',
-                        '${TimeSeriesAPI.max(state.graphData[6].data).metric.toStringAsFixed(3)}', () {
-                      setState(() {
-                        disabledGraphs[6] = !(disabledGraphs[6] ?? false);
-                      });
-                    }, disabledGraphs[6] ?? false),
+                    state.graphData[0].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Colors.green,
+                            'Temp',
+                            '${state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
+                            '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
+                            '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit',
+                            () {
+                            setState(() {
+                              disabledGraphs[0] = !(disabledGraphs[0] ?? false);
+                            });
+                          }, disabledGraphs[0] ?? false),
+                    state.graphData[1].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Colors.blue,
+                            'Humi',
+                            '${state.graphData[1].data[selectedGraphIndex ?? state.graphData[1].data.length - 1].metric.toInt()}%',
+                            '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
+                            '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%',
+                            () {
+                            setState(() {
+                              disabledGraphs[1] = !(disabledGraphs[1] ?? false);
+                            });
+                          }, disabledGraphs[1] ?? false),
+                    state.graphData[2].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Colors.orange,
+                            'VPD',
+                            '${(state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric / 40).toStringAsFixed(2)}',
+                            '${(TimeSeriesAPI.min(state.graphData[2].data).metric / 40).toStringAsFixed(2)}',
+                            '${(TimeSeriesAPI.max(state.graphData[2].data).metric / 40).toStringAsFixed(2)}',
+                            () {
+                            setState(() {
+                              disabledGraphs[2] = !(disabledGraphs[2] ?? false);
+                            });
+                          }, disabledGraphs[2] ?? false),
+                    state.graphData[4].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Colors.cyan,
+                            'Ventilation',
+                            '${state.graphData[4].data[selectedGraphIndex ?? state.graphData[4].data.length - 1].metric.toInt()}%',
+                            '${TimeSeriesAPI.min(state.graphData[4].data).metric.toInt()}%',
+                            '${TimeSeriesAPI.max(state.graphData[4].data).metric.toInt()}%',
+                            () {
+                            setState(() {
+                              disabledGraphs[4] = !(disabledGraphs[4] ?? false);
+                            });
+                          }, disabledGraphs[4] ?? false),
+                    state.graphData[3].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Color(0xffB3B634),
+                            'Light',
+                            '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
+                            '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
+                            '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%',
+                            () {
+                            setState(() {
+                              disabledGraphs[3] = !(disabledGraphs[3] ?? false);
+                            });
+                          }, disabledGraphs[3] ?? false),
+                    state.graphData[5].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Color(0xff595959),
+                            'CO2',
+                            '${(state.graphData[5].data[selectedGraphIndex ?? state.graphData[5].data.length - 1].metric * 20).toInt()}',
+                            '${(TimeSeriesAPI.min(state.graphData[5].data).metric * 20).toInt()}',
+                            '${(TimeSeriesAPI.max(state.graphData[5].data).metric * 20).toInt()}',
+                            () {
+                            setState(() {
+                              disabledGraphs[5] = !(disabledGraphs[5] ?? false);
+                            });
+                          }, disabledGraphs[5] ?? false),
+                    state.graphData[6].data.length == 0
+                        ? Container()
+                        : _renderMetric(
+                            Color(0xFF483581),
+                            'Weight ($weightUnit)',
+                            '${state.graphData[6].data[selectedGraphIndex ?? state.graphData[6].data.length - 1].metric.toStringAsFixed(3)}',
+                            '${TimeSeriesAPI.min(state.graphData[6].data).metric.toStringAsFixed(3)}',
+                            '${TimeSeriesAPI.max(state.graphData[6].data).metric.toStringAsFixed(3)}',
+                            () {
+                            setState(() {
+                              disabledGraphs[6] = !(disabledGraphs[6] ?? false);
+                            });
+                          }, disabledGraphs[6] ?? false),
                     Container(width: 4),
                   ],
                 ),
@@ -236,12 +270,12 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
 
   Widget _buildLineChart(PlantFeedAppBarBlocStateLoaded state) {
     List<LineChartBarData> lineBars = [];
-    
+
     for (int i = 0; i < state.graphData.length; i++) {
       if (disabledGraphs[i] == true) continue;
       ChartSeries series = state.graphData[i];
       if (series.data.isEmpty) continue;
-      
+
       lineBars.add(LineChartBarData(
         spots: series.data.asMap().entries.map((e) {
           return FlSpot(e.key.toDouble(), e.value.metric);
@@ -267,10 +301,14 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
         ),
         borderData: FlBorderData(show: false),
         lineTouchData: LineTouchData(
-          touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-            if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
+          touchCallback:
+              (FlTouchEvent event, LineTouchResponse? touchResponse) {
+            if (touchResponse != null &&
+                touchResponse.lineBarSpots != null &&
+                touchResponse.lineBarSpots!.isNotEmpty) {
               setState(() {
-                selectedGraphIndex = touchResponse.lineBarSpots!.first.x.toInt();
+                selectedGraphIndex =
+                    touchResponse.lineBarSpots!.first.x.toInt();
               });
             }
           },
@@ -282,8 +320,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
     );
   }
 
-  Widget _renderMetric(
-      Color color, String name, String value, String min, String max, void Function() onTap, bool disabled) {
+  Widget _renderMetric(Color color, String name, String value, String min,
+      String max, void Function() onTap, bool disabled) {
     return Opacity(
       opacity: disabled ? 0.5 : 1,
       child: InkWell(
@@ -292,7 +330,9 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
             children: <Widget>[
-              Text(name, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold)),
+              Text(name,
+                  style: TextStyle(
+                      color: Color(0xFF494949), fontWeight: FontWeight.bold)),
               Row(
                 children: <Widget>[
                   Text(value == "0" ? "N/A" : value,
@@ -304,8 +344,14 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                   value != "0"
                       ? Column(
                           children: <Widget>[
-                            Text(max, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300)),
-                            Text(min, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300)),
+                            Text(max,
+                                style: TextStyle(
+                                    color: Color(0xFF494949),
+                                    fontWeight: FontWeight.w300)),
+                            Text(min,
+                                style: TextStyle(
+                                    color: Color(0xFF494949),
+                                    fontWeight: FontWeight.w300)),
                           ],
                         )
                       : Container(),

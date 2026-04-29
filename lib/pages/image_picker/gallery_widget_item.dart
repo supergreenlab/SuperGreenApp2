@@ -74,7 +74,8 @@ class GalleryWidgetItemState extends State<GalleryWidgetItem> {
                     fileId: widget.mediaFile.id,
                     type: widget.mediaFile.type,
                   ),
-                  builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (snapshot.hasData) {
                       String thumbnail = snapshot.data!;
                       widget.mediaFile.thumbnailPath = thumbnail;
@@ -93,7 +94,10 @@ class GalleryWidgetItemState extends State<GalleryWidgetItem> {
                       return Icon(Icons.error, color: Colors.red, size: 24);
                     } else {
                       return Center(
-                        child: SizedBox(width: 30, height: 30, child: CircularProgressIndicator()),
+                        child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator()),
                       );
                     }
                   }),

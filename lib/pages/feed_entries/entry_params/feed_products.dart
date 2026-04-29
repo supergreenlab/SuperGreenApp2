@@ -73,7 +73,8 @@ class FeedProductsItemParams extends Equatable {
   final String geo;
   final FeedProductsLinkParams link;
 
-  FeedProductsItemParams(this.title, this.description, this.picture, this.price, this.geo, this.link);
+  FeedProductsItemParams(this.title, this.description, this.picture, this.price,
+      this.geo, this.link);
 
   factory FeedProductsItemParams.fromMap(Map<String, dynamic> map) {
     return FeedProductsItemParams(
@@ -108,16 +109,21 @@ class FeedProductsParams extends FeedEntryParams {
   final List<FeedProductsButtonParams>? buttons;
   final FeedProductsButtonParams? selectedButton;
 
-  FeedProductsParams(this.topPic, this.text, this.products, this.buttons, this.selectedButton);
+  FeedProductsParams(
+      this.topPic, this.text, this.products, this.buttons, this.selectedButton);
 
   factory FeedProductsParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    List<FeedProductsItemParams> items =
-        map['products'].map<FeedProductsItemParams>((p) => FeedProductsItemParams.fromMap(p)).toList();
-    List<FeedProductsButtonParams> buttons =
-        (map['buttons'] ?? []).map<FeedProductsButtonParams>((b) => FeedProductsButtonParams.fromMap(b)).toList();
-    FeedProductsButtonParams? selectedButton =
-        map['selectedButton'] == null ? null : FeedProductsButtonParams.fromMap(map['selectedButton']);
+    List<FeedProductsItemParams> items = map['products']
+        .map<FeedProductsItemParams>((p) => FeedProductsItemParams.fromMap(p))
+        .toList();
+    List<FeedProductsButtonParams> buttons = (map['buttons'] ?? [])
+        .map<FeedProductsButtonParams>(
+            (b) => FeedProductsButtonParams.fromMap(b))
+        .toList();
+    FeedProductsButtonParams? selectedButton = map['selectedButton'] == null
+        ? null
+        : FeedProductsButtonParams.fromMap(map['selectedButton']);
     return FeedProductsParams(
       map['top_pic'],
       map['text'],

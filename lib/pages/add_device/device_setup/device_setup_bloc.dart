@@ -67,7 +67,8 @@ class DeviceSetupBlocEventDone extends DeviceSetupBlocEvent {
   final bool requiresInititalSetup;
   final bool requiresWifiSetup;
 
-  DeviceSetupBlocEventDone(this.device, this.requiresInititalSetup, this.requiresWifiSetup);
+  DeviceSetupBlocEventDone(
+      this.device, this.requiresInititalSetup, this.requiresWifiSetup);
 
   @override
   List<Object> get props => [device];
@@ -101,21 +102,26 @@ class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   final bool requiresInititalSetup;
   final bool requiresWifiSetup;
 
-  DeviceSetupBlocStateDone(this.device, this.requiresInititalSetup, this.requiresWifiSetup) : super(1);
+  DeviceSetupBlocStateDone(
+      this.device, this.requiresInititalSetup, this.requiresWifiSetup)
+      : super(1);
 
   @override
   List<Object> get props => [device];
 }
 
-class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
+class DeviceSetupBloc
+    extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   final MainNavigateToDeviceSetupEvent args;
 
   DeviceSetupBloc(this.args) : super(DeviceSetupBlocState(0)) {
-    Future.delayed(const Duration(seconds: 1), () => this.add(DeviceSetupBlocEventStartSetup()));
+    Future.delayed(const Duration(seconds: 1),
+        () => this.add(DeviceSetupBlocEventStartSetup()));
   }
 
   @override
-  Stream<DeviceSetupBlocState> mapEventToState(DeviceSetupBlocEvent event) async* {
+  Stream<DeviceSetupBlocState> mapEventToState(
+      DeviceSetupBlocEvent event) async* {
     if (event is DeviceSetupBlocEventStartSetup) {
       this._startSearch(event);
     } else if (event is DeviceSetupBlocEventProgress) {
@@ -125,7 +131,8 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
     } else if (event is DeviceSetupBlocEventAlreadyExists) {
       yield DeviceSetupBlocStateAlreadyExists();
     } else if (event is DeviceSetupBlocEventDone) {
-      yield DeviceSetupBlocStateDone(event.device, event.requiresInititalSetup, event.requiresWifiSetup);
+      yield DeviceSetupBlocStateDone(
+          event.device, event.requiresInititalSetup, event.requiresWifiSetup);
     }
   }
 
@@ -137,13 +144,17 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
       String? auth;
 
       if (event.username != null && event.password != null) {
-        auth = base64.encode(utf8.encode('${event.username}:${event.password}'));
+        auth =
+            base64.encode(utf8.encode('${event.username}:${event.password}'));
       }
 
       try {
-        deviceIdentifier = await DeviceAPI.fetchStringParam(args.ip, "BROKER_CLIENTID", auth: auth, nRetries: 10);
+        deviceIdentifier = await DeviceAPI.fetchStringParam(
+            args.ip, "BROKER_CLIENTID",
+            auth: auth, nRetries: 10);
       } catch (e) {
-        add(DeviceSetupBlocEventLoadingError(requiresAuth: e.toString().endsWith('401')));
+        add(DeviceSetupBlocEventLoadingError(
+            requiresAuth: e.toString().endsWith('401')));
         return;
       }
 
@@ -158,11 +169,18 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
       int deviceID;
 
       try {
-        final deviceName = await DeviceAPI.fetchStringParam(args.ip, "DEVICE_NAME", auth: auth);
-        final mdnsDomain = await DeviceAPI.fetchStringParam(args.ip, "MDNS_DOMAIN", auth: auth);
+        final deviceName = await DeviceAPI.fetchStringParam(
+            args.ip, "DEVICE_NAME",
+            auth: auth);
+        final mdnsDomain = await DeviceAPI.fetchStringParam(
+            args.ip, "MDNS_DOMAIN",
+            auth: auth);
 
-        final DevicesCompanion device =
-            DevicesCompanion.insert(identifier: deviceIdentifier, name: deviceName, ip: args.ip, mdns: mdnsDomain);
+        final DevicesCompanion device = DevicesCompanion.insert(
+            identifier: deviceIdentifier,
+            name: deviceName,
+            ip: args.ip,
+            mdns: mdnsDomain);
         deviceID = await db.addDevice(device);
       } catch (e) {
         add(DeviceSetupBlocEventLoadingError());
@@ -181,7 +199,8 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
       Device d = await db.getDevice(deviceID);
 
       final Param time = await db.getParam(deviceID, 'TIME');
-      await DeviceHelper.updateIntParam(d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+      await DeviceHelper.updateIntParam(
+          d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
 
       final Param state = await db.getParam(deviceID, 'STATE');
 
@@ -191,15 +210,21 @@ class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocSt
         final Module boxes = await db.getModule(deviceID, 'box');
         for (int i = 0; i < boxes.arrayLen; ++i) {
           try {
-            final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
+            final Param onHour =
+                await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
             final Param onMin = await db.getParam(deviceID, 'BOX_${i}_ON_MIN');
-            await DeviceHelper.updateHourMinParams(d, onHour, onMin, onHour.ivalue!, onMin.ivalue!);
+            await DeviceHelper.updateHourMinParams(
+                d, onHour, onMin, onHour.ivalue!, onMin.ivalue!);
 
-            final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
-            final Param offMin = await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
-            await DeviceHelper.updateHourMinParams(d, offHour, offMin, offHour.ivalue!, offMin.ivalue!);
+            final Param offHour =
+                await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
+            final Param offMin =
+                await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
+            await DeviceHelper.updateHourMinParams(
+                d, offHour, offMin, offHour.ivalue!, offMin.ivalue!);
           } catch (e, trace) {
-            Logger.logError(e, trace, data: {"ip": args.ip, "deviceID": deviceID});
+            Logger.logError(e, trace,
+                data: {"ip": args.ip, "deviceID": deviceID});
           }
         }
 

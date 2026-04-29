@@ -43,17 +43,20 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   }
 
   Widget itemBuilder(BuildContext context, PublicPlant plant) {
-    String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format =
+        AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToPublicPlant(
           plant.id,
           name: plant.name,
         ));
       },
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Color(0xffdedede)), borderRadius: BorderRadius.circular(5.0)),
+            border: Border.all(width: 1, color: Color(0xffdedede)),
+            borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 4.0),
           child: Column(
@@ -63,9 +66,14 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath!),
-                        fit: BoxFit.cover, headers: {'Host': BackendAPI().storageServerHostHeader},
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    Image.network(
+                        BackendAPI()
+                            .feedsAPI
+                            .absoluteFileURL(plant.thumbnailPath!),
+                        fit: BoxFit.cover,
+                        headers: {'Host': BackendAPI().storageServerHostHeader},
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
                       }
@@ -75,24 +83,27 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
                       padding: const EdgeInsets.all(3.0),
                       child: Text(
                         plant.name,
-                        style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, shadows: [
-                          Shadow(
-                              // bottomLeft
-                              offset: Offset(-1.5, -1.5),
-                              color: Colors.white),
-                          Shadow(
-                              // bottomRight
-                              offset: Offset(1.5, -1.5),
-                              color: Colors.white),
-                          Shadow(
-                              // topRight
-                              offset: Offset(1.5, 1.5),
-                              color: Colors.white),
-                          Shadow(
-                              // topLeft
-                              offset: Offset(-1.5, 1.5),
-                              color: Colors.white),
-                        ]),
+                        style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                  // bottomLeft
+                                  offset: Offset(-1.5, -1.5),
+                                  color: Colors.white),
+                              Shadow(
+                                  // bottomRight
+                                  offset: Offset(1.5, -1.5),
+                                  color: Colors.white),
+                              Shadow(
+                                  // topRight
+                                  offset: Offset(1.5, 1.5),
+                                  color: Colors.white),
+                              Shadow(
+                                  // topLeft
+                                  offset: Offset(-1.5, 1.5),
+                                  color: Colors.white),
+                            ]),
                       ),
                     ),
                     Positioned(
@@ -134,7 +145,8 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
       title: 'Plants you follow',
       actionText: 'View as feed',
       actionFn: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToFollowsFeedEvent());
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToFollowsFeedEvent());
       },
     );
   }
@@ -184,7 +196,8 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
           ),
           GreenButton(
             onPressed: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToSettingsAuth());
             },
             title: 'Login or create account',
           )

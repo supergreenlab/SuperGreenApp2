@@ -35,11 +35,14 @@ class FullscreenPictureBlocState extends Equatable {
   List<Object> get props => [];
 }
 
-class FullscreenPictureBloc extends LegacyBloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
+class FullscreenPictureBloc
+    extends LegacyBloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
   final MainNavigateToFullscreenPicture args;
 
-  FullscreenPictureBloc(this.args) : super(FullscreenPictureBlocState(args.id, args.image));
+  FullscreenPictureBloc(this.args)
+      : super(FullscreenPictureBlocState(args.id, args.image));
 
   @override
-  Stream<FullscreenPictureBlocState> mapEventToState(FullscreenPictureBlocEvent event) async* {}
+  Stream<FullscreenPictureBlocState> mapEventToState(
+      FullscreenPictureBlocEvent event) async* {}
 }

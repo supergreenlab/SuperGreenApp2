@@ -39,7 +39,8 @@ class FollowsFeedBlocStateLoaded extends FollowsFeedBlocState {
   List<Object> get props => [];
 }
 
-class FollowsFeedBloc extends LegacyBloc<FollowsFeedBlocEvent, FollowsFeedBlocState> {
+class FollowsFeedBloc
+    extends LegacyBloc<FollowsFeedBlocEvent, FollowsFeedBlocState> {
   final MainNavigateToFollowsFeedEvent args;
 
   FollowsFeedBloc(this.args) : super(FollowsFeedBlocStateInit()) {
@@ -47,7 +48,8 @@ class FollowsFeedBloc extends LegacyBloc<FollowsFeedBlocEvent, FollowsFeedBlocSt
   }
 
   @override
-  Stream<FollowsFeedBlocState> mapEventToState(FollowsFeedBlocEvent event) async* {
+  Stream<FollowsFeedBlocState> mapEventToState(
+      FollowsFeedBlocEvent event) async* {
     if (event is FollowsFeedBlocEventInit) {
       yield FollowsFeedBlocStateLoaded();
     }

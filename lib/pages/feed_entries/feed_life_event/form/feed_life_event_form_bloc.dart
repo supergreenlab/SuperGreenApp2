@@ -64,27 +64,33 @@ class FeedLifeEventFormBlocStateLoaded extends FeedLifeEventFormBlocState {
 class FeedLifeEventFormBlocStateDone extends FeedLifeEventFormBlocState {
   final FeedEntry? feedEntry;
 
-  FeedLifeEventFormBlocStateDone(PlantPhases phase, this.feedEntry) : super(phase);
+  FeedLifeEventFormBlocStateDone(PlantPhases phase, this.feedEntry)
+      : super(phase);
 
   @override
   List<Object?> get props => [...super.props, feedEntry];
 }
 
-class FeedLifeEventFormBloc extends LegacyBloc<FeedLifeEventFormBlocEvent, FeedLifeEventFormBlocState> {
+class FeedLifeEventFormBloc
+    extends LegacyBloc<FeedLifeEventFormBlocEvent, FeedLifeEventFormBlocState> {
   final MainNavigateToFeedLifeEventFormEvent _args;
 
-  FeedLifeEventFormBloc(this._args) : super(FeedLifeEventFormBlocStateInit(_args.phase)) {
+  FeedLifeEventFormBloc(this._args)
+      : super(FeedLifeEventFormBlocStateInit(_args.phase)) {
     add(FeedLifeEventFormBlocEventInit());
   }
 
   @override
-  Stream<FeedLifeEventFormBlocState> mapEventToState(FeedLifeEventFormBlocEvent event) async* {
+  Stream<FeedLifeEventFormBlocState> mapEventToState(
+      FeedLifeEventFormBlocEvent event) async* {
     if (event is FeedLifeEventFormBlocEventInit) {
       Plant plant = await RelDB.get().plantsDAO.getPlant(_args.plant.id);
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
-      yield FeedLifeEventFormBlocStateLoaded(_args.phase, plantSettings.dateForPhase(_args.phase));
+      yield FeedLifeEventFormBlocStateLoaded(
+          _args.phase, plantSettings.dateForPhase(_args.phase));
     } else if (event is FeedLifeEventFormBlocEventSetDate) {
-      FeedEntry? feedEntry = await PlantHelper.updatePlantPhase(_args.plant, _args.phase, event.date);
+      FeedEntry? feedEntry = await PlantHelper.updatePlantPhase(
+          _args.plant, _args.phase, event.date);
       yield FeedLifeEventFormBlocStateDone(_args.phase, feedEntry);
     }
   }

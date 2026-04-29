@@ -50,7 +50,9 @@ class FeedUnknownCardPage extends StatelessWidget {
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedUnknownCardPage(this.animation, this.feedState, this.state, {Key? key}) : super(key: key);
+  const FeedUnknownCardPage(this.animation, this.feedState, this.state,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +61,10 @@ class FeedUnknownCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_unknown.svg', FeedUnknownCardPage.feedUnknownCardPageTitle, state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
+          FeedCardTitle('assets/feed_card/icon_unknown.svg',
+              FeedUnknownCardPage.feedUnknownCardPageTitle, state.synced,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, feedState),
@@ -71,7 +75,8 @@ class FeedUnknownCardPage extends StatelessWidget {
             child: Fullscreen(
               title: FeedUnknownCardPage.feedUnknownCardPageTitle,
               subtitle: FeedUnknownCardPage.feedUnknownCardPageUpgradeApp,
-              child: SvgPicture.asset('assets/feed_card/icon_unknown.svg', height: 70),
+              child: SvgPicture.asset('assets/feed_card/icon_unknown.svg',
+                  height: 70),
             ),
           ),
         ],

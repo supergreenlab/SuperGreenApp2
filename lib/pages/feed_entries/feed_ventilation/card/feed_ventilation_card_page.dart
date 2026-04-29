@@ -191,9 +191,11 @@ class FeedVentilationCardPage extends StatelessWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+  const FeedVentilationCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -236,20 +238,32 @@ class FeedVentilationCardPage extends StatelessWidget {
     Widget body;
     String title = FeedVentilationCardPage.feedVentilationCardPageTitle;
     String icon = FeedEntryIcons[FE_VENTILATION]!;
-    if (params.values.blowerRefSource == null && params.values.fanRefSource == null) {
-      body = FeedVentilationCardLegacy(params: state.params as FeedVentilationParams);
+    if (params.values.blowerRefSource == null &&
+        params.values.fanRefSource == null) {
+      body = FeedVentilationCardLegacy(
+          params: state.params as FeedVentilationParams);
     } else {
       FeedVentilationCardV3Values values;
       if (params.values.fanRefSource != null) {
         title = FeedVentilationCardPage.feedVentilationFanCardPageTitle;
         icon = 'assets/feed_card/icon_ventilation_fan.png';
-        values = FeedVentilationCardV3Values('Fan', params.values.fanRefSource!, params.values.fanRefMin!,
-            params.values.fanRefMax!, params.values.fanMin!, params.values.fanMax!);
+        values = FeedVentilationCardV3Values(
+            'Fan',
+            params.values.fanRefSource!,
+            params.values.fanRefMin!,
+            params.values.fanRefMax!,
+            params.values.fanMin!,
+            params.values.fanMax!);
       } else {
         title = FeedVentilationCardPage.feedVentilationBlowerCardPageTitle;
         icon = 'assets/feed_card/icon_ventilation_blower.svg';
-        values = FeedVentilationCardV3Values('Blower', params.values.blowerRefSource!, params.values.blowerRefMin!,
-            params.values.blowerRefMax!, params.values.blowerMin!, params.values.blowerMax!);
+        values = FeedVentilationCardV3Values(
+            'Blower',
+            params.values.blowerRefSource!,
+            params.values.blowerRefMin!,
+            params.values.blowerRefMax!,
+            params.values.blowerMin!,
+            params.values.blowerMax!);
       }
       body = FeedVentilationCardV3(values: values);
     }
@@ -258,10 +272,11 @@ class FeedVentilationCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              icon, title, state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
-            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+          FeedCardTitle(icon, title, state.synced,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions!(context, state) : []),
           body,
           SocialBarPage(

@@ -47,7 +47,10 @@ class SettingsDeviceAuthBlocEventSetAuth extends SettingsDeviceAuthBlocEvent {
   final String? oldPassword;
 
   SettingsDeviceAuthBlocEventSetAuth(
-      {required this.username, required this.password, this.oldUsername, this.oldPassword});
+      {required this.username,
+      required this.password,
+      this.oldUsername,
+      this.oldPassword});
 
   @override
   List<Object> get props => [username, password];
@@ -65,7 +68,8 @@ class SettingsDeviceAuthBlocStateLoaded extends SettingsDeviceAuthBlocState {
   final bool authSetup;
   final bool? needsUpgrade;
 
-  SettingsDeviceAuthBlocStateLoaded(this.device, {required this.authSetup, this.needsUpgrade});
+  SettingsDeviceAuthBlocStateLoaded(this.device,
+      {required this.authSetup, this.needsUpgrade});
 
   @override
   List<Object?> get props => [device, authSetup, needsUpgrade];
@@ -90,7 +94,8 @@ class SettingsDeviceAuthBlocStateDoneAuth extends SettingsDeviceAuthBlocState {
   List<Object> get props => [device];
 }
 
-class SettingsDeviceAuthBloc extends LegacyBloc<SettingsDeviceAuthBlocEvent, SettingsDeviceAuthBlocState> {
+class SettingsDeviceAuthBloc extends LegacyBloc<SettingsDeviceAuthBlocEvent,
+    SettingsDeviceAuthBlocState> {
   final MainNavigateToSettingsDeviceAuth args;
 
   SettingsDeviceAuthBloc(this.args) : super(SettingsDeviceAuthBlocStateInit()) {
@@ -98,23 +103,29 @@ class SettingsDeviceAuthBloc extends LegacyBloc<SettingsDeviceAuthBlocEvent, Set
   }
 
   @override
-  Stream<SettingsDeviceAuthBlocState> mapEventToState(SettingsDeviceAuthBlocEvent event) async* {
+  Stream<SettingsDeviceAuthBlocState> mapEventToState(
+      SettingsDeviceAuthBlocEvent event) async* {
     if (event is SettingsDeviceAuthBlocEventInit) {
-      Param otaTimestamp = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_TIMESTAMP');
+      Param otaTimestamp = await RelDB.get()
+          .devicesDAO
+          .getParam(args.device.id, 'OTA_TIMESTAMP');
       String? auth = AppDB().getDeviceAuth(args.device.identifier);
       yield SettingsDeviceAuthBlocStateLoaded(
         args.device,
         authSetup: auth != null,
-        needsUpgrade: otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
+        needsUpgrade:
+            otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is SettingsDeviceAuthBlocEventSetAuth) {
       yield SettingsDeviceAuthBlocStateLoading();
       String? auth = AppDB().getDeviceAuth(args.device.identifier);
       if (auth != null) {
         try {
-          String oldAuth = base64.encode(utf8.encode('${event.oldUsername}:${event.oldPassword}'));
-          String identifier =
-              await DeviceAPI.fetchStringParam(args.device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: oldAuth);
+          String oldAuth = base64
+              .encode(utf8.encode('${event.oldUsername}:${event.oldPassword}'));
+          String identifier = await DeviceAPI.fetchStringParam(
+              args.device.ip, 'BROKER_CLIENTID',
+              nRetries: 1, auth: oldAuth);
           if (identifier != args.device.identifier) {
             throw 'Wrong identifier';
           }
@@ -128,7 +139,8 @@ class SettingsDeviceAuthBloc extends LegacyBloc<SettingsDeviceAuthBlocEvent, Set
         }
       }
 
-      await DeviceHelper.updateAuth(args.device, event.username, event.password);
+      await DeviceHelper.updateAuth(
+          args.device, event.username, event.password);
       await Future.delayed(Duration(seconds: 1));
       yield SettingsDeviceAuthBlocStateDoneAuth(args.device);
     }

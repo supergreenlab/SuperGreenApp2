@@ -23,7 +23,8 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:tuple/tuple.dart';
 
 class DateRenderer {
-  static String renderSchedule(Param onHour, Param onMin, Param offHour, Param offMin) {
+  static String renderSchedule(
+      Param onHour, Param onMin, Param offHour, Param offMin) {
     DateTime on = DateTime(2022, 1, 1, onHour.ivalue!, onMin.ivalue!);
     DateTime off = DateTime(2022, 1, 1, offHour.ivalue!, offMin.ivalue!);
     if (on.isAfter(off)) {
@@ -34,7 +35,8 @@ class DateRenderer {
   }
 
   static String renderAbsoluteDate(DateTime date) {
-    String format = AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format =
+        AppDB().getUserSettings().freedomUnits! ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     DateFormat f = DateFormat(format);
     return f.format(date);
   }
@@ -45,27 +47,36 @@ class DateRenderer {
   }
 
   static String renderSincePhase(PlantSettings plantSettings, DateTime date) {
-    Tuple3<PlantPhases, DateTime, Duration>? phaseData = plantSettings.phaseAt(date);
+    Tuple3<PlantPhases, DateTime, Duration>? phaseData =
+        plantSettings.phaseAt(date);
     if (phaseData == null) {
       return 'Life events not set.';
     }
     List<String Function(Duration)> phases = [
       (Duration diff) => 'Clon. for ${renderDuration(phaseData.item3)}',
       (Duration diff) => 'Germ. ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Veg. for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Bloom. for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
+      (Duration diff) =>
+          'Veg. for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) =>
+          'Bloom. for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) =>
+          'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) =>
+          'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
     ];
     return phases[phaseData.item1.index](phaseData.item3);
   }
 
-  static String renderSinceGermination(PlantSettings plantSettings, DateTime date) {
-    if (plantSettings.germinationDate == null && plantSettings.cloningDate == null) {
+  static String renderSinceGermination(
+      PlantSettings plantSettings, DateTime date) {
+    if (plantSettings.germinationDate == null &&
+        plantSettings.cloningDate == null) {
       return 'Germination date not set.';
     }
-    DateTime date2 = plantSettings.germinationDate ?? plantSettings.cloningDate!;
-    String label = plantSettings.germinationDate != null ? "Germinated" : "Cloned";
+    DateTime date2 =
+        plantSettings.germinationDate ?? plantSettings.cloningDate!;
+    String label =
+        plantSettings.germinationDate != null ? "Germinated" : "Cloned";
     Duration diff = date.difference(date2);
     return '$label ${renderDuration(diff)}';
   }
@@ -80,7 +91,8 @@ class DateRenderer {
     } else if (minuteDiff < 60) {
       format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''}$suffix';
     } else if (hourDiff < 24) {
-      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ${minuteDiff % 60}min$suffix';
+      format =
+          '$hourDiff hour${hourDiff > 1 ? 's' : ''} ${minuteDiff % 60}min$suffix';
     } else if (dayDiff < 7) {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ${hourDiff % 24}h$suffix';
     } else {

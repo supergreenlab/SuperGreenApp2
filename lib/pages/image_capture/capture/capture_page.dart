@@ -57,13 +57,15 @@ class _CapturePageState extends State<CapturePage> {
           }
         } else if (state is CaptureBlocStateDone) {
           _popDone = true;
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.feedMedias));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.feedMedias));
         }
       },
       child: BlocBuilder<CaptureBloc, CaptureBlocState>(
           bloc: BlocProvider.of<CaptureBloc>(context),
           builder: (context, state) {
-            if (_cameraController != null && _cameraController!.value.isInitialized == true) {
+            if (_cameraController != null &&
+                _cameraController!.value.isInitialized == true) {
               if (state is CaptureBlocStateLoading) {
                 return Scaffold(
                     body: FullscreenLoading(
@@ -92,7 +94,8 @@ class _CapturePageState extends State<CapturePage> {
       child: WillPopScope(
         onWillPop: () async {
           if (_filePath != null) {
-            await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
+            await _deleteFileIfExists(
+                FeedMedias.makeAbsoluteFilePath(_filePath!));
           }
           return true;
         },
@@ -101,7 +104,8 @@ class _CapturePageState extends State<CapturePage> {
             children: [
               LayoutBuilder(builder: (context, constraints) {
                 double width = constraints.maxWidth;
-                double height = constraints.maxWidth * _cameraController!.value.aspectRatio;
+                double height =
+                    constraints.maxWidth * _cameraController!.value.aspectRatio;
                 Widget cameraPreview = Positioned(
                     left: constraints.maxWidth / 2 - width / 2,
                     top: constraints.maxHeight / 2 - height / 2,
@@ -109,7 +113,8 @@ class _CapturePageState extends State<CapturePage> {
                         width: width,
                         height: height,
                         child: GestureDetector(
-                            onTapUp: (TapUpDetails details) => onFocusTap(details, width, height),
+                            onTapUp: (TapUpDetails details) =>
+                                onFocusTap(details, width, height),
                             child: CameraPreview(_cameraController!))));
                 if (state.overlayPath != null) {
                   Widget overlay = Positioned(
@@ -122,7 +127,9 @@ class _CapturePageState extends State<CapturePage> {
                               fit: BoxFit.contain,
                               child: Opacity(
                                   opacity: 0.6,
-                                  child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath!)))))));
+                                  child: Image.file(File(
+                                      FeedMedias.makeAbsoluteFilePath(
+                                          state.overlayPath!)))))));
                   cameraPreview = Stack(children: [
                     cameraPreview,
                     overlay,
@@ -182,7 +189,8 @@ class _CapturePageState extends State<CapturePage> {
         children: [
           LayoutBuilder(builder: (context, constraints) {
             double width = constraints.maxWidth;
-            double height = constraints.maxWidth * _cameraController!.value.aspectRatio;
+            double height =
+                constraints.maxWidth * _cameraController!.value.aspectRatio;
             return Stack(children: [
               Positioned(
                   left: (constraints.maxWidth - width) / 2,
@@ -191,7 +199,8 @@ class _CapturePageState extends State<CapturePage> {
                       width: width,
                       height: height,
                       child: GestureDetector(
-                          onTapUp: (TapUpDetails details) => onFocusTap(details, width, height),
+                          onTapUp: (TapUpDetails details) =>
+                              onFocusTap(details, width, height),
                           child: CameraPreview(_cameraController!)))),
             ]);
           }),
@@ -224,9 +233,11 @@ class _CapturePageState extends State<CapturePage> {
     return RawMaterialButton(
       onPressed: () async {
         if (_filePath != null) {
-          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
+          await _deleteFileIfExists(
+              FeedMedias.makeAbsoluteFilePath(_filePath!));
         }
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigatorActionPop());
       },
       shape: new CircleBorder(),
       child: new Icon(
@@ -311,14 +322,16 @@ class _CapturePageState extends State<CapturePage> {
     );
   }
 
-  List<Widget> _renderRecordingMode(BuildContext context, CaptureBlocState state) {
+  List<Widget> _renderRecordingMode(
+      BuildContext context, CaptureBlocState state) {
     return <Widget>[
       _renderStopButton(context, state),
     ];
   }
 
   Widget _renderPictureButton(BuildContext context, CaptureBlocState state) {
-    return _renderBottomButton(context, Icons.photo_camera, Colors.blue, () async {
+    return _renderBottomButton(context, Icons.photo_camera, Colors.blue,
+        () async {
       if (_filePath != null) {
         await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
       }
@@ -353,7 +366,8 @@ class _CapturePageState extends State<CapturePage> {
     });
   }
 
-  Widget _renderBottomButton(BuildContext context, IconData icon, Color color, Function() onPressed) {
+  Widget _renderBottomButton(
+      BuildContext context, IconData icon, Color color, Function() onPressed) {
     return RawMaterialButton(
       onPressed: onPressed,
       child: new Icon(
@@ -369,15 +383,16 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   void _endCapture(CaptureBlocState state) async {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToImageCapturePlaybackEvent(_filePath!, overlayPath: state.overlayPath, futureFn: (f) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToImageCapturePlaybackEvent(_filePath!,
+            overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
         await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
         return;
       }
-      BlocProvider.of<CaptureBloc>(context)
-          .add(CaptureBlocEventCreate(files: [File(FeedMedias.makeAbsoluteFilePath(_filePath!))]));
+      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(
+          files: [File(FeedMedias.makeAbsoluteFilePath(_filePath!))]));
     }));
   }
 
@@ -387,7 +402,8 @@ class _CapturePageState extends State<CapturePage> {
     if (old != null) {
       await old.dispose();
     }
-    _cameraController = CameraController(_cameras[0], ResolutionPreset.veryHigh, enableAudio: _enableAudio);
+    _cameraController = CameraController(_cameras[0], ResolutionPreset.veryHigh,
+        enableAudio: _enableAudio);
     await _cameraController!.initialize();
     _cameraController!.setFocusMode(focusMode);
     _cameraController!.lockCaptureOrientation(DeviceOrientation.portraitUp);
@@ -407,7 +423,8 @@ class _CapturePageState extends State<CapturePage> {
     if (Platform.isAndroid) {
       yFocus = (height - details.localPosition.dy) / height;
     }
-    _cameraController!.setFocusPoint(Offset(details.localPosition.dx / width, yFocus));
+    _cameraController!
+        .setFocusPoint(Offset(details.localPosition.dx / width, yFocus));
   }
 
   void _buildPicker(BuildContext context) {
@@ -419,10 +436,12 @@ class _CapturePageState extends State<CapturePage> {
           withVideos: true,
           onDone: (Set<MediaFile?> selectedFiles) {
             Timer(Duration(milliseconds: 500), () {
-              List<File> files = selectedFiles.where((mf) => mf != null).map((f) {
+              List<File> files =
+                  selectedFiles.where((mf) => mf != null).map((f) {
                 return File(f!.path);
               }).toList();
-              BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(files: files));
+              BlocProvider.of<CaptureBloc>(context)
+                  .add(CaptureBlocEventCreate(files: files));
             });
             Navigator.pop(c);
           },

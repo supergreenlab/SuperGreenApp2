@@ -46,8 +46,8 @@ class CardPlantGermination {
         'text': CardPlantGermination.toweliePlantGermination,
         'buttons': [
           TowelieButtonPlantGerminate.createButton(),
-          TowelieButtonShowTip.createButton(
-              'Germination guide', 't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
+          TowelieButtonShowTip.createButton('Germination guide',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
         ]
       })),
     ));

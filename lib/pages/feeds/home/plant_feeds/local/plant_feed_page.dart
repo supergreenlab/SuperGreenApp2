@@ -72,7 +72,8 @@ class PlantFeedPage extends StatefulWidget {
     return Intl.message(
       'Plant feed',
       name: 'plantFeedPageTitle',
-      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Label for the button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -81,7 +82,8 @@ class PlantFeedPage extends StatefulWidget {
     return Intl.message(
       'Viewing single log entry',
       name: 'plantFeedPageSingleEntry',
-      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Label for the button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -90,7 +92,8 @@ class PlantFeedPage extends StatefulWidget {
     return Intl.message(
       'View complete diary',
       name: 'plantFeedPageSingleEntryButton',
-      desc: 'Button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -261,7 +264,8 @@ class PlantFeedPage extends StatefulWidget {
     return Intl.message(
       'Plant was removed or archived.',
       name: 'plantFeedPageArchived',
-      desc: 'Message displayed when the plant that was displayed has be removed or archived',
+      desc:
+          'Message displayed when the plant that was displayed has be removed or archived',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -270,7 +274,8 @@ class PlantFeedPage extends StatefulWidget {
     return Intl.message(
       'OPEN PLANT LIST',
       name: 'plantFeedPageOpenPlantMenu',
-      desc: 'Button displayed under plantFeedPageArchived, opens the plant menu',
+      desc:
+          'Button displayed under plantFeedPageArchived, opens the plant menu',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -306,7 +311,8 @@ class PlantFeedPage extends StatefulWidget {
     return Intl.message(
       'START',
       name: 'plantFeedPageStart',
-      desc: 'Button displayed under plantFeedPageAddFirstPlantPart2, opens the plant creation user flow',
+      desc:
+          'Button displayed under plantFeedPageAddFirstPlantPart2, opens the plant creation user flow',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -353,8 +359,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             if (state.box.device != null) {
               // TODO find something better than this
               Timer(Duration(milliseconds: 100), () {
-                BlocProvider.of<DeviceReachableListenerBloc>(context)
-                    .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
+                BlocProvider.of<DeviceReachableListenerBloc>(context).add(
+                    DeviceReachableListenerBlocEventLoadDevice(
+                        state.box.device!));
               });
             }
           }
@@ -378,10 +385,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               );
             }
 
-            return BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-              listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
+            return BlocListener<DeviceReachableListenerBloc,
+                DeviceReachableListenerBlocState>(
+              listener: (BuildContext context,
+                  DeviceReachableListenerBlocState reachableState) {
                 if (state is PlantFeedBlocStateLoaded) {
-                  if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
+                  if (reachableState
+                          is DeviceReachableListenerBlocStateDeviceReachable &&
                       reachableState.device.id == state.box.device) {
                     setState(() {
                       _reachable = reachableState.reachable;
@@ -393,7 +403,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               },
               child: Scaffold(
                   key: _scaffoldKey,
-                  appBar: state is PlantFeedBlocStateNoPlant || state is PlantFeedBlocStatePlantRemoved
+                  appBar: state is PlantFeedBlocStateNoPlant ||
+                          state is PlantFeedBlocStatePlantRemoved
                       ? SGLAppBar(
                           PlantFeedPage.plantFeedPageTitle,
                           fontSize: 20,
@@ -404,10 +415,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                       : null,
                   drawer: Drawer(
                       child: PlantDrawerPage(
-                    selectedPlant: state is PlantFeedBlocStateLoaded ? state.plant : null,
+                    selectedPlant:
+                        state is PlantFeedBlocStateLoaded ? state.plant : null,
                   )),
-                  body: AnimatedSwitcher(child: body, duration: Duration(milliseconds: 200)),
-                  floatingActionButton: state is PlantFeedBlocStateLoaded ? _renderSpeedDial(context, state) : null),
+                  body: AnimatedSwitcher(
+                      child: body, duration: Duration(milliseconds: 200)),
+                  floatingActionButton: state is PlantFeedBlocStateLoaded
+                      ? _renderSpeedDial(context, state)
+                      : null),
             );
           },
         ),
@@ -415,7 +430,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  SpeedDial _renderSpeedDial(BuildContext context, PlantFeedBlocStateLoaded state) {
+  SpeedDial _renderSpeedDial(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return SpeedDial(
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
@@ -446,7 +462,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         ][_speedDialType.index]());
   }
 
-  List<SpeedDialChild> _renderTrimSpeedDials(BuildContext context, PlantFeedBlocStateLoaded state) {
+  List<SpeedDialChild> _renderTrimSpeedDials(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
@@ -462,17 +479,23 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           FeedEntryIcons[FE_DEFOLIATION]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedDefoliationFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedDefoliationFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_DEFOLIATION',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'
+              ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuTopping,
           FeedEntryIcons[FE_TOPPING]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedToppingFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedToppingFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_TOPPING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
@@ -483,16 +506,20 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           FeedEntryIcons[FE_CLONING]!,
           _onSpeedDialSelected(
             context,
-            ({pushAsReplacement = false}) => MainNavigateToFeedCloningFormEvent(state.plant,
-                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+            ({pushAsReplacement = false}) => MainNavigateToFeedCloningFormEvent(
+                state.plant,
+                pushAsReplacement: pushAsReplacement,
+                futureFn: futureFn(context, state)),
           )),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuFimming,
           FeedEntryIcons[FE_FIMMING]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedFimmingFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedFimmingFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_FIMMING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
@@ -503,17 +530,23 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           FeedEntryIcons[FE_BENDING]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedBendingFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedBendingFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_BENDING',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'
+              ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuTransplant,
           FeedEntryIcons[FE_TRANSPLANT]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedTransplantFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedTransplantFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_TRANSPLANT',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',
@@ -522,7 +555,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     ];
   }
 
-  List<SpeedDialChild> _renderLifeEvents(BuildContext context, PlantFeedBlocStateLoaded state) {
+  List<SpeedDialChild> _renderLifeEvents(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
@@ -538,59 +572,87 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           FeedEntryIcons[FE_LIFE_EVENT_CLONING]!,
           _onSpeedDialSelected(
             context,
-            ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(state.plant, PlantPhases.CLONING,
-                pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+            ({pushAsReplacement = false}) =>
+                MainNavigateToFeedLifeEventFormEvent(
+                    state.plant, PlantPhases.CLONING,
+                    pushAsReplacement: pushAsReplacement,
+                    futureFn: futureFn(context, state)),
           )),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGerminating,
           FeedEntryIcons[FE_LIFE_EVENT_GERMINATING]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant, PlantPhases.GERMINATING,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.GERMINATING,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_GERMINATING',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'
+              ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuVegging,
           'assets/plant_infos/icon_vegging_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(state.plant, PlantPhases.VEGGING,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.VEGGING,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_VEGGING',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en'
+              ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuBlooming,
           'assets/plant_infos/icon_blooming_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(state.plant, PlantPhases.BLOOMING,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.BLOOMING,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_BLOOMING',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en'
+              ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuDrying,
           'assets/plant_infos/icon_drying_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(state.plant, PlantPhases.DRYING,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.DRYING,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_DRYING',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en'
+              ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuCuring,
           'assets/plant_infos/icon_curing_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(state.plant, PlantPhases.CURING,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.CURING,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_CURING',
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/why_cure/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/why_cure/l/en'
+              ])),
     ];
   }
 
-  List<SpeedDialChild> _renderGeneralSpeedDials(BuildContext context, PlantFeedBlocStateLoaded state) {
+  List<SpeedDialChild> _renderGeneralSpeedDials(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGrowlog,
@@ -598,21 +660,27 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                  plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)))),
+                  plant: state.plant,
+                  pushAsReplacement: pushAsReplacement,
+                  futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuMeasure,
           FeedEntryIcons[FE_MEASURE]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedMeasureFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)))),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedMeasureFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuNutrientMix,
           FeedEntryIcons[FE_NUTRIENT_MIX]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedNutrientMixFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedNutrientMixFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_WATERING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_start_adding_nutrients/l/en',
@@ -623,8 +691,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           FeedEntryIcons[FE_WATER]!,
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.plant,
-                  pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+              ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
+                  state.plant,
+                  pushAsReplacement: pushAsReplacement,
+                  futureFn: futureFn(context, state)),
               tipID: 'TIP_WATERING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
@@ -653,7 +723,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     ];
   }
 
-  SpeedDialChild _renderSpeedDialChild(String label, String icon, void Function() navigateTo) {
+  SpeedDialChild _renderSpeedDialChild(
+      String label, String icon, void Function() navigateTo) {
     return SpeedDialChild(
       child: SvgPicture.asset(icon),
       label: label,
@@ -663,14 +734,17 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  void Function() _onSpeedDialSelected(
-      BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
+  void Function() _onSpeedDialSelected(BuildContext context,
+      MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
       {String? tipID, List<String>? tipPaths}) {
     return () {
       _openCloseDial.value = !_openCloseDial.value;
       if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
-            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
+            tipID,
+            tipPaths,
+            navigatorEvent(pushAsReplacement: true)
+                as MainNavigateToFeedFormEvent));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }
@@ -684,7 +758,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           icon: Icon(Icons.remove_red_eye),
           tooltip: 'View live cams',
           onPressed: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTimelapseViewer(state.plant));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToTimelapseViewer(state.plant));
           },
         ),
       ];
@@ -692,17 +767,20 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         actions.insert(
             0,
             BlocProvider<SunglassesBloc>(
-              create: (BuildContext context) => SunglassesBloc(state.box.device!, state.box.deviceBox!),
+              create: (BuildContext context) =>
+                  SunglassesBloc(state.box.device!, state.box.deviceBox!),
               child: BlocBuilder<SunglassesBloc, SunglassesBlocState>(
                 builder: (BuildContext context, SunglassesBlocState state) {
                   if (state is SunglassesBlocStateLoaded) {
                     return Opacity(
                       opacity: state.sunglassesOn ? 0.5 : 1,
                       child: IconButton(
-                        icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
+                        icon:
+                            SvgPicture.asset('assets/home/icon_sunglasses.svg'),
                         tooltip: 'Sunglasses mode',
                         onPressed: () {
-                          BlocProvider.of<SunglassesBloc>(context).add(SunglassesBlocEventOnOff());
+                          BlocProvider.of<SunglassesBloc>(context)
+                              .add(SunglassesBlocEventOnOff());
                         },
                       ),
                     );
@@ -730,7 +808,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           title: PlantFeedPage.plantFeedPageSingleEntry,
           button: PlantFeedPage.plantFeedPageSingleEntryButton,
           onTap: () {
-            BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToPlantFeedEvent(state.plant));
+            BlocProvider.of<HomeNavigatorBloc>(context)
+                .add(HomeNavigateToPlantFeedEvent(state.plant));
           },
         );
       }
@@ -739,7 +818,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(
             LocalPlantFeedBlocDelegate(state.plant.feed,
-                feedEntryID: state.feedEntry?.id, commentID: state.commentID, replyTo: state.replyTo),
+                feedEntryID: state.feedEntry?.id,
+                commentID: state.commentID,
+                replyTo: state.replyTo),
             filters: filters),
         child: FeedPage(
           automaticallyImplyLeading: true,
@@ -769,22 +850,25 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   }
 
   Widget _renderPlantRemoved(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      Center(
-          child: Column(children: [
-        Icon(Icons.delete, color: Colors.grey, size: 100),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(PlantFeedPage.plantFeedPageArchived, style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
-        ),
-        GreenButton(
-          title: PlantFeedPage.plantFeedPageOpenPlantMenu,
-          onPressed: () {
-            _scaffoldKey.currentState!.openDrawer();
-          },
-        ),
-      ]))
-    ]);
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+              child: Column(children: [
+            Icon(Icons.delete, color: Colors.grey, size: 100),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(PlantFeedPage.plantFeedPageArchived,
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+            ),
+            GreenButton(
+              title: PlantFeedPage.plantFeedPageOpenPlantMenu,
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+            ),
+          ]))
+        ]);
   }
 
   Widget _renderNoPlant(BuildContext context) {
@@ -795,29 +879,36 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: Text(PlantFeedPage.plantFeedPageNoPlantYet,
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
                   Text(PlantFeedPage.plantFeedPageAddFirstPlantPart1,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text(PlantFeedPage.plantFeedPageAddFirstPlantPart2,
-                      style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w200,
+                          color: Color(0xff3bb30b))),
                 ],
               ),
             ),
             GreenButton(
               title: PlantFeedPage.plantFeedPageStart,
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToCreatePlantEvent(futureFn: (future) async {
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToCreatePlantEvent(futureFn: (future) async {
                   dynamic res = await future;
                   if (res == true) {
-                    BlocProvider.of<PlantFeedBloc>(context).add(PlantFeedBlocEventLoad());
+                    BlocProvider.of<PlantFeedBloc>(context)
+                        .add(PlantFeedBlocEventLoad());
                   }
                 }));
               },
@@ -835,7 +926,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           onTap: () {
             _openCloseDial.value = !_openCloseDial.value;
           },
-          child: Container(width: constraints.maxWidth, height: constraints.maxHeight, color: Colors.white60),
+          child: Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              color: Colors.white60),
         );
       },
     );
@@ -856,7 +950,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 maxLines: 1,
                 softWrap: false,
                 overflow: TextOverflow.fade,
-                style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.normal),
               ),
               Text(_remote ? 'Remote controled!' : _deviceIP,
                   style: TextStyle(
@@ -887,7 +984,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               padding: const EdgeInsets.only(right: 8.0),
               child: nameText,
             ),
-            Icon(Icons.offline_bolt, color: _reachable ? Colors.green : Colors.grey, size: 20),
+            Icon(Icons.offline_bolt,
+                color: _reachable ? Colors.green : Colors.grey, size: 20),
           ],
         );
       }
@@ -912,7 +1010,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
       _renderQuickView,
       _renderControls,
-      (c, s) => EnvironmentsPage(s.box, plant: s.plant, futureFn: futureFn(c, s)),
+      (c, s) =>
+          EnvironmentsPage(s.box, plant: s.plant, futureFn: futureFn(c, s)),
       _renderPlantInfos,
       _renderProducts,
     ];
@@ -931,7 +1030,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             return tabs[index](context, state);
           },
           pagination: SwiperPagination(
-            builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
+            builder: new DotSwiperPaginationBuilder(
+                color: Colors.white, activeColor: Color(0xff3bb30b)),
           ),
           loop: false,
         ),
@@ -939,11 +1039,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  Widget _renderQuickView(BuildContext context, PlantFeedBlocStateLoaded state) {
+  Widget _renderQuickView(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(state.plant, state.box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.box)),
+        BlocProvider<PlantQuickViewBloc>(
+            create: (context) => PlantQuickViewBloc(state.plant, state.box)),
+        BlocProvider<AppBarMetricsBloc>(
+            create: (context) => AppBarMetricsBloc(state.box)),
       ],
       child: PlantQuickViewPage(),
     );
@@ -952,8 +1055,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   Widget _renderControls(BuildContext context, PlantFeedBlocStateLoaded state) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<BoxControlsBloc>(create: (context) => BoxControlsBloc(state.plant, state.box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.box)),
+        BlocProvider<BoxControlsBloc>(
+            create: (context) => BoxControlsBloc(state.plant, state.box)),
+        BlocProvider<AppBarMetricsBloc>(
+            create: (context) => AppBarMetricsBloc(state.box)),
       ],
       child: BoxControlsPage(
         futureFn: futureFn(context, state),
@@ -961,9 +1066,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  Widget _renderPlantInfos(BuildContext context, PlantFeedBlocStateLoaded state) {
+  Widget _renderPlantInfos(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return BlocProvider<PlantInfosBloc>(
-      create: (context) => PlantInfosBloc(LocalPlantInfosBlocDelegate(state.plant)),
+      create: (context) =>
+          PlantInfosBloc(LocalPlantInfosBlocDelegate(state.plant)),
       child: PlantInfosPage(),
     );
   }
@@ -975,7 +1082,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  void _showSharingLink(BuildContext context, PlantFeedBlocStateLoaded state) async {
+  void _showSharingLink(
+      BuildContext context, PlantFeedBlocStateLoaded state) async {
     await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -993,7 +1101,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               child: PlantPublicLink(
                 state: state,
                 onMakePublic: () {
-                  BlocProvider.of<PlantFeedBloc>(context).add(PlantFeedBlocEventMakePublic());
+                  BlocProvider.of<PlantFeedBloc>(context)
+                      .add(PlantFeedBlocEventMakePublic());
                 },
               ),
             ),
@@ -1009,11 +1118,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   }
 
 // TODO DRY this somewhere
-  void Function(Future<dynamic>?) futureFn(BuildContext context, PlantFeedBlocStateLoaded state) {
+  void Function(Future<dynamic>?) futureFn(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return (Future<dynamic>? future) async {
       dynamic feedEntry = await future;
       if (feedEntry != null && feedEntry is FeedEntry) {
-        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));
+        BlocProvider.of<TowelieBloc>(context)
+            .add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));
       }
     };
   }

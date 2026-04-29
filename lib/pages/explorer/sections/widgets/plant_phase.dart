@@ -26,18 +26,21 @@ class PlantPhase extends StatelessWidget {
   final DateTime? time;
   final PlantSettings plantSettings;
 
-  const PlantPhase({Key? key, required this.plantSettings, this.time}) : super(key: key);
+  const PlantPhase({Key? key, required this.plantSettings, this.time})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String germinationText = 'Date not set';
     if (plantSettings.germinationDate != null) {
-      Duration diff = (this.time ?? DateTime.now()).difference(plantSettings.germinationDate!);
+      Duration diff = (this.time ?? DateTime.now())
+          .difference(plantSettings.germinationDate!);
       germinationText = DateRenderer.renderDuration(diff, suffix: '');
     }
     String? phaseTitle;
     String bloomingText = 'Not set.';
-    Tuple3<PlantPhases, DateTime, Duration>? phaseData = plantSettings.phaseAt(DateTime.now());
+    Tuple3<PlantPhases, DateTime, Duration>? phaseData =
+        plantSettings.phaseAt(DateTime.now());
     if (phaseData != null && phaseData.item1 != PlantPhases.GERMINATING) {
       List<String> phases = [
         'Cloning for: ',
@@ -55,7 +58,8 @@ class PlantPhase extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 4.0, right: 8.0),
-            child: SvgPicture.asset("assets/explorer/icon_phase.svg", width: 35, height: 35),
+            child: SvgPicture.asset("assets/explorer/icon_phase.svg",
+                width: 35, height: 35),
           ),
           Expanded(
             child: Column(

@@ -38,8 +38,7 @@ class IconCheckbox extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.circle,
-          border: Border.all(color: strokeColor, width: 3.0)
-      ),
+          border: Border.all(color: strokeColor, width: 3.0)),
       child: Center(
         child: asset,
       ),

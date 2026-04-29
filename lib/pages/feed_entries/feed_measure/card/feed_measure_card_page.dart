@@ -101,9 +101,12 @@ class FeedMeasureCardPage extends StatefulWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedMeasureCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions}) : super(key: key);
+  const FeedMeasureCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
+      : super(key: key);
 
   @override
   _FeedMeasureCardPageState createState() => _FeedMeasureCardPageState();
@@ -139,8 +142,13 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
+                      Expanded(
+                          child:
+                              PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(
+                          child: PlantPhase(
+                              plantSettings: state.plantSettings!,
+                              time: state.date)),
                     ],
                   ),
                 )
@@ -164,16 +172,21 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
     String? sliderTitle;
     if (params.time != null) {
       Duration time = Duration(seconds: params.time!);
-      sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDays(Duration(seconds: params.time!).inDays);
+      sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDays(
+          Duration(seconds: params.time!).inDays);
       if (time.inMinutes == 0) {
-        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageSeconds(Duration(seconds: params.time!).inSeconds);
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageSeconds(
+            Duration(seconds: params.time!).inSeconds);
       } else if (time.inHours == 0) {
-        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageMinutes(Duration(seconds: params.time!).inMinutes);
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageMinutes(
+            Duration(seconds: params.time!).inMinutes);
       } else if (time.inDays == 0) {
-        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageHours(Duration(seconds: params.time!).inHours);
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageHours(
+            Duration(seconds: params.time!).inHours);
       } else if (time.inDays < 4) {
         sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDaysAndHours(
-            Duration(seconds: params.time!).inDays, Duration(seconds: params.time!).inHours % 24);
+            Duration(seconds: params.time!).inDays,
+            Duration(seconds: params.time!).inHours % 24);
       }
     }
     return FeedCard(
@@ -181,23 +194,34 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(FeedEntryIcons[FE_MEASURE]!, FeedMeasureCardPage.feedMeasureCardPageTitle, state.synced,
-              title2: widget.state.showPlantInfos ? widget.state.plantName : null,
+          FeedCardTitle(FeedEntryIcons[FE_MEASURE]!,
+              FeedMeasureCardPage.feedMeasureCardPageTitle, state.synced,
+              title2:
+                  widget.state.showPlantInfos ? widget.state.plantName : null,
               showSyncStatus: !state.isRemoteState,
               showControls: !state.isRemoteState, onEdit: () {
             setState(() {
               editText = true;
             });
           }, onDelete: () {
-            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
+          },
+              actions: widget.cardActions != null
+                  ? widget.cardActions!(context, state)
+                  : []),
           state.showPlantInfos
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
+                      Expanded(
+                          child:
+                              PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(
+                          child: PlantPhase(
+                              plantSettings: state.plantSettings!,
+                              time: state.date)),
                     ],
                   ),
                 )
@@ -208,12 +232,16 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
             showTapIcon: state.previous != null,
             onMediaTapped: (media) {
               if (state.previous != null) {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToFullscreenMedia(
-                    state.previous!.thumbnailPath, state.previous!.filePath,
-                    overlayPath: state.current.filePath, heroPath: state.current.filePath, sliderTitle: sliderTitle));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(
+                        state.previous!.thumbnailPath, state.previous!.filePath,
+                        overlayPath: state.current.filePath,
+                        heroPath: state.current.filePath,
+                        sliderTitle: sliderTitle));
               } else {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(state.current.thumbnailPath, state.current.filePath));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(
+                        state.current.thumbnailPath, state.current.filePath));
               }
             },
           ),
@@ -226,7 +254,8 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   params.message ?? '',
                   edit: editText,
                   onEdited: (value) {
-                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(state, params.copyWith(value)));
+                    BlocProvider.of<FeedBloc>(context).add(
+                        FeedBlocEventEditParams(state, params.copyWith(value)));
                     setState(() {
                       editText = false;
                     });

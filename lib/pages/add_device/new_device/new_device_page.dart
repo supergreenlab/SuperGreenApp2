@@ -92,7 +92,8 @@ class NewDevicePage extends StatelessWidget {
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
           if (state.popOnComplete) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop());
           } else {
             _startSetup(context);
           }
@@ -140,7 +141,8 @@ class NewDevicePage extends StatelessWidget {
     );
   }
 
-  Widget _renderFailed(BuildContext context, NewDeviceBlocStateConnectionToSSIDFailed state) {
+  Widget _renderFailed(
+      BuildContext context, NewDeviceBlocStateConnectionToSSIDFailed state) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,7 +151,8 @@ class NewDevicePage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: MarkdownBody(
               data: NewDevicePage.instructionsNewDeviceWifiFailed,
-              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Color(0xff454545), fontSize: 16)),
             ),
           ),
           Expanded(
@@ -169,7 +172,8 @@ class NewDevicePage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
                     data: NewDevicePage.instructionsNewDeviceWifiFailed3,
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Color(0xff454545), fontSize: 16)),
                   ),
                 ),
               ],
@@ -183,7 +187,8 @@ class NewDevicePage extends StatelessWidget {
                 title: CommonL10N.doneButton,
                 onPressed: () {
                   if (state.popOnComplete) {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigatorActionPop());
                   } else {
                     _startSetup(context);
                   }
@@ -197,14 +202,16 @@ class NewDevicePage extends StatelessWidget {
   }
 
   Widget _renderLoading() {
-    return Expanded(child: FullscreenLoading(title: NewDevicePage.newDeviceAutoConnect));
+    return Expanded(
+        child: FullscreenLoading(title: NewDevicePage.newDeviceAutoConnect));
   }
 
   void _startSetup(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToDeviceSetupEvent('192.168.4.1', futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToDeviceSetupEvent('192.168.4.1', futureFn: (future) async {
       Device device = await future;
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigatorActionPop(param: device));
     }));
   }
 }

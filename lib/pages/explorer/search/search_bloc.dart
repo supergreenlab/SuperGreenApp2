@@ -73,9 +73,13 @@ class SearchBloc extends LegacyBloc<SearchBlocEvent, SearchBlocState> {
       yield SearchBlocStateLoaded([], true, 0, null);
     } else if (event is SearchBlocEventSearch) {
       yield SearchBlocStateLoading();
-      List<dynamic> plantMaps = await BackendAPI().feedsAPI.searchPlants(event.search, 10, event.offset);
-      List<PublicPlant> plants = plantMaps.map<PublicPlant>((m) => PublicPlant.fromMap(m)).toList();
-      yield SearchBlocStateLoaded(plants, plants.length < 10, event.offset, event.search);
+      List<dynamic> plantMaps = await BackendAPI()
+          .feedsAPI
+          .searchPlants(event.search, 10, event.offset);
+      List<PublicPlant> plants =
+          plantMaps.map<PublicPlant>((m) => PublicPlant.fromMap(m)).toList();
+      yield SearchBlocStateLoaded(
+          plants, plants.length < 10, event.offset, event.search);
     }
   }
 }

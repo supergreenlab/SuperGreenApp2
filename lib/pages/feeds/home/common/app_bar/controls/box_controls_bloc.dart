@@ -26,7 +26,8 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
 class BoxControlParamsController extends ParamsController {
-  BoxControlParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+  BoxControlParamsController({Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get blower => params['blower']!;
   ParamController get light => params['light']!;
@@ -55,9 +56,11 @@ class BoxControlParamsController extends ParamsController {
 
     int nLights = 0;
     try {
-      Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
+      Module lightModule =
+          await RelDB.get().devicesDAO.getModule(device.id, "led");
       for (int i = 0; i < lightModule.arrayLen; ++i) {
-        Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+        Param boxParam =
+            await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
         if (boxParam.ivalue != box.deviceBox!) {
           continue;
         }
@@ -150,7 +153,8 @@ class BoxControlsBlocStateLoaded extends BoxControlsBlocState {
       ];
 }
 
-class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocState> {
+class BoxControlsBloc
+    extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocState> {
   final Plant? plant;
   Box box;
   Device? device;
@@ -163,7 +167,8 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   }
 
   @override
-  Stream<BoxControlsBlocState> mapEventToState(BoxControlsBlocEvent event) async* {
+  Stream<BoxControlsBlocState> mapEventToState(
+      BoxControlsBlocEvent event) async* {
     if (event is BoxControlsBlocEventInit) {
       final db = RelDB.get();
       if (box.device == null) {
@@ -184,7 +189,10 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       add(BoxControlsBlocEventInit());
     } else if (event is BoxControlsBlocEventSetDevice) {
       final db = RelDB.get();
-      await BoxHelper.setBoxDevice(box, device: event.device, deviceBox: event.deviceBox, screenDevice: event.device.isScreen ? event.device : null);
+      await BoxHelper.setBoxDevice(box,
+          device: event.device,
+          deviceBox: event.deviceBox,
+          screenDevice: event.device.isScreen ? event.device : null);
       this.box = await db.plantsDAO.getBox(box.id);
       add(BoxControlsBlocEventInit());
     }
@@ -192,7 +200,8 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
 
   void onParamUpdate(ParamsController newValue) {
     metrics = newValue as BoxControlParamsController;
-    add(BoxControlsBlocEventLoaded(BoxControlsBlocStateLoaded(device!, plant, box, metrics!)));
+    add(BoxControlsBlocEventLoaded(
+        BoxControlsBlocStateLoaded(device!, plant, box, metrics!)));
   }
 
   @override

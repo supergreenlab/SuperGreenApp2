@@ -30,14 +30,16 @@ class ChecklistCollectionsBlocEventInit extends ChecklistCollectionsBlocEvent {
   List<Object?> get props => [];
 }
 
-class ChecklistCollectionsBlocEventAddCollection extends ChecklistCollectionsBlocEvent {
-
+class ChecklistCollectionsBlocEventAddCollection
+    extends ChecklistCollectionsBlocEvent {
   final ChecklistCollectionsCompanion collection;
 
   ChecklistCollectionsBlocEventAddCollection(this.collection);
 
   @override
-  List<Object?> get props => [collection,];
+  List<Object?> get props => [
+        collection,
+      ];
 }
 
 abstract class ChecklistCollectionsBlocState extends Equatable {}
@@ -47,33 +49,41 @@ class ChecklistCollectionsBlocStateInit extends ChecklistCollectionsBlocState {
   List<Object?> get props => [];
 }
 
-class ChecklistCollectionsBlocStateLoaded extends ChecklistCollectionsBlocState {
-
+class ChecklistCollectionsBlocStateLoaded
+    extends ChecklistCollectionsBlocState {
   final List<ChecklistCollection> checklistCollections;
   final List<ChecklistCollectionsCompanion> collections;
 
-  ChecklistCollectionsBlocStateLoaded(this.checklistCollections, this.collections);
+  ChecklistCollectionsBlocStateLoaded(
+      this.checklistCollections, this.collections);
 
   @override
   List<Object?> get props => [collections];
 }
 
-class ChecklistCollectionsBloc extends LegacyBloc<ChecklistCollectionsBlocEvent, ChecklistCollectionsBlocState> {
-
+class ChecklistCollectionsBloc extends LegacyBloc<ChecklistCollectionsBlocEvent,
+    ChecklistCollectionsBlocState> {
   final MainNavigateToChecklistCollections args;
 
-  ChecklistCollectionsBloc(this.args) : super(ChecklistCollectionsBlocStateInit()) {
+  ChecklistCollectionsBloc(this.args)
+      : super(ChecklistCollectionsBlocStateInit()) {
     add(ChecklistCollectionsBlocEventInit());
   }
 
   @override
-  Stream<ChecklistCollectionsBlocState> mapEventToState(ChecklistCollectionsBlocEvent event) async* {
+  Stream<ChecklistCollectionsBlocState> mapEventToState(
+      ChecklistCollectionsBlocEvent event) async* {
     if (event is ChecklistCollectionsBlocEventInit) {
-      List<ChecklistCollection> checklistCollections = await RelDB.get().checklistsDAO.getChecklistCollectionsForChecklist(args.checklist);
-      List<ChecklistCollectionsCompanion> collections = await BackendAPI().checklistAPI.getChecklistCollections();
-      yield ChecklistCollectionsBlocStateLoaded(checklistCollections, collections);
+      List<ChecklistCollection> checklistCollections = await RelDB.get()
+          .checklistsDAO
+          .getChecklistCollectionsForChecklist(args.checklist);
+      List<ChecklistCollectionsCompanion> collections =
+          await BackendAPI().checklistAPI.getChecklistCollections();
+      yield ChecklistCollectionsBlocStateLoaded(
+          checklistCollections, collections);
     } else if (event is ChecklistCollectionsBlocEventAddCollection) {
-      await ChecklistHelper.subscribeCollection(event.collection.serverID.value!, args.checklist);
+      await ChecklistHelper.subscribeCollection(
+          event.collection.serverID.value!, args.checklist);
     }
   }
 }

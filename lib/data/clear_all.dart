@@ -39,13 +39,15 @@ class ClearAll {
     int i = 0;
     for (FeedMedia feedMedia in feedMedias) {
       try {
-        await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath)).delete();
+        await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath))
+            .delete();
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"filePath": feedMedia.filePath});
       }
       yield ClearAllState(++i, feedMedias.length * 2);
       try {
-        await File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)).delete();
+        await File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath))
+            .delete();
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"filePath": feedMedia.thumbnailPath});
       }
@@ -78,14 +80,19 @@ class ClearAll {
     yield ClearAllState(0, feedMedias.length);
     i = 0;
     for (FeedMedia feedMedia in feedMedias) {
-      await RelDB.get().feedsDAO.updateFeedMedia(feedMedia.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().feedsDAO.updateFeedMedia(feedMedia
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, feedMedias.length);
     }
-    List<FeedEntry> feedEntries = await RelDB.get().feedsDAO.getAllFeedEntries();
+    List<FeedEntry> feedEntries =
+        await RelDB.get().feedsDAO.getAllFeedEntries();
     i = 0;
     yield ClearAllState(0, feedEntries.length);
     for (FeedEntry feedEntry in feedEntries) {
-      await RelDB.get().feedsDAO.updateFeedEntry(feedEntry.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().feedsDAO.updateFeedEntry(feedEntry
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, feedEntries.length);
     }
 
@@ -93,7 +100,9 @@ class ClearAll {
     i = 0;
     yield ClearAllState(0, feeds.length);
     for (Feed feed in feeds) {
-      await RelDB.get().feedsDAO.updateFeed(feed.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().feedsDAO.updateFeed(feed
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, feeds.length);
     }
 
@@ -101,7 +110,9 @@ class ClearAll {
     i = 0;
     yield ClearAllState(0, plants.length);
     for (Plant plant in plants) {
-      await RelDB.get().plantsDAO.updatePlant(plant.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().plantsDAO.updatePlant(plant
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, plants.length);
     }
 
@@ -109,7 +120,9 @@ class ClearAll {
     i = 0;
     yield ClearAllState(0, timelapses.length);
     for (Timelapse timelapse in timelapses) {
-      await RelDB.get().plantsDAO.updateTimelapse(timelapse.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().plantsDAO.updateTimelapse(timelapse
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, timelapses.length);
     }
 
@@ -117,7 +130,9 @@ class ClearAll {
     i = 0;
     yield ClearAllState(0, boxes.length);
     for (Box box in boxes) {
-      await RelDB.get().plantsDAO.updateBox(box.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().plantsDAO.updateBox(box
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, boxes.length);
     }
 
@@ -125,10 +140,14 @@ class ClearAll {
     i = 0;
     yield ClearAllState(0, devices.length);
     for (Device device in devices) {
-      await RelDB.get().devicesDAO.updateDevice(device.toCompanion(true).copyWith(serverID: Value(null), synced: Value(false)));
+      await RelDB.get().devicesDAO.updateDevice(device
+          .toCompanion(true)
+          .copyWith(serverID: Value(null), synced: Value(false)));
       yield ClearAllState(++i, devices.length);
     }
 
-    await RelDB.get().deletesDAO.removeDeletes(await RelDB.get().deletesDAO.getDeletes());
+    await RelDB.get()
+        .deletesDAO
+        .removeDeletes(await RelDB.get().deletesDAO.getDeletes());
   }
 }

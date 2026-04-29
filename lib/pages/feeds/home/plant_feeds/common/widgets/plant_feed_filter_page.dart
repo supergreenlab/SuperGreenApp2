@@ -48,7 +48,9 @@ class PlantFeedFilterPage extends StatefulWidget {
   final Function(List<String>) onSaveFilters;
   final List<String> filters;
 
-  const PlantFeedFilterPage({Key? key, required this.onSaveFilters, required this.filters}) : super(key: key);
+  const PlantFeedFilterPage(
+      {Key? key, required this.onSaveFilters, required this.filters})
+      : super(key: key);
 
   @override
   State<PlantFeedFilterPage> createState() => _PlantFeedFilterPageState();
@@ -89,7 +91,8 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
               backgroundColor: Colors.transparent,
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 0.0, left: 16.0, right: 16.0),
+                  padding:
+                      const EdgeInsets.only(top: 0.0, left: 16.0, right: 16.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -137,7 +140,8 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             onTap: () => {
               setState(() {
                 filters = {};
-                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(null));
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventSetFilters(null));
                 widget.onSaveFilters([]);
               })
             },
@@ -157,8 +161,10 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                 cardTypes.forEach((f) {
                   filters[f] = false;
                 });
-                List<String> f = cardTypes.where((ct) => filters[ct] ?? true).toList();
-                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(f));
+                List<String> f =
+                    cardTypes.where((ct) => filters[ct] ?? true).toList();
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventSetFilters(f));
                 widget.onSaveFilters(f);
               })
             },
@@ -176,11 +182,12 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
     );
   }
 
-  static double filterSidePadding=16.0;
+  static double filterSidePadding = 16.0;
 
   Widget _renderCardFilters(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: filterSidePadding, right: filterSidePadding, bottom: 16.0),
+      padding: EdgeInsets.only(
+          left: filterSidePadding, right: filterSidePadding, bottom: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -215,8 +222,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                   filterName: 'FE_NUTRIENT_MIX', name: 'Nutrient M'),
               _renderCardfilter(context,
                   filterName: 'FE_WATER', name: 'Watering'),
-              _renderCardfilter(context,
-                  filterName: 'FE_LIGHT', name: 'Light'),
+              _renderCardfilter(context, filterName: 'FE_LIGHT', name: 'Light'),
               _renderCardfilter(context,
                   filterName: 'FE_VENTILATION', name: 'Ventilation'),
               _renderCardfilter(context,
@@ -228,9 +234,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             alignment: WrapAlignment.start,
             children: [
               _renderCardfilter(context,
-                filterName: 'FE_LIFE_EVENT',
-                name: 'Life events'
-              ),
+                  filterName: 'FE_LIFE_EVENT', name: 'Life events'),
               _renderCardfilter(
                 context,
                 filterName: 'FE_TOWELIE_INFO',
@@ -250,15 +254,16 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
   }) {
     bool checked = filters[filterName] ?? true;
     Size size = MediaQuery.of(context).size;
-    double width = (size.width - filterSidePadding*2) / 4;
+    double width = (size.width - filterSidePadding * 2) / 4;
     if (width < 85) {
-      width = (size.width - filterSidePadding*2) / 3;
+      width = (size.width - filterSidePadding * 2) / 3;
     }
     return InkWell(
       onTap: () {
         setState(() {
           filters[filterName] = !checked;
-          List<String> f = cardTypes.where((ct) => filters[ct] ?? true).toList();
+          List<String> f =
+              cardTypes.where((ct) => filters[ct] ?? true).toList();
           BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(f));
           widget.onSaveFilters(f);
         });
@@ -282,7 +287,10 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: IconCheckbox(icon: FeedEntryIcons[filterName]!, checked: checked, size: 30.0),
+              child: IconCheckbox(
+                  icon: FeedEntryIcons[filterName]!,
+                  checked: checked,
+                  size: 30.0),
             )
           ],
         ),

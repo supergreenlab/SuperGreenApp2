@@ -19,12 +19,12 @@
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 
-const CH_FEEDING='FEEDING';
-const CH_PESTS='PESTS';
-const CH_TRAINING='TRAINING';
-const CH_ENVIRONMENT='ENVIRONMENT';
-const CH_SUPPLY='SUPPLY';
-const CH_OTHER='OTHER';
+const CH_FEEDING = 'FEEDING';
+const CH_PESTS = 'PESTS';
+const CH_TRAINING = 'TRAINING';
+const CH_ENVIRONMENT = 'ENVIRONMENT';
+const CH_SUPPLY = 'SUPPLY';
+const CH_OTHER = 'OTHER';
 
 const Map<String, String> ChecklistCategoryIcons = {
   CH_FEEDING: 'assets/checklist/icon_watering.svg',
@@ -58,9 +58,9 @@ const Map<String, String> ChecklistActionIcons = {
   ChecklistActionMessage.TYPE: 'assets/checklist/icon_message.svg',
 };
 
-const CO_BASICS='BASICS';
-const CO_NUTRIENT='NUTRIENT';
-const CO_RECIPE='RECIPE';
+const CO_BASICS = 'BASICS';
+const CO_NUTRIENT = 'NUTRIENT';
+const CO_RECIPE = 'RECIPE';
 
 const Map<String, String> ChecklistCollectionCategoryIcons = {
   CO_BASICS: 'assets/checklist/icon_daily_checks.svg',

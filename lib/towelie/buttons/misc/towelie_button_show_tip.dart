@@ -26,13 +26,16 @@ class TowelieButtonShowTip extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton(String title, String url) => TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton(String title, String url) =>
+      TowelieButton.createButton(_id, {
         'title': title,
         'url': url,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
-    yield TowelieBlocStateMainNavigation(MainNavigateToTipEvent(null, [event.params['url']], null));
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
+    yield TowelieBlocStateMainNavigation(
+        MainNavigateToTipEvent(null, [event.params['url']], null));
   }
 }

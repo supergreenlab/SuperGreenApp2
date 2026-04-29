@@ -44,7 +44,8 @@ class PlantInfosDropdownInput extends StatelessWidget {
         ),
         child: DropdownButtonFormField(
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               filled: true,
               fillColor: Colors.white10,
               hintText: hintText,
@@ -53,10 +54,13 @@ class PlantInfosDropdownInput extends StatelessWidget {
               labelStyle: TextStyle(
                 color: Colors.white,
               ),
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white)),
             ),
             selectedItemBuilder: (BuildContext context) {
-              return items.map((i) => Text(i[1], style: TextStyle(color: Colors.white))).toList();
+              return items
+                  .map((i) => Text(i[1], style: TextStyle(color: Colors.white)))
+                  .toList();
             },
             items: items
                 .map((i) => DropdownMenuItem<String>(

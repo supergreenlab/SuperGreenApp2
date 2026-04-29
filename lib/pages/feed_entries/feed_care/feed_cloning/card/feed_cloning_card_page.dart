@@ -34,8 +34,12 @@ class FeedCloningCardPage extends FeedCareCommonCardPage {
     );
   }
 
-  FeedCloningCardPage(Animation<double> animation, FeedState feedState, FeedEntryState state,
-      {Key? key, List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions})
+  FeedCloningCardPage(
+      Animation<double> animation, FeedState feedState, FeedEntryState state,
+      {Key? key,
+      List<Widget> Function(
+              BuildContext context, FeedEntryState feedEntryState)?
+          cardActions})
       : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {

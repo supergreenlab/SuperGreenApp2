@@ -45,14 +45,20 @@ class Fullscreen extends StatelessWidget {
     if (title != null) {
       titles.add(Text(
         title!,
-        style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor ?? Color(0xff565656)),
+        style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: textColor ?? Color(0xff565656)),
         textAlign: TextAlign.center,
       ));
     }
     if (subtitle != null) {
       titles.add(Text(
         subtitle!,
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: textColor ?? Colors.grey),
+        style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: textColor ?? Colors.grey),
         textAlign: TextAlign.center,
       ));
     }

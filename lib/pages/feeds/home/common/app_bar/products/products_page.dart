@@ -111,7 +111,9 @@ class _ProductsPageState extends State<ProductsPage> {
             if (state is ProductsBlocStateLoading) {
               return AppBarTab(child: _renderLoading(context, state));
             }
-            return AppBarTab(child: _renderLoaded(context, state as ProductsBlocStateLoaded));
+            return AppBarTab(
+                child:
+                    _renderLoaded(context, state as ProductsBlocStateLoaded));
           }),
     );
   }
@@ -141,13 +143,15 @@ class _ProductsPageState extends State<ProductsPage> {
             size: 40,
           ),
           onPressed: () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToSelectNewProductEvent(products, futureFn: (future) async {
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToSelectNewProductEvent(products,
+                    futureFn: (future) async {
               List<Product>? products = await future;
               if (products == null) {
                 return;
               }
-              BlocProvider.of<ProductsBloc>(context).add(ProductsBlocEventUpdate(products));
+              BlocProvider.of<ProductsBloc>(context)
+                  .add(ProductsBlocEventUpdate(products));
             }));
           },
         ),
@@ -164,7 +168,9 @@ class _ProductsPageState extends State<ProductsPage> {
           height: 1,
           color: Color(0xFF494949),
         ),
-        state.products.length == 0 ? _renderEmptyList(context) : _renderList(context, state),
+        state.products.length == 0
+            ? _renderEmptyList(context)
+            : _renderList(context, state),
       ]),
     );
   }
@@ -177,10 +183,14 @@ class _ProductsPageState extends State<ProductsPage> {
             child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
               child: Text(
-                widget.editable ? ProductsPage.productsPageToolboxEmptyOwnPlant : ProductsPage.productsPageToolboxEmpty,
-                style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold),
+                widget.editable
+                    ? ProductsPage.productsPageToolboxEmptyOwnPlant
+                    : ProductsPage.productsPageToolboxEmpty,
+                style: TextStyle(
+                    color: Color(0xFF494949), fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -192,7 +202,8 @@ class _ProductsPageState extends State<ProductsPage> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(ProductsPage.productsPageToolboxInstructions, style: TextStyle(color: Color(0xFF494949))),
+                  child: Text(ProductsPage.productsPageToolboxInstructions,
+                      style: TextStyle(color: Color(0xFF494949))),
                 ),
               ),
             ]),
@@ -207,19 +218,26 @@ class _ProductsPageState extends State<ProductsPage> {
       child: ListView(
         children: state.products.map<Widget>((p) {
           final ProductCategoryUI categoryUI = productCategories[p.category]!;
-          List<Widget> subtitle = [Text(p.name, style: TextStyle(fontSize: 20, color: Color(0xFF494949)))];
+          List<Widget> subtitle = [
+            Text(p.name,
+                style: TextStyle(fontSize: 20, color: Color(0xFF494949)))
+          ];
           if (p.specs?.by != null) {
             subtitle.addAll([
               Row(children: [
-                Text(ProductsPage.productsPageToolboxBy, style: TextStyle(color: Color(0xFF494949))),
+                Text(ProductsPage.productsPageToolboxBy,
+                    style: TextStyle(color: Color(0xFF494949))),
                 Text(p.specs!.by!, style: TextStyle(color: Color(0xff3bb30b))),
               ])
             ]);
           }
           return ListTile(
             leading: SvgPicture.asset(categoryUI.icon),
-            title: Text(categoryUI.name, style: TextStyle(color: Color(0xFF494949))),
-            subtitle: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: subtitle),
+            title: Text(categoryUI.name,
+                style: TextStyle(color: Color(0xFF494949))),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: subtitle),
             trailing: p.supplier?.url != null
                 ? InkWell(
                     child: Icon(

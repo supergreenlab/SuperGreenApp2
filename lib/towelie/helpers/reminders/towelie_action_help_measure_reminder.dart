@@ -39,9 +39,12 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   String get feedEntryType => 'FE_MEASURE';
 
   @override
-  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {
-    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
-    yield TowelieBlocStateHelper(RouteSettings(name: '/feed/plant', arguments: null),
+  Stream<TowelieBlocState> feedEntryTrigger(
+      TowelieBlocEventFeedEntryCreated event) async* {
+    Plant plant =
+        await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
+    yield TowelieBlocStateHelper(
+        RouteSettings(name: '/feed/plant', arguments: null),
         TowelieActionHelpMeasureReminder.towelieHelperMeasureReminder,
         buttons: [
           TowelieButtonReminder.createButton(

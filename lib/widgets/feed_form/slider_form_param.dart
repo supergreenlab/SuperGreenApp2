@@ -23,7 +23,7 @@ import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 class SliderFormParam extends StatelessWidget {
   final double value;
   final void Function(String)? onTitleEdited;
-  final void Function(double)? onChangeStart;  // Add this line
+  final void Function(double)? onChangeStart; // Add this line
   final void Function(double) onChanged;
   final void Function(double) onChangeEnd;
   final String title;
@@ -41,7 +41,7 @@ class SliderFormParam extends StatelessWidget {
     required this.icon,
     required this.value,
     this.onTitleEdited,
-    this.onChangeStart,  // Add this line
+    this.onChangeStart, // Add this line
     required this.onChanged,
     required this.onChangeEnd,
     required this.color,
@@ -74,9 +74,14 @@ class SliderFormParam extends StatelessWidget {
                         onChanged(newValue);
                         onChangeEnd(newValue);
                       },
-                child: Text('-', style: TextStyle(fontSize: 50, color: Colors.grey)),
+                child: Text('-',
+                    style: TextStyle(fontSize: 50, color: Colors.grey)),
               ),
-              Text('$value%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b))),
+              Text('$value%',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff3bb30b))),
               TextButton(
                 onPressed: disable == true
                     ? null
@@ -86,7 +91,8 @@ class SliderFormParam extends StatelessWidget {
                         onChanged(newValue);
                         onChangeEnd(newValue);
                       },
-                child: Text('+', style: TextStyle(fontSize: 30, color: Colors.grey)),
+                child: Text('+',
+                    style: TextStyle(fontSize: 30, color: Colors.grey)),
               ),
               loading == true
                   ? SizedBox(
@@ -94,7 +100,8 @@ class SliderFormParam extends StatelessWidget {
                       width: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 3.0,
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff3bb30b)),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Color(0xff3bb30b)),
                       ),
                     )
                   : Container(),
@@ -109,7 +116,8 @@ class SliderFormParam extends StatelessWidget {
                   child: Slider(
                     min: min,
                     max: max,
-                    onChangeStart: disable == true ? null : onChangeStart,  // Add this line
+                    onChangeStart:
+                        disable == true ? null : onChangeStart, // Add this line
                     onChangeEnd: disable == true ? null : onChangeEnd,
                     value: value,
                     activeColor: color,

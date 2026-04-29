@@ -39,9 +39,11 @@ abstract class FeedCareCommonCardPage extends StatefulWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedCareCommonCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+  const FeedCareCommonCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -82,8 +84,13 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
+                      Expanded(
+                          child:
+                              PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(
+                          child: PlantPhase(
+                              plantSettings: state.plantSettings!,
+                              time: state.date)),
                     ],
                   ),
                 )
@@ -115,9 +122,12 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
           showSyncStatus: !state.isRemoteState,
           showControls: !state.isRemoteState,
           onDelete: () {
-            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
           },
-          actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
+          actions: widget.cardActions != null
+              ? widget.cardActions!(context, state)
+              : []),
       SocialBarPage(
         state: state,
         feedState: widget.feedState,
@@ -128,7 +138,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         params.message ?? '',
         edit: editText,
         onEdited: (value) {
-          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(state, params.copyWith(value)));
+          BlocProvider.of<FeedBloc>(context)
+              .add(FeedBlocEventEditParams(state, params.copyWith(value)));
           setState(() {
             editText = false;
           });
@@ -154,8 +165,9 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             state.beforeMedias,
             prefix: 'Before ',
             onMediaTapped: (media) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToFullscreenMedia(
+                      media.thumbnailPath, media.filePath));
             },
           ),
         ),
@@ -170,8 +182,9 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               state.afterMedias,
               prefix: 'After ',
               onMediaTapped: (media) {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(
+                        media.thumbnailPath, media.filePath));
               },
             ),
           ));
@@ -184,7 +197,9 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
           child: Row(
             children: [
               Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
-              Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
+              Expanded(
+                  child: PlantPhase(
+                      plantSettings: state.plantSettings!, time: state.date)),
             ],
           ),
         ),

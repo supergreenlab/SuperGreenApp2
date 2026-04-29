@@ -34,13 +34,16 @@ class ProductsAPI {
     return serverID!;
   }
 
-  Future<List<Product>> searchProducts(String terms, {ProductCategoryID? categoryID}) async {
+  Future<List<Product>> searchProducts(String terms,
+      {ProductCategoryID? categoryID}) async {
     String url = '/products/search?terms=${Uri.encodeQueryComponent(terms)}';
     if (categoryID != null) {
       url += '&category=${describeEnum(categoryID)}';
     }
     Map<String, dynamic> productResults = await BackendAPI().get(url);
     List<dynamic> products = productResults['products'];
-    return products.map<Product>((p) => Product.fromMap(p, json: true)).toList();
+    return products
+        .map<Product>((p) => Product.fromMap(p, json: true))
+        .toList();
   }
 }

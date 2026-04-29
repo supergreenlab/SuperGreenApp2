@@ -26,7 +26,10 @@ class PlantInfosPlantType extends StatefulWidget {
   final Function onCancel;
   final Function(String? plantType) onSubmit;
 
-  PlantInfosPlantType({required this.plantType, required this.onCancel, required this.onSubmit});
+  PlantInfosPlantType(
+      {required this.plantType,
+      required this.onCancel,
+      required this.onSubmit});
 
   @override
   _PlantInfosPlantTypeState createState() => _PlantInfosPlantTypeState();

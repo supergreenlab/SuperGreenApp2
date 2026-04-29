@@ -23,18 +23,24 @@ class ListTitle extends StatelessWidget {
   final String? actionText;
   final Function()? actionFn;
 
-  const ListTitle({Key? key, required this.title, this.actionText, this.actionFn}) : super(key: key);
+  const ListTitle(
+      {Key? key, required this.title, this.actionText, this.actionFn})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 20.0, bottom: 12.0),
+      padding:
+          const EdgeInsets.only(left: 8.0, right: 8.0, top: 20.0, bottom: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff464646)),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff464646)),
           ),
           this.actionText != null && this.actionFn != null
               ? InkWell(

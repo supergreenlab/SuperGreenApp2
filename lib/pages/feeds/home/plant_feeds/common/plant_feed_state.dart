@@ -9,7 +9,8 @@ class PlantFeedState extends FeedState {
   final PlantSettings plantSettings;
   final BoxSettings boxSettings;
 
-  PlantFeedState(bool loggedIn, String? storeGeo, this.plantID, this.boxID, this.plantSettings, this.boxSettings)
+  PlantFeedState(bool loggedIn, String? storeGeo, this.plantID, this.boxID,
+      this.plantSettings, this.boxSettings)
       : super(loggedIn, storeGeo);
 
   @override

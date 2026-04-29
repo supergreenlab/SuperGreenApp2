@@ -24,13 +24,16 @@ import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 class FeedVentilationLegacyFormPage extends StatefulWidget {
   final LegacyBlowerParamsController paramsController;
 
-  const FeedVentilationLegacyFormPage(this.paramsController, {Key? key}) : super(key: key);
+  const FeedVentilationLegacyFormPage(this.paramsController, {Key? key})
+      : super(key: key);
 
   @override
-  _FeedVentilationLegacyFormPageState createState() => _FeedVentilationLegacyFormPageState();
+  _FeedVentilationLegacyFormPageState createState() =>
+      _FeedVentilationLegacyFormPageState();
 }
 
-class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFormPage> {
+class _FeedVentilationLegacyFormPageState
+    extends State<FeedVentilationLegacyFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
 
@@ -59,7 +62,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
             });
           },
           onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+            BlocProvider.of<FeedVentilationFormBloc>(context)
+                .add(FeedVentilationFormBlocParamsChangedEvent(
               paramsController: widget.paramsController.copyWithValues({
                 "blowerDay": _blowerDay,
               }) as LegacyBlowerParamsController,
@@ -80,7 +84,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
             });
           },
           onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+            BlocProvider.of<FeedVentilationFormBloc>(context)
+                .add(FeedVentilationFormBlocParamsChangedEvent(
               paramsController: widget.paramsController.copyWithValues({
                 "blowerNight": _blowerNight,
               }) as LegacyBlowerParamsController,

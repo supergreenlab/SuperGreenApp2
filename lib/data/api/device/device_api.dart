@@ -29,7 +29,9 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceAPI {
   static String mdnsDomain(String name) {
-    return name.toLowerCase().replaceAllMapped(RegExp(r'[\W_]+'), (match) => "");
+    return name
+        .toLowerCase()
+        .replaceAllMapped(RegExp(r'[\W_]+'), (match) => "");
   }
 
   static Future<String?> resolveLocalName(String name) async {
@@ -48,15 +50,18 @@ class DeviceAPI {
   }
 
   static Future<String?> resolveLocalNameMDNS(String name) async {
-    final MDnsClient client =
-        MDnsClient(rawDatagramSocketFactory: (dynamic host, int port, {bool? reuseAddress, bool? reusePort, int? ttl}) {
-      return RawDatagramSocket.bind(host, port, reuseAddress: true, reusePort: false, ttl: ttl!);
+    final MDnsClient client = MDnsClient(rawDatagramSocketFactory:
+        (dynamic host, int port,
+            {bool? reuseAddress, bool? reusePort, int? ttl}) {
+      return RawDatagramSocket.bind(host, port,
+          reuseAddress: true, reusePort: false, ttl: ttl!);
     });
     await client.start();
 
     String? foundIP;
     await for (IPAddressResourceRecord record
-        in client.lookup<IPAddressResourceRecord>(ResourceRecordQuery.addressIPv4(name))) {
+        in client.lookup<IPAddressResourceRecord>(
+            ResourceRecordQuery.addressIPv4(name))) {
       foundIP = record.address.address;
       break;
     }
@@ -67,16 +72,19 @@ class DeviceAPI {
   static Future<String> fetchConfig(String controllerIP, {String? auth}) async {
     final client = new HttpClient();
     client.connectionTimeout = Duration(seconds: 10);
-    final req = await client.getUrl(Uri.parse('http://$controllerIP/fs/config.json'));
+    final req =
+        await client.getUrl(Uri.parse('http://$controllerIP/fs/config.json'));
     if (auth != null) {
       req.headers.set('Authorization', 'Basic $auth');
     }
     final HttpClientResponse resp = await req.close();
     if (resp.contentLength == 0) {
-      Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+      Logger.throwError('Device request error: ${resp.statusCode}',
+          fwdThrow: true);
     }
     if ((resp.statusCode / 100).floor() != 2) {
-      Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+      Logger.throwError('Device request error: ${resp.statusCode}',
+          fwdThrow: true);
     }
     final completer = Completer<String>();
     completer.future.whenComplete(() => client.close(force: true));
@@ -116,7 +124,8 @@ class DeviceAPI {
             return '';
           }
           if ((resp.statusCode / 100).floor() != 2) {
-            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+            Logger.throwError('Device request error: ${resp.statusCode}',
+                fwdThrow: true);
           }
           final completer = Completer<String>();
           completer.future.whenComplete(() => client.close(force: true));
@@ -148,13 +157,15 @@ class DeviceAPI {
           await Future.delayed(Duration(seconds: wait));
         }
         try {
-          final req = await client.getUrl(Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}'));
+          final req = await client.getUrl(
+              Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}'));
           if (auth != null) {
             req.headers.set('Authorization', 'Basic $auth');
           }
           final resp = await req.close();
           if ((resp.statusCode / 100).floor() != 2) {
-            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+            Logger.throwError('Device request error: ${resp.statusCode}',
+                fwdThrow: true);
           }
           final completer = Completer<int>();
           completer.future.whenComplete(() => client.close(force: true));
@@ -162,7 +173,9 @@ class DeviceAPI {
             try {
               completer.complete(int.parse(contents));
             } catch (e, trace) {
-              Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName}, fwdThrow: true);
+              Logger.logError(e, trace,
+                  data: {"controllerIP": controllerIP, "paramName": paramName},
+                  fwdThrow: true);
             }
           }, onError: completer.completeError);
           return completer.future;
@@ -173,36 +186,55 @@ class DeviceAPI {
         }
       }
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName}, fwdThrow: true);
+      Logger.logError(e, trace,
+          data: {"controllerIP": controllerIP, "paramName": paramName},
+          fwdThrow: true);
     }
     throw Error();
   }
 
-  static Future<String> setStringParam(String controllerIP, String paramName, String value,
+  static Future<String> setStringParam(
+      String controllerIP, String paramName, String value,
       {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     try {
-      await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
-          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
+      await post(
+          'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
+          timeout: timeout,
+          nRetries: nRetries,
+          wait: wait,
+          auth: auth);
     } catch (e, trace) {
       Logger.logError(e, trace,
-          data: {"controllerIP": controllerIP, "paramName": paramName, "value": value}, fwdThrow: true);
+          data: {
+            "controllerIP": controllerIP,
+            "paramName": paramName,
+            "value": value
+          },
+          fwdThrow: true);
     }
     return fetchStringParam(controllerIP, paramName, auth: auth);
   }
 
-  static Future<int> setIntParam(String controllerIP, String paramName, int value,
+  static Future<int> setIntParam(
+      String controllerIP, String paramName, int value,
       {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     try {
       await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     } catch (e, trace) {
       Logger.logError(e, trace,
-          data: {"controllerIP": controllerIP, "paramName": paramName, "value": value}, fwdThrow: true);
+          data: {
+            "controllerIP": controllerIP,
+            "paramName": paramName,
+            "value": value
+          },
+          fwdThrow: true);
     }
     return fetchIntParam(controllerIP, paramName, auth: auth);
   }
 
-  static Future post(String url, {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
+  static Future post(String url,
+      {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -219,7 +251,8 @@ class DeviceAPI {
           }
           final resp = await req.close();
           if ((resp.statusCode / 100).floor() != 2) {
-            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+            Logger.throwError('Device request error: ${resp.statusCode}',
+                fwdThrow: true);
           }
           break;
         } catch (e) {
@@ -245,7 +278,8 @@ class DeviceAPI {
           await Future.delayed(Duration(seconds: wait));
         }
         try {
-          final req = await client.postUrl(Uri.parse('http://$controllerIP/fs/$fileName'));
+          final req = await client
+              .postUrl(Uri.parse('http://$controllerIP/fs/$fileName'));
           if (auth != null) {
             req.headers.set('Authorization', 'Basic $auth');
           }
@@ -254,7 +288,8 @@ class DeviceAPI {
           await req.flush();
           final resp = await req.close();
           if ((resp.statusCode / 100).floor() != 2) {
-            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+            Logger.throwError('Device request error: ${resp.statusCode}',
+                fwdThrow: true);
           }
           break;
         } catch (e) {
@@ -264,7 +299,9 @@ class DeviceAPI {
         }
       }
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "fileName": fileName}, fwdThrow: true);
+      Logger.logError(e, trace,
+          data: {"controllerIP": controllerIP, "fileName": fileName},
+          fwdThrow: true);
     } finally {
       client.close(force: true);
     }
@@ -272,7 +309,8 @@ class DeviceAPI {
 
   static Map<int, bool> fetchingAllParams = {};
 
-  static Future fetchAllParams(String ip, int deviceID, Function(double) advancement,
+  static Future fetchAllParams(
+      String ip, int deviceID, Function(double) advancement,
       {bool delete = false, String? auth}) async {
     if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
@@ -303,7 +341,10 @@ class DeviceAPI {
           } catch (e) {}
           if (exists == null) {
             ModulesCompanion module = ModulesCompanion.insert(
-                device: deviceID, name: moduleName, isArray: isArray, arrayLen: isArray ? k['array']['len'] : 0);
+                device: deviceID,
+                name: moduleName,
+                isArray: isArray,
+                arrayLen: isArray ? k['array']['len'] : 0);
             moduleID = await db.addModule(module);
           } else {
             moduleID = exists.id;
@@ -317,7 +358,8 @@ class DeviceAPI {
         } catch (e) {}
         if (type == INTEGER_TYPE) {
           try {
-            final value = await DeviceAPI.fetchIntParam(ip, k['caps_name'], auth: auth);
+            final value =
+                await DeviceAPI.fetchIntParam(ip, k['caps_name'], auth: auth);
             if (exists == null) {
               ParamsCompanion param = ParamsCompanion.insert(
                   device: deviceID,
@@ -330,11 +372,14 @@ class DeviceAPI {
               await db.updateParam(exists.copyWith(ivalue: Value(value)));
             }
           } catch (e, trace) {
-            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']}, fwdThrow: true);
+            Logger.logError(e, trace,
+                data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']},
+                fwdThrow: true);
           }
         } else {
           try {
-            final value = await DeviceAPI.fetchStringParam(ip, k['caps_name'], auth: auth);
+            final value = await DeviceAPI.fetchStringParam(ip, k['caps_name'],
+                auth: auth);
             if (exists == null) {
               ParamsCompanion param = ParamsCompanion.insert(
                   device: deviceID,
@@ -347,7 +392,9 @@ class DeviceAPI {
               await db.updateParam(exists.copyWith(svalue: Value(value)));
             }
           } catch (e, trace) {
-            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']}, fwdThrow: true);
+            Logger.logError(e, trace,
+                data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']},
+                fwdThrow: true);
           }
         }
         ++done;
@@ -361,19 +408,23 @@ class DeviceAPI {
       int nMotors = 0;
       if (isController) {
         try {
-          final boxModule = await RelDB.get().devicesDAO.getModule(deviceID, 'box');
+          final boxModule =
+              await RelDB.get().devicesDAO.getModule(deviceID, 'box');
           nBoxes = boxModule.arrayLen;
         } catch (e) {}
         try {
-          final i2cModule = await RelDB.get().devicesDAO.getModule(deviceID, 'i2c');
+          final i2cModule =
+              await RelDB.get().devicesDAO.getModule(deviceID, 'i2c');
           nSensorPorts = i2cModule.arrayLen;
         } catch (e) {}
         try {
-          final ledModule = await RelDB.get().devicesDAO.getModule(deviceID, 'led');
+          final ledModule =
+              await RelDB.get().devicesDAO.getModule(deviceID, 'led');
           nLeds = ledModule.arrayLen;
         } catch (e) {}
         try {
-          final motorModule = await RelDB.get().devicesDAO.getModule(deviceID, 'motor');
+          final motorModule =
+              await RelDB.get().devicesDAO.getModule(deviceID, 'motor');
           nMotors = motorModule.arrayLen;
         } catch (e) {}
       }
@@ -390,7 +441,8 @@ class DeviceAPI {
         config: Value(config),
       ));
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID}, fwdThrow: true);
+      Logger.logError(e, trace,
+          data: {"ip": ip, "deviceID": deviceID}, fwdThrow: true);
     } finally {
       DeviceAPI.fetchingAllParams[deviceID] = false;
     }

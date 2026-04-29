@@ -41,7 +41,8 @@ First step is to **give your new plant a name**.''',
     final bdb = RelDB.get().plantsDAO;
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpCreatePlant.towelieHelperCreatePlant);
+      yield TowelieBlocStateHelper(event.settings,
+          TowelieActionHelpCreatePlant.towelieHelperCreatePlant);
     }
   }
 }

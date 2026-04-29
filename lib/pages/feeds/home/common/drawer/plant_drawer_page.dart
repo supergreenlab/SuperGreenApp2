@@ -34,7 +34,8 @@ class PlantDrawerPage extends StatefulWidget {
   final Plant? selectedPlant;
   final Box? selectedBox;
 
-  const PlantDrawerPage({Key? key, this.selectedPlant, this.selectedBox}) : super(key: key);
+  const PlantDrawerPage({Key? key, this.selectedPlant, this.selectedBox})
+      : super(key: key);
 
   @override
   _PlantDrawerPageState createState() => _PlantDrawerPageState();
@@ -66,7 +67,8 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                 SizedBox(
                   width: 50,
                   height: 50,
-                  child: SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
+                  child: SvgPicture.asset(
+                      "assets/super_green_lab_vertical_white.svg"),
                 ),
               ])),
             ),
@@ -86,7 +88,8 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                       children: <Widget>[
                         ListTile(
                             leading: Icon(Icons.add_circle),
-                            title: Text(PlantDrawerPage.plantDrawerPageAddPlantLabel),
+                            title: Text(
+                                PlantDrawerPage.plantDrawerPageAddPlantLabel),
                             onTap: () => _onAddPlant(context)),
                       ],
                     ))))
@@ -99,7 +102,8 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
   Widget _plantList(BuildContext context) {
     return BlocBuilder<PlantDrawerBloc, PlantDrawerBlocState>(
       buildWhen: (previousState, state) =>
-          state is PlantDrawerBlocStateLoadingPlantList || state is PlantDrawerBlocStatePlantListUpdated,
+          state is PlantDrawerBlocStateLoadingPlantList ||
+          state is PlantDrawerBlocStatePlantListUpdated,
       builder: (BuildContext context, PlantDrawerBlocState state) {
         late Widget content;
         if (state is PlantDrawerBlocStateLoadingPlantList) {
@@ -121,17 +125,26 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
               child: ListView(
                   controller: drawerScrollController,
                   key: const PageStorageKey<String>('plants'),
-                  children: boxes.where((b) => plants.where((p) => p.box == b.id).length != 0).map((b) {
+                  children: boxes
+                      .where(
+                          (b) => plants.where((p) => p.box == b.id).length != 0)
+                      .map((b) {
                     // TODO make this like the dashboard
                     List<Widget> content = [
                       Container(
                         decoration: BoxDecoration(
-                          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 1,
+                                offset: Offset(0, 2))
+                          ],
                           color: Colors.white,
                         ),
                         child: ListTile(
                           onTap: () {
-                            BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToBoxFeedEvent(b));
+                            BlocProvider.of<HomeNavigatorBloc>(context)
+                                .add(HomeNavigateToBoxFeedEvent(b));
                           },
                           leading: Container(
                             width: 60,
@@ -144,14 +157,16 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                                         color: Colors.green,
                                       )
                                     : Icon(Icons.crop_square),
-                                SvgPicture.asset('assets/settings/icon_lab.svg'),
+                                SvgPicture.asset(
+                                    'assets/settings/icon_lab.svg'),
                               ],
                             ),
                           ),
                           title: Text(b.name),
                           trailing: InkWell(
                               onTap: () {
-                                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(b));
+                                BlocProvider.of<MainNavigatorBloc>(context)
+                                    .add(MainNavigateToSettingsBox(b));
                               },
                               child: Icon(Icons.settings)),
                         ),
@@ -177,14 +192,22 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                             trailing: Container(
                                 width: 50,
                                 height: 30,
-                                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                                  nUnseen != null && nUnseen > 0 ? _renderBadge(nUnseen) : Container(),
-                                  InkWell(
-                                      onTap: () {
-                                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlant(p));
-                                      },
-                                      child: Icon(Icons.settings)),
-                                ])),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      nUnseen != null && nUnseen > 0
+                                          ? _renderBadge(nUnseen)
+                                          : Container(),
+                                      InkWell(
+                                          onTap: () {
+                                            BlocProvider.of<MainNavigatorBloc>(
+                                                    context)
+                                                .add(
+                                                    MainNavigateToSettingsPlant(
+                                                        p));
+                                          },
+                                          child: Icon(Icons.settings)),
+                                    ])),
                             title: Text(p.name),
                             onTap: () => _selectPlant(context, p),
                           ));
@@ -232,13 +255,16 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
 
   void _selectPlant(BuildContext context, Plant plant) {
     //ignore: close_sinks
-    HomeNavigatorBloc navigatorBloc = BlocProvider.of<HomeNavigatorBloc>(context);
+    HomeNavigatorBloc navigatorBloc =
+        BlocProvider.of<HomeNavigatorBloc>(context);
     Navigator.pop(context);
-    Timer(Duration(milliseconds: 250), () => navigatorBloc.add(HomeNavigateToPlantFeedEvent(plant)));
+    Timer(Duration(milliseconds: 250),
+        () => navigatorBloc.add(HomeNavigateToPlantFeedEvent(plant)));
   }
 
   void _onAddPlant(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToCreatePlantEvent());
   }
 
   Widget _renderSearchField(BuildContext context) {

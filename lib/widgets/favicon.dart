@@ -25,7 +25,9 @@ class FaviconImage extends StatefulWidget {
   final String url;
   final Widget alternativeImage;
 
-  const FaviconImage({Key? key, required this.alternativeImage, required this.url}) : super(key: key);
+  const FaviconImage(
+      {Key? key, required this.alternativeImage, required this.url})
+      : super(key: key);
 
   @override
   State<FaviconImage> createState() => _FaviconState();

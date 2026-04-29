@@ -86,9 +86,10 @@ class ExplorerBloc extends LegacyBloc<ExplorerBlocEvent, ExplorerBlocState> {
       yield ExplorerBlocStateInit();
       yield ExplorerBlocStateLoaded(BackendAPI().usersAPI.loggedIn);
     } else if (event is ExplorerBlocEventMakePublic) {
-      await RelDB.get()
-          .plantsDAO
-          .updatePlant(PlantsCompanion(id: Value(event.plant.id), public: Value(true), synced: Value(false)));
+      await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(event.plant.id),
+          public: Value(true),
+          synced: Value(false)));
     }
   }
 }

@@ -24,26 +24,48 @@ import 'package:super_green_app/pages/checklist/create/create_checklist_action_c
 class ChecklistActionsSelector extends CreateChecklistActionConditionPopup {
   final void Function(ChecklistAction action) onAdd;
 
-  ChecklistActionsSelector({required this.onAdd, required Function() onClose, required List<String> filteredValues})
-      : super(onClose: onClose, title: 'Select new action type', filteredValues: filteredValues);
+  ChecklistActionsSelector(
+      {required this.onAdd,
+      required Function() onClose,
+      required List<String> filteredValues})
+      : super(
+            onClose: onClose,
+            title: 'Select new action type',
+            filteredValues: filteredValues);
 
   Widget renderConditions(BuildContext context) {
     return Column(
       children: [
-        renderCondition(context, ChecklistActionIcons[ChecklistActionWebpage.TYPE]!, 'Open webpage',
-            'Open a webpage to complete the checklist entry.', 'Ex: some growweedeasy.com article about pests', () {
+        renderCondition(
+            context,
+            ChecklistActionIcons[ChecklistActionWebpage.TYPE]!,
+            'Open webpage',
+            'Open a webpage to complete the checklist entry.',
+            'Ex: some growweedeasy.com article about pests', () {
           onAdd(ChecklistActionWebpage());
         }),
-        renderCondition(context, ChecklistActionIcons[ChecklistActionCreateCard.TYPE]!, 'Create diary entry',
-            'Create a diary entry to complete the checklist entry.', 'Ex: create watering entry', () {
+        renderCondition(
+            context,
+            ChecklistActionIcons[ChecklistActionCreateCard.TYPE]!,
+            'Create diary entry',
+            'Create a diary entry to complete the checklist entry.',
+            'Ex: create watering entry', () {
           onAdd(ChecklistActionCreateCard());
         }),
-        renderCondition(context, ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!, 'Buy product',
-            'Buy a product to complete the checklist entry.', 'Ex: Buy insecticidal soap', () {
+        renderCondition(
+            context,
+            ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!,
+            'Buy product',
+            'Buy a product to complete the checklist entry.',
+            'Ex: Buy insecticidal soap', () {
           onAdd(ChecklistActionBuyProduct());
         }),
-        renderCondition(context, ChecklistActionIcons[ChecklistActionMessage.TYPE]!, 'Show a message',
-            'Just display a simple title+instructions message notification', 'Ex: Apply insecticidal soap.', () {
+        renderCondition(
+            context,
+            ChecklistActionIcons[ChecklistActionMessage.TYPE]!,
+            'Show a message',
+            'Just display a simple title+instructions message notification',
+            'Ex: Apply insecticidal soap.', () {
           onAdd(ChecklistActionMessage());
         }),
       ],

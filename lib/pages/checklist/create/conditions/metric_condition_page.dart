@@ -52,8 +52,10 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
 
   @override
   void initState() {
-    _minController.text = widget.condition.min == null ? '' : widget.condition.min.toString();
-    _maxController.text = widget.condition.max == null ? '' : widget.condition.max.toString();
+    _minController.text =
+        widget.condition.min == null ? '' : widget.condition.min.toString();
+    _maxController.text =
+        widget.condition.max == null ? '' : widget.condition.max.toString();
 
     super.initState();
   }

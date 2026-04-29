@@ -33,7 +33,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
       listener: (BuildContext context, SettingsLoginBlocState state) {
         if (state is SettingsLoginBlocStateDone) {
           Timer(Duration(seconds: 2), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: true));
           });
         }
       },
@@ -74,7 +75,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                   Container(
                     color: Colors.indigo,
                     child: Center(
-                      child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20)),
+                      child: Text('Login',
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
                   ),
                   Expanded(
@@ -88,13 +90,15 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                           elevation: 5,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 24.0),
                           child: SGLTextField(
                               textCapitalization: TextCapitalization.none,
                               focusNode: _nicknameFocusNode,
                               onFieldSubmitted: (_) {
                                 _nicknameFocusNode.unfocus();
-                                FocusScope.of(context).requestFocus(_passwordFocusNode);
+                                FocusScope.of(context)
+                                    .requestFocus(_passwordFocusNode);
                               },
                               hintText: 'Ex: Bob',
                               controller: _nicknameController,
@@ -110,7 +114,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                           elevation: 5,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 24.0),
                           child: SGLTextField(
                               textCapitalization: TextCapitalization.none,
                               focusNode: _passwordFocusNode,
@@ -133,7 +138,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                       alignment: Alignment.centerRight,
                       child: GreenButton(
                         title: 'LOGIN',
-                        onPressed: _nicknameController.value.text != '' && _passwordController.value.text != ''
+                        onPressed: _nicknameController.value.text != '' &&
+                                _passwordController.value.text != ''
                             ? () => _handleInput(context)
                             : null,
                       ),
@@ -152,7 +158,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsLoginBlocStateLoaded),
               ),
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
@@ -160,8 +167,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
 
   void _onTokenReceived(String token) {
     Navigator.pop(context);
-    BlocProvider.of<SettingsLoginBloc>(context)
-        .add(SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text, token));
+    BlocProvider.of<SettingsLoginBloc>(context).add(SettingsLoginBlocEventLogin(
+        _nicknameController.value.text, _passwordController.value.text, token));
   }
 
   void _handleInput(BuildContext context) {
@@ -182,7 +189,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
           });
     } else {
       BlocProvider.of<SettingsLoginBloc>(context).add(
-          SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text, Config.skipCaptchaToken));
+          SettingsLoginBlocEventLogin(_nicknameController.value.text,
+              _passwordController.value.text, Config.skipCaptchaToken));
     }
   }
 

@@ -49,7 +49,8 @@ class QRCodeViewerBlocStateLoaded extends QRCodeViewerBlocState {
   List<Object> get props => [plant, box];
 }
 
-class QRCodeViewerBloc extends LegacyBloc<QRCodeViewerBlocEvent, QRCodeViewerBlocState> {
+class QRCodeViewerBloc
+    extends LegacyBloc<QRCodeViewerBlocEvent, QRCodeViewerBlocState> {
   final MainNavigateToQRCodeViewer args;
 
   QRCodeViewerBloc(this.args) : super(QRCodeViewerBlocStateInit(args.plant)) {
@@ -57,7 +58,8 @@ class QRCodeViewerBloc extends LegacyBloc<QRCodeViewerBlocEvent, QRCodeViewerBlo
   }
 
   @override
-  Stream<QRCodeViewerBlocState> mapEventToState(QRCodeViewerBlocEvent event) async* {
+  Stream<QRCodeViewerBlocState> mapEventToState(
+      QRCodeViewerBlocEvent event) async* {
     if (event is QRCodeViewerBlocEventInit) {
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);

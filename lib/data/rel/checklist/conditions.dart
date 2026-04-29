@@ -46,7 +46,9 @@ abstract class ChecklistCondition extends Equatable {
       ];
 
   static List<ChecklistCondition> fromMapArray(List<dynamic> maps) {
-    return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
+    return maps
+        .map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m))
+        .toList();
   }
 
   static ChecklistCondition fromMap(Map<String, dynamic> map) {
@@ -298,7 +300,8 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   final int? duration;
   final String durationUnit;
 
-  String get asSentence => 'If plant is ${PlantPhaseNames[phase!]!} since ${duration!} ${durationUnit.toLowerCase()}.';
+  String get asSentence =>
+      'If plant is ${PlantPhaseNames[phase!]!} since ${duration!} ${durationUnit.toLowerCase()}.';
 
   ChecklistConditionAfterPhase({
     required this.id,
@@ -363,9 +366,11 @@ class ChecklistConditionTimer extends ChecklistCondition {
   final String durationUnit;
 
   String get asSentence {
-    String str = 'Trigger on ${DateFormat.yMMMMEEEEd().format(date!)} at ${DateFormat.Hm().format(date!)}';
+    String str =
+        'Trigger on ${DateFormat.yMMMMEEEEd().format(date!)} at ${DateFormat.Hm().format(date!)}';
     if (repeat) {
-      str += ' then repeat every ${repeatDuration!} ${durationUnit.toLowerCase()}.';
+      str +=
+          ' then repeat every ${repeatDuration!} ${durationUnit.toLowerCase()}.';
     }
     return str;
   }

@@ -41,20 +41,28 @@ enum NotificationDataType {
 abstract class NotificationData extends Equatable {
   final Map<String, dynamic> data;
 
-  NotificationData({required this.data, NotificationDataType? type, String? title, String? body, int? id}) {
-    data['type'] = (type != null ? EnumToString.convertToString(type) : null) ?? data['type'];
+  NotificationData(
+      {required this.data,
+      NotificationDataType? type,
+      String? title,
+      String? body,
+      int? id}) {
+    data['type'] = (type != null ? EnumToString.convertToString(type) : null) ??
+        data['type'];
     data['id'] = id ?? data['id'];
     data['title'] = title ?? data['title'];
     data['body'] = body ?? data['body'];
   }
 
-  NotificationDataType get type => EnumToString.fromString(NotificationDataType.values, data['type'])!;
+  NotificationDataType get type =>
+      EnumToString.fromString(NotificationDataType.values, data['type'])!;
   int get id => data['id'];
   String get title => data['title'];
   String get body => data['body'];
 
   factory NotificationData.fromMap(Map<String, dynamic> data) {
-    switch (EnumToString.fromString(NotificationDataType.values, data['type'])) {
+    switch (
+        EnumToString.fromString(NotificationDataType.values, data['type'])) {
       case NotificationDataType.PLANT_COMMENT:
         return NotificationDataPlantComment.fromMap(data);
       case NotificationDataType.PLANT_COMMENT_REPLY:
@@ -123,11 +131,13 @@ class NotificationDataPlantComment extends NotificationData {
           title: title,
           body: body,
         );
-  NotificationDataPlantComment.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataPlantComment.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
-  CommentType get commentType => EnumToString.fromString(CommentType.values, data['commentType'])!;
+  CommentType get commentType =>
+      EnumToString.fromString(CommentType.values, data['commentType'])!;
 }
 
 class NotificationDataPlantCommentReply extends NotificationData {
@@ -151,7 +161,8 @@ class NotificationDataPlantCommentReply extends NotificationData {
           title: title,
           body: body,
         );
-  NotificationDataPlantCommentReply.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataPlantCommentReply.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
@@ -160,7 +171,8 @@ class NotificationDataPlantCommentReply extends NotificationData {
 }
 
 class NotificationDataReminder extends NotificationData {
-  NotificationDataReminder({int? id, String? title, String? body, required int plantID})
+  NotificationDataReminder(
+      {int? id, String? title, String? body, required int plantID})
       : super(
             id: id,
             data: {
@@ -169,13 +181,15 @@ class NotificationDataReminder extends NotificationData {
             type: NotificationDataType.REMINDER,
             title: title,
             body: body);
-  NotificationDataReminder.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataReminder.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   int get plantID => data['plantID'];
 }
 
 class NotificationDataAlert extends NotificationData {
-  NotificationDataAlert({int? id, String? title, String? body, required String plantID})
+  NotificationDataAlert(
+      {int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -200,12 +214,18 @@ class NotificationDataLikePlantComment extends NotificationData {
       String? replyTo})
       : super(
           id: id,
-          data: {'plantID': plantID, 'feedEntryID': feedEntryID, 'commentID': commentID, 'replyTo': replyTo},
+          data: {
+            'plantID': plantID,
+            'feedEntryID': feedEntryID,
+            'commentID': commentID,
+            'replyTo': replyTo
+          },
           type: NotificationDataType.LIKE_PLANT_COMMENT,
           title: title,
           body: body,
         );
-  NotificationDataLikePlantComment.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataLikePlantComment.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
@@ -215,7 +235,11 @@ class NotificationDataLikePlantComment extends NotificationData {
 
 class NotificationDataLikePlantFeedEntry extends NotificationData {
   NotificationDataLikePlantFeedEntry(
-      {int? id, String? title, String? body, required String plantID, required String feedEntryID})
+      {int? id,
+      String? title,
+      String? body,
+      required String plantID,
+      required String feedEntryID})
       : super(
           id: id,
           data: {'plantID': plantID, 'feedEntryID': feedEntryID},
@@ -223,14 +247,16 @@ class NotificationDataLikePlantFeedEntry extends NotificationData {
           title: title,
           body: body,
         );
-  NotificationDataLikePlantFeedEntry.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataLikePlantFeedEntry.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
 }
 
 class NotificationDataFollowedPlantActivity extends NotificationData {
-  NotificationDataFollowedPlantActivity({int? id, String? title, String? body, required String plantID})
+  NotificationDataFollowedPlantActivity(
+      {int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -239,13 +265,15 @@ class NotificationDataFollowedPlantActivity extends NotificationData {
             type: NotificationDataType.FOLLOWED_PLANT_ACTIVITY,
             title: title,
             body: body);
-  NotificationDataFollowedPlantActivity.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataFollowedPlantActivity.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
 }
 
 class NotificationDataNewFollower extends NotificationData {
-  NotificationDataNewFollower({int? id, String? title, String? body, required String plantID})
+  NotificationDataNewFollower(
+      {int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -254,13 +282,15 @@ class NotificationDataNewFollower extends NotificationData {
             type: NotificationDataType.NEW_FOLLOWER,
             title: title,
             body: body);
-  NotificationDataNewFollower.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataNewFollower.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
 }
 
 class NotificationDataDeviceUnreachable extends NotificationData {
-  NotificationDataDeviceUnreachable({int? id, String? title, String? body, required String deviceID})
+  NotificationDataDeviceUnreachable(
+      {int? id, String? title, String? body, required String deviceID})
       : super(
             id: id,
             data: {
@@ -269,13 +299,15 @@ class NotificationDataDeviceUnreachable extends NotificationData {
             type: NotificationDataType.DEVICE_UNREACHABLE,
             title: title,
             body: body);
-  NotificationDataDeviceUnreachable.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataDeviceUnreachable.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get deviceID => data['deviceID'];
 }
 
 class NotificationDataLivecamUnreachable extends NotificationData {
-  NotificationDataLivecamUnreachable({int? id, String? title, String? body, required String plantID})
+  NotificationDataLivecamUnreachable(
+      {int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -284,13 +316,15 @@ class NotificationDataLivecamUnreachable extends NotificationData {
             type: NotificationDataType.LIVECAM_UNREACHABLE,
             title: title,
             body: body);
-  NotificationDataLivecamUnreachable.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataLivecamUnreachable.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
 }
 
 class NotificationDataNewTimelapse extends NotificationData {
-  NotificationDataNewTimelapse({int? id, String? title, String? body, required String plantID})
+  NotificationDataNewTimelapse(
+      {int? id, String? title, String? body, required String plantID})
       : super(
           id: id,
           title: title,
@@ -300,20 +334,21 @@ class NotificationDataNewTimelapse extends NotificationData {
           },
           type: NotificationDataType.NEW_TIMELAPSE,
         );
-  NotificationDataNewTimelapse.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataNewTimelapse.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
 }
 
 class NotificationDataChecklistSeedTriggered extends NotificationData {
-  NotificationDataChecklistSeedTriggered(
-      {int? id,
-      String? title,
-      String? body,
-      required String plantID,
-      required String checklistID,
-      required CommentType checklistSeedID,})
-      : super(
+  NotificationDataChecklistSeedTriggered({
+    int? id,
+    String? title,
+    String? body,
+    required String plantID,
+    required String checklistID,
+    required CommentType checklistSeedID,
+  }) : super(
           id: id,
           data: {
             'plantID': plantID,
@@ -324,7 +359,8 @@ class NotificationDataChecklistSeedTriggered extends NotificationData {
           title: title,
           body: body,
         );
-  NotificationDataChecklistSeedTriggered.fromMap(Map<String, dynamic> data) : super(data: data);
+  NotificationDataChecklistSeedTriggered.fromMap(Map<String, dynamic> data)
+      : super(data: data);
 
   String get plantID => data['plantID'];
   String get checklistID => data['checklistID'];

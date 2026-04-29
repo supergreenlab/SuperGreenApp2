@@ -86,13 +86,16 @@ class FeedNutrientMixCardPage extends StatefulWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedNutrientMixCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+  const FeedNutrientMixCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
       : super(key: key);
 
   @override
-  _FeedNutrientMixCardPageState createState() => _FeedNutrientMixCardPageState();
+  _FeedNutrientMixCardPageState createState() =>
+      _FeedNutrientMixCardPageState();
 }
 
 class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
@@ -112,11 +115,15 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(FeedEntryIcons[FE_NUTRIENT_MIX]!, FeedNutrientMixCardPage.feedNutrientMixCardTitle,
+          FeedCardTitle(
+              FeedEntryIcons[FE_NUTRIENT_MIX]!,
+              FeedNutrientMixCardPage.feedNutrientMixCardTitle,
               widget.state.synced,
               showSyncStatus: !widget.state.isRemoteState,
               showControls: !widget.state.isRemoteState,
-              actions: widget.cardActions != null ? widget.cardActions!(context, widget.state) : []),
+              actions: widget.cardActions != null
+                  ? widget.cardActions!(context, widget.state)
+                  : []),
           Container(
             height: 140,
             alignment: Alignment.center,
@@ -134,22 +141,40 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
     FeedNutrientMixParams params = state.params as FeedNutrientMixParams;
     List<Widget> cards = [
-      renderCard('assets/feed_form/icon_volume.svg', 8, FeedNutrientMixCardPage.feedNutrientMixCardWaterQuantity,
-          Text('${params.volume} L', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
+      renderCard(
+          'assets/feed_form/icon_volume.svg',
+          8,
+          FeedNutrientMixCardPage.feedNutrientMixCardWaterQuantity,
+          Text('${params.volume} L',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
     ];
     if (params.ph != null) {
-      cards.add(renderCard('assets/products/toolbox/icon_ph_ec.svg', 0, 'PH',
-          Text('${params.ph}', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'PH',
+          Text('${params.ph}',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
     }
     if (params.ec != null) {
-      cards.add(renderCard('assets/products/toolbox/icon_ph_ec.svg', 0, 'EC',
-          Text('${params.ec} μS/cm', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'EC',
+          Text('${params.ec} μS/cm',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
     }
     if (params.tds != null) {
-      cards.add(renderCard('assets/products/toolbox/icon_ph_ec.svg', 0, 'TDS',
-          Text('${params.tds} ppm', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'TDS',
+          Text('${params.tds} ppm',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
     }
-    cards.addAll(params.nutrientProducts.map((np) => renderNutrientProduct(np)).toList());
+    cards.addAll(params.nutrientProducts
+        .map((np) => renderNutrientProduct(np))
+        .toList());
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -167,7 +192,8 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               });
             },
             onDelete: () {
-              BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventDeleteEntry(state));
             },
           ),
           Padding(
@@ -176,11 +202,15 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 (params.basedOn ?? '') != ''
-                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardFrom(params.basedOn!),
+                    ? Text(
+                        FeedNutrientMixCardPage.feedNutrientMixCardFrom(
+                            params.basedOn!),
                         style: TextStyle(color: Color(0xffababab)))
                     : Container(),
                 (params.phase ?? '') != ''
-                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardPhase(nutrientMixPhasesUI[params.phase!]!),
+                    ? Text(
+                        FeedNutrientMixCardPage.feedNutrientMixCardPhase(
+                            nutrientMixPhasesUI[params.phase!]!),
                         style: TextStyle(color: Color(0xffababab)))
                     : Container(),
               ],
@@ -204,7 +234,9 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
           (params.message ?? '') != '' || editText == true
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(FeedNutrientMixCardPage.feedNutrientMixCardObservations, style: TextStyle()),
+                  child: Text(
+                      FeedNutrientMixCardPage.feedNutrientMixCardObservations,
+                      style: TextStyle()),
                 )
               : Container(),
           (params.message ?? '') != '' || editText == true
@@ -212,8 +244,9 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
                   params.message ?? '',
                   edit: editText,
                   onEdited: (value) {
-                    BlocProvider.of<FeedBloc>(context)
-                        .add(FeedBlocEventEditParams(state, params.copyWith(message: value)));
+                    BlocProvider.of<FeedBloc>(context).add(
+                        FeedBlocEventEditParams(
+                            state, params.copyWith(message: value)));
                     setState(() {
                       editText = false;
                     });
@@ -242,7 +275,8 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
             style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25)));
   }
 
-  Widget renderCard(String icon, double iconPadding, String title, Widget child) {
+  Widget renderCard(
+      String icon, double iconPadding, String title, Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(

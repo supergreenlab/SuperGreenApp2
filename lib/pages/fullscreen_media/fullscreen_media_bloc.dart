@@ -37,20 +37,22 @@ class FullscreenMediaBlocState extends Equatable {
   final String? heroPath;
   final String? sliderTitle;
 
-  FullscreenMediaBlocState(
-      this.thumbnailPath, this.filePath, this.isVideo, this.overlayPath, this.heroPath, this.sliderTitle);
+  FullscreenMediaBlocState(this.thumbnailPath, this.filePath, this.isVideo,
+      this.overlayPath, this.heroPath, this.sliderTitle);
 
   @override
   List<Object> get props => [thumbnailPath, filePath, isVideo];
 }
 
 class FullscreenMediaBlocStateInit extends FullscreenMediaBlocState {
-  FullscreenMediaBlocStateInit(
-      String thumbnailPath, String filePath, bool isVideo, String? overlayPath, String? heroPath, String? sliderTitle)
-      : super(thumbnailPath, filePath, isVideo, overlayPath, heroPath, sliderTitle);
+  FullscreenMediaBlocStateInit(String thumbnailPath, String filePath,
+      bool isVideo, String? overlayPath, String? heroPath, String? sliderTitle)
+      : super(thumbnailPath, filePath, isVideo, overlayPath, heroPath,
+            sliderTitle);
 }
 
-class FullscreenMediaBloc extends LegacyBloc<FullscreenMediaBlocEvent, FullscreenMediaBlocState> {
+class FullscreenMediaBloc
+    extends LegacyBloc<FullscreenMediaBlocEvent, FullscreenMediaBlocState> {
   final MainNavigateToFullscreenMedia args;
 
   static bool _isVideo(String filePath) {
@@ -63,16 +65,27 @@ class FullscreenMediaBloc extends LegacyBloc<FullscreenMediaBlocEvent, Fullscree
   }
 
   FullscreenMediaBloc(this.args)
-      : super(FullscreenMediaBlocState(args.thumbnailPath, args.filePath, FullscreenMediaBloc._isVideo(args.filePath),
-            args.overlayPath, args.heroPath, args.sliderTitle)) {
+      : super(FullscreenMediaBlocState(
+            args.thumbnailPath,
+            args.filePath,
+            FullscreenMediaBloc._isVideo(args.filePath),
+            args.overlayPath,
+            args.heroPath,
+            args.sliderTitle)) {
     add(FullscreenMediaBlocEventInit());
   }
 
   @override
-  Stream<FullscreenMediaBlocState> mapEventToState(FullscreenMediaBlocEvent event) async* {
+  Stream<FullscreenMediaBlocState> mapEventToState(
+      FullscreenMediaBlocEvent event) async* {
     if (event is FullscreenMediaBlocEventInit) {
-      yield FullscreenMediaBlocStateInit(args.thumbnailPath, args.filePath, FullscreenMediaBloc._isVideo(args.filePath),
-          args.overlayPath, args.heroPath, args.sliderTitle);
+      yield FullscreenMediaBlocStateInit(
+          args.thumbnailPath,
+          args.filePath,
+          FullscreenMediaBloc._isVideo(args.filePath),
+          args.overlayPath,
+          args.heroPath,
+          args.sliderTitle);
     }
   }
 }

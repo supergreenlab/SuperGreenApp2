@@ -25,7 +25,11 @@ class PlantInfosTextInput extends StatelessWidget {
   final bool number;
 
   const PlantInfosTextInput(
-      {Key? key, required this.controller, required this.hintText, required this.labelText, this.number = false})
+      {Key? key,
+      required this.controller,
+      required this.hintText,
+      required this.labelText,
+      this.number = false})
       : super(key: key);
 
   @override
@@ -33,9 +37,11 @@ class PlantInfosTextInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: TextFormField(
-        keyboardType: number ? TextInputType.numberWithOptions(decimal: true) : null,
+        keyboardType:
+            number ? TextInputType.numberWithOptions(decimal: true) : null,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           filled: true,
           fillColor: Colors.white10,
           hintText: hintText,
@@ -44,7 +50,8 @@ class PlantInfosTextInput extends StatelessWidget {
           labelStyle: TextStyle(
             color: Colors.white,
           ),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         ),
         style: TextStyle(color: Colors.white, decoration: TextDecoration.none),
         controller: controller,

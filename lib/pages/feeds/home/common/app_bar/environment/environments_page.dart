@@ -77,7 +77,8 @@ class EnvironmentsPage extends StatelessWidget {
   final Plant? plant;
   final void Function(Future<dynamic>?)? futureFn;
 
-  const EnvironmentsPage(this.box, {Key? key, this.futureFn, this.plant}) : super(key: key);
+  const EnvironmentsPage(this.box, {Key? key, this.futureFn, this.plant})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +97,10 @@ class EnvironmentsPage extends StatelessWidget {
             duration: Duration(milliseconds: 200),
             child: Column(
               children: [
-                AppBarTitle(title: 'Graphs', plant: this.plant,),
+                AppBarTitle(
+                  title: 'Graphs',
+                  plant: this.plant,
+                ),
                 Expanded(child: graphBody),
               ],
             )));

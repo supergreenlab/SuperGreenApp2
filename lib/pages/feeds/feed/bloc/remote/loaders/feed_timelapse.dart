@@ -31,13 +31,17 @@ class FeedTimelapseLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<dynamic> feedMediasMap = await BackendAPI().feedsAPI.publicFeedMediasForFeedEntry(state.feedEntryID);
+    List<dynamic> feedMediasMap = await BackendAPI()
+        .feedsAPI
+        .publicFeedMediasForFeedEntry(state.feedEntryID);
     List<MediaState> medias = [];
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
     state = FeedTimelapseState(state,
-        medias: medias, isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
+        medias: medias,
+        isRemoteState: true,
+        socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState as FeedEntrySocialStateLoaded, state);
     return super.load(state);
   }

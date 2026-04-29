@@ -29,6 +29,7 @@ class TowelieActionHelpNotification extends TowelieActionHelp {
   Stream<TowelieBlocState> idTrigger(TowelieBlocEventTrigger event) async* {
     NotificationsBlocStateNotification parameters = event.parameters;
     yield TowelieBlocStateHelper(
-        RouteSettings(name: event.currentRoute, arguments: null), parameters.notificationData.body);
+        RouteSettings(name: event.currentRoute, arguments: null),
+        parameters.notificationData.body);
   }
 }

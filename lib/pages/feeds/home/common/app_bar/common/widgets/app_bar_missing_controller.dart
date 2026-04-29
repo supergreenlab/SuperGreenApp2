@@ -79,7 +79,8 @@ class AppBarMissingController extends StatelessWidget {
     return Intl.message(
       'SETUP CONTROLLER',
       name: 'appBarMissingControllerSetupController',
-      desc: 'SETUP CONTROLLER displayed when controller is missing, opens the select controller dialog',
+      desc:
+          'SETUP CONTROLLER displayed when controller is missing, opens the select controller dialog',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -91,11 +92,14 @@ class AppBarMissingController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white.withAlpha(220)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white.withAlpha(220)),
       child: Fullscreen(
         fontSize: 15,
         fontWeight: FontWeight.normal,
-        title: AppBarMissingController.appBarMissingControllerControllerRequired,
+        title:
+            AppBarMissingController.appBarMissingControllerControllerRequired,
         child: Column(
           children: [
             Row(
@@ -104,7 +108,8 @@ class AppBarMissingController extends StatelessWidget {
                 GreenButton(
                   title: AppBarMissingController.appBarMissingControllerShopNow,
                   onPressed: () {
-                    launchUrl(Uri.parse('https://www.supergreenlab.com/bundle/micro-box-bundle'));
+                    launchUrl(Uri.parse(
+                        'https://www.supergreenlab.com/bundle/micro-box-bundle'));
                   },
                 ),
                 Padding(
@@ -113,15 +118,20 @@ class AppBarMissingController extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 GreenButton(
-                  title: AppBarMissingController.appBarMissingControllerSetupController,
+                  title: AppBarMissingController
+                      .appBarMissingControllerSetupController,
                   onPressed: () {
                     BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSelectDeviceEvent(isController: true, futureFn: (future) async {
-                      dynamic res = await future;
-                      if (res is SelectBoxDeviceData) {
-                        BlocProvider.of<BoxControlsBloc>(context).add(BoxControlsBlocEventSetDevice(res.device, res.deviceBox));
-                      }
-                    }));
+                        .add(MainNavigateToSelectDeviceEvent(
+                            isController: true,
+                            futureFn: (future) async {
+                              dynamic res = await future;
+                              if (res is SelectBoxDeviceData) {
+                                BlocProvider.of<BoxControlsBloc>(context).add(
+                                    BoxControlsBlocEventSetDevice(
+                                        res.device, res.deviceBox));
+                              }
+                            }));
                   },
                 ),
               ],
@@ -141,7 +151,8 @@ class AppBarMissingController extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      launchUrl(Uri.parse('https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
+                      launchUrl(Uri.parse(
+                          'https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
                     },
                   ),
                 ],

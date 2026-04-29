@@ -27,15 +27,18 @@ class TowelieButtonStartSeedling extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton() => TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_id, {
         'title': 'Start',
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     await CardPlantGermination.createPlantGermination(feed);
-    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await selectButtons(feedEntry, selectedButtonID: id);
   }
 }

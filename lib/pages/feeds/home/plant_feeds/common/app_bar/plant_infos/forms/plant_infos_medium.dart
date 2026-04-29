@@ -26,7 +26,8 @@ class PlantInfosMedium extends StatefulWidget {
   final Function onCancel;
   final Function(String? medium) onSubmit;
 
-  PlantInfosMedium({required this.medium, required this.onCancel, required this.onSubmit});
+  PlantInfosMedium(
+      {required this.medium, required this.onCancel, required this.onSubmit});
 
   @override
   _PlantInfosMediumState createState() => _PlantInfosMediumState();

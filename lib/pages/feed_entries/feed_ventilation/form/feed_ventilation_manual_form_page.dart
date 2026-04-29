@@ -35,7 +35,7 @@ class FeedVentilationManualFormPage extends StatefulWidget {
     );
   }
 
-    static String get instructionsManualTimerFanModeDescription {
+  static String get instructionsManualTimerFanModeDescription {
     return Intl.message(
       'This is the **manual fan control** mode, just set a value and the fan will stay at this power.\n\nMake sure your motor port is configured in the settings.',
       name: 'instructionsManualTimerFanModeDescription',
@@ -44,19 +44,28 @@ class FeedVentilationManualFormPage extends StatefulWidget {
     );
   }
 
-  String get instructionsManualTimerModeDescription => paramsController is BlowerParamsController ? FeedVentilationManualFormPage.instructionsManualTimerBlowerModeDescription : FeedVentilationManualFormPage.instructionsManualTimerFanModeDescription;
+  String get instructionsManualTimerModeDescription => paramsController
+          is BlowerParamsController
+      ? FeedVentilationManualFormPage
+          .instructionsManualTimerBlowerModeDescription
+      : FeedVentilationManualFormPage.instructionsManualTimerFanModeDescription;
 
   final Param humidity;
   final Param temperature;
   final VentilationParamsController paramsController;
 
-  const FeedVentilationManualFormPage(this.humidity, this.temperature, this.paramsController, {Key? key}) : super(key: key);
+  const FeedVentilationManualFormPage(
+      this.humidity, this.temperature, this.paramsController,
+      {Key? key})
+      : super(key: key);
 
   @override
-  _FeedVentilationManualFormPageState createState() => _FeedVentilationManualFormPageState();
+  _FeedVentilationManualFormPageState createState() =>
+      _FeedVentilationManualFormPageState();
 }
 
-class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFormPage> {
+class _FeedVentilationManualFormPageState
+    extends State<FeedVentilationManualFormPage> {
   int _value = 0;
   int? _previousHashCode;
 
@@ -79,7 +88,8 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
             data: widget.instructionsManualTimerModeDescription,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         SliderFormParam(
@@ -96,7 +106,8 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
             });
           },
           onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+            BlocProvider.of<FeedVentilationFormBloc>(context)
+                .add(FeedVentilationFormBlocParamsChangedEvent(
               paramsController: widget.paramsController.copyWithValues({
                 "min": _value,
               }) as FeedVentilationParamsController,

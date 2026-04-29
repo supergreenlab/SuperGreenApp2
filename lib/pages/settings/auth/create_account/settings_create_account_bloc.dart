@@ -7,17 +7,20 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SettingsCreateAccountBlocEvent extends Equatable {}
 
-class SettingsCreateAccountBlocEventInit extends SettingsCreateAccountBlocEvent {
+class SettingsCreateAccountBlocEventInit
+    extends SettingsCreateAccountBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocEventCreateAccount extends SettingsCreateAccountBlocEvent {
+class SettingsCreateAccountBlocEventCreateAccount
+    extends SettingsCreateAccountBlocEvent {
   final String nickname;
   final String password;
   final String token;
 
-  SettingsCreateAccountBlocEventCreateAccount(this.nickname, this.password, this.token);
+  SettingsCreateAccountBlocEventCreateAccount(
+      this.nickname, this.password, this.token);
 
   @override
   List<Object> get props => [nickname, password, token];
@@ -25,17 +28,20 @@ class SettingsCreateAccountBlocEventCreateAccount extends SettingsCreateAccountB
 
 abstract class SettingsCreateAccountBlocState extends Equatable {}
 
-class SettingsCreateAccountBlocStateInit extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateInit
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocStateLoading extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateLoading
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocStateLoaded extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateLoaded
+    extends SettingsCreateAccountBlocState {
   final bool isAuth;
 
   SettingsCreateAccountBlocStateLoaded(this.isAuth);
@@ -44,37 +50,45 @@ class SettingsCreateAccountBlocStateLoaded extends SettingsCreateAccountBlocStat
   List<Object> get props => [isAuth];
 }
 
-class SettingsCreateAccountBlocStateDone extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateDone
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocStateError extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateError
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBloc extends LegacyBloc<SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
+class SettingsCreateAccountBloc extends LegacyBloc<
+    SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsCreateAccount args;
   late bool _isAuth;
 
-  SettingsCreateAccountBloc(this.args) : super(SettingsCreateAccountBlocStateInit()) {
+  SettingsCreateAccountBloc(this.args)
+      : super(SettingsCreateAccountBlocStateInit()) {
     _isAuth = BackendAPI().usersAPI.loggedIn;
     add(SettingsCreateAccountBlocEventInit());
   }
 
   @override
-  Stream<SettingsCreateAccountBlocState> mapEventToState(SettingsCreateAccountBlocEvent event) async* {
+  Stream<SettingsCreateAccountBlocState> mapEventToState(
+      SettingsCreateAccountBlocEvent event) async* {
     if (event is SettingsCreateAccountBlocEventInit) {
       yield SettingsCreateAccountBlocStateLoading();
       yield SettingsCreateAccountBlocStateLoaded(_isAuth);
     } else if (event is SettingsCreateAccountBlocEventCreateAccount) {
       yield SettingsCreateAccountBlocStateLoading();
       try {
-        await BackendAPI().usersAPI.createUser(event.nickname, event.password, event.token);
+        await BackendAPI()
+            .usersAPI
+            .createUser(event.nickname, event.password, event.token);
         //await BackendAPI().usersAPI.login(event.nickname, event.password, event.token);
-        await BackendAPI().feedsAPI.createUserEnd(notificationToken: AppDB().getAppData().notificationToken);
+        await BackendAPI().feedsAPI.createUserEnd(
+            notificationToken: AppDB().getAppData().notificationToken);
       } catch (e, trace) {
         Logger.logError(e, trace);
         yield SettingsCreateAccountBlocStateError();

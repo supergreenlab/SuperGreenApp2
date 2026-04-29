@@ -70,15 +70,19 @@ class _PlantPickerPageState extends State<PlantPickerPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(state.title, style: TextStyle(fontSize: 20)),
                 ),
-                Expanded(child: renderPlantsList(context, state.boxes, state.plants)),
+                Expanded(
+                    child:
+                        renderPlantsList(context, state.boxes, state.plants)),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: GreenButton(
-                      title: PlantPickerPage.plantPickerPageSelectButton(selectedPlants.length),
+                      title: PlantPickerPage.plantPickerPageSelectButton(
+                          selectedPlants.length),
                       onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: selectedPlants));
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigatorActionPop(param: selectedPlants));
                       },
                     ),
                   ),
@@ -95,13 +99,15 @@ class _PlantPickerPageState extends State<PlantPickerPage> {
                 iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
   }
 
-  Widget renderPlantsList(BuildContext context, List<Box> boxes, List<Plant> plants) {
+  Widget renderPlantsList(
+      BuildContext context, List<Box> boxes, List<Plant> plants) {
     List<Widget> children = [];
     for (Box box in boxes) {
       List<Plant> ps = plants.where((p) => p.box == box.id).toList();

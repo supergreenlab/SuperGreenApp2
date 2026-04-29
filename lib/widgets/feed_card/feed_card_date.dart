@@ -58,8 +58,10 @@ class _FeedCardDateState extends State<FeedCardDate> {
     String format = [
       () => DateRenderer.renderAbsoluteDate(widget.feedEntryState.date),
       () => DateRenderer.renderSinceNow(widget.feedEntryState.date),
-      () => DateRenderer.renderSincePhase(widget.plantSettings!, widget.feedEntryState.date),
-      () => DateRenderer.renderSinceGermination(widget.plantSettings!, widget.feedEntryState.date),
+      () => DateRenderer.renderSincePhase(
+          widget.plantSettings!, widget.feedEntryState.date),
+      () => DateRenderer.renderSinceGermination(
+          widget.plantSettings!, widget.feedEntryState.date),
     ][display.index]();
     return InkWell(
         onTap: () {

@@ -54,9 +54,12 @@ class FeedLightCardPage extends StatelessWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedLightCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions}) : super(key: key);
+  const FeedLightCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +75,10 @@ class FeedLightCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(FeedEntryIcons[FE_LIGHT]!, 'Stretch control', state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
+          FeedCardTitle(
+              FeedEntryIcons[FE_LIGHT]!, 'Stretch control', state.synced,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState),
           Container(
             height: 130,
             alignment: Alignment.center,
@@ -95,9 +100,12 @@ class FeedLightCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(FeedEntryIcons[FE_LIGHT]!, 'Stretch control', state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
-            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+          FeedCardTitle(
+              FeedEntryIcons[FE_LIGHT]!, 'Stretch control', state.synced,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions!(context, state) : []),
           Container(
             height: 130,
@@ -128,7 +136,8 @@ class FeedLightCardPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _renderValues(List<dynamic> values, List<dynamic> initialValues) {
+  List<Widget> _renderValues(
+      List<dynamic> values, List<dynamic> initialValues) {
     int i = 0;
     return values
         .map<Map<String, int>>((v) {
@@ -150,16 +159,24 @@ class FeedLightCardPage extends StatelessWidget {
                   children: <Widget>[
                     Text(FeedLightCardPage.feedLightCardPageChannel),
                     Text('${v['i']! + 1}',
-                        style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300, color: Colors.grey)),
+                        style: TextStyle(
+                            fontSize: 45,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.grey)),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('${v['from']}%', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+                    Text('${v['from']}%',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w300)),
                     Icon(Icons.arrow_forward, size: 18),
                     Text('${v['to']}%',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.green)),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.green)),
                   ],
                 ),
               ],

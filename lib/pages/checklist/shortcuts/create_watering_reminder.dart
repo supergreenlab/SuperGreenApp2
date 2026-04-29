@@ -34,7 +34,9 @@ class CreateWateringReminder extends StatefulWidget {
   final Function() onClose;
   final Checklist checklist;
 
-  const CreateWateringReminder({Key? key, required this.checklist, required this.onClose}) : super(key: key);
+  const CreateWateringReminder(
+      {Key? key, required this.checklist, required this.onClose})
+      : super(key: key);
 
   @override
   State<CreateWateringReminder> createState() => _CreateWateringReminderState();
@@ -42,7 +44,7 @@ class CreateWateringReminder extends StatefulWidget {
 
 class _CreateWateringReminderState extends State<CreateWateringReminder> {
   ChecklistCondition condition = ChecklistConditionTimer(
-    id: Uuid().v4(), 
+    id: Uuid().v4(),
     date: DateTime.now(),
   );
 
@@ -112,29 +114,34 @@ Follow these 3 steps to make sure your soil is well watered:
 ![Pic](https://www.supergreenlab.com/img/files/attJg4Px8XDhCR6gO.jpg)
 
                         ''';
-                        ChecklistActionCreateCard waterAction = ChecklistActionCreateCard(
+                        ChecklistActionCreateCard waterAction =
+                            ChecklistActionCreateCard(
                           entryType: FE_WATER,
                         );
                         /* ChecklistActionCreateCard mediaAction = ChecklistActionCreateCard(
                           entryType: FE_MEDIA,
                           instructions: 'Take a pic of your plant before the watering to see the difference.',
                         ); */
-                        BlocProvider.of<ChecklistBloc>(context)
-                            .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
+                        BlocProvider.of<ChecklistBloc>(context).add(
+                            ChecklistBlocEventCreate(
+                                ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
                           title: drift.Value('Water plant reminder'),
                           description: drift.Value(instructions),
                           category: drift.Value(CH_FEEDING),
                           fast: drift.Value(false),
                           public: drift.Value(false),
-                          repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
+                          repeat: drift.Value(
+                              (condition as ChecklistConditionTimer).repeat),
                           mine: drift.Value(true),
                           conditions: drift.Value('[${condition.toJSON()}]'),
                           exitConditions: drift.Value('[]'),
-                          actions: drift.Value('[${waterAction.toJSON()}]'), // ${mediaAction.toJSON()},
+                          actions: drift.Value(
+                              '[${waterAction.toJSON()}]'), // ${mediaAction.toJSON()},
                           synced: drift.Value(false),
                         )));
-                        SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
+                        SyncerBloc syncerBloc =
+                            BlocProvider.of<SyncerBloc>(context);
                         Future.delayed(const Duration(milliseconds: 200), () {
                           syncerBloc.add(SyncerBlocEventForceSyncChecklists());
                         });

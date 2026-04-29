@@ -63,7 +63,8 @@ class SettingsDeviceBlocStateDone extends SettingsDeviceBlocState {
   List<Object> get props => [device];
 }
 
-class SettingsDeviceBloc extends LegacyBloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
+class SettingsDeviceBloc
+    extends LegacyBloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsDevice args;
   late Device device;
@@ -73,7 +74,8 @@ class SettingsDeviceBloc extends LegacyBloc<SettingsDeviceBlocEvent, SettingsDev
   }
 
   @override
-  Stream<SettingsDeviceBlocState> mapEventToState(SettingsDeviceBlocEvent event) async* {
+  Stream<SettingsDeviceBlocState> mapEventToState(
+      SettingsDeviceBlocEvent event) async* {
     if (event is SettingsDeviceBlocEventInit) {
       device = await RelDB.get().devicesDAO.getDevice(args.device.id);
       yield SettingsDeviceBlocStateLoaded(device);

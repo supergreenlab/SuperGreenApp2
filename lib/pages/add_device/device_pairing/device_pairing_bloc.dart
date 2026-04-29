@@ -49,7 +49,8 @@ class DevicePairingBlocStateLoaded extends DevicePairingBlocState {
   final bool loggedIn;
   final bool needsUpgrade;
 
-  DevicePairingBlocStateLoaded(this.device, {required this.loggedIn, required this.needsUpgrade});
+  DevicePairingBlocStateLoaded(this.device,
+      {required this.loggedIn, required this.needsUpgrade});
 
   @override
   List<Object> get props => [device, loggedIn, needsUpgrade];
@@ -78,7 +79,8 @@ class DevicePairingBlocStateDone extends DevicePairingBlocState {
   List<Object> get props => [device];
 }
 
-class DevicePairingBloc extends LegacyBloc<DevicePairingBlocEvent, DevicePairingBlocState> {
+class DevicePairingBloc
+    extends LegacyBloc<DevicePairingBlocEvent, DevicePairingBlocState> {
   final MainNavigateToDevicePairingEvent args;
 
   DevicePairingBloc(this.args) : super(DevicePairingBlocStateInit()) {
@@ -86,13 +88,17 @@ class DevicePairingBloc extends LegacyBloc<DevicePairingBlocEvent, DevicePairing
   }
 
   @override
-  Stream<DevicePairingBlocState> mapEventToState(DevicePairingBlocEvent event) async* {
+  Stream<DevicePairingBlocState> mapEventToState(
+      DevicePairingBlocEvent event) async* {
     if (event is DevicePairingBlocEventInit) {
-      Param otaTimestamp = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_TIMESTAMP');
+      Param otaTimestamp = await RelDB.get()
+          .devicesDAO
+          .getParam(args.device.id, 'OTA_TIMESTAMP');
       yield DevicePairingBlocStateLoaded(
         args.device,
         loggedIn: AppDB().getAppData().jwt != null,
-        needsUpgrade: otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
+        needsUpgrade:
+            otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is DevicePairingBlocEventPair) {
       yield DevicePairingBlocStateLoading();

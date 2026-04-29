@@ -71,7 +71,8 @@ class LocalBoxFeedBlocStateBoxRemoved extends LocalBoxFeedBlocState {
   List<Object> get props => [];
 }
 
-class LocalBoxFeedBloc extends LegacyBloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlocState> {
+class LocalBoxFeedBloc
+    extends LegacyBloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent args;
 
   StreamSubscription<Box>? boxStream;
@@ -82,12 +83,14 @@ class LocalBoxFeedBloc extends LegacyBloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlo
   }
 
   @override
-  Stream<LocalBoxFeedBlocState> mapEventToState(LocalBoxFeedBlocEvent event) async* {
+  Stream<LocalBoxFeedBlocState> mapEventToState(
+      LocalBoxFeedBlocEvent event) async* {
     if (event is LocalBoxFeedBlocEventInit) {
       try {
         box = await RelDB.get().plantsDAO.getBox(args.box.id);
       } catch (e) {}
-      boxStream = RelDB.get().plantsDAO.watchBox(args.box.id).listen(_onBoxUpdated);
+      boxStream =
+          RelDB.get().plantsDAO.watchBox(args.box.id).listen(_onBoxUpdated);
       yield LocalBoxFeedBlocStateLoaded(box!);
     } else if (event is LocalBoxFeedBlocEventUpdated) {
       if (box == null) {

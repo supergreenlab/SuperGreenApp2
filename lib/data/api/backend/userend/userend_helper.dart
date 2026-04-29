@@ -24,19 +24,23 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 
 class UserEndHelper {
-
   static Future setSynced(String type, String id) async {
-    Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/$type/$id/sync'), headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/$type/$id/sync'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('setSynced failed: ${resp.body}', data: {"type": type, "id": id});
+      Logger.throwError('setSynced failed: ${resp.body}',
+          data: {"type": type, "id": id});
     }
   }
 
   static Future<Map<String, dynamic>> unsynced(String type) async {
-    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -45,5 +49,4 @@ class UserEndHelper {
     }
     return JsonDecoder().convert(resp.body);
   }
-  
 }

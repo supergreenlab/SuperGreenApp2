@@ -78,13 +78,15 @@ class SelectDeviceBlocStateDone extends SelectDeviceBlocState {
   final Device device;
   final int deviceBox;
 
-  SelectDeviceBlocStateDone(List<Device> devices, this.device, this.deviceBox) : super(devices);
+  SelectDeviceBlocStateDone(List<Device> devices, this.device, this.deviceBox)
+      : super(devices);
 
   @override
   List<Object> get props => [devices, device];
 }
 
-class SelectDeviceBloc extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
+class SelectDeviceBloc
+    extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
   List<Device> _devices = [];
   StreamSubscription<List<Device>>? _stream;
 
@@ -96,10 +98,12 @@ class SelectDeviceBloc extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlo
   }
 
   @override
-  Stream<SelectDeviceBlocState> mapEventToState(SelectDeviceBlocEvent event) async* {
+  Stream<SelectDeviceBlocState> mapEventToState(
+      SelectDeviceBlocEvent event) async* {
     if (event is SelectDeviceBlocEventLoadDevices) {
       final ddb = RelDB.get().devicesDAO;
-      final watcher = ddb.watchDevices(isController: args.isController, isScreen: args.isScreen);
+      final watcher = ddb.watchDevices(
+          isController: args.isController, isScreen: args.isScreen);
       _stream = watcher.listen(_onDeviceListChanged);
     } else if (event is SelectDeviceBlocEventDeviceListUpdated) {
       _devices = event.devices;

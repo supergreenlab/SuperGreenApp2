@@ -129,7 +129,8 @@ class TowelieBlocEventButtonPressed extends TowelieBlocEvent {
   final dynamic feed;
   final dynamic feedEntry;
 
-  TowelieBlocEventButtonPressed(this.context, this.params, {this.feed, this.feedEntry});
+  TowelieBlocEventButtonPressed(this.context, this.params,
+      {this.feed, this.feedEntry});
 
   @override
   List<Object> get props => [rand, context, params, feed, feedEntry];
@@ -177,7 +178,8 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final bool hasNext;
   final List<Map<String, dynamic>>? buttons;
 
-  TowelieBlocStateHelper(this.settings, this.text, {this.hasNext = false, this.buttons});
+  TowelieBlocStateHelper(this.settings, this.text,
+      {this.hasNext = false, this.buttons});
 
   @override
   List<Object?> get props => [rand, settings, text, hasNext, buttons];

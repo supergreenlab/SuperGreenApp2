@@ -36,7 +36,8 @@ class SettingsBoxBlocEventUpdate extends SettingsBoxBlocEvent {
   final int? deviceBox;
   final Device? screenDevice;
 
-  SettingsBoxBlocEventUpdate(this.name, this.device, this.deviceBox, this.screenDevice);
+  SettingsBoxBlocEventUpdate(
+      this.name, this.device, this.deviceBox, this.screenDevice);
 
   @override
   List<Object?> get props => [name, device, screenDevice];
@@ -55,7 +56,8 @@ class SettingsBoxBlocStateLoaded extends SettingsBoxBlocState {
   final int? deviceBox;
   final Device? screenDevice;
 
-  SettingsBoxBlocStateLoaded(this.box, this.device, this.deviceBox, this.screenDevice);
+  SettingsBoxBlocStateLoaded(
+      this.box, this.device, this.deviceBox, this.screenDevice);
 
   @override
   List<Object?> get props => [box, device, deviceBox, screenDevice];
@@ -67,13 +69,15 @@ class SettingsBoxBlocStateDone extends SettingsBoxBlocState {
   final int? deviceBox;
   final Device? screenDevice;
 
-  SettingsBoxBlocStateDone(this.box, this.device, this.deviceBox, this.screenDevice);
+  SettingsBoxBlocStateDone(
+      this.box, this.device, this.deviceBox, this.screenDevice);
 
   @override
   List<Object?> get props => [box, device, deviceBox];
 }
 
-class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
+class SettingsBoxBloc
+    extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsBox args;
   late Box box;
@@ -86,7 +90,8 @@ class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocSt
   }
 
   @override
-  Stream<SettingsBoxBlocState> mapEventToState(SettingsBoxBlocEvent event) async* {
+  Stream<SettingsBoxBlocState> mapEventToState(
+      SettingsBoxBlocEvent event) async* {
     if (event is SettingsBoxBlocEventInit) {
       box = await RelDB.get().plantsDAO.getBox(args.box.id);
       if (box.device != null) {
@@ -94,21 +99,25 @@ class SettingsBoxBloc extends LegacyBloc<SettingsBoxBlocEvent, SettingsBoxBlocSt
         deviceBox = box.deviceBox;
       }
       if (box.screenDevice != null) {
-        screenDevice = await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
+        screenDevice =
+            await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
       }
       yield SettingsBoxBlocStateLoaded(box, device, deviceBox, screenDevice);
     } else if (event is SettingsBoxBlocEventUpdate) {
       yield SettingsBoxBlocStateLoading();
       await BoxHelper.removeBoxDevice(box,
-          removeDevice: event.device == null, removeScreenDevice: event.screenDevice == null);
+          removeDevice: event.device == null,
+          removeScreenDevice: event.screenDevice == null);
       await BoxHelper.setBoxDevice(box,
-          device: event.device, deviceBox: event.deviceBox, screenDevice: event.screenDevice);
+          device: event.device,
+          deviceBox: event.deviceBox,
+          screenDevice: event.screenDevice);
       if (event.name != box.name) {
-        await RelDB.get()
-            .plantsDAO
-            .updateBox(BoxesCompanion(id: Value(box.id), name: Value(event.name), synced: Value(false)));
+        await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
+            id: Value(box.id), name: Value(event.name), synced: Value(false)));
       }
-      yield SettingsBoxBlocStateDone(box, event.device, event.deviceBox, event.screenDevice);
+      yield SettingsBoxBlocStateDone(
+          box, event.device, event.deviceBox, event.screenDevice);
     }
   }
 }

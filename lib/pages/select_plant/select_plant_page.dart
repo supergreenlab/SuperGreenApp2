@@ -56,7 +56,9 @@ class SelectPlantPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: Text(state.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    child: Text(state.title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -66,30 +68,44 @@ class SelectPlantPage extends StatelessWidget {
                         List<Widget> content = [
                           Container(
                             decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 1,
+                                    offset: Offset(0, 2))
+                              ],
                               color: Colors.white,
                             ),
                             child: ListTile(
-                              leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
+                              leading: SvgPicture.asset(
+                                  'assets/settings/icon_lab.svg'),
                               title: Text(box.name),
                             ),
                           ),
                         ];
-                        content.addAll(state.plants.where((p) => p.box == box.id).map((p) {
+                        content.addAll(
+                            state.plants.where((p) => p.box == box.id).map((p) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 16),
                             child: ListTile(
                               leading: SizedBox(
-                                  width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_plants.svg')),
+                                  width: 40,
+                                  height: 40,
+                                  child: SvgPicture.asset(
+                                      'assets/settings/icon_plants.svg')),
                               onTap: () {
-                                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: p));
+                                BlocProvider.of<MainNavigatorBloc>(context)
+                                    .add(MainNavigatorActionPop(param: p));
                               },
-                              title: Text('${++i}. ${p.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                              title: Text('${++i}. ${p.name}',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               subtitle: Text('Tap to select'),
                               trailing: SizedBox(
                                   width: 30,
                                   height: 30,
-                                  child: SvgPicture.asset('assets/settings/icon_${p.synced ? '' : 'un'}synced.svg')),
+                                  child: SvgPicture.asset(
+                                      'assets/settings/icon_${p.synced ? '' : 'un'}synced.svg')),
                             ),
                           );
                         }).toList());
@@ -113,7 +129,8 @@ class SelectPlantPage extends StatelessWidget {
                 hideBackButton: !(state is SelectPlantBlocStateLoaded),
                 elevation: 10,
               ),
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
@@ -127,22 +144,32 @@ class SelectPlantPage extends StatelessWidget {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no plant yet.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text('You have no plant yet.',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
-                  Text('Add your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
-                  Text('PLANT', style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+                  Text('Add your first',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text('PLANT',
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w200,
+                          color: Color(0xff3bb30b))),
                 ],
               ),
             ),
             GreenButton(
               title: 'START',
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToCreatePlantEvent());
               },
             ),
           ],
@@ -159,12 +186,16 @@ class SelectPlantPage extends StatelessWidget {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no private diaries to make public.\nCheck your plant settings to un-public a plant.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text(
+                        'You have no private diaries to make public.\nCheck your plant settings to un-public a plant.',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
                 ],
               ),
@@ -172,7 +203,8 @@ class SelectPlantPage extends StatelessWidget {
             GreenButton(
               title: 'OPEN SETTINGS',
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlants());
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToSettingsPlants());
               },
             ),
           ],

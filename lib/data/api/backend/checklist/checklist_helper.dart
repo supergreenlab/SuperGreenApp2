@@ -22,29 +22,34 @@ import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistHelper {
-  static Future deleteChecklist(Checklist checklist, {addDeleted = true}) async {
+  static Future deleteChecklist(Checklist checklist,
+      {addDeleted = true}) async {
     await RelDB.get().checklistsDAO.deleteChecklist(checklist);
     if (addDeleted && checklist.serverID != null) {
-      await RelDB.get()
-          .deletesDAO
-          .addDelete(DeletesCompanion(serverID: Value(checklist.serverID!), type: Value('checklists')));
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(checklist.serverID!), type: Value('checklists')));
     }
 
-    List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(checklist.id);
+    List<ChecklistSeed> checklistSeeds =
+        await RelDB.get().checklistsDAO.getChecklistSeeds(checklist.id);
     for (ChecklistSeed checklistSeed in checklistSeeds) {
-      await ChecklistHelper.deleteChecklistSeed(checklistSeed, addDeleted: addDeleted);
+      await ChecklistHelper.deleteChecklistSeed(checklistSeed,
+          addDeleted: addDeleted);
     }
   }
 
-  static Future deleteChecklistSeed(ChecklistSeed checklistSeed, {addDeleted = true}) async {
+  static Future deleteChecklistSeed(ChecklistSeed checklistSeed,
+      {addDeleted = true}) async {
     await RelDB.get().checklistsDAO.deleteChecklistSeed(checklistSeed);
     if (addDeleted && checklistSeed.serverID != null) {
-      await RelDB.get()
-          .deletesDAO
-          .addDelete(DeletesCompanion(serverID: Value(checklistSeed.serverID!), type: Value('checklistseeds')));
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(checklistSeed.serverID!),
+          type: Value('checklistseeds')));
     }
 
-    List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getChecklistLogsForChecklistSeed(checklistSeed);
+    List<ChecklistLog> checklistLogs = await RelDB.get()
+        .checklistsDAO
+        .getChecklistLogsForChecklistSeed(checklistSeed);
     for (ChecklistLog checklistLog in checklistLogs) {
       await ChecklistHelper.deleteChecklistLog(checklistLog);
     }
@@ -54,32 +59,36 @@ class ChecklistHelper {
     if (checklistLog.checked || checklistLog.skipped) {
       return;
     }
-    await RelDB.get()
-        .checklistsDAO
-        .updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
+    await RelDB.get().checklistsDAO.updateChecklistLog(
+        checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
   }
 
   static Future checkChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get()
-        .checklistsDAO
-        .updateChecklistLog(checklistLog.copyWith(checked: true, synced: false).toCompanion(true));
+    await RelDB.get().checklistsDAO.updateChecklistLog(
+        checklistLog.copyWith(checked: true, synced: false).toCompanion(true));
   }
 
   static Future skipChecklistLog(ChecklistLog checklistLog) async {
-    await RelDB.get()
-        .checklistsDAO
-        .updateChecklistLog(checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
+    await RelDB.get().checklistsDAO.updateChecklistLog(
+        checklistLog.copyWith(skipped: true, synced: false).toCompanion(true));
   }
 
-  static Future subscribeCollection(String collectionID, Checklist checklist) async {
+  static Future subscribeCollection(
+      String collectionID, Checklist checklist) async {
     try {
       // If exists.
-      await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(checklist, collectionID);
+      await RelDB.get()
+          .checklistsDAO
+          .getChecklistCollectionForServerID(checklist, collectionID);
     } catch (e) {
       try {
-        ChecklistCollectionsCompanion collection = await BackendAPI().checklistAPI.getChecklistCollection(collectionID);
+        ChecklistCollectionsCompanion collection = await BackendAPI()
+            .checklistAPI
+            .getChecklistCollection(collectionID);
         collection = collection.copyWith(checklist: Value(checklist.id));
-        await BackendAPI().checklistAPI.subscribeCollection(collectionID, checklist.serverID!);
+        await BackendAPI()
+            .checklistAPI
+            .subscribeCollection(collectionID, checklist.serverID!);
         await RelDB.get().checklistsDAO.addChecklistCollection(collection);
       } catch (e, trace) {
         Logger.logError(e, trace);

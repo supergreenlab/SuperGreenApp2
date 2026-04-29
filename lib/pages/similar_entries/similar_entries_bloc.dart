@@ -44,7 +44,8 @@ class SimilarEntriesBlocStateLoaded extends SimilarEntriesBlocState {
   List<Object?> get props => [feedEntryState];
 }
 
-class SimilarEntriesBloc extends LegacyBloc<SimilarEntriesBlocEvent, SimilarEntriesBlocState> {
+class SimilarEntriesBloc
+    extends LegacyBloc<SimilarEntriesBlocEvent, SimilarEntriesBlocState> {
   final MainNavigateToSimilarEntriesEvent args;
 
   SimilarEntriesBloc(this.args) : super(SimilarEntriesBlocStateInit()) {
@@ -52,7 +53,8 @@ class SimilarEntriesBloc extends LegacyBloc<SimilarEntriesBlocEvent, SimilarEntr
   }
 
   @override
-  Stream<SimilarEntriesBlocState> mapEventToState(SimilarEntriesBlocEvent event) async* {
+  Stream<SimilarEntriesBlocState> mapEventToState(
+      SimilarEntriesBlocEvent event) async* {
     if (event is SimilarEntriesBlocEventInit) {
       yield SimilarEntriesBlocStateLoaded(args.feedEntryState);
     }

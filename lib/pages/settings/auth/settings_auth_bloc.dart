@@ -32,7 +32,7 @@ abstract class SettingsAuthBlocEvent extends Equatable {}
 
 class SettingsAuthBlocEventInit extends SettingsAuthBlocEvent {
   final int rand = Random().nextInt(1 << 32);
-  
+
   @override
   List<Object> get props => [rand];
 }
@@ -78,7 +78,8 @@ class SettingsAuthBlocStateLoaded extends SettingsAuthBlocState {
   final bool syncOverGSM;
   final User? user;
 
-  SettingsAuthBlocStateLoaded(this.isAuth, this.notificationEnabled, this.syncOverGSM, this.user);
+  SettingsAuthBlocStateLoaded(
+      this.isAuth, this.notificationEnabled, this.syncOverGSM, this.user);
 
   @override
   List<Object?> get props => [isAuth, notificationEnabled, syncOverGSM, user];
@@ -98,7 +99,8 @@ class SettingsAuthBlocStateError extends SettingsAuthBlocState {
   List<Object> get props => [message];
 }
 
-class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
+class SettingsAuthBloc
+    extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsAuth args;
   late bool _isAuth;
@@ -108,7 +110,8 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
   }
 
   @override
-  Stream<SettingsAuthBlocState> mapEventToState(SettingsAuthBlocEvent event) async* {
+  Stream<SettingsAuthBlocState> mapEventToState(
+      SettingsAuthBlocEvent event) async* {
     if (event is SettingsAuthBlocEventInit) {
       yield SettingsAuthBlocStateLoading();
       /*yield SettingsAuthBlocStateLoaded(
@@ -120,7 +123,8 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
         user = await BackendAPI().usersAPI.me();
         notificationEnabled = await RemoteNotifications.checkPermissions();
       }
-      yield SettingsAuthBlocStateLoaded(_isAuth, notificationEnabled, AppDB().getAppData().syncOverGSM, user);
+      yield SettingsAuthBlocStateLoaded(
+          _isAuth, notificationEnabled, AppDB().getAppData().syncOverGSM, user);
     } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {
       AppDB().setSynceOverGSM(event.syncOverGSM);
     } else if (event is SettingsAuthBlocEventLogout) {
@@ -138,7 +142,8 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
 
       Image? image = decodeImage(await event.file.readAsBytes());
       Image thumbnail = copyResize(image!,
-          height: image.height > image.width ? 300 : null, width: image.width >= image.height ? 300 : null);
+          height: image.height > image.width ? 300 : null,
+          width: image.width >= image.height ? 300 : null);
       File tmpDest = File('${AppDB().tmpPath}/avatar.$ext');
       await tmpDest.writeAsBytes(encodeJpg(thumbnail, quality: 50));
 

@@ -39,10 +39,13 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
   String get feedEntryType => 'FE_WATER';
 
   @override
-  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {
-    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
+  Stream<TowelieBlocState> feedEntryTrigger(
+      TowelieBlocEventFeedEntryCreated event) async* {
+    Plant plant =
+        await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
     yield TowelieBlocStateHelper(
-        RouteSettings(name: '/feed/plant', arguments: null), TowelieActionHelpWaterReminder.towelieHelperWaterReminder,
+        RouteSettings(name: '/feed/plant', arguments: null),
+        TowelieActionHelpWaterReminder.towelieHelperWaterReminder,
         buttons: [
           // TowelieButtonReminder.createButton(
           // '1 min',

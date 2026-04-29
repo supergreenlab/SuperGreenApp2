@@ -65,7 +65,8 @@ class FeedLightFormBlocValueChangedEvent extends FeedLightFormBlocEvent {
   List<Object> get props => [i, value];
 }
 
-class FeedLightFormBlocLightSettingsChangedEvent extends FeedLightFormBlocEvent {
+class FeedLightFormBlocLightSettingsChangedEvent
+    extends FeedLightFormBlocEvent {
   final int i;
   final LightSettings lightSetting;
 
@@ -99,8 +100,10 @@ class FeedLightFormBlocStateLightsLoading extends FeedLightFormBlocState {
   List<Object> get props => [index];
 }
 
-class FeedLightFormBlocStateNoDevice extends FeedLightFormBlocStateLightsLoaded {
-  FeedLightFormBlocStateNoDevice(List<BoxLight> values, Box box) : super(values, box);
+class FeedLightFormBlocStateNoDevice
+    extends FeedLightFormBlocStateLightsLoaded {
+  FeedLightFormBlocStateNoDevice(List<BoxLight> values, Box box)
+      : super(values, box);
 }
 
 class FeedLightFormBlocStateLoading extends FeedLightFormBlocState {
@@ -132,11 +135,14 @@ class BoxLight extends Equatable {
   List<Object?> get props => [value, lightSettings];
 
   BoxLight copyWith({Param? value, LightSettings? lightSettings}) {
-    return BoxLight(value: value ?? this.value, lightSettings: lightSettings ?? this.lightSettings);
+    return BoxLight(
+        value: value ?? this.value,
+        lightSettings: lightSettings ?? this.lightSettings);
   }
 }
 
-class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
+class FeedLightFormBloc
+    extends LegacyBloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
   final MainNavigateToFeedLightFormEvent args;
 
   late Device device;
@@ -148,7 +154,8 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
   }
 
   @override
-  Stream<FeedLightFormBlocState> mapEventToState(FeedLightFormBlocEvent event) async* {
+  Stream<FeedLightFormBlocState> mapEventToState(
+      FeedLightFormBlocEvent event) async* {
     if (event is FeedLightFormBlocEventLoadLights) {
       yield* _handleLoadLights();
     } else if (event is FeedLightFormBlocValueChangedEvent) {
@@ -171,7 +178,8 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     for (int i = 0; i < lightModule.arrayLen; ++i) {
       Param boxParam = await db.devicesDAO.getParam(device.id, "LED_${i}_BOX");
       if (boxParam.ivalue == box.deviceBox) {
-        lightParams.add(await db.devicesDAO.getParam(device.id, "LED_${i}_DIM"));
+        lightParams
+            .add(await db.devicesDAO.getParam(device.id, "LED_${i}_DIM"));
       }
     }
     initialLightParams = List.from(lightParams); // Create a copy of lightParams
@@ -187,12 +195,14 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     }
     List<BoxLight> boxLights = [];
     for (int i = 0; i < lightParams.length; ++i) {
-      boxLights.add(BoxLight(value: lightParams[i], lightSettings: lightSettings[i]));
+      boxLights.add(
+          BoxLight(value: lightParams[i], lightSettings: lightSettings[i]));
     }
     yield FeedLightFormBlocStateLightsLoaded(boxLights, box);
   }
 
-  Stream<FeedLightFormBlocState> _handleValueChanged(FeedLightFormBlocValueChangedEvent event) async* {
+  Stream<FeedLightFormBlocState> _handleValueChanged(
+      FeedLightFormBlocValueChangedEvent event) async* {
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(args.box.id);
     if (box.device == null) {
@@ -200,15 +210,18 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     }
     yield FeedLightFormBlocStateLightsLoading(event.i);
     try {
-      await DeviceHelper.updateIntParam(device, lightParams[event.i], (event.value).toInt());
-      lightParams[event.i] = lightParams[event.i].copyWith(ivalue: Value(event.value.toInt()));
+      await DeviceHelper.updateIntParam(
+          device, lightParams[event.i], (event.value).toInt());
+      lightParams[event.i] =
+          lightParams[event.i].copyWith(ivalue: Value(event.value.toInt()));
     } catch (e, trace) {
       Logger.logError(e, trace);
     }
     yield FeedLightFormBlocStateLightsLoading(-1);
   }
 
-  Stream<FeedLightFormBlocState> _handleLightSettingsChanged(FeedLightFormBlocLightSettingsChangedEvent event) async* {
+  Stream<FeedLightFormBlocState> _handleLightSettingsChanged(
+      FeedLightFormBlocLightSettingsChangedEvent event) async* {
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(args.box.id);
     BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
@@ -219,7 +232,8 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     db.plantsDAO.updateBox(box.toCompanion(true));
   }
 
-  Stream<FeedLightFormBlocState> _handleCreate(FeedLightFormBlocEventCreate event) async* {
+  Stream<FeedLightFormBlocState> _handleCreate(
+      FeedLightFormBlocEventCreate event) async* {
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(args.box.id);
     if (box.device == null) {
@@ -230,12 +244,15 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     FeedEntry? feedEntry;
     for (int i = 0; i < plants.length; ++i) {
       PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
-      if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
+      if (plantSettings.dryingStart != null ||
+          plantSettings.curingStart != null) {
         continue;
       }
       List<int> values = event.values.map((l) => l.value.ivalue!).toList();
-      List<int> initialValues = initialLightParams.map((l) => l.ivalue!).toList();
-      int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+      List<int> initialValues =
+          initialLightParams.map((l) => l.ivalue!).toList();
+      int feedEntryID =
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_LIGHT',
         feed: plants[i].feed,
         date: DateTime.now(),
@@ -258,7 +275,8 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     yield FeedLightFormBlocStateCancelling();
     List<Future> futures = [];
     for (int i = 0; i < lightParams.length; ++i) {
-      futures.add(DeviceHelper.updateIntParam(device, lightParams[i], initialLightParams[i].ivalue!));
+      futures.add(DeviceHelper.updateIntParam(
+          device, lightParams[i], initialLightParams[i].ivalue!));
     }
     try {
       await Future.wait(futures);

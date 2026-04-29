@@ -22,9 +22,13 @@ import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dar
 
 class DiscussionsBloc extends SectionBloc<PublicFeedEntry> {
   Future<List<dynamic>> loadItems(int n, int offset) async {
-    List<dynamic> comments = await BackendAPI().feedsAPI.publicCommentedFeedEntries(n, offset);
-    comments.removeWhere((c) => BackendAPI().blockedUserIDs.contains(c['commentUserID']));
+    List<dynamic> comments =
+        await BackendAPI().feedsAPI.publicCommentedFeedEntries(n, offset);
+    comments.removeWhere(
+        (c) => BackendAPI().blockedUserIDs.contains(c['commentUserID']));
     return comments;
   }
-  PublicFeedEntry itemFromMap(Map<String, dynamic> map) => PublicFeedEntry.fromMap(map);
+
+  PublicFeedEntry itemFromMap(Map<String, dynamic> map) =>
+      PublicFeedEntry.fromMap(map);
 }

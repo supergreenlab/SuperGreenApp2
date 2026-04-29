@@ -23,13 +23,17 @@ import 'package:super_green_app/pages/checklist/create/create_checklist_section.
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class WebpageActionPage extends StatefulWidget {
-
   final ChecklistActionWebpage action;
 
   final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  WebpageActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
+  WebpageActionPage(
+      {Key? key,
+      required this.onClose,
+      required this.action,
+      required this.onUpdate})
+      : super(key: key);
 
   @override
   State<WebpageActionPage> createState() => _WebpageActionPageState();
@@ -63,9 +67,13 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Enter URL of webpage to open:',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
-          ),
+        Text(
+          'Enter URL of webpage to open:',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Color(0xff6A6A6A)),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
@@ -84,7 +92,10 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             'Description',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Color(0xff6A6A6A)),
           ),
         ),
         Padding(
@@ -92,11 +103,13 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
           child: SizedBox(
             height: 150,
             child: FeedFormTextarea(
-              placeholder: 'ex: When the temperature gets too high, some fungus might develop on your leaves.',
+              placeholder:
+                  'ex: When the temperature gets too high, some fungus might develop on your leaves.',
               noPadding: true,
               textEditingController: _instructionController,
               onChanged: (value) {
-                widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
+                widget.onUpdate(widget.action
+                    .copyWith(instructions: _instructionController.text));
               },
             ),
           ),

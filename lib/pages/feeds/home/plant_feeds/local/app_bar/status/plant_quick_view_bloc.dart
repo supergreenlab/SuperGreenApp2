@@ -56,13 +56,15 @@ class PlantQuickViewBlocStateLoaded extends PlantQuickViewBlocState {
   final List<FeedEntry> watering;
   final FeedEntry? media;
 
-  PlantQuickViewBlocStateLoaded(this.plant, this.box, this.watering, this.media);
+  PlantQuickViewBlocStateLoaded(
+      this.plant, this.box, this.watering, this.media);
 
   @override
   List<Object?> get props => [this.plant, this.box, this.watering, this.media];
 }
 
-class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickViewBlocState> {
+class PlantQuickViewBloc
+    extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickViewBlocState> {
   final Plant plant;
   Device? device;
   late Box box;
@@ -73,18 +75,26 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
   late StreamSubscription wateringSub;
   late StreamSubscription mediaSub;
 
-  PlantQuickViewBloc(this.plant, this.box) : super(PlantQuickViewBlocStateInit(plant)) {
+  PlantQuickViewBloc(this.plant, this.box)
+      : super(PlantQuickViewBlocStateInit(plant)) {
     add(PlantQuickViewBlocEventInit());
   }
 
   @override
-  Stream<PlantQuickViewBlocState> mapEventToState(PlantQuickViewBlocEvent event) async* {
+  Stream<PlantQuickViewBlocState> mapEventToState(
+      PlantQuickViewBlocEvent event) async* {
     if (event is PlantQuickViewBlocEventInit) {
       final db = RelDB.get();
-      watering = await db.feedsDAO.getFeedEntriesForFeedWithType(plant.feed, 'FE_WATER');
-      media = await db.feedsDAO.getLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA');
-      wateringSub = db.feedsDAO.watchFeedEntriesForFeedWithType(plant.feed, 'FE_WATER').listen(onWateringChange);
-      mediaSub = db.feedsDAO.watchLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA').listen(onMediaChange);
+      watering = await db.feedsDAO
+          .getFeedEntriesForFeedWithType(plant.feed, 'FE_WATER');
+      media = await db.feedsDAO
+          .getLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA');
+      wateringSub = db.feedsDAO
+          .watchFeedEntriesForFeedWithType(plant.feed, 'FE_WATER')
+          .listen(onWateringChange);
+      mediaSub = db.feedsDAO
+          .watchLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA')
+          .listen(onMediaChange);
       yield PlantQuickViewBlocStateLoaded(plant, box, watering, media);
     } else if (event is PlantQuickViewBlocEventLoaded) {
       yield event.state;
@@ -93,12 +103,14 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
 
   void onWateringChange(List<FeedEntry> value) {
     watering = value;
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, box, watering, media)));
+    add(PlantQuickViewBlocEventLoaded(
+        PlantQuickViewBlocStateLoaded(plant, box, watering, media)));
   }
 
   void onMediaChange(FeedEntry? value) {
     media = value;
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, box, watering, media)));
+    add(PlantQuickViewBlocEventLoaded(
+        PlantQuickViewBlocStateLoaded(plant, box, watering, media)));
   }
 
   @override

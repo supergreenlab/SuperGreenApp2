@@ -21,11 +21,12 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/red_button.dart';
 
 class ChecklistLogButtonBottomBar extends StatelessWidget {
-
   final Function() onCheck;
   final Function() onSkip;
 
-  const ChecklistLogButtonBottomBar({Key? key, required this.onCheck, required this.onSkip}) : super(key: key);
+  const ChecklistLogButtonBottomBar(
+      {Key? key, required this.onCheck, required this.onSkip})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

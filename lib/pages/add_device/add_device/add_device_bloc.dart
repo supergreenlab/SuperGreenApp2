@@ -36,7 +36,8 @@ class AddDeviceBloc extends LegacyBloc<AddDeviceBlocEvent, AddDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToAddDeviceEvent args;
 
-  AddDeviceBloc(this.args) : super(AddDeviceBlocState(AppDB().getAppData().jwt != null));
+  AddDeviceBloc(this.args)
+      : super(AddDeviceBlocState(AppDB().getAppData().jwt != null));
 
   @override
   Stream<AddDeviceBlocState> mapEventToState(AddDeviceBlocEvent event) async* {}

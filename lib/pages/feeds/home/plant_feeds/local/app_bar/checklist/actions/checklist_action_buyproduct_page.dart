@@ -57,10 +57,12 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
       child: AppBarAction(
         iconWidget: FaviconImage(
           url: (checklistAction as ChecklistActionBuyProduct).url!,
-          alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),
+          alternativeImage: SvgPicture.asset(
+              ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),
         ),
         color: Color.fromARGB(255, 140, 98, 158),
-        title: (checklistAction as ChecklistActionBuyProduct).name ?? checklistSeed.title,
+        title: (checklistAction as ChecklistActionBuyProduct).name ??
+            checklistSeed.title,
         onCheck: onCheck,
         onSkip: onSkip,
         child: summarize ? null : _renderBody(context),
@@ -81,8 +83,8 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
               backgroundColor: Colors.transparent,
               builder: (BuildContext c) {
                 return BlocProvider<ChecklistActionPopupBloc>(
-                  create: (BuildContext context) =>
-                      ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
+                  create: (BuildContext context) => ChecklistActionPopupBloc(
+                      this.plant, this.box, this.checklistSeed),
                   child: ChecklistActionPopupPage(),
                 );
               },
@@ -91,7 +93,10 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
             launchUrl(url);
           }
         },
-        actionIcon: !summarize ? null : SvgPicture.asset(ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),
+        actionIcon: !summarize
+            ? null
+            : SvgPicture.asset(
+                ChecklistActionIcons[ChecklistActionBuyProduct.TYPE]!),
       ),
     );
   }
@@ -106,10 +111,14 @@ class ChecklistActionBuyProductButton extends ChecklistActionButton {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           MarkdownBody(
-            data: (checklistAction as ChecklistActionBuyProduct).instructions ?? '',
+            data: (checklistAction as ChecklistActionBuyProduct).instructions ??
+                '',
             styleSheet: MarkdownStyleSheet(
               p: TextStyle(color: Color(0xff454545), fontSize: 14),
-              h1: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
+              h1: TextStyle(
+                  color: Color(0xff454545),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],

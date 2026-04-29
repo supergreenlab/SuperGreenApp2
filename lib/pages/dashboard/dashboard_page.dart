@@ -68,8 +68,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 hideBackButton: true,
                 leading: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child:
-                      SizedBox(width: 100, height: 100, child: SvgPicture.asset('assets/explorer/logo_sgl_white.svg')),
+                  child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: SvgPicture.asset(
+                          'assets/explorer/logo_sgl_white.svg')),
                 ),
               ),
               body: body,
@@ -104,7 +107,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _renderSearchField(BuildContext context, DashboardBlocStateLoaded state) {
+  Widget _renderSearchField(
+      BuildContext context, DashboardBlocStateLoaded state) {
     Widget trailing;
     if (searchController.text == '') {
       trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
@@ -229,7 +233,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
                     onTap: () {
-                      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToPlantFeedEvent(p));
+                      BlocProvider.of<HomeNavigatorBloc>(context)
+                          .add(HomeNavigateToPlantFeedEvent(p));
                     },
                   ),
                 ),
@@ -246,13 +251,16 @@ class _DashboardPageState extends State<DashboardPage> {
                   return tabs[index](context, p, box);
                 },
                 pagination: SwiperPagination(
-                  builder: new DotSwiperPaginationBuilder(color: Color(0xffdedede), activeColor: Color(0xff3bb30b)),
+                  builder: new DotSwiperPaginationBuilder(
+                      color: Color(0xffdedede), activeColor: Color(0xff3bb30b)),
                 ),
                 loop: false,
               ),
             ),
           ),
-          p == state.plants.last ? Container() : Container(height: 2, color: Color(0xffdedede)),
+          p == state.plants.last
+              ? Container()
+              : Container(height: 2, color: Color(0xffdedede)),
         ];
         return Container(
           height: 460,
@@ -268,8 +276,10 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _renderQuickView(BuildContext context, Plant plant, Box box) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(plant, box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(box)),
+        BlocProvider<PlantQuickViewBloc>(
+            create: (context) => PlantQuickViewBloc(plant, box)),
+        BlocProvider<AppBarMetricsBloc>(
+            create: (context) => AppBarMetricsBloc(box)),
       ],
       child: PlantQuickViewPage(),
     );
@@ -278,8 +288,10 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _renderControls(BuildContext context, Plant plant, Box box) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<BoxControlsBloc>(create: (context) => BoxControlsBloc(plant, box)),
-        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(box)),
+        BlocProvider<BoxControlsBloc>(
+            create: (context) => BoxControlsBloc(plant, box)),
+        BlocProvider<AppBarMetricsBloc>(
+            create: (context) => AppBarMetricsBloc(box)),
       ],
       child: BoxControlsPage(
         futureFn: futureFn(context, plant),
@@ -292,7 +304,8 @@ class _DashboardPageState extends State<DashboardPage> {
     return (Future<dynamic>? future) async {
       dynamic feedEntry = await future;
       if (feedEntry != null && feedEntry is FeedEntry) {
-        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(plant, feedEntry));
+        BlocProvider.of<TowelieBloc>(context)
+            .add(TowelieBlocEventFeedEntryCreated(plant, feedEntry));
       }
     };
   }

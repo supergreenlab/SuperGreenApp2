@@ -21,11 +21,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/assets/metrics.dart';
 
 class ChecklistMetricKey extends StatelessWidget {
-
   final String? metricKey;
   final Function(String type) onChange;
 
-  const ChecklistMetricKey({Key? key, required this.onChange, required this.metricKey}) : super(key: key);
+  const ChecklistMetricKey(
+      {Key? key, required this.onChange, required this.metricKey})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

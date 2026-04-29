@@ -31,7 +31,8 @@ class SGLAppBar extends AppBar {
     Widget? leading,
   }) : super(
           automaticallyImplyLeading: !hideBackButton,
-          title: Text(title, style: TextStyle(color: titleColor, fontSize: fontSize)),
+          title: Text(title,
+              style: TextStyle(color: titleColor, fontSize: fontSize)),
           iconTheme: IconThemeData(
             color: iconColor,
           ),

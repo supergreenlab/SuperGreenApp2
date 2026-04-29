@@ -29,7 +29,11 @@ class PlantInfosPhaseSince extends StatefulWidget {
   final Function(DateTime date) onSubmit;
 
   PlantInfosPhaseSince(
-      {required this.title, required this.icon, required this.date, required this.onCancel, required this.onSubmit});
+      {required this.title,
+      required this.icon,
+      required this.date,
+      required this.onCancel,
+      required this.onSubmit});
 
   @override
   _PlantInfosPhaseSinceState createState() => _PlantInfosPhaseSinceState();

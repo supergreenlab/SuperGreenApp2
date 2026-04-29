@@ -26,7 +26,9 @@ class PlantPublicLink extends StatefulWidget {
   final PlantFeedBlocStateLoaded state;
   final Function() onMakePublic;
 
-  const PlantPublicLink({Key? key, required this.state, required this.onMakePublic}) : super(key: key);
+  const PlantPublicLink(
+      {Key? key, required this.state, required this.onMakePublic})
+      : super(key: key);
 
   @override
   State<PlantPublicLink> createState() => _PlantPublicLinkState();
@@ -44,7 +46,8 @@ class _PlantPublicLinkState extends State<PlantPublicLink> {
   Widget build(BuildContext context) {
     if (!isPublic) {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 30, top: 16.0, left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(
+            bottom: 30, top: 16.0, left: 16.0, right: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,10 +77,12 @@ class _PlantPublicLinkState extends State<PlantPublicLink> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30, top: 16.0, left: 16.0, right: 16.0),
+      padding:
+          const EdgeInsets.only(bottom: 30, top: 16.0, left: 16.0, right: 16.0),
       child: InkWell(
         onTap: () async {
-          await Share.share("https://supergreenlab.com/public/plant?id=${widget.state.plant.serverID}");
+          await Share.share(
+              "https://supergreenlab.com/public/plant?id=${widget.state.plant.serverID}");
           Navigator.of(context).pop();
         },
         child: Column(
@@ -98,7 +103,12 @@ class _PlantPublicLinkState extends State<PlantPublicLink> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset('assets/home/icon_share_link.svg', color: Color(0xff454545), width: 20, height: 20,),
+                  child: SvgPicture.asset(
+                    'assets/home/icon_share_link.svg',
+                    color: Color(0xff454545),
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
                 Expanded(
                   child: Text(

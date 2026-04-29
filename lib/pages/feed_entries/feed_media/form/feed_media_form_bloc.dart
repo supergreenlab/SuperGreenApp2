@@ -61,7 +61,8 @@ class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
 
   final FeedMediaDraft? draft;
 
-  FeedMediaFormBlocEventCreate(this.date, this.medias, this.message, this.helpRequest, this.draft);
+  FeedMediaFormBlocEventCreate(
+      this.date, this.medias, this.message, this.helpRequest, this.draft);
 
   @override
   List<Object?> get props => [date, medias, message, helpRequest, draft];
@@ -114,7 +115,6 @@ class FeedMediaFormBlocStateLoading extends FeedMediaFormBlocState {
 }
 
 class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
-
   final FeedEntry? feedEntry;
 
   FeedMediaFormBlocStateDone(this.feedEntry);
@@ -123,7 +123,8 @@ class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
   List<Object?> get props => [feedEntry];
 }
 
-class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
+class FeedMediaFormBloc
+    extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent args;
 
   int get feedID => args.plant?.feed ?? args.box!.feed!;
@@ -133,7 +134,8 @@ class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaForm
   }
 
   @override
-  Stream<FeedMediaFormBlocState> mapEventToState(FeedMediaFormBlocEvent event) async* {
+  Stream<FeedMediaFormBlocState> mapEventToState(
+      FeedMediaFormBlocEvent event) async* {
     if (event is FeedMediaFormBlocEventLoadDraft) {
       try {
         FeedEntryDraft? draft;
@@ -141,7 +143,8 @@ class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaForm
           draft = await RelDB.get().feedsDAO.getEntryDraft(feedID, 'FE_MEDIA');
         } catch (e) {}
         if (draft != null) {
-          yield FeedMediaFormBlocStateDraft(FeedMediaDraft.fromJSON(draft.id, draft.params));
+          yield FeedMediaFormBlocStateDraft(
+              FeedMediaDraft.fromJSON(draft.id, draft.params));
         } else {
           yield FeedMediaFormBlocStateNoDraft();
         }
@@ -154,23 +157,33 @@ class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaForm
     } else if (event is FeedMediaFormBlocEventSaveDraft) {
       if (event.draft.draftID != null) {
         await RelDB.get().feedsDAO.updateFeedEntryDraft(
-            FeedEntryDraftsCompanion(id: Value(event.draft.draftID!), params: Value(event.draft.toJSON())));
+            FeedEntryDraftsCompanion(
+                id: Value(event.draft.draftID!),
+                params: Value(event.draft.toJSON())));
       } else {
-        int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(FeedEntryDraftsCompanion(
-            feed: Value(feedID), type: Value('FE_MEDIA'), params: Value(event.draft.toJSON())));
-        yield FeedMediaFormBlocStateCurrentDraft(event.draft.copyWithDraftID(draftID));
+        int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(
+            FeedEntryDraftsCompanion(
+                feed: Value(feedID),
+                type: Value('FE_MEDIA'),
+                params: Value(event.draft.toJSON())));
+        yield FeedMediaFormBlocStateCurrentDraft(
+            event.draft.copyWithDraftID(draftID));
       }
     } else if (event is FeedMediaFormBlocEventCreate) {
       yield FeedMediaFormBlocStateLoading();
       final db = RelDB.get();
-      int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID =
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
         feed: feedID,
         date: event.date,
-        params: Value(FeedMediaParams(event.message, event.helpRequest, boxFeed: args.plant == null).toJSON()),
+        params: Value(FeedMediaParams(event.message, event.helpRequest,
+                boxFeed: args.plant == null)
+            .toJSON()),
       ));
       for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(feedID), feedEntry: Value(feedEntryID)));
+        await db.feedsDAO.addFeedMedia(
+            m.copyWith(feed: Value(feedID), feedEntry: Value(feedEntryID)));
       }
 
       if (event.draft != null) {

@@ -41,7 +41,10 @@ class CommentParam extends Equatable {
   }
 
   factory CommentParam.fromMap(Map<String, dynamic> map) {
-    return CommentParam(recommend: (map['recommend'] ?? []).map<Product>((r) => Product.fromMap(r)).toList());
+    return CommentParam(
+        recommend: (map['recommend'] ?? [])
+            .map<Product>((r) => Product.fromMap(r))
+            .toList());
   }
 
   @override
@@ -153,7 +156,8 @@ class Comment extends Equatable {
       nLikes: map['nLikes'],
       replyTo: map['replyTo'],
       text: map['text'],
-      type: EnumToString.fromString(CommentType.values, map['type'] as String) as CommentType,
+      type: EnumToString.fromString(CommentType.values, map['type'] as String)
+          as CommentType,
       params: map['params'],
       createdAt: DateTime.parse(map['cat'] as String).toLocal(),
     );

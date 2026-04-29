@@ -24,13 +24,17 @@ import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_ty
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 
 class CardConditionPage extends StatelessWidget {
-
   final ChecklistConditionAfterCard condition;
 
   final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const CardConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
+  const CardConditionPage(
+      {Key? key,
+      required this.onClose,
+      required this.condition,
+      required this.onUpdate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +44,8 @@ class CardConditionPage extends StatelessWidget {
       title: 'After a diary entry is created',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           _renderCardType(context),
           _renderDuration(context),
         ]),
@@ -55,11 +58,14 @@ class CardConditionPage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
-          child: Text('After card with type:', style: TextStyle(fontWeight: FontWeight.bold),),
+          child: Text(
+            'After card with type:',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         ChecklistCardType(
           cardType: condition.entryType,
-          onChange: (String type) { 
+          onChange: (String type) {
             onUpdate(condition.copyWith(entryType: type));
           },
         ),
@@ -76,7 +82,7 @@ class CardConditionPage extends StatelessWidget {
           onUpdate(condition.copyWith(duration: duration, durationUnit: unit));
         },
         unit: condition.durationUnit,
-        ),
+      ),
     ]);
   }
 }

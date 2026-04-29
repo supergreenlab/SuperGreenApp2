@@ -31,8 +31,8 @@ class FeedLightParams extends FeedEntryParams {
     if (map['values'] == null) {
       return FeedLightParams([], []);
     }
-    return FeedLightParams(
-        map['values'].map<int>((v) => v as int).toList(), map['initialValues'].map<int>((v) => v as int).toList());
+    return FeedLightParams(map['values'].map<int>((v) => v as int).toList(),
+        map['initialValues'].map<int>((v) => v as int).toList());
   }
 
   @override

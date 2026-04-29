@@ -73,7 +73,8 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     );
   }
 
-  Widget _renderDeleting(BuildContext context, DeleteAccountBlocStateDeletingFiles state) {
+  Widget _renderDeleting(
+      BuildContext context, DeleteAccountBlocStateDeletingFiles state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -209,7 +210,9 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: GreenButton(
                       title: 'Confirm delete',
-                      onPressed: nickname.text != '' && password.text != '' ? () => this._handleInput(context) : null,
+                      onPressed: nickname.text != '' && password.text != ''
+                          ? () => this._handleInput(context)
+                          : null,
                     ),
                   ),
                 ],
@@ -223,8 +226,9 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
   void _onTokenReceived(String token) {
     Navigator.pop(context);
-    BlocProvider.of<DeleteAccountBloc>(context)
-        .add(DeleteAccountBlocEventDelete(nickname.text, password.text, token, deleteLocalData));
+    BlocProvider.of<DeleteAccountBloc>(context).add(
+        DeleteAccountBlocEventDelete(
+            nickname.text, password.text, token, deleteLocalData));
   }
 
   void _handleInput(BuildContext context) {
@@ -244,8 +248,9 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
             );
           });
     } else {
-      BlocProvider.of<DeleteAccountBloc>(context)
-          .add(DeleteAccountBlocEventDelete(nickname.text, password.text, Config.skipCaptchaToken, deleteLocalData));
+      BlocProvider.of<DeleteAccountBloc>(context).add(
+          DeleteAccountBlocEventDelete(nickname.text, password.text,
+              Config.skipCaptchaToken, deleteLocalData));
     }
   }
 }

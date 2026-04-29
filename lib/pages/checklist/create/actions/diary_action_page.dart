@@ -29,7 +29,11 @@ class DiaryActionPage extends StatefulWidget {
   final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  DiaryActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate})
+  DiaryActionPage(
+      {Key? key,
+      required this.onClose,
+      required this.action,
+      required this.onUpdate})
       : super(key: key);
 
   @override
@@ -73,7 +77,10 @@ class _DiaryActionPageState extends State<DiaryActionPage> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             'Instructions',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Color(0xff6A6A6A)),
           ),
         ),
         Padding(
@@ -81,11 +88,13 @@ class _DiaryActionPageState extends State<DiaryActionPage> {
           child: SizedBox(
             height: 150,
             child: FeedFormTextarea(
-              placeholder: 'ex: Check the leaves for small white dots. Make sure to check both sides of the leaf. Getting a macro lens will help.',
+              placeholder:
+                  'ex: Check the leaves for small white dots. Make sure to check both sides of the leaf. Getting a macro lens will help.',
               noPadding: true,
               textEditingController: _instructionController,
               onChanged: (value) {
-                widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
+                widget.onUpdate(widget.action
+                    .copyWith(instructions: _instructionController.text));
               },
             ),
           ),

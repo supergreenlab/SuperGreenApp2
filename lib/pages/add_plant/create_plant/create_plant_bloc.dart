@@ -49,11 +49,13 @@ class CreatePlantBlocStateDone extends CreatePlantBlocState {
   List<Object> get props => [plant, box];
 }
 
-class CreatePlantBloc extends LegacyBloc<CreatePlantBlocEvent, CreatePlantBlocState> {
+class CreatePlantBloc
+    extends LegacyBloc<CreatePlantBlocEvent, CreatePlantBlocState> {
   CreatePlantBloc() : super(CreatePlantBlocState());
 
   @override
-  Stream<CreatePlantBlocState> mapEventToState(CreatePlantBlocEvent event) async* {
+  Stream<CreatePlantBlocState> mapEventToState(
+      CreatePlantBlocEvent event) async* {
     if (event is CreatePlantBlocEventCreate) {
       final bdb = RelDB.get().plantsDAO;
       final fdb = RelDB.get().feedsDAO;

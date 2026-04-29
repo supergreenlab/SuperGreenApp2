@@ -57,10 +57,12 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
     if (nMeasures == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure,
+      yield TowelieBlocStateHelper(
+          event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure,
           hasNext: true);
     } else if (nMeasures == 1) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure3,
+      yield TowelieBlocStateHelper(event.settings,
+          TowelieActionHelpFormMeasure.towelieHelperFormMeasure3,
           hasNext: false);
     }
   }
@@ -69,7 +71,8 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
   Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {
     int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
     if (nMeasures == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure2);
+      yield TowelieBlocStateHelper(event.settings,
+          TowelieActionHelpFormMeasure.towelieHelperFormMeasure2);
     }
   }
 }

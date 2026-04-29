@@ -24,13 +24,17 @@ import 'package:super_green_app/pages/checklist/create/widgets/checklist_duratio
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_phase.dart';
 
 class PhaseConditionPage extends StatelessWidget {
-
   final ChecklistConditionAfterPhase condition;
 
   final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const PhaseConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
+  const PhaseConditionPage(
+      {Key? key,
+      required this.onClose,
+      required this.condition,
+      required this.onUpdate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +44,8 @@ class PhaseConditionPage extends StatelessWidget {
       title: 'When the plant reaches a phase',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           _renderCardType(context),
           _renderDuration(context),
         ]),
@@ -55,7 +58,10 @@ class PhaseConditionPage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
-          child: Text('When plant is:', style: TextStyle(fontWeight: FontWeight.bold),),
+          child: Text(
+            'When plant is:',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         ChecklistPhase(
           phase: condition.phase,

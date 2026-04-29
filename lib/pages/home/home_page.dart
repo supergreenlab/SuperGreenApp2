@@ -51,11 +51,13 @@ class HomePage extends StatelessWidget {
     return BlocListener<TowelieBloc, TowelieBlocState>(
       listener: (BuildContext context, state) {
         if (state is TowelieBlocStateHomeNavigation) {
-          BlocProvider.of<HomeNavigatorBloc>(context).add(state.homeNavigatorEvent);
+          BlocProvider.of<HomeNavigatorBloc>(context)
+              .add(state.homeNavigatorEvent);
         }
       },
       child: BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
-        builder: (context, navigatorState) => BlocBuilder<HomeBloc, HomeBlocState>(builder: (context, state) {
+        builder: (context, navigatorState) =>
+            BlocBuilder<HomeBloc, HomeBlocState>(builder: (context, state) {
           Widget body = FullscreenLoading(
             title: 'Loading..',
           );
@@ -68,11 +70,15 @@ class HomePage extends StatelessWidget {
             body = Navigator(
               //observers: [_analyticsObserver],
               initialRoute: navigatorState.index == 0 ? '/' : '/feed/plant',
-              onGenerateInitialRoutes: (NavigatorState navigator, String initialRoute) {
+              onGenerateInitialRoutes:
+                  (NavigatorState navigator, String initialRoute) {
                 if (initialRoute == '/feed/plant') {
                   return [
                     _onGenerateRoute(
-                        context, RouteSettings(name: initialRoute, arguments: HomeNavigateToPlantFeedEvent(null)))
+                        context,
+                        RouteSettings(
+                            name: initialRoute,
+                            arguments: HomeNavigateToPlantFeedEvent(null)))
                   ];
                 }
                 return [
@@ -80,7 +86,8 @@ class HomePage extends StatelessWidget {
                 ];
               },
               key: _navigatorKey,
-              onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
+              onGenerateRoute: (settings) =>
+                  this._onGenerateRoute(context, settings),
             );
 
             Widget homeIcon = Icon(Icons.event_note);
@@ -103,7 +110,8 @@ class HomePage extends StatelessWidget {
             navbar = BottomNavigationBar(
               unselectedItemColor: Colors.black38,
               selectedItemColor: Colors.green,
-              onTap: (i) => this._onNavigationBarItemSelect(context, i, navigatorState),
+              onTap: (i) =>
+                  this._onNavigationBarItemSelect(context, i, navigatorState),
               elevation: 10,
               currentIndex: navigatorState.index,
               items: [
@@ -129,7 +137,8 @@ class HomePage extends StatelessWidget {
 
           return Scaffold(
             bottomNavigationBar: navbar,
-            body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+            body: AnimatedSwitcher(
+                duration: Duration(milliseconds: 200), child: body),
           );
         }),
       ),
@@ -151,29 +160,37 @@ class HomePage extends StatelessWidget {
         ),
         child: Text(
           '$n',
-          style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
       ),
     );
   }
 
-  void _onNavigationBarItemSelect(BuildContext context, int i, HomeNavigatorState state) {
+  void _onNavigationBarItemSelect(
+      BuildContext context, int i, HomeNavigatorState state) {
     if (i == state.index) return;
     if (i == 0) {
-      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToDashboardEvent());
+      BlocProvider.of<HomeNavigatorBloc>(context)
+          .add(HomeNavigateToDashboardEvent());
     } else if (i == 1) {
-      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToPlantFeedEvent(null));
+      BlocProvider.of<HomeNavigatorBloc>(context)
+          .add(HomeNavigateToPlantFeedEvent(null));
     } else if (i == 2) {
-      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToExplorerEvent());
+      BlocProvider.of<HomeNavigatorBloc>(context)
+          .add(HomeNavigateToExplorerEvent());
     } else if (i == 3) {
-      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToSettingsEvent());
+      BlocProvider.of<HomeNavigatorBloc>(context)
+          .add(HomeNavigateToSettingsEvent());
     }
   }
 
-  Route<dynamic> _onGenerateRoute(BuildContext context, RouteSettings settings) {
+  Route<dynamic> _onGenerateRoute(
+      BuildContext context, RouteSettings settings) {
     Timer(Duration(milliseconds: 100), () {
-      BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventRoute(settings));
+      BlocProvider.of<TowelieBloc>(context)
+          .add(TowelieBlocEventRoute(settings));
     });
     switch (settings.name) {
       case '/dashboard':
@@ -181,20 +198,27 @@ class HomePage extends StatelessWidget {
             settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => DashboardBloc(),
-                  child: TowelieHelper.wrapWidget(settings, context, DashboardPage()),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, DashboardPage()),
                 ));
       case '/feed/plant':
-        return _plantFeedRoute(context, settings, settings.arguments as HomeNavigateToPlantFeedEvent, providers: [
-          BlocProvider<DeviceReachableListenerBloc>(
-            create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder),
-          )
-        ]);
+        return _plantFeedRoute(context, settings,
+            settings.arguments as HomeNavigateToPlantFeedEvent,
+            providers: [
+              BlocProvider<DeviceReachableListenerBloc>(
+                create: (context) => DeviceReachableListenerBloc(
+                    settings.arguments as DeviceNavigationArgHolder),
+              )
+            ]);
       case '/feed/box':
-        return _boxFeedRoute(context, settings, settings.arguments as HomeNavigateToBoxFeedEvent, providers: [
-          BlocProvider<DeviceReachableListenerBloc>(
-            create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder),
-          )
-        ]);
+        return _boxFeedRoute(
+            context, settings, settings.arguments as HomeNavigateToBoxFeedEvent,
+            providers: [
+              BlocProvider<DeviceReachableListenerBloc>(
+                create: (context) => DeviceReachableListenerBloc(
+                    settings.arguments as DeviceNavigationArgHolder),
+              )
+            ]);
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,
@@ -203,50 +227,61 @@ class HomePage extends StatelessWidget {
                     BlocProvider(create: (context) => ExplorerBloc()),
                     BlocProvider(create: (context) => SearchBloc()),
                   ],
-                  child: TowelieHelper.wrapWidget(settings, context, ExplorerPage()),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, ExplorerPage()),
                 ));
       case '/settings':
         return MaterialPageRoute(
             settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SettingsBloc(),
-                  child: TowelieHelper.wrapWidget(settings, context, SettingsPage()),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, SettingsPage()),
                 ));
       default:
         return MaterialPageRoute(
             settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => DashboardBloc(),
-                  child: TowelieHelper.wrapWidget(settings, context, DashboardPage()),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, DashboardPage()),
                 ));
     }
   }
 
-  MaterialPageRoute _plantFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event,
+  MaterialPageRoute _plantFeedRoute(BuildContext context,
+      RouteSettings settings, HomeNavigateToPlantFeedEvent event,
       {required List<BlocProvider> providers}) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
               providers: [
-                BlocProvider<PlantDrawerBloc>(create: (context) => PlantDrawerBloc()),
-                BlocProvider<PlantFeedBloc>(create: (context) => PlantFeedBloc(event)),
+                BlocProvider<PlantDrawerBloc>(
+                    create: (context) => PlantDrawerBloc()),
+                BlocProvider<PlantFeedBloc>(
+                    create: (context) => PlantFeedBloc(event)),
                 ...providers,
               ],
-              child: TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
+              child:
+                  TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
             ));
   }
 
-  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToBoxFeedEvent event,
+  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings,
+      HomeNavigateToBoxFeedEvent event,
       {required List<BlocProvider> providers}) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
               providers: [
-                BlocProvider<PlantDrawerBloc>(create: (context) => PlantDrawerBloc()),
-                BlocProvider<LocalBoxFeedBloc>(create: (context) => LocalBoxFeedBloc(event)),
+                BlocProvider<PlantDrawerBloc>(
+                    create: (context) => PlantDrawerBloc()),
+                BlocProvider<LocalBoxFeedBloc>(
+                    create: (context) => LocalBoxFeedBloc(event)),
                 ...providers,
               ],
-              child: TowelieHelper.wrapWidget(settings, context, LocalBoxFeedPage()),
+              child: TowelieHelper.wrapWidget(
+                  settings, context, LocalBoxFeedPage()),
             ));
   }
 }

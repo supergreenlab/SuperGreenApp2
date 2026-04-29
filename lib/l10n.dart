@@ -28,7 +28,9 @@ class SGLLocalizations {
 
   static Future<SGLLocalizations> load(Locale locale) {
     final String name =
-        locale.countryCode == null || locale.countryCode!.isEmpty ? locale.languageCode : locale.toString();
+        locale.countryCode == null || locale.countryCode!.isEmpty
+            ? locale.languageCode
+            : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {
@@ -57,7 +59,8 @@ class SGLLocalizationsDelegate extends LocalizationsDelegate<SGLLocalizations> {
   const SGLLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en', 'es', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      ['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
   Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale);

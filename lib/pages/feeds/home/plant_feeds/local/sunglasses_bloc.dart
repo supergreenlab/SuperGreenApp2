@@ -36,26 +36,32 @@ class SunglassesBlocStateLoaded extends SunglassesBlocState {
   List<Object> get props => [sunglassesOn];
 }
 
-class SunglassesBloc extends LegacyBloc<SunglassesBlocEvent, SunglassesBlocState> {
+class SunglassesBloc
+    extends LegacyBloc<SunglassesBlocEvent, SunglassesBlocState> {
   final int _deviceID;
   final int _deviceBox;
 
-  SunglassesBloc(this._deviceID, this._deviceBox) : super(SunglassesBlocStateInit()) {
+  SunglassesBloc(this._deviceID, this._deviceBox)
+      : super(SunglassesBlocStateInit()) {
     add(SunglassesBlocEventInit());
   }
 
   @override
-  Stream<SunglassesBlocState> mapEventToState(SunglassesBlocEvent event) async* {
+  Stream<SunglassesBlocState> mapEventToState(
+      SunglassesBlocEvent event) async* {
     if (event is SunglassesBlocEventInit) {
       yield SunglassesBlocStateLoaded(await _isON());
     } else if (event is SunglassesBlocEventOnOff) {
       Device device = await RelDB.get().devicesDAO.getDevice(_deviceID);
-      Param dimParam = await RelDB.get().devicesDAO.getParam(_deviceID, 'BOX_${_deviceBox}_LED_DIM');
+      Param dimParam = await RelDB.get()
+          .devicesDAO
+          .getParam(_deviceID, 'BOX_${_deviceBox}_LED_DIM');
       try {
         if (await _isON()) {
           await DeviceHelper.updateIntParam(device, dimParam, 0);
         } else {
-          await DeviceHelper.updateIntParam(device, dimParam, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+          await DeviceHelper.updateIntParam(device, dimParam,
+              DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
         }
       } catch (e, trace) {
         Logger.logError(e, trace);
@@ -65,8 +71,11 @@ class SunglassesBloc extends LegacyBloc<SunglassesBlocEvent, SunglassesBlocState
   }
 
   Future<bool> _isON() async {
-    Param dimParam = await RelDB.get().devicesDAO.getParam(_deviceID, 'BOX_${_deviceBox}_LED_DIM');
-    int time = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 - dimParam.ivalue!;
+    Param dimParam = await RelDB.get()
+        .devicesDAO
+        .getParam(_deviceID, 'BOX_${_deviceBox}_LED_DIM');
+    int time = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
+        dimParam.ivalue!;
     return time < 1200;
   }
 }

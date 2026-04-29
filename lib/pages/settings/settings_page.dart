@@ -56,24 +56,26 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
-  void _createPinLock({bool isEdited = false }) {
+  void _createPinLock({bool isEdited = false}) {
     screenLockCreate(
       context: context,
       config: screenLockConfig,
       keyPadConfig: screenLockKeyPadConfig,
       cancelButton: const Icon(Icons.close, size: 36),
       title: isEdited
-        ? const Text('Let\'s create a new PIN code')
-        : const Text('Please enter PIN'),
+          ? const Text('Let\'s create a new PIN code')
+          : const Text('Please enter PIN'),
       confirmTitle: Text('Great! Now confirm it'),
       onConfirmed: (value) {
-        BlocProvider.of<SettingsBloc>(context).add(SettingsBlocEventSetPinLock(value));
+        BlocProvider.of<SettingsBloc>(context)
+            .add(SettingsBlocEventSetPinLock(value));
         Navigator.of(context).pop();
 
-        showSnackBar(context, isEdited
-          ? 'All done! You can now use your new PIN code'
-          : 'All done! The app is now protected with your PIN code'
-        );
+        showSnackBar(
+            context,
+            isEdited
+                ? 'All done! You can now use your new PIN code'
+                : 'All done! The app is now protected with your PIN code');
       },
     );
   }
@@ -95,7 +97,8 @@ class _SettingsPageState extends State<SettingsPage> {
               children: <Widget>[
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<SettingsBloc>(context).add(SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
+                    BlocProvider.of<SettingsBloc>(context).add(
+                        SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
                   },
                   leading: SizedBox(
                       width: 40,
@@ -103,17 +106,28 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: SvgPicture.asset(state.freedomUnits
                           ? 'assets/settings/icon_imperial.svg'
                           : 'assets/settings/icon_metric.svg')),
-                  title: Text(state.freedomUnits ? 'Imperial unit system' : 'Metric unit system',
+                  title: Text(
+                      state.freedomUnits
+                          ? 'Imperial unit system'
+                          : 'Metric unit system',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
+                  subtitle: Text(
+                      'Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsAuth());
                   },
-                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_account.svg')),
-                  title: Text('SGL Account', style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Enable backups, remote control, sharing, etc..'),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child:
+                          SvgPicture.asset('assets/settings/icon_account.svg')),
+                  title: Text('SGL Account',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle:
+                      Text('Enable backups, remote control, sharing, etc..'),
                 ),
                 ListTile(
                   onTap: () {
@@ -132,72 +146,94 @@ class _SettingsPageState extends State<SettingsPage> {
                       onUnlocked: () {
                         Navigator.of(context).pop();
 
-                        final blocProvider = BlocProvider.of<SettingsBloc>(context);
+                        final blocProvider =
+                            BlocProvider.of<SettingsBloc>(context);
 
                         showModalBottomSheet<void>(
-                          context: context,
-                          isScrollControlled: false,
-                          useSafeArea: true,
-                          builder: (BuildContext context) {
-                            return Padding(
-                              padding: kPadding16,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SglFilledGreenButton(
-                                    title: 'Change PIN code',
-                                    expanded: true,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      _createPinLock(isEdited: true);
-                                    },
-                                  ),
-                                  context.vBox16,
-                                  SglOutlinedRedButton(
-                                    title: 'Remove PIN lock',
-                                    expanded: true,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      blocProvider.add(SettingsBlocEventSetPinLock(''));
+                            context: context,
+                            isScrollControlled: false,
+                            useSafeArea: true,
+                            builder: (BuildContext context) {
+                              return Padding(
+                                padding: kPadding16,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SglFilledGreenButton(
+                                      title: 'Change PIN code',
+                                      expanded: true,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        _createPinLock(isEdited: true);
+                                      },
+                                    ),
+                                    context.vBox16,
+                                    SglOutlinedRedButton(
+                                      title: 'Remove PIN lock',
+                                      expanded: true,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        blocProvider.add(
+                                            SettingsBlocEventSetPinLock(''));
 
-                                      showSnackBar(context, 'All done! PIN lock removed');
-                                    },
-                                  )
-                                ],
-                              ),
-                            );
-                          }
-                        );
+                                        showSnackBar(context,
+                                            'All done! PIN lock removed');
+                                      },
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
                       },
                     );
                   },
-                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_lock.svg')),
-                  title: Text('PIN lock', style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset('assets/settings/icon_lock.svg')),
+                  title: Text('PIN lock',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Set up or change PIN lock'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlants());
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsPlants());
                   },
-                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_plants.svg')),
-                  title: Text('Plants', style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child:
+                          SvgPicture.asset('assets/settings/icon_plants.svg')),
+                  title: Text('Plants',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Move to new box & delete plants.'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBoxes());
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsBoxes());
                   },
-                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_lab.svg')),
-                  title: Text('Labs', style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset('assets/settings/icon_lab.svg')),
+                  title: Text('Labs',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Change controller & delete labs.'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsDevices());
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsDevices());
                   },
-                  leading:
-                      SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_controller.svg')),
-                  title: Text('Controllers', style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset(
+                          'assets/settings/icon_controller.svg')),
+                  title: Text('Controllers',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Edit & delete controllers.'),
                 ),
                 ListTile(
@@ -210,9 +246,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                     await FlutterEmailSender.send(email);
                   },
-                  leading:
-                      SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_feedback.svg')),
-                  title: Text('Send us some feedback!', style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset(
+                          'assets/settings/icon_feedback.svg')),
+                  title: Text('Send us some feedback!',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Tap to send over email'),
                 ),
                 ListTile(
@@ -230,8 +270,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                     await FlutterEmailSender.send(email);
                   },
-                  leading: SizedBox(width: 40, height: 40, child: Image.asset('assets/settings/avatar.jpg')),
-                  title: Text('Send my logs to stant', style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.asset('assets/settings/avatar.jpg')),
+                  title: Text('Send my logs to stant',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Tap to send over email'),
                 ),
                 ListTile(

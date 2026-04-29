@@ -25,7 +25,11 @@ class ChecklistCardType extends StatelessWidget {
   final String? cardType;
   final Function(String type) onChange;
 
-  const ChecklistCardType({Key? key, required this.onChange, required this.cardType, this.creatableCards = false})
+  const ChecklistCardType(
+      {Key? key,
+      required this.onChange,
+      required this.cardType,
+      this.creatableCards = false})
       : super(key: key);
 
   @override

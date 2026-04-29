@@ -55,9 +55,11 @@ class FeedScheduleCardPage extends StatelessWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedScheduleCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+  const FeedScheduleCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -102,10 +104,12 @@ class FeedScheduleCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              FeedEntryIcons[FE_SCHEDULE]!, FeedScheduleCardPage.feedScheduleCardPageTitle, state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
-            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+          FeedCardTitle(FeedEntryIcons[FE_SCHEDULE]!,
+              FeedScheduleCardPage.feedScheduleCardPageTitle, state.synced,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions!(context, state) : []),
           Container(
             height: 100,
@@ -114,9 +118,13 @@ class FeedScheduleCardPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  FeedScheduleCardPage.feedScheduleCardPagePhase(params.schedule),
+                  FeedScheduleCardPage.feedScheduleCardPagePhase(
+                      params.schedule),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300, color: Color(0xff3bb30b)),
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xff3bb30b)),
                 ),
               ],
             ),

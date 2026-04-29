@@ -29,12 +29,12 @@ class YesNoFormParam extends StatelessWidget {
   final Widget? child;
 
   const YesNoFormParam({
-      required this.icon,
-      required this.title,
-      required this.yes,
-      required this.onPressed,
-      this.titleBackgroundColor,
-      this.child,
+    required this.icon,
+    required this.title,
+    required this.yes,
+    required this.onPressed,
+    this.titleBackgroundColor,
+    this.child,
   });
 
   @override
@@ -93,10 +93,7 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: color,
-          border: Border.all(
-            color: Colors.white,
-            width: 2
-          ),
+          border: Border.all(color: Colors.white, width: 2),
         ),
         child: AnimatedAlign(
           duration: animationDuration,

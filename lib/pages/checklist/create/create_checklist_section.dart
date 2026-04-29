@@ -28,7 +28,14 @@ class CreateChecklistSection extends StatelessWidget {
   final bool hideTitle;
 
   const CreateChecklistSection(
-      {Key? key, required this.child, this.title, this.titleWidget, this.onClose, this.icon, this.noBorder = false, this.hideTitle=false})
+      {Key? key,
+      required this.child,
+      this.title,
+      this.titleWidget,
+      this.onClose,
+      this.icon,
+      this.noBorder = false,
+      this.hideTitle = false})
       : super(key: key);
 
   @override
@@ -56,41 +63,47 @@ class CreateChecklistSection extends StatelessWidget {
         decoration: decoration,
         child: Column(
           children: [
-            hideTitle ? Container() : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                title == null
-                    ? titleWidget ?? Container()
-                    : Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          icon == null
-                              ? Container()
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: icon,
-                                  ),
+            hideTitle
+                ? Container()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      title == null
+                          ? titleWidget ?? Container()
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                icon == null
+                                    ? Container()
+                                    : Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: icon,
+                                        ),
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4.0, left: 8.0, bottom: 4.0),
+                                  child: Text(title!,
+                                      style:
+                                          TextStyle(color: Color(0xff757575))),
                                 ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0, left: 8.0, bottom: 4.0),
-                            child: Text(title!, style: TextStyle(color: Color(0xff757575))),
-                          ),
-                        ],
-                      ),
-                onClose == null
-                    ? Container()
-                    : InkWell(
-                        onTap: this.onClose,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-                          child: Icon(Icons.close),
-                        ),
-                      ),
-              ],
-            ),
+                              ],
+                            ),
+                      onClose == null
+                          ? Container()
+                          : InkWell(
+                              onTap: this.onClose,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 8.0, right: 8.0),
+                                child: Icon(Icons.close),
+                              ),
+                            ),
+                    ],
+                  ),
             child,
           ],
         ),

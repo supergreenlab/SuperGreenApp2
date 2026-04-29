@@ -43,8 +43,10 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   void initState() {
     scrollController.addListener(() {
       setState(() {
-        showLeftArrow = scrollController.position.pixels > scrollController.position.minScrollExtent;
-        showRightArrow = scrollController.position.pixels < scrollController.position.maxScrollExtent;
+        showLeftArrow = scrollController.position.pixels >
+            scrollController.position.minScrollExtent;
+        showRightArrow = scrollController.position.pixels <
+            scrollController.position.maxScrollExtent;
       });
     });
     dotTimer = Timer.periodic(new Duration(milliseconds: 500), (timer) {
@@ -77,11 +79,13 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
               } else if (state is AppBarMetricsBlocStateNoDevice) {
                 return _renderNoDevice(context, state);
               }
-              return _renderLoaded(context, state as AppBarMetricsBlocStateLoaded);
+              return _renderLoaded(
+                  context, state as AppBarMetricsBlocStateLoaded);
             }));
   }
 
-  Widget _renderNoDevice(BuildContext context, AppBarMetricsBlocStateNoDevice state) {
+  Widget _renderNoDevice(
+      BuildContext context, AppBarMetricsBlocStateNoDevice state) {
     return Stack(
       children: [
         Padding(
@@ -110,7 +114,8 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
     );
   }
 
-  Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
+  Widget _renderLoading(
+      BuildContext context, AppBarMetricsBlocStateInit state) {
     return Stack(
       children: [
         _renderMetrics(24, 56, 110, 453, 45, 0),
@@ -122,7 +127,8 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Loading metrics${List.generate(loadingDots % 4, (index) => '.').join('')}',
+                Text(
+                    'Loading metrics${List.generate(loadingDots % 4, (index) => '.').join('')}',
                     style: TextStyle(
                       fontSize: 15.0,
                       color: Color(0xff909090),
@@ -136,13 +142,22 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
+  Widget _renderLoaded(
+      BuildContext context, AppBarMetricsBlocStateLoaded state) {
     AppBarMetricsParamsController metrics = state.metrics;
-    return _renderMetrics(metrics.temp.ivalue, metrics.humidity?.ivalue, metrics.vpd.ivalue.toDouble(),
-        metrics.co2.ivalue, !(metrics.weight.available == true) ? null : metrics.weight.ivalue.toDouble(), metrics.version.ivalue);
+    return _renderMetrics(
+        metrics.temp.ivalue,
+        metrics.humidity?.ivalue,
+        metrics.vpd.ivalue.toDouble(),
+        metrics.co2.ivalue,
+        !(metrics.weight.available == true)
+            ? null
+            : metrics.weight.ivalue.toDouble(),
+        metrics.version.ivalue);
   }
 
-  Widget _renderMetrics(int? temp, int? humidity, double? vpd, int? co2, double? weight, int version) {
+  Widget _renderMetrics(int? temp, int? humidity, double? vpd, int? co2,
+      double? weight, int version) {
     bool freedomUnits = AppDB().getUserSettings().freedomUnits!;
     String tempUnit = freedomUnits ? '°F' : '°C';
     if (freedomUnits && temp != null) {
@@ -154,7 +169,8 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
     }
     List<Widget> widgets = [
       AppBarMetric(
-          icon: SvgPicture.asset('assets/app_bar/icon_temperature.svg', height: 35),
+          icon: SvgPicture.asset('assets/app_bar/icon_temperature.svg',
+              height: 35),
           value: '$temp',
           unit: tempUnit,
           unitSize: 30,
@@ -169,7 +185,9 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           color: Color(0xFFD7352B)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
-          value: vpd == null || vpd == 0 ? 'n/a' : '${(version != 0 && version <= 1700000000 ? vpd / 10 : vpd / 100.0).toStringAsFixed(2)}',
+          value: vpd == null || vpd == 0
+              ? 'n/a'
+              : '${(version != 0 && version <= 1700000000 ? vpd / 10 : vpd / 100.0).toStringAsFixed(2)}',
           color: Color(0xFF115D87)),
     ];
     if (co2 != null && co2 != 0) {
@@ -191,24 +209,26 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
       height: 55,
       child: Stack(
         children: [
-          widgets.length > 3 ? ListView(
-            controller: scrollController,
-            scrollDirection: Axis.horizontal,
-            children: widgets
-                .map<Widget>((w) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: w,
-                    ))
-                .toList(),
-          ) : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: widgets
-                .map<Widget>((w) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: w,
-                    ))
-                .toList(),
-          ),
+          widgets.length > 3
+              ? ListView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  children: widgets
+                      .map<Widget>((w) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: w,
+                          ))
+                      .toList(),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: widgets
+                      .map<Widget>((w) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: w,
+                          ))
+                      .toList(),
+                ),
           showLeftArrow && widgets.length > 3
               ? Positioned(
                   top: 0,
@@ -244,7 +264,13 @@ class AppBarMetric extends StatelessWidget {
   final double unitSize;
   final Color color;
 
-  const AppBarMetric({Key? key, required this.icon, this.value, this.unit, this.unitSize = 20, required this.color})
+  const AppBarMetric(
+      {Key? key,
+      required this.icon,
+      this.value,
+      this.unit,
+      this.unitSize = 20,
+      required this.color})
       : super(key: key);
 
   @override

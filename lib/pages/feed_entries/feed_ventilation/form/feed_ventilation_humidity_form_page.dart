@@ -45,19 +45,28 @@ class FeedVentilationHumidityFormPage extends StatefulWidget {
     );
   }
 
-  String get instructionsHumidityModeDescription => paramsController is BlowerParamsController ? FeedVentilationHumidityFormPage.instructionsBlowerHumidityModeDescription : FeedVentilationHumidityFormPage.instructionsFanHumidityModeDescription;
+  String get instructionsHumidityModeDescription => paramsController
+          is BlowerParamsController
+      ? FeedVentilationHumidityFormPage
+          .instructionsBlowerHumidityModeDescription
+      : FeedVentilationHumidityFormPage.instructionsFanHumidityModeDescription;
 
   final Param humidity;
   final Param temperature;
   final VentilationParamsController paramsController;
 
-  const FeedVentilationHumidityFormPage(this.humidity, this.temperature, this.paramsController, {Key? key}) : super(key: key);
+  const FeedVentilationHumidityFormPage(
+      this.humidity, this.temperature, this.paramsController,
+      {Key? key})
+      : super(key: key);
 
   @override
-  _FeedVentilationHumidityFormPageState createState() => _FeedVentilationHumidityFormPageState();
+  _FeedVentilationHumidityFormPageState createState() =>
+      _FeedVentilationHumidityFormPageState();
 }
 
-class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidityFormPage> {
+class _FeedVentilationHumidityFormPageState
+    extends State<FeedVentilationHumidityFormPage> {
   int _min = 0;
   int _max = 0;
   int _refMin = 0;
@@ -65,7 +74,8 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
   int? _previousHashCode;
 
   void refreshParamsController() {
-    if (widget.paramsController.hashCode == this._previousHashCode) { // WTF is there anything better, keeping the object reference would change that reference without assignment oO
+    if (widget.paramsController.hashCode == this._previousHashCode) {
+      // WTF is there anything better, keeping the object reference would change that reference without assignment oO
       return;
     }
     setState(() {
@@ -87,27 +97,36 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
             data: widget.instructionsHumidityModeDescription,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         Column(
           children: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(children: [
                       Text(
                         'Low ',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.blue),
                       ),
                       Text(
                         'humidity settings',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black87),
                       ),
                     ]),
-                    Text('Current box humidity: ${widget.humidity.ivalue}$unit'),
+                    Text(
+                        'Current box humidity: ${widget.humidity.ivalue}$unit'),
                   ],
                 )),
             NumberFormParam(
@@ -121,7 +140,8 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                 setState(() {
                   _refMin = newValue.toInt();
                 });
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                BlocProvider.of<FeedVentilationFormBloc>(context)
+                    .add(FeedVentilationFormBlocParamsChangedEvent(
                   paramsController: widget.paramsController.copyWithValues({
                     "refMin": newValue.toInt(),
                   }) as FeedVentilationParamsController,
@@ -142,8 +162,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    paramsController: widget.paramsController.copyWithValues({
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                    FeedVentilationFormBlocParamsChangedEvent(
+                        paramsController:
+                            widget.paramsController.copyWithValues({
                   "min": _min,
                 }) as FeedVentilationParamsController));
               },
@@ -153,21 +175,29 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
         Column(
           children: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(children: [
                       Text(
                         'High ',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.red),
                       ),
                       Text(
                         'humidity settings',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black87),
                       ),
                     ]),
-                    Text('Current box humidity: ${widget.humidity.ivalue}$unit'),
+                    Text(
+                        'Current box humidity: ${widget.humidity.ivalue}$unit'),
                   ],
                 )),
             NumberFormParam(
@@ -203,7 +233,8 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                BlocProvider.of<FeedVentilationFormBloc>(context)
+                    .add(FeedVentilationFormBlocParamsChangedEvent(
                   paramsController: widget.paramsController.copyWithValues({
                     "max": _max,
                   }) as FeedVentilationParamsController,

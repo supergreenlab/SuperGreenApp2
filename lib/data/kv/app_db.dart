@@ -54,7 +54,8 @@ class AppDB {
   }
 
   UserSettings getUserSettings() {
-    return _settingsDB.get('userSettings', defaultValue: UserSettings.defaults());
+    return _settingsDB.get('userSettings',
+        defaultValue: UserSettings.defaults());
   }
 
   DeviceData getDeviceData(String identifier) {

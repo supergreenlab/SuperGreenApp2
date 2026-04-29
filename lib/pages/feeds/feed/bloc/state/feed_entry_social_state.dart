@@ -41,7 +41,11 @@ class FeedEntrySocialStateLoaded extends FeedEntrySocialState {
       this.comments});
 
   FeedEntrySocialStateLoaded copyWith(
-      {bool? isLiked, bool? isBookmarked, int? nComments, int? nLikes, List<Comment>? comments}) {
+      {bool? isLiked,
+      bool? isBookmarked,
+      int? nComments,
+      int? nLikes,
+      List<Comment>? comments}) {
     return FeedEntrySocialStateLoaded(
       isLiked: isLiked ?? this.isLiked,
       isBookmarked: isBookmarked ?? this.isBookmarked,
@@ -51,8 +55,12 @@ class FeedEntrySocialStateLoaded extends FeedEntrySocialState {
     );
   }
 
-  factory FeedEntrySocialStateLoaded.fromMap(Map<String, dynamic> map) => FeedEntrySocialStateLoaded(
-      isLiked: map['liked'], isBookmarked: map['bookmarked'], nComments: map['nComments'], nLikes: map['nLikes']);
+  factory FeedEntrySocialStateLoaded.fromMap(Map<String, dynamic> map) =>
+      FeedEntrySocialStateLoaded(
+          isLiked: map['liked'],
+          isBookmarked: map['bookmarked'],
+          nComments: map['nComments'],
+          nLikes: map['nLikes']);
 
   @override
   List<Object?> get props => [

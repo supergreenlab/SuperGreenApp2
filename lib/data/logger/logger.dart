@@ -40,14 +40,18 @@ class Logger {
   static void log(Object message) {
     print(message);
     try {
-      logFile.writeAsStringSync('${DateTime.now().toIso8601String()} - $message\n', mode: FileMode.append, flush: true);
+      logFile.writeAsStringSync(
+          '${DateTime.now().toIso8601String()} - $message\n',
+          mode: FileMode.append,
+          flush: true);
     } catch (e, stackTrace) {
       print(e);
       print(stackTrace);
     }
   }
 
-  static void logError(dynamic error, StackTrace? stackTrace, {Map<String, dynamic>? data, bool fwdThrow = false}) {
+  static void logError(dynamic error, StackTrace? stackTrace,
+      {Map<String, dynamic>? data, bool fwdThrow = false}) {
     data = data ?? {};
     String dataStr = data.keys.map<String>((String key) {
       return "$key=${data![key]}";
@@ -71,7 +75,8 @@ class Logger {
     }
   }
 
-  static void throwError(String error, {Map<String, dynamic>? data, bool fwdThrow = false}) {
+  static void throwError(String error,
+      {Map<String, dynamic>? data, bool fwdThrow = false}) {
     try {
       throw error;
     } catch (e, trace) {

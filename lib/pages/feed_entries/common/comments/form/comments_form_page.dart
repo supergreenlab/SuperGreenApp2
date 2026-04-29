@@ -83,7 +83,8 @@ class CommentsFormPage extends StatefulWidget {
     return Intl.message(
       'Replying to ',
       name: 'commentsFormPageReplyingTo',
-      desc: 'Followed by a username when replying to a comment (trailing space is important)',
+      desc:
+          'Followed by a username when replying to a comment (trailing space is important)',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -202,8 +203,10 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         } else if (state is CommentsFormBlocStateUpdateComment) {
           int i = comments.indexWhere((c) => c.id == state.commentID);
           if (i != -1) {
-            if (comments[i].isNew == true && (state.comment.isNew ?? false) == false) {
-              BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+            if (comments[i].isNew == true &&
+                (state.comment.isNew ?? false) == false) {
+              BlocProvider.of<NotificationsBloc>(context)
+                  .add(NotificationsBlocEventRequestPermission());
             }
             setState(() {
               comments[i] = state.comment;
@@ -211,9 +214,14 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
           }
         } else if (state is CommentsFormBlocStateAddComment) {
           insertNewComment(state.comment);
-          if (scrollController.hasClients && scrollController.offset != 0 && state.comment.replyTo == null) {
-            Timer(Duration(milliseconds: 100),
-                () => scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.linear));
+          if (scrollController.hasClients &&
+              scrollController.offset != 0 &&
+              state.comment.replyTo == null) {
+            Timer(
+                Duration(milliseconds: 100),
+                () => scrollController.animateTo(0,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear));
           }
         } else if (state is CommentsFormBlocStateUser) {
           setState(() {
@@ -265,13 +273,15 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
             child: AnimatedList(
           key: listKey,
           controller: scrollController,
-          itemBuilder: (BuildContext context, int index, Animation<double> animation) {
+          itemBuilder:
+              (BuildContext context, int index, Animation<double> animation) {
             if (index >= comments.length) {
               if (eof) {
                 return Container();
               }
-              BlocProvider.of<CommentsFormBloc>(context)
-                  .add(CommentsFormBlocEventLoadComments(comments.where((c) => c.replyTo == null).length));
+              BlocProvider.of<CommentsFormBloc>(context).add(
+                  CommentsFormBlocEventLoadComments(
+                      comments.where((c) => c.replyTo == null).length));
               return Container(
                 height: 100,
                 child: FullscreenLoading(
@@ -296,11 +306,13 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                             replyTo = comments[index];
                             replyToDisplay = replyTo;
                             if (replyTo!.replyTo != null) {
-                              replyTo = comments.firstWhere((c) => c.id == replyTo!.replyTo);
+                              replyTo = comments
+                                  .firstWhere((c) => c.id == replyTo!.replyTo);
                             }
                             inputFocus.requestFocus();
                             type = CommentType.COMMENT;
-                            textEditingController.text = '@${replyToDisplay!.from} ';
+                            textEditingController.text =
+                                '@${replyToDisplay!.from} ';
                           });
                         },
                       ),
@@ -317,7 +329,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
     if (user == null) {
       return InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToSettingsAuth());
         },
         child: Center(
             child: Padding(
@@ -393,7 +406,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         title: CommentsFormPage.commentsFormPageViewingSingleComment,
         button: CommentsFormPage.commentsFormPageViewAllComments,
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(false, feedEntry));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToCommentFormEvent(false, feedEntry));
         },
       );
     } else if (type == CommentType.COMMENT) {
@@ -402,8 +416,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         renderType(context, CommentType.TIPS),
         renderType(context, CommentType.DIAGNOSIS),
         renderType(context, CommentType.RECOMMEND, onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToSelectNewProductEvent([], futureFn: (future) async {
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToSelectNewProductEvent([], futureFn: (future) async {
             List<Product>? products = await future;
             if (products == null || products.length == 0) {
               return;
@@ -456,7 +470,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
           children: [
             name,
             Row(children: [
-              Text(recommended![0].name, style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(recommended![0].name,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               recommended![0].supplier != null
                   ? Expanded(
                       child: Padding(
@@ -471,7 +486,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                   : Container(),
               recommended!.length > 1
                   ? Text(
-                      CommentsFormPage.commentsFormPageNOtherRecommendations(recommended!.length - 1),
+                      CommentsFormPage.commentsFormPageNOtherRecommendations(
+                          recommended!.length - 1),
                       style: TextStyle(color: Color(0xff919191)),
                     )
                   : Container(),
@@ -510,7 +526,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         margin: EdgeInsets.only(bottom: 6.0),
       ),
       AnimatedSizeAndFade(
-          fadeDuration: Duration(milliseconds: 200), sizeDuration: Duration(milliseconds: 200), child: content),
+          fadeDuration: Duration(milliseconds: 200),
+          sizeDuration: Duration(milliseconds: 200),
+          child: content),
       !single || replyTo != null ? renderInput(context) : Container(),
     ]);
   }
@@ -530,19 +548,23 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.black26), borderRadius: BorderRadius.circular(25.0)),
+                  border: Border.all(width: 1, color: Colors.black26),
+                  borderRadius: BorderRadius.circular(25.0)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
                       child: TextField(
                         autofocus: autoFocus,
                         focusNode: inputFocus,
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: CommentsFormPage.commentsFormPageInputHintText(user!.nickname!)),
+                            hintText:
+                                CommentsFormPage.commentsFormPageInputHintText(
+                                    user!.nickname!)),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
                         minLines: 1,
@@ -557,7 +579,11 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                         return;
                       }
                       BlocProvider.of<CommentsFormBloc>(context).add(
-                          CommentsFormBlocEventPostComment(textEditingController.text, type, replyTo, recommended));
+                          CommentsFormBlocEventPostComment(
+                              textEditingController.text,
+                              type,
+                              replyTo,
+                              recommended));
                       FocusScope.of(context).unfocus();
                       textEditingController.clear();
                       type = CommentType.COMMENT;
@@ -566,8 +592,12 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
-                      child: Text(CommentsFormPage.commentsFormPageSubmitComment,
-                          style: TextStyle(color: Color(0xff001AFF), fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      child: Text(
+                          CommentsFormPage.commentsFormPageSubmitComment,
+                          style: TextStyle(
+                              color: Color(0xff001AFF),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -579,7 +609,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
     );
   }
 
-  Widget renderType(BuildContext context, CommentType type, {Function()? onTap}) {
+  Widget renderType(BuildContext context, CommentType type,
+      {Function()? onTap}) {
     Map<String, String> commentType = commentTypes[type]!;
     return InkWell(
         onTap: onTap ??
@@ -605,7 +636,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                 style: TextStyle(
                     color: Color(0xff474747),
                     fontSize: 16,
-                    fontWeight: this.type == type ? FontWeight.bold : FontWeight.normal),
+                    fontWeight: this.type == type
+                        ? FontWeight.bold
+                        : FontWeight.normal),
               ),
               Container(
                 margin: const EdgeInsets.all(5.0),
@@ -613,7 +646,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                 decoration: BoxDecoration(
                     border: Border.all(
                         width: this.type == type ? 2 : 1,
-                        color: this.type == type ? Color(0xff3bb30b) : Color(0xffbdbdbd)),
+                        color: this.type == type
+                            ? Color(0xff3bb30b)
+                            : Color(0xffbdbdbd)),
                     borderRadius: BorderRadius.all(Radius.circular(25))),
                 child: Image.asset(commentType['pic']!, width: 25, height: 25),
               ),
@@ -625,16 +660,23 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
   void insertNewComment(Comment comment) {
     int index;
     if (comment.replyTo != null) {
-      int startIndex = comments.lastIndexWhere((c) => c.id == comment.replyTo || c.replyTo == comment.replyTo) + 1;
+      int startIndex = comments.lastIndexWhere(
+              (c) => c.id == comment.replyTo || c.replyTo == comment.replyTo) +
+          1;
       index = comments.lastIndexWhere(
-          (c) => c.replyTo == comment.replyTo && c.createdAt.isAfter(comment.createdAt), startIndex);
+          (c) =>
+              c.replyTo == comment.replyTo &&
+              c.createdAt.isAfter(comment.createdAt),
+          startIndex);
       index = index < 0 ? startIndex : index;
     } else {
-      index = comments.indexWhere((c) => c.replyTo == null && c.createdAt.isBefore(comment.createdAt));
+      index = comments.indexWhere(
+          (c) => c.replyTo == null && c.createdAt.isBefore(comment.createdAt));
       index = index < 0 ? comments.length : index;
     }
     if (listKey.currentState != null) {
-      listKey.currentState!.insertItem(index, duration: Duration(milliseconds: 200));
+      listKey.currentState!
+          .insertItem(index, duration: Duration(milliseconds: 200));
     }
     comments.insert(index, comment);
   }

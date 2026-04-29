@@ -54,14 +54,18 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   final String? replyTo;
   final List<String>? filters;
 
-  LocalFeedBlocDelegate(this.feedID, {this.feedEntryID, this.commentID, this.replyTo, this.filters});
+  LocalFeedBlocDelegate(this.feedID,
+      {this.feedEntryID, this.commentID, this.replyTo, this.filters});
 
   Stream<FeedBlocState> onInitialLoad() async* {
     if (commentID != null) {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID!);
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(feedEntryID!);
       LocalFeedEntryLoader loader = loaderForType(feedEntry.type);
-      FeedEntryStateLoaded feedEntryStateLoaded = await loader.load(loader.stateForFeedEntry(feedEntry));
-      yield FeedBlocStateOpenComment(feedEntryStateLoaded, this.commentID!, this.replyTo);
+      FeedEntryStateLoaded feedEntryStateLoaded =
+          await loader.load(loader.stateForFeedEntry(feedEntry));
+      yield FeedBlocStateOpenComment(
+          feedEntryStateLoaded, this.commentID!, this.replyTo);
     }
   }
 
@@ -88,15 +92,20 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
       'FE_NUTRIENT_MIX': FeedNutrientMixLoader(add),
       'FE_TIMELAPSE': FeedTimelapseLoader(add),
     };
-    insertSubscription = FeedEntryHelper.eventBus.on<FeedEntryInsertEvent>().listen((FeedEntryInsertEvent event) {
+    insertSubscription = FeedEntryHelper.eventBus
+        .on<FeedEntryInsertEvent>()
+        .listen((FeedEntryInsertEvent event) {
       FeedEntry feedEntry = event.feedEntry;
       if (feedEntry.feed != feedID) {
         return;
       }
-      FeedEntryState newFirstEntry = loaderForType(feedEntry.type).stateForFeedEntry(feedEntry);
+      FeedEntryState newFirstEntry =
+          loaderForType(feedEntry.type).stateForFeedEntry(feedEntry);
       add(FeedBlocEventAddedEntry(newFirstEntry));
     });
-    deleteSubscription = FeedEntryHelper.eventBus.on<FeedEntryDeleteEvent>().listen((FeedEntryDeleteEvent event) {
+    deleteSubscription = FeedEntryHelper.eventBus
+        .on<FeedEntryDeleteEvent>()
+        .listen((FeedEntryDeleteEvent event) {
       add(FeedBlocEventDeletedFeedEntry(event.feedEntry.id));
     });
   }
@@ -112,18 +121,25 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future<void> loadFeed() async {
-    add(FeedBlocEventFeedLoaded(FeedState(AppDB().getAppData().jwt != null, AppDB().getAppData().storeGeo)));
+    add(FeedBlocEventFeedLoaded(FeedState(
+        AppDB().getAppData().jwt != null, AppDB().getAppData().storeGeo)));
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
+  Future<List<FeedEntryState>> loadEntries(
+      int n, int offset, List<String>? filters) async {
     if (feedEntryID != null) {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID!);
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(feedEntryID!);
       LocalFeedEntryLoader loader = loaderForType(feedEntry.type);
       return [await loader.load(loader.stateForFeedEntry(feedEntry))];
     }
-    List<FeedEntry> fe = await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset, filters);
-    return fe.map<FeedEntryState>((fe) => loaderForType(fe.type).stateForFeedEntry(fe)).toList();
+    List<FeedEntry> fe =
+        await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset, filters);
+    return fe
+        .map<FeedEntryState>(
+            (fe) => loaderForType(fe.type).stateForFeedEntry(fe))
+        .toList();
   }
 
   @override
@@ -134,25 +150,32 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future forceSyncFeedEntry(feedEntryID) async {
-    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), synced: Value(false)));
-    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getFeedMedias(feedEntryID);
+    await FeedEntryHelper.updateFeedEntry(
+        FeedEntriesCompanion(id: Value(feedEntryID), synced: Value(false)));
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getFeedMedias(feedEntryID);
     for (FeedMedia feedMedia in feedMedias) {
-      await RelDB.get().feedsDAO.updateFeedMedia(FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(false)));
+      await RelDB.get().feedsDAO.updateFeedMedia(
+          FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(false)));
     }
   }
-  
+
   @override
   Future moveFeedEntry(feedEntryID, feedID) async {
-    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), feed: Value(feedID), synced: Value(false)));
-    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getFeedMedias(feedEntryID);
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(feedEntryID), feed: Value(feedID), synced: Value(false)));
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getFeedMedias(feedEntryID);
     for (FeedMedia feedMedia in feedMedias) {
-      await RelDB.get().feedsDAO.updateFeedMedia(FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(false)));
+      await RelDB.get().feedsDAO.updateFeedMedia(
+          FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(false)));
     }
   }
 
   @override
   Future likeFeedEntry(FeedEntryState entry) async {
-    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
 
     await BackendAPI().feedsAPI.likeFeedEntry(feedEntry.serverID!);
     FeedEntryLoader loader = this.loaderForType(entry.type);
@@ -161,7 +184,8 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future bookmarkFeedEntry(FeedEntryState entry) async {
-    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
 
     await BackendAPI().feedsAPI.bookmarkFeedEntry(feedEntry.serverID!);
     FeedEntryLoader loader = this.loaderForType(entry.type);
@@ -173,7 +197,8 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future markAsRead(dynamic feedEntryID) async {
-    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), isNew: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(
+        FeedEntriesCompanion(id: Value(feedEntryID), isNew: Value(false)));
   }
 
   @override

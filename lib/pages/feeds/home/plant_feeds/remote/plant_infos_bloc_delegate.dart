@@ -28,10 +28,13 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
 
   @override
   void loadPlant() async {
-    Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
+    Map<String, dynamic> plant =
+        await BackendAPI().feedsAPI.publicPlant(plantID);
     plantInfosLoaded(PlantInfos(
         plant['name'],
-        BackendAPI().feedsAPI.absoluteFileURL(plant['filePath'] ?? ''), // TODO set default
+        BackendAPI()
+            .feedsAPI
+            .absoluteFileURL(plant['filePath'] ?? ''), // TODO set default
         BackendAPI().feedsAPI.absoluteFileURL(plant['thumbnailPath'] ?? ''),
         BoxSettings.fromJSON(plant['boxSettings']),
         PlantSettings.fromJSON(plant['settings']),
@@ -42,7 +45,8 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos) async* {}
 
   @override
-  Stream<PlantInfosBlocState> updatePhase(PlantPhases phase, DateTime date) async* {}
+  Stream<PlantInfosBlocState> updatePhase(
+      PlantPhases phase, DateTime date) async* {}
 
   @override
   Future<void> close() async {}

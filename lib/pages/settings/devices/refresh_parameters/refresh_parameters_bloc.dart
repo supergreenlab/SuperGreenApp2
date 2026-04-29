@@ -100,17 +100,20 @@ class RefreshParametersBlocStateDone extends RefreshParametersBlocState {
   List<Object> get props => [device];
 }
 
-class RefreshParametersBloc extends LegacyBloc<RefreshParametersBlocEvent, RefreshParametersBlocState> {
+class RefreshParametersBloc
+    extends LegacyBloc<RefreshParametersBlocEvent, RefreshParametersBlocState> {
   //ignore: unused_field
   final MainNavigateToRefreshParameters args;
   late Device device;
 
-  RefreshParametersBloc(this.args) : super(RefreshParametersBlocStateLoading()) {
+  RefreshParametersBloc(this.args)
+      : super(RefreshParametersBlocStateLoading()) {
     add(RefreshParametersBlocEventInit());
   }
 
   @override
-  Stream<RefreshParametersBlocState> mapEventToState(RefreshParametersBlocEvent event) async* {
+  Stream<RefreshParametersBlocState> mapEventToState(
+      RefreshParametersBlocEvent event) async* {
     if (event is RefreshParametersBlocEventInit) {
       device = await RelDB.get().devicesDAO.getDevice(args.device.id);
       refreshParams();
@@ -130,10 +133,15 @@ class RefreshParametersBloc extends LegacyBloc<RefreshParametersBlocEvent, Refre
 
   void refreshParams({bool delete = false}) async {
     String? auth = AppDB().getDeviceAuth(device.identifier);
-    final deviceName = await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME", auth: auth);
-    final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN", auth: auth);
-    await RelDB.get().devicesDAO.updateDevice(
-        DevicesCompanion(id: Value(device.id), name: Value(deviceName), mdns: Value(mdnsDomain), synced: Value(false)));
+    final deviceName =
+        await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME", auth: auth);
+    final mdnsDomain =
+        await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN", auth: auth);
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+        id: Value(device.id),
+        name: Value(deviceName),
+        mdns: Value(mdnsDomain),
+        synced: Value(false)));
     try {
       await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
         add(RefreshParametersBlocEventRefreshing(adv));

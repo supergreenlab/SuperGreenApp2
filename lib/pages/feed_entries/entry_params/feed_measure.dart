@@ -27,7 +27,8 @@ class FeedMeasureParams extends FeedEntryParams {
 
   FeedMeasureParams(this.message, this.time, this.previous);
 
-  FeedMeasureParams copyWith(String message) => FeedMeasureParams(message, this.time, this.previous);
+  FeedMeasureParams copyWith(String message) =>
+      FeedMeasureParams(message, this.time, this.previous);
 
   factory FeedMeasureParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -36,7 +37,8 @@ class FeedMeasureParams extends FeedEntryParams {
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({'message': message, 'time': time, 'previous': previous});
+    return JsonEncoder()
+        .convert({'message': message, 'time': time, 'previous': previous});
   }
 
   @override

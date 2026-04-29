@@ -51,7 +51,8 @@ class TimerConditionPage extends StatelessWidget {
       title: 'At a given time',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           _renderDate(context),
         ]),
       ),

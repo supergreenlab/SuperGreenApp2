@@ -51,9 +51,11 @@ class FeedTimelapseCardPage extends StatefulWidget {
   final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedTimelapseCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+  const FeedTimelapseCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -90,8 +92,13 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
+                      Expanded(
+                          child:
+                              PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(
+                          child: PlantPhase(
+                              plantSettings: state.plantSettings!,
+                              time: state.date)),
                     ],
                   ),
                 )
@@ -116,9 +123,10 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              FeedEntryIcons[FE_TIMELAPSE]!, FeedTimelapseCardPage.feedTimelapseCardPageTitle, state.synced,
-              title2: widget.state.showPlantInfos ? widget.state.plantName : null,
+          FeedCardTitle(FeedEntryIcons[FE_TIMELAPSE]!,
+              FeedTimelapseCardPage.feedTimelapseCardPageTitle, state.synced,
+              title2:
+                  widget.state.showPlantInfos ? widget.state.plantName : null,
               onShare: () {
                 MediaState media = state.medias[mediaShown];
                 Share.shareXFiles([XFile(media.filePath)]);
@@ -126,16 +134,24 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
               showSyncStatus: !state.isRemoteState,
               showControls: !state.isRemoteState,
               onDelete: () {
-                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventDeleteEntry(state));
               },
-              actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
+              actions: widget.cardActions != null
+                  ? widget.cardActions!(context, state)
+                  : []),
           state.showPlantInfos
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
+                      Expanded(
+                          child:
+                              PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(
+                          child: PlantPhase(
+                              plantSettings: state.plantSettings!,
+                              time: state.date)),
                     ],
                   ),
                 )
@@ -148,8 +164,9 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
                     mediaShown = i;
                   },
                   onMediaTapped: (media) {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
+                    BlocProvider.of<MainNavigatorBloc>(context).add(
+                        MainNavigateToFullscreenMedia(
+                            media.thumbnailPath, media.filePath));
                   },
                 )
               : Container(),

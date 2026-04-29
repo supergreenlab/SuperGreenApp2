@@ -43,15 +43,18 @@ class NotificationRequestBlocStateLoaded extends NotificationRequestBlocState {
   List<Object> get props => [];
 }
 
-class NotificationRequestBloc extends LegacyBloc<NotificationRequestBlocEvent, NotificationRequestBlocState> {
+class NotificationRequestBloc extends LegacyBloc<NotificationRequestBlocEvent,
+    NotificationRequestBlocState> {
   final Function onClose;
 
-  NotificationRequestBloc({required this.onClose}) : super(NotificationRequestBlocStateInit()) {
+  NotificationRequestBloc({required this.onClose})
+      : super(NotificationRequestBlocStateInit()) {
     add(NotificationRequestBlocEventInit());
   }
 
   @override
-  Stream<NotificationRequestBlocState> mapEventToState(NotificationRequestBlocEvent event) async* {
+  Stream<NotificationRequestBlocState> mapEventToState(
+      NotificationRequestBlocEvent event) async* {
     if (event is NotificationRequestBlocEventInit) {
       yield NotificationRequestBlocStateLoaded();
     } else if (event is NotificationRequestBlocEventDone) {

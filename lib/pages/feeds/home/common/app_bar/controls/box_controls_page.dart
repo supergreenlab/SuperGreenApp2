@@ -64,12 +64,15 @@ class BoxControlsPage extends StatelessWidget {
             } else if (state is BoxControlsBlocStateNoDevice) {
               return AppBarTab(child: _renderNoDevice(context, state));
             }
-            return AppBarTab(child: _renderLoaded(context, state as BoxControlsBlocStateLoaded));
+            return AppBarTab(
+                child: _renderLoaded(
+                    context, state as BoxControlsBlocStateLoaded));
           }),
     );
   }
 
-  Widget _renderNoDevice(BuildContext context, BoxControlsBlocStateNoDevice state) {
+  Widget _renderNoDevice(
+      BuildContext context, BoxControlsBlocStateNoDevice state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -125,7 +128,8 @@ class BoxControlsPage extends StatelessWidget {
     );
   }
 
-  Widget _renderActions(BuildContext context, BoxControlsBlocStateLoaded state) {
+  Widget _renderActions(
+      BuildContext context, BoxControlsBlocStateLoaded state) {
     double totalDimming = 0;
     List<ParamController> dimmings = state.metrics.lightsDimming;
     for (ParamController dimming in dimmings) {
@@ -140,17 +144,24 @@ class BoxControlsPage extends StatelessWidget {
       state.box,
       state.plant,
       state.metrics.blower.available,
-      state.metrics.blower.available ? '${state.metrics.blower.ivalue}%' : 'N/A%',
+      state.metrics.blower.available
+          ? '${state.metrics.blower.ivalue}%'
+          : 'N/A%',
       state.metrics.onHour.available && state.metrics.offHour.available,
       state.metrics.onHour.available && state.metrics.offHour.available
-          ? DateRenderer.renderSchedule(state.metrics.onHour.param!, state.metrics.onMin.param!,
-              state.metrics.offHour.param!, state.metrics.offMin.param!)
+          ? DateRenderer.renderSchedule(
+              state.metrics.onHour.param!,
+              state.metrics.onMin.param!,
+              state.metrics.offHour.param!,
+              state.metrics.offMin.param!)
           : 'N/A',
       state.metrics.nLights > 0,
       state.metrics.nLights > 0 ? '${totalDimming.floor()}%' : 'N/A%',
       state.plant == null ? '' : '${state.plant!.alerts ? "ON" : "OFF"}',
     );
-    if (state.box.device != null && !state.device.isScreen && state.box.screenDevice == null) {
+    if (state.box.device != null &&
+        !state.device.isScreen &&
+        state.box.screenDevice == null) {
       buttons = Column(
         children: [
           _renderScreenButton(context),
@@ -170,18 +181,25 @@ class BoxControlsPage extends StatelessWidget {
     );
   }
 
-  Widget _renderScreenStatus(BuildContext context, BoxControlsBlocStateLoaded state) {
+  Widget _renderScreenStatus(
+      BuildContext context, BoxControlsBlocStateLoaded state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
-          child: SizedBox(child: SvgPicture.asset('assets/app_bar/icon_screen.svg'), width: 40, height: 40, ),
+          child: SizedBox(
+            child: SvgPicture.asset('assets/app_bar/icon_screen.svg'),
+            width: 40,
+            height: 40,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
-          child:
-              Text('SCREEN LINKED.', style: TextStyle(color: Color(0xff3bb30b),)),
+          child: Text('SCREEN LINKED.',
+              style: TextStyle(
+                color: Color(0xff3bb30b),
+              )),
         ),
       ],
     );
@@ -190,35 +208,53 @@ class BoxControlsPage extends StatelessWidget {
   Widget _renderScreenButton(BuildContext context) {
     return InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(
-              isScreen: true,
-              isController: false,
-              futureFn: (future) async {
-                dynamic res = await future;
-                if (res is SelectBoxDeviceData) {
-                  BlocProvider.of<BoxControlsBloc>(context)
-                      .add(BoxControlsBlocEventSetScreenDevice(res.device, res.deviceBox));
-                }
-              }));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToSelectDeviceEvent(
+                  isScreen: true,
+                  isController: false,
+                  futureFn: (future) async {
+                    dynamic res = await future;
+                    if (res is SelectBoxDeviceData) {
+                      BlocProvider.of<BoxControlsBloc>(context).add(
+                          BoxControlsBlocEventSetScreenDevice(
+                              res.device, res.deviceBox));
+                    }
+                  }));
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: SizedBox(child: SvgPicture.asset('assets/app_bar/icon_screen.svg'), width: 40, height: 40, ),
+              child: SizedBox(
+                child: SvgPicture.asset('assets/app_bar/icon_screen.svg'),
+                width: 40,
+                height: 40,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
+              padding:
+                  const EdgeInsets.only(top: 8.0, bottom: 10.0, right: 8.0),
               child: Text('ADD A SCREEN!',
-                  style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+                  style: TextStyle(
+                      color: Color(0xff3bb30b),
+                      decoration: TextDecoration.underline)),
             ),
           ],
         ));
   }
 
-  Widget _renderButtons(BuildContext context, Box box, Plant? plant, bool blowerAvailable, String blower,
-      bool scheduleAvailable, String schedule, bool lightAvailable, String light, String alerts) {
+  Widget _renderButtons(
+      BuildContext context,
+      Box box,
+      Plant? plant,
+      bool blowerAvailable,
+      String blower,
+      bool scheduleAvailable,
+      String schedule,
+      bool lightAvailable,
+      String light,
+      String alerts) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -226,7 +262,8 @@ class BoxControlsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.5),
                 child: AppBarAction(
                   center: true,
                   disabled: !blowerAvailable,
@@ -236,18 +273,24 @@ class BoxControlsPage extends StatelessWidget {
                   content: AutoSizeText(
                     blower,
                     maxLines: 1,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF454545)),
                   ),
                   action: !blowerAvailable
                       ? null
                       : _onEnvironmentControlTapped(
                           context,
-                          ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
-                              pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
+                          ({pushAsReplacement = false}) =>
+                              MainNavigateToFeedVentilationFormEvent(box,
+                                  pushAsReplacement: pushAsReplacement,
+                                  futureFn: futureFn)),
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 4.0, vertical: 12.0),
                   child: AppBarAction(
                     center: true,
                     disabled: !scheduleAvailable,
@@ -257,16 +300,23 @@ class BoxControlsPage extends StatelessWidget {
                     content: AutoSizeText(
                       schedule,
                       maxLines: 1,
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF454545)),
                     ),
                     action: !scheduleAvailable
                         ? null
                         : _onEnvironmentControlTapped(
                             context,
-                            ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
-                                pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                            ({pushAsReplacement = false}) =>
+                                MainNavigateToFeedScheduleFormEvent(box,
+                                    pushAsReplacement: pushAsReplacement,
+                                    futureFn: futureFn),
                             tipID: 'TIP_BLOOM',
-                            tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
+                            tipPaths: [
+                                't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
+                              ]),
                   )),
             ],
           ),
@@ -275,7 +325,8 @@ class BoxControlsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.5),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 4.0, vertical: 5.5),
                   child: AppBarAction(
                       center: true,
                       disabled: !lightAvailable,
@@ -285,14 +336,19 @@ class BoxControlsPage extends StatelessWidget {
                       content: AutoSizeText(
                         light,
                         maxLines: 1,
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                        style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF454545)),
                       ),
                       action: !lightAvailable
                           ? null
                           : _onEnvironmentControlTapped(
                               context,
-                              ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(box,
-                                  pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                              ({pushAsReplacement = false}) =>
+                                  MainNavigateToFeedLightFormEvent(box,
+                                      pushAsReplacement: pushAsReplacement,
+                                      futureFn: futureFn),
                               tipID: 'TIP_STRETCH',
                               tipPaths: [
                                   't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
@@ -300,7 +356,8 @@ class BoxControlsPage extends StatelessWidget {
                                 ]))),
               plant != null
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0, vertical: 12.0),
                       child: AppBarAction(
                         center: true,
                         icon: 'assets/app_bar/icon_alerts.svg',
@@ -312,10 +369,14 @@ class BoxControlsPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: plant.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
+                              color: plant.alerts
+                                  ? Color(0xFF3BB28B)
+                                  : Color(0xFFD7352B)),
                         ),
-                        action: () => BlocProvider.of<MainNavigatorBloc>(context).add(
-                          MainNavigateToSettingsPlantAlerts(plant, futureFn: futureFn),
+                        action: () =>
+                            BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigateToSettingsPlantAlerts(plant,
+                              futureFn: futureFn),
                         ),
                       ))
                   : Container(),
@@ -327,13 +388,16 @@ class BoxControlsPage extends StatelessWidget {
   }
 
   // TODO DRY this with plant_feed_page
-  void Function() _onEnvironmentControlTapped(
-      BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
+  void Function() _onEnvironmentControlTapped(BuildContext context,
+      MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
       {String? tipID, List<String>? tipPaths}) {
     return () {
       if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
-            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
+            tipID,
+            tipPaths,
+            navigatorEvent(pushAsReplacement: true)
+                as MainNavigateToFeedFormEvent));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }

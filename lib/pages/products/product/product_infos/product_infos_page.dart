@@ -44,7 +44,8 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
                 iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );

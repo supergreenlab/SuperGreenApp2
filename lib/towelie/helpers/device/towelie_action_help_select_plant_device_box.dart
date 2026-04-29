@@ -41,7 +41,9 @@ class TowelieActionHelpSelectPlantDeviceBox extends TowelieActionHelp {
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpSelectPlantDeviceBox.towelieHelperSelectPlantDeviceBox);
+          event.settings,
+          TowelieActionHelpSelectPlantDeviceBox
+              .towelieHelperSelectPlantDeviceBox);
     }
   }
 }

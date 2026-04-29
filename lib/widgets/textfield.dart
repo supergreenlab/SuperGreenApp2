@@ -45,8 +45,9 @@ class SGLTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget field = Container(
-      decoration:
-          BoxDecoration(border: Border.all(width: 1, color: Colors.black26), borderRadius: BorderRadius.circular(3)),
+      decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.black26),
+          borderRadius: BorderRadius.circular(3)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
         child: TextField(

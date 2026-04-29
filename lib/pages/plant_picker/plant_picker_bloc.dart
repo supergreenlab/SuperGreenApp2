@@ -46,13 +46,15 @@ class PlantPickerBlocStateLoaded extends PlantPickerBlocState {
   final List<Plant> plants;
   final List<Plant>? selectedPlants;
 
-  PlantPickerBlocStateLoaded(this.title, this.boxes, this.plants, this.selectedPlants);
+  PlantPickerBlocStateLoaded(
+      this.title, this.boxes, this.plants, this.selectedPlants);
 
   @override
   List<Object?> get props => [title, boxes, plants, selectedPlants];
 }
 
-class PlantPickerBloc extends LegacyBloc<PlantPickerBlocEvent, PlantPickerBlocState> {
+class PlantPickerBloc
+    extends LegacyBloc<PlantPickerBlocEvent, PlantPickerBlocState> {
   final MainNavigateToPlantPickerEvent args;
 
   PlantPickerBloc(this.args) : super(PlantPickerBlocStateInit()) {
@@ -60,7 +62,8 @@ class PlantPickerBloc extends LegacyBloc<PlantPickerBlocEvent, PlantPickerBlocSt
   }
 
   @override
-  Stream<PlantPickerBlocState> mapEventToState(PlantPickerBlocEvent event) async* {
+  Stream<PlantPickerBlocState> mapEventToState(
+      PlantPickerBlocEvent event) async* {
     if (event is PlantPickerBlocEventInit) {
       List<Plant> plants = await RelDB.get().plantsDAO.getPlants();
       List<Box> boxes = await RelDB.get().plantsDAO.getBoxes();

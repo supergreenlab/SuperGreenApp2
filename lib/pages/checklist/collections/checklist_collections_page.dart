@@ -53,7 +53,8 @@ class ChecklistCollectionsPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, ChecklistCollectionsBlocStateLoaded state) {
+  Widget _renderLoaded(
+      BuildContext context, ChecklistCollectionsBlocStateLoaded state) {
     return ListView(children: [
       ...state.collections.map<Widget>((c) {
         return Padding(
@@ -71,7 +72,9 @@ class ChecklistCollectionsPage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 16.0),
-                        child: SvgPicture.asset(ChecklistCollectionCategoryIcons[c.category.value]!),
+                        child: SvgPicture.asset(
+                            ChecklistCollectionCategoryIcons[
+                                c.category.value]!),
                       ),
                       Expanded(
                         child: AutoSizeText(
@@ -79,7 +82,10 @@ class ChecklistCollectionsPage extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.fade,
                           softWrap: true,
-                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff454545)),
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff454545)),
                         ),
                       ),
                     ],
@@ -90,7 +96,10 @@ class ChecklistCollectionsPage extends StatelessWidget {
                       data: c.description.value,
                       styleSheet: MarkdownStyleSheet(
                         p: TextStyle(color: Color(0xff454545), fontSize: 14),
-                        h1: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
+                        h1: TextStyle(
+                            color: Color(0xff454545),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -98,14 +107,18 @@ class ChecklistCollectionsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GreenButton(
-                        onPressed:
-                            state.checklistCollections.firstWhereOrNull((cc) => cc.serverID == c.serverID.value) != null
-                                ? null
-                                : () {
-                                    BlocProvider.of<ChecklistCollectionsBloc>(context)
-                                        .add(ChecklistCollectionsBlocEventAddCollection(c));
-                                    Navigator.pop(context);
-                                  },
+                        onPressed: state.checklistCollections.firstWhereOrNull(
+                                    (cc) => cc.serverID == c.serverID.value) !=
+                                null
+                            ? null
+                            : () {
+                                BlocProvider.of<ChecklistCollectionsBloc>(
+                                        context)
+                                    .add(
+                                        ChecklistCollectionsBlocEventAddCollection(
+                                            c));
+                                Navigator.pop(context);
+                              },
                         title: 'Add collection',
                       ),
                     ],

@@ -40,10 +40,19 @@ class FeedWaterFormBlocEventCreate extends FeedWaterFormBlocEvent {
   final String message;
 
   FeedWaterFormBlocEventCreate(
-      this.date, this.tooDry, this.volume, this.nutrient, this.wateringLab, this.ph, this.ec, this.tds, this.message);
+      this.date,
+      this.tooDry,
+      this.volume,
+      this.nutrient,
+      this.wateringLab,
+      this.ph,
+      this.ec,
+      this.tds,
+      this.message);
 
   @override
-  List<Object?> get props => [date, tooDry, volume, nutrient, wateringLab, ph, ec, tds, message];
+  List<Object?> get props =>
+      [date, tooDry, volume, nutrient, wateringLab, ph, ec, tds, message];
 }
 
 class FeedWaterFormBlocState extends Equatable {
@@ -61,13 +70,15 @@ class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedWaterFormBloc extends LegacyBloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
+class FeedWaterFormBloc
+    extends LegacyBloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
   final MainNavigateToFeedWaterFormEvent args;
 
   FeedWaterFormBloc(this.args) : super(FeedWaterFormBlocState());
 
   @override
-  Stream<FeedWaterFormBlocState> mapEventToState(FeedWaterFormBlocEvent event) async* {
+  Stream<FeedWaterFormBlocState> mapEventToState(
+      FeedWaterFormBlocEvent event) async* {
     if (event is FeedWaterFormBlocEventCreate) {
       final db = RelDB.get();
       List<Plant> plants = [args.plant];
@@ -76,13 +87,14 @@ class FeedWaterFormBloc extends LegacyBloc<FeedWaterFormBlocEvent, FeedWaterForm
       }
       late FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
-        int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+        int feedEntryID =
+            await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_WATER',
           feed: plants[i].feed,
           date: event.date,
-          params: Value(
-              FeedWaterParams(event.volume, event.tooDry, event.nutrient, event.ph, event.ec, event.tds, event.message)
-                  .toJSON()),
+          params: Value(FeedWaterParams(event.volume, event.tooDry,
+                  event.nutrient, event.ph, event.ec, event.tds, event.message)
+              .toJSON()),
         ));
         if (i == 0) {
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);

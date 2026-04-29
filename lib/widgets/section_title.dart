@@ -80,12 +80,18 @@ class _SectionTitleState extends State<SectionTitle> {
     return Container(
       decoration: BoxDecoration(
         boxShadow: widget.elevation != null
-            ? [BoxShadow(offset: Offset(0, widget.elevation!), color: Colors.black12, blurRadius: widget.elevation!)]
+            ? [
+                BoxShadow(
+                    offset: Offset(0, widget.elevation!),
+                    color: Colors.black12,
+                    blurRadius: widget.elevation!)
+              ]
             : null,
         color: widget.backgroundColor ?? Color(0xFFECECEC),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: widget.large ? 16.0 : 8.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: 3.0, vertical: widget.large ? 16.0 : 8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -96,7 +102,8 @@ class _SectionTitleState extends State<SectionTitle> {
                       controller: _titleController,
                       focusNode: _focusNode,
                       style: TextStyle(
-                        fontWeight: widget.bold ? FontWeight.bold : FontWeight.w300,
+                        fontWeight:
+                            widget.bold ? FontWeight.bold : FontWeight.w300,
                         fontSize: widget.large ? 20 : 16,
                         color: widget.titleColor,
                       ),
@@ -109,7 +116,8 @@ class _SectionTitleState extends State<SectionTitle> {
                   : Text(
                       widget.title,
                       style: TextStyle(
-                        fontWeight: widget.bold ? FontWeight.bold : FontWeight.w300,
+                        fontWeight:
+                            widget.bold ? FontWeight.bold : FontWeight.w300,
                         fontSize: widget.large ? 20 : 16,
                         color: widget.titleColor,
                       ),
@@ -117,7 +125,8 @@ class _SectionTitleState extends State<SectionTitle> {
             ),
             if (widget.onTitleEdited != null)
               IconButton(
-                icon: Icon(_isEditing ? Icons.check : Icons.edit, color: _isEditing ? Colors.green : null),
+                icon: Icon(_isEditing ? Icons.check : Icons.edit,
+                    color: _isEditing ? Colors.green : null),
                 onPressed: () {
                   setState(() {
                     if (_isEditing) {
@@ -151,13 +160,15 @@ class _SectionTitleState extends State<SectionTitle> {
       child: Container(
         width: widget.large ? 50 : 40,
         height: widget.large ? 50 : 40,
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(25))),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: widget.iconPadding, horizontal: widget.iconPadding),
+          padding: EdgeInsets.symmetric(
+              vertical: widget.iconPadding, horizontal: widget.iconPadding),
           child: SvgPicture.asset(widget.icon),
         ),
       ),
     );
   }
 }
-

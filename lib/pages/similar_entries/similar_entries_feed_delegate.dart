@@ -40,7 +40,8 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   FeedEntryState postProcess(FeedEntryState state) {
     return state.copyWith(
-        shareLink: 'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
+        shareLink:
+            'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
   }
 
   @override
@@ -49,8 +50,10 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
-    Tuple3<PlantPhases, DateTime, Duration> phaseDate = feedEntryState.plantSettings!.phaseAt(feedEntryState.date)!;
+  Future<List<FeedEntryState>> loadEntries(
+      int n, int offset, List<String>? filters) async {
+    Tuple3<PlantPhases, DateTime, Duration> phaseDate =
+        feedEntryState.plantSettings!.phaseAt(feedEntryState.date)!;
 
     String feedID = '00000000-0000-0000-0000-000000000000';
     if (feedEntryState.feedID is int) {
@@ -64,15 +67,25 @@ class SimilarEntriesFeedBlocDelegate extends RemoteFeedBlocDelegate {
     if (feedEntryState.plantSettings!.plantType == 'AUTO') {
       DateTime date2 = feedEntryState.plantSettings!.germinationDate!;
       Duration diff = feedEntryState.date.difference(date2);
-      phaseDate = Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.GERMINATING, date2, diff);
+      phaseDate = Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.GERMINATING, date2, diff);
     }
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(feedID, feedEntryState.plantSettings!.plantType, phaseDate.item1, phaseDate.item3.inDays+1, n, offset);
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.similarFeedEntries(
+        feedID,
+        feedEntryState.plantSettings!.plantType,
+        phaseDate.item1,
+        phaseDate.item3.inDays + 1,
+        n,
+        offset);
 
-    entriesMap.removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));
+    entriesMap
+        .removeWhere((e) => BackendAPI().blockedUserIDs.contains(e['userID']));
 
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
-      return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap).copyWith(showPlantInfos: true);
+      return loaderForType(entryMap['type'])
+          .stateForFeedEntryMap(entryMap)
+          .copyWith(showPlantInfos: true);
     }).toList();
   }
 

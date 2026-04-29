@@ -54,12 +54,14 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
       child: AppBarAction(
         icon: ChecklistActionIcons[ChecklistActionMessage.TYPE]!,
         color: Colors.teal,
-        title: (checklistAction as ChecklistActionMessage).title ?? checklistSeed.title,
+        title: (checklistAction as ChecklistActionMessage).title ??
+            checklistSeed.title,
         onCheck: onCheck,
         onSkip: onSkip,
         child: summarize ? null : _renderBody(context),
         content: AutoSizeText(
-          (checklistAction as ChecklistActionMessage).instructions ?? 'Slide to check',
+          (checklistAction as ChecklistActionMessage).instructions ??
+              'Slide to check',
           maxLines: 1,
           style: TextStyle(
             fontSize: 22,
@@ -75,15 +77,18 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
               backgroundColor: Colors.transparent,
               builder: (BuildContext c) {
                 return BlocProvider<ChecklistActionPopupBloc>(
-                  create: (BuildContext context) =>
-                      ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
+                  create: (BuildContext context) => ChecklistActionPopupBloc(
+                      this.plant, this.box, this.checklistSeed),
                   child: ChecklistActionPopupPage(),
                 );
               },
             );
           }
         },
-        actionIcon: !summarize ? null : SvgPicture.asset(ChecklistActionIcons[ChecklistActionMessage.TYPE]!),
+        actionIcon: !summarize
+            ? null
+            : SvgPicture.asset(
+                ChecklistActionIcons[ChecklistActionMessage.TYPE]!),
       ),
     );
   }
@@ -99,10 +104,14 @@ class ChecklistActionMessageButton extends ChecklistActionButton {
         children: [
           SingleChildScrollView(
             child: MarkdownBody(
-              data: (checklistAction as ChecklistActionMessage).instructions ?? '',
+              data: (checklistAction as ChecklistActionMessage).instructions ??
+                  '',
               styleSheet: MarkdownStyleSheet(
                 p: TextStyle(color: Color(0xff454545), fontSize: 14),
-                h1: TextStyle(color: Color(0xff454545), fontSize: 15, fontWeight: FontWeight.bold),
+                h1: TextStyle(
+                    color: Color(0xff454545),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),

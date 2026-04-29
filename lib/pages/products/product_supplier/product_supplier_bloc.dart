@@ -48,7 +48,8 @@ class ProductSupplierBlocStateLoaded extends ProductSupplierBlocState {
   List<Object> get props => [products];
 }
 
-class ProductSupplierBloc extends LegacyBloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
+class ProductSupplierBloc
+    extends LegacyBloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
   final MainNavigateToProductSupplierEvent args;
 
   ProductSupplierBloc(this.args) : super(ProductSupplierBlocStateInit()) {
@@ -56,7 +57,8 @@ class ProductSupplierBloc extends LegacyBloc<ProductSupplierBlocEvent, ProductSu
   }
 
   @override
-  Stream<ProductSupplierBlocState> mapEventToState(ProductSupplierBlocEvent event) async* {
+  Stream<ProductSupplierBlocState> mapEventToState(
+      ProductSupplierBlocEvent event) async* {
     if (event is ProductSupplierBlocEventInit) {
       yield ProductSupplierBlocStateLoaded(args.products);
     }

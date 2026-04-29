@@ -44,25 +44,34 @@ class FeedVentilationTimerFormPage extends StatefulWidget {
     );
   }
 
-  String get instructionsTimerModeDescription => paramsController is BlowerParamsController ? FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription : FeedVentilationTimerFormPage.instructionsFanTimerModeDescription;
+  String get instructionsTimerModeDescription =>
+      paramsController is BlowerParamsController
+          ? FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription
+          : FeedVentilationTimerFormPage.instructionsFanTimerModeDescription;
 
   final Param humidity;
   final Param temperature;
   final VentilationParamsController paramsController;
 
-  const FeedVentilationTimerFormPage(this.humidity, this.temperature, this.paramsController, {Key? key}) : super(key: key);
+  const FeedVentilationTimerFormPage(
+      this.humidity, this.temperature, this.paramsController,
+      {Key? key})
+      : super(key: key);
 
   @override
-  _FeedVentilationTimerFormPageState createState() => _FeedVentilationTimerFormPageState();
+  _FeedVentilationTimerFormPageState createState() =>
+      _FeedVentilationTimerFormPageState();
 }
 
-class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormPage> {
+class _FeedVentilationTimerFormPageState
+    extends State<FeedVentilationTimerFormPage> {
   int _day = 0;
   int _night = 0;
   int? _previousHashCode;
 
   void refreshParamsController() {
-    if (widget.paramsController.hashCode == this._previousHashCode) { // WTF is there anything better, keeping the object reference would change that reference without assignment oO
+    if (widget.paramsController.hashCode == this._previousHashCode) {
+      // WTF is there anything better, keeping the object reference would change that reference without assignment oO
       return;
     }
     setState(() {
@@ -81,7 +90,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
             data: widget.instructionsTimerModeDescription,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Color(0xff454545), fontSize: 16)),
           ),
         ),
         SliderFormParam(
@@ -98,7 +108,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
             });
           },
           onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+            BlocProvider.of<FeedVentilationFormBloc>(context)
+                .add(FeedVentilationFormBlocParamsChangedEvent(
               paramsController: widget.paramsController.copyWithValues({
                 "min": _night,
               }) as FeedVentilationParamsController,
@@ -119,7 +130,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
             });
           },
           onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+            BlocProvider.of<FeedVentilationFormBloc>(context)
+                .add(FeedVentilationFormBlocParamsChangedEvent(
               paramsController: widget.paramsController.copyWithValues({
                 "max": _day,
               }) as FeedVentilationParamsController,

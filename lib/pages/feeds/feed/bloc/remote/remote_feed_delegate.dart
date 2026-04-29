@@ -49,9 +49,11 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   Stream<FeedBlocState> onInitialLoad() async* {
     // TODO this shouldn't be there
     if (commentID != null) {
-      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID!);
+      Map<String, dynamic> entryMap =
+          await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID!);
       RemoteFeedEntryLoader feedEntryLoader = loaderForType(entryMap['type']);
-      FeedEntryStateLoaded feedEntry = await feedEntryLoader.load(feedEntryLoader.stateForFeedEntryMap(entryMap));
+      FeedEntryStateLoaded feedEntry = await feedEntryLoader
+          .load(feedEntryLoader.stateForFeedEntryMap(entryMap));
       yield FeedBlocStateOpenComment(feedEntry, this.commentID!, this.replyTo);
     }
   }
@@ -90,9 +92,9 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future deleteFeedEntry(feedEntryID) async {}
-    @override
+  @override
   Future forceSyncFeedEntry(feedEntryID) async {}
-    @override
+  @override
   Future moveFeedEntry(feedEntryID, feedID) async {}
 
   @override

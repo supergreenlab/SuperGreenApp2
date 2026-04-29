@@ -41,7 +41,8 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
   }
 
   @override
-  Widget renderBody(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+  Widget renderBody(
+      BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return renderGrid(context, state, items);
   }
 
@@ -57,7 +58,8 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
     );
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToPublicPlant(
           feedEntry.plantID!,
           name: feedEntry.plantName,
           feedEntryID: feedEntry.id,
@@ -77,9 +79,12 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                   fit: StackFit.expand,
                   children: [
                     Image.network(
-                        BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath!),
-                        fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        BackendAPI().feedsAPI.absoluteFileURL(
+                            feedEntry.thumbnailPath ??
+                                feedEntry.plantThumbnailPath!),
+                        fit: BoxFit.cover, loadingBuilder:
+                            (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
                       }
@@ -112,7 +117,9 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                               fontWeight: FontWeight.bold,
                             )),
                         Text(feedEntry.commentID != null
-                            ? (feedEntry.replyTo != null ? ' liked a reply' : ' liked a comment')
+                            ? (feedEntry.replyTo != null
+                                ? ' liked a reply'
+                                : ' liked a comment')
                             : ' liked a diary entry'),
                       ],
                     ),

@@ -24,7 +24,8 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
 class AppBarMetricsParamsController extends ParamsController {
-  AppBarMetricsParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+  AppBarMetricsParamsController({Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get temp => this.params['temp']!;
   ParamController get humidity => this.params['humidity']!;
@@ -33,7 +34,8 @@ class AppBarMetricsParamsController extends ParamsController {
   ParamController get weight => this.params['weight']!;
   ParamController get version => this.params['version']!;
 
-  static Future<AppBarMetricsParamsController> load(Device device, Box box) async {
+  static Future<AppBarMetricsParamsController> load(
+      Device device, Box box) async {
     AppBarMetricsParamsController c = AppBarMetricsParamsController();
     await c.loadBoxParam(device, box, 'TEMP', 'temp');
     await c.loadBoxParam(device, box, 'HUMI', 'humidity');
@@ -94,7 +96,8 @@ class AppBarMetricsBlocStateLoaded extends AppBarMetricsBlocState {
   List<Object?> get props => [this.box, this.metrics];
 }
 
-class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetricsBlocState> {
+class AppBarMetricsBloc
+    extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetricsBlocState> {
   Device? device;
   late Box box;
 
@@ -111,19 +114,22 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
   }
 
   @override
-  Stream<AppBarMetricsBlocState> mapEventToState(AppBarMetricsBlocEvent event) async* {
+  Stream<AppBarMetricsBlocState> mapEventToState(
+      AppBarMetricsBlocEvent event) async* {
     if (event is AppBarMetricsBlocEventInit) {
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(this.box.id);
       if (box.device == null) {
-        boxSubscription = db.plantsDAO.watchBox(this.box.id).listen(onBoxUpdate);
+        boxSubscription =
+            db.plantsDAO.watchBox(this.box.id).listen(onBoxUpdate);
         yield AppBarMetricsBlocStateNoDevice(box);
         return;
       }
 
       device = await db.devicesDAO.getDevice(box.device!);
       if (device!.isSetup == false) {
-        deviceSubscription = db.devicesDAO.watchDevice(device!.id).listen(onDeviceUpdate);
+        deviceSubscription =
+            db.devicesDAO.watchDevice(device!.id).listen(onDeviceUpdate);
         yield AppBarMetricsBlocStateNoDevice(box);
         return;
       }
@@ -158,7 +164,8 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
 
   void onParamsUpdate(ParamsController value) {
     this.metrics = value as AppBarMetricsParamsController;
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(box, metrics!)));
+    add(AppBarMetricsBlocEventLoaded(
+        AppBarMetricsBlocStateLoaded(box, metrics!)));
   }
 
   Future forceRefresh() async {

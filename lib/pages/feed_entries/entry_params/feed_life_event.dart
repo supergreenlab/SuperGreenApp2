@@ -29,7 +29,8 @@ class FeedLifeEventParams extends FeedEntryParams {
 
   factory FeedLifeEventParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedLifeEventParams(PlantPhases.values.firstWhere((p) => describeEnum(p) == map['phase']));
+    return FeedLifeEventParams(
+        PlantPhases.values.firstWhere((p) => describeEnum(p) == map['phase']));
   }
 
   @override

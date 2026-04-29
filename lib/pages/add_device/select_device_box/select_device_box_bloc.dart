@@ -61,7 +61,8 @@ class SelectDeviceBoxBlocStateLoaded extends SelectDeviceBoxBlocState {
   final int nBoxes;
   final Device device;
 
-  SelectDeviceBoxBlocStateLoaded(this.boxes, this.nLeds, this.nBoxes, this.device);
+  SelectDeviceBoxBlocStateLoaded(
+      this.boxes, this.nLeds, this.nBoxes, this.device);
 
   @override
   List<Object> get props => [boxes, nLeds, nBoxes, device];
@@ -83,7 +84,8 @@ class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
   List<Object> get props => [box];
 }
 
-class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
+class SelectDeviceBoxBloc
+    extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
   final MainNavigateToSelectDeviceBoxEvent args;
 
   SelectDeviceBoxBloc(this.args) : super(SelectDeviceBoxBlocStateInit()) {
@@ -91,7 +93,8 @@ class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDev
   }
 
   @override
-  Stream<SelectDeviceBoxBlocState> mapEventToState(SelectDeviceBoxBlocEvent event) async* {
+  Stream<SelectDeviceBoxBlocState> mapEventToState(
+      SelectDeviceBoxBlocEvent event) async* {
     if (event is SelectDeviceBoxBlocEventInitialize) {
       yield* _loadAll();
     } else if (event is SelectDeviceBoxBlocEventDelete) {
@@ -99,7 +102,8 @@ class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDev
       yield SelectDeviceBoxBlocStateInit();
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(args.device.id);
-      final boxEnabledParam = await ddb.getParam(device.id, 'BOX_${event.box}_ENABLED');
+      final boxEnabledParam =
+          await ddb.getParam(device.id, 'BOX_${event.box}_ENABLED');
       await DeviceHelper.updateIntParam(args.device, boxEnabledParam, 0);
       final ledModule = await ddb.getModule(device.id, 'led');
       for (int i = 0; i < ledModule.arrayLen; ++i) {
@@ -131,7 +135,8 @@ class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDev
       for (int i = 0; i < ledModule.arrayLen; ++i) {
         final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
         if (ledBox.ivalue! >= 0) {
-          SelectData? selectData = boxes.firstWhereOrNull((b) => b.box == ledBox.ivalue);
+          SelectData? selectData =
+              boxes.firstWhereOrNull((b) => b.box == ledBox.ivalue);
           if (selectData != null) {
             selectData.leds.add(i);
           }
@@ -139,7 +144,8 @@ class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDev
       }
       nLeds = ledModule.arrayLen;
     } catch (e) {}
-    yield SelectDeviceBoxBlocStateLoaded(boxes, nLeds, boxModule.arrayLen, device);
+    yield SelectDeviceBoxBlocStateLoaded(
+        boxes, nLeds, boxModule.arrayLen, device);
   }
 }
 

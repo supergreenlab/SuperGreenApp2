@@ -54,7 +54,6 @@ class RefreshParametersPage extends StatefulWidget {
 }
 
 class _RefreshParametersPageState extends State<RefreshParametersPage> {
-
   @protected
   void initState() {
     super.initState();
@@ -67,7 +66,8 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
       listener: (BuildContext context, RefreshParametersBlocState state) async {
         if (state is RefreshParametersBlocStateRefreshed) {
           Timer(const Duration(milliseconds: 2000), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true));
           });
         }
       },
@@ -97,7 +97,8 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
             }
             return WillPopScope(
               onWillPop: () async {
-                return state is RefreshParametersBlocStateRefreshed || state is RefreshParametersBlocStateError;
+                return state is RefreshParametersBlocStateRefreshed ||
+                    state is RefreshParametersBlocStateError;
               },
               child: Scaffold(
                   appBar: SGLAppBar(
@@ -109,16 +110,21 @@ class _RefreshParametersPageState extends State<RefreshParametersPage> {
                     hideBackButton: state is RefreshParametersBlocStateDone,
                   ),
                   backgroundColor: Colors.white,
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
   }
 
   Widget _renderRefreshDone(RefreshParametersBlocStateRefreshed state) {
-    String subtitle = RefreshParametersPage.refreshParametersPageControllerRefreshed(state.device.name);
+    String subtitle =
+        RefreshParametersPage.refreshParametersPageControllerRefreshed(
+            state.device.name);
     return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+        title: CommonL10N.done,
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   @override

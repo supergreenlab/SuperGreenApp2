@@ -47,7 +47,8 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
       if (params.previous is int) {
         previousMedia = await db.feedsDAO.getFeedMedia(params.previous);
       } else if (params.previous is String) {
-        previousMedia = await db.feedsDAO.getFeedMediaForServerID(params.previous);
+        previousMedia =
+            await db.feedsDAO.getFeedMediaForServerID(params.previous);
       }
       previous = MediaState(
           previousMedia.id,
@@ -57,7 +58,8 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
           previousMedia.synced);
     }
 
-    List<FeedMedia> currentMedia = await db.feedsDAO.getFeedMedias(state.feedEntryID);
+    List<FeedMedia> currentMedia =
+        await db.feedsDAO.getFeedMedias(state.feedEntryID);
     MediaState current = MediaState(
         currentMedia[0].id,
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].filePath),
@@ -72,8 +74,10 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {
-    await FeedEntryHelper.updateFeedEntry(
-        FeedEntriesCompanion(id: Value(entry.feedEntryID), params: Value(params.toJSON()), synced: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(entry.feedEntryID),
+        params: Value(params.toJSON()),
+        synced: Value(false)));
   }
 
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
@@ -81,23 +85,30 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
     FeedMeasureParams params = entry.params as FeedMeasureParams;
     RelDB db = RelDB.get();
     if (params.previous is int) {
-      _previousStreams[entry.feedEntryID] = db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
+      _previousStreams[entry.feedEntryID] =
+          db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
         try {
-          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+          FeedEntry feedEntry =
+              await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
           await updateFeedEntryState(feedEntry);
         } catch (e) {}
       });
     } else if (params.previous is String) {
-      _previousStreams[entry.feedEntryID] = db.feedsDAO.watchFeedMediaForServerID(params.previous).listen((_) async {
+      _previousStreams[entry.feedEntryID] = db.feedsDAO
+          .watchFeedMediaForServerID(params.previous)
+          .listen((_) async {
         try {
-          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+          FeedEntry feedEntry =
+              await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
           await updateFeedEntryState(feedEntry);
         } catch (e) {}
       });
     }
-    _currentStreams[entry.feedEntryID] = db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
+    _currentStreams[entry.feedEntryID] =
+        db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
       try {
-        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
         await updateFeedEntryState(feedEntry);
       } catch (e) {}
     });

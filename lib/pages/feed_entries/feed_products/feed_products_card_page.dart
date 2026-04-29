@@ -63,9 +63,11 @@ class FeedProductsCardPage extends StatelessWidget {
   final Animation<double> animation;
   final FeedState? feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final List<Widget> Function(
+      BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+  const FeedProductsCardPage(this.animation, this.feedState, this.state,
+      {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -82,8 +84,8 @@ class FeedProductsCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              FeedEntryIcons[FE_TOWELIE_INFO]!, FeedProductsCardPage.feedProductsCardPageTitle, state.synced),
+          FeedCardTitle(FeedEntryIcons[FE_TOWELIE_INFO]!,
+              FeedProductsCardPage.feedProductsCardPageTitle, state.synced),
           Container(
             height: 150,
             alignment: Alignment.center,
@@ -134,8 +136,9 @@ class FeedProductsCardPage extends StatelessWidget {
           ));
     }
     body.add(_renderStoreGeos(context, cardState));
-    body.addAll(
-        params.products.where((p) => p.geo == feedState!.storeGeo).map<Widget>((FeedProductsItemParams product) {
+    body.addAll(params.products
+        .where((p) => p.geo == feedState!.storeGeo)
+        .map<Widget>((FeedProductsItemParams product) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -155,15 +158,20 @@ class FeedProductsCardPage extends StatelessWidget {
                   ),
                   MarkdownBody(
                       data: product.description,
-                      styleSheet:
-                          MarkdownStyleSheet(strong: TextStyle(), p: TextStyle(color: Color(0xff454545), fontSize: 14))),
+                      styleSheet: MarkdownStyleSheet(
+                          strong: TextStyle(),
+                          p: TextStyle(
+                              color: Color(0xff454545), fontSize: 14))),
                 ],
               ),
             ),
           ),
           ButtonTheme(
-            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0), //adds padding inside the button
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+            padding: EdgeInsets.symmetric(
+                vertical: 16.0,
+                horizontal: 16.0), //adds padding inside the button
+            materialTapTargetSize: MaterialTapTargetSize
+                .shrinkWrap, //limits the touch area to the button area
             minWidth: 0, //wraps child's width
             height: 0,
             child: TextButton(
@@ -174,7 +182,8 @@ class FeedProductsCardPage extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     textAlign: TextAlign.center,
                   ),
-                  Text(FeedProductsCardPage.feedProductsCardPageViewButton, style: TextStyle(color: Colors.blue)),
+                  Text(FeedProductsCardPage.feedProductsCardPageViewButton,
+                      style: TextStyle(color: Colors.blue)),
                 ],
               ),
               onPressed: () async {
@@ -211,11 +220,15 @@ class FeedProductsCardPage extends StatelessWidget {
           bool selected = sg == feedState!.storeGeo;
           return TextButton(
             child: Text(_storeGeoNames[sg]!,
-                style: TextStyle(color: sg == feedState!.storeGeo ? Colors.black : Colors.blue)),
+                style: TextStyle(
+                    color: sg == feedState!.storeGeo
+                        ? Colors.black
+                        : Colors.blue)),
             onPressed: selected
                 ? null
                 : () async {
-                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetStoreGeo(sg));
+                    BlocProvider.of<FeedBloc>(context)
+                        .add(FeedBlocEventSetStoreGeo(sg));
                   },
           );
         }).toList(),
@@ -234,19 +247,25 @@ class FeedProductsCardPage extends StatelessWidget {
 
   Widget _renderButton(BuildContext context, FeedProductsButtonParams button) {
     return TextButton(
-      child: Text(button.title.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
+      child: Text(button.title.toUpperCase(),
+          style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
-        BlocProvider.of<TowelieBloc>(context)
-            .add(TowelieBlocEventButtonPressed(context, button.params, feed: state.feedID, feedEntry: state.feedEntryID));
+        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
+            context, button.params,
+            feed: state.feedID, feedEntry: state.feedEntryID));
       },
     );
   }
 
-  Widget _renderSelectedButton(BuildContext context, FeedProductsButtonParams button) {
+  Widget _renderSelectedButton(
+      BuildContext context, FeedProductsButtonParams button) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button.title.toUpperCase()}',
-          style: TextStyle(color: Color(0xff565656), fontSize: 12, fontWeight: FontWeight.bold)),
+          style: TextStyle(
+              color: Color(0xff565656),
+              fontSize: 12,
+              fontWeight: FontWeight.bold)),
     );
   }
 }

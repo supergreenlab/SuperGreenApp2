@@ -64,7 +64,11 @@ class HomeBloc extends LegacyBloc<HomeBlocEvent, HomeBlocState> {
   @override
   Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {
     if (event is HomeBlocEventLoad) {
-      _pendingStream = RelDB.get().checklistsDAO.getNLogsTotal().watchSingle().listen(_hasPendingChange);
+      _pendingStream = RelDB.get()
+          .checklistsDAO
+          .getNLogsTotal()
+          .watchSingle()
+          .listen(_hasPendingChange);
     } else if (event is HomeBlocEventLoaded) {
       yield HomeBlocStateLoaded(event.hasPending);
     }

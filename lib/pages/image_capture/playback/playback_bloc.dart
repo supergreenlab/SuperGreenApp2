@@ -48,20 +48,23 @@ class PlaybackBlocState extends Equatable {
   final String cancelButton;
   final String okButton;
 
-  PlaybackBlocState(this.filePath, this.isVideo, this.cancelButton, this.okButton, this.overlayPath);
+  PlaybackBlocState(this.filePath, this.isVideo, this.cancelButton,
+      this.okButton, this.overlayPath);
   @override
   List<Object?> get props => [filePath, overlayPath, isVideo];
 }
 
 class PlaybackBlocStateInit extends PlaybackBlocState {
-  PlaybackBlocStateInit(String filePath, bool isVideo, String cancelButton, String okButton, String? overlayPath)
+  PlaybackBlocStateInit(String filePath, bool isVideo, String cancelButton,
+      String okButton, String? overlayPath)
       : super(filePath, isVideo, cancelButton, okButton, overlayPath);
 }
 
 class PlaybackBlocStateReload extends PlaybackBlocState {
   final int rand = Random().nextInt(1 << 32);
 
-  PlaybackBlocStateReload(String filePath, bool isVideo, String cancelButton, String okButton, String? overlayPath)
+  PlaybackBlocStateReload(String filePath, bool isVideo, String cancelButton,
+      String okButton, String? overlayPath)
       : super(filePath, isVideo, cancelButton, okButton, overlayPath);
   @override
   List<Object?> get props => [...super.props, rand];
@@ -73,8 +76,12 @@ class PlaybackBloc extends LegacyBloc<PlaybackBlocEvent, PlaybackBlocState> {
   static bool _isVideo(String filePath) => filePath.endsWith('mp4');
 
   PlaybackBloc(this._args)
-      : super(PlaybackBlocState(_args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton,
-            _args.okButton, _args.overlayPath)) {
+      : super(PlaybackBlocState(
+            _args.filePath,
+            PlaybackBloc._isVideo(_args.filePath),
+            _args.cancelButton,
+            _args.okButton,
+            _args.overlayPath)) {
     add(PlaybackBlocEventInit());
   }
 
@@ -82,18 +89,29 @@ class PlaybackBloc extends LegacyBloc<PlaybackBlocEvent, PlaybackBlocState> {
   Stream<PlaybackBlocState> mapEventToState(PlaybackBlocEvent event) async* {
     if (event is PlaybackBlocEventInit) {
       yield PlaybackBlocStateInit(
-          _args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton, _args.okButton, _args.overlayPath);
+          _args.filePath,
+          PlaybackBloc._isVideo(_args.filePath),
+          _args.cancelButton,
+          _args.okButton,
+          _args.overlayPath);
     } else if (event is PlaybackBlocEventRotate) {
       try {
-        Image? image = decodeImage(await new File(FeedMedias.makeAbsoluteFilePath(_args.filePath)).readAsBytes());
+        Image? image = decodeImage(
+            await new File(FeedMedias.makeAbsoluteFilePath(_args.filePath))
+                .readAsBytes());
         image = copyRotate(image!, angle: 90);
         List<int>? out = encodeNamedImage(_args.filePath, image);
-        await File(FeedMedias.makeAbsoluteFilePath(_args.filePath)).writeAsBytes(out!, flush: true);
+        await File(FeedMedias.makeAbsoluteFilePath(_args.filePath))
+            .writeAsBytes(out!, flush: true);
       } catch (e, trace) {
         Logger.logError(e, trace);
       }
       yield PlaybackBlocStateReload(
-          _args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton, _args.okButton, _args.overlayPath);
+          _args.filePath,
+          PlaybackBloc._isVideo(_args.filePath),
+          _args.cancelButton,
+          _args.okButton,
+          _args.overlayPath);
     }
   }
 }

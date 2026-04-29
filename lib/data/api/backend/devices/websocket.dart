@@ -36,13 +36,17 @@ class ControllerMetric extends Equatable {
   final String key;
   final dynamic value;
 
-  ControllerMetric({required this.controllerID, required this.key, required this.value});
+  ControllerMetric(
+      {required this.controllerID, required this.key, required this.value});
 
   @override
   List<Object> get props => [controllerID, key, value];
 
   factory ControllerMetric.fromMap(Map<String, dynamic> map) {
-    return ControllerMetric(controllerID: map['controllerID'], key: map['key'], value: map['value']);
+    return ControllerMetric(
+        controllerID: map['controllerID'],
+        key: map['key'],
+        value: map['value']);
   }
 
   factory ControllerMetric.fromJSON(String json) {
@@ -55,13 +59,17 @@ class ControllerLog extends Equatable {
   final String module;
   final String msg;
 
-  ControllerLog({required this.controllerID, required this.module, required this.msg});
+  ControllerLog(
+      {required this.controllerID, required this.module, required this.msg});
 
   @override
   List<Object> get props => [controllerID, module, msg];
 
   factory ControllerLog.fromMap(Map<String, dynamic> map) {
-    return ControllerLog(controllerID: map['controllerID'], module: map['module'], msg: map['msg']);
+    return ControllerLog(
+        controllerID: map['controllerID'],
+        module: map['module'],
+        msg: map['msg']);
   }
 
   factory ControllerLog.fromJSON(String json) {
@@ -83,7 +91,10 @@ class DeviceWebsocket {
   Map<String, Completer> commandCompleters = {};
 
   DeviceWebsocket(this.device) {
-    deviceSub = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device newDevice) {
+    deviceSub = RelDB.get()
+        .devicesDAO
+        .watchDevice(device.id)
+        .listen((Device newDevice) {
       this.device = newDevice;
     });
   }
@@ -112,8 +123,10 @@ class DeviceWebsocket {
   }
 
   void connect() async {
-    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
-    String url = '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
+    await RelDB.get().devicesDAO.updateDevice(
+        DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+    String url =
+        '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
     try {
       channel = IOWebSocketChannel(await WebSocket.connect(url, headers: {
         'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
@@ -138,16 +151,19 @@ class DeviceWebsocket {
             // This needs testing, added the line below instead of the line 133
             try {
               await sendRemoteCommand('geti -k TIME', nRetries: 0);
-              await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
+              await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+                  id: Value(device.id), isRemote: Value(true)));
             } catch (e) {
               //print(e.toString());
-              await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+              await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+                  id: Value(device.id), isRemote: Value(false)));
             }
           });
         }
         timeout?.cancel();
         timeout = Timer(Duration(seconds: 10), () {
-          RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+          RelDB.get().devicesDAO.updateDevice(
+              DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
           timeout = null;
           pingTimer?.cancel();
           pingTimer = null;
@@ -175,20 +191,28 @@ class DeviceWebsocket {
         }
         dynamic value = cm.value;
         if (value is String) {
-          await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: Value(value)));
+          await RelDB.get()
+              .devicesDAO
+              .updateParam(param.copyWith(svalue: Value(value)));
         } else if (value is double) {
-          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: Value(value.round())));
+          await RelDB.get()
+              .devicesDAO
+              .updateParam(param.copyWith(ivalue: Value(value.round())));
         } else if (value is int) {
-          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: Value(value)));
+          await RelDB.get()
+              .devicesDAO
+              .updateParam(param.copyWith(ivalue: Value(value)));
         }
       }
     }, onError: (e) async {
-      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+      await RelDB.get().devicesDAO.updateDevice(
+          DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
       Logger.logError(e, null);
       await Future.delayed(Duration(seconds: 3));
       connect();
     }, onDone: () async {
-      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+      await RelDB.get().devicesDAO.updateDevice(
+          DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
       await Future.delayed(Duration(seconds: 3));
       connect();
     });
@@ -198,7 +222,11 @@ class DeviceWebsocket {
     }
   }
 
-  Future sendRemoteCommand(String cmd, {int nRetries = 5, int tryN = 0, Completer? completer, String? uuid}) async {
+  Future sendRemoteCommand(String cmd,
+      {int nRetries = 5,
+      int tryN = 0,
+      Completer? completer,
+      String? uuid}) async {
     String signing = AppDB().getDeviceSigning(device.identifier)!;
     if (uuid == null) {
       uuid = Uuid().v4();
@@ -216,7 +244,11 @@ class DeviceWebsocket {
       if (!completer!.isCompleted) {
         if (tryN < nRetries) {
           Logger.log("Retrying $cmd");
-          sendRemoteCommand(cmd, nRetries: nRetries, tryN: tryN + 1, completer: completer, uuid: uuid);
+          sendRemoteCommand(cmd,
+              nRetries: nRetries,
+              tryN: tryN + 1,
+              completer: completer,
+              uuid: uuid);
           return;
         } else {
           completer.completeError(Exception('Timeout for command $uuid'));

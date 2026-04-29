@@ -42,7 +42,8 @@ with artificial **lights and ventilation**.''',
     final bdb = RelDB.get().plantsDAO;
     int nBoxes = await bdb.nBoxes().getSingle();
     if (nBoxes == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpCreateLab.towelieHelperCreateLab);
+      yield TowelieBlocStateHelper(
+          event.settings, TowelieActionHelpCreateLab.towelieHelperCreateLab);
     }
   }
 }

@@ -53,13 +53,15 @@ class PlantDrawerBlocStatePlantListUpdated extends PlantDrawerBlocState {
   final List<Box> boxes;
   final List<GetNLogsPerPlantsResult> hasPending;
 
-  PlantDrawerBlocStatePlantListUpdated(this.plants, this.boxes, this.hasPending);
+  PlantDrawerBlocStatePlantListUpdated(
+      this.plants, this.boxes, this.hasPending);
 
   @override
   List<Object> get props => [plants, boxes, hasPending];
 }
 
-class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
+class PlantDrawerBloc
+    extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   List<Plant> _plants = [];
   List<Box> _boxes = [];
   List<GetNLogsPerPlantsResult> _hasPending = [];
@@ -72,11 +74,18 @@ class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocSt
   }
 
   @override
-  Stream<PlantDrawerBlocState> mapEventToState(PlantDrawerBlocEvent event) async* {
+  Stream<PlantDrawerBlocState> mapEventToState(
+      PlantDrawerBlocEvent event) async* {
     if (event is PlantDrawerBlocEventLoadPlants) {
-      _plantStream = RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
-      _boxesStream = RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
-      _pendingStream = RelDB.get().checklistsDAO.getNLogsPerPlants().watch().listen(_hasPendingChange);
+      _plantStream =
+          RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
+      _boxesStream =
+          RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
+      _pendingStream = RelDB.get()
+          .checklistsDAO
+          .getNLogsPerPlants()
+          .watch()
+          .listen(_hasPendingChange);
     } else if (event is PlantDrawerBlocEventBoxListUpdated) {
       yield PlantDrawerBlocStatePlantListUpdated(_plants, _boxes, _hasPending);
     }

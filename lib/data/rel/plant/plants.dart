@@ -62,11 +62,13 @@ class Plants extends Table {
   static Future<Map<String, dynamic>> toMap(Plant plant) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
     if (feed.serverID == null) {
-      Logger.throwError('Missing serverID for feed relation', data: {"plant": plant});
+      Logger.throwError('Missing serverID for feed relation',
+          data: {"plant": plant});
     }
     Box box = await RelDB.get().plantsDAO.getBox(plant.box);
     if (box.serverID == null) {
-      Logger.throwError('Missing serverID for box relation', data: {"box": box});
+      Logger.throwError('Missing serverID for box relation',
+          data: {"box": box});
     }
 
     return {
@@ -94,7 +96,8 @@ class Boxes extends Table {
   IntColumn get deviceBox => integer().nullable()();
   IntColumn get screenDevice => integer().nullable()();
 
-  TextColumn get screenDeviceToken => text().withLength(min: 36, max: 36).nullable()();
+  TextColumn get screenDeviceToken =>
+      text().withLength(min: 36, max: 36).nullable()();
   TextColumn get encKey => text().withLength(min: 36, max: 36).nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
 
@@ -109,13 +112,16 @@ class Boxes extends Table {
     }
     int? deviceID;
     if (map['deviceID'] != null) {
-      Device device = await RelDB.get().devicesDAO.getDeviceForServerID(map['deviceID']);
+      Device device =
+          await RelDB.get().devicesDAO.getDeviceForServerID(map['deviceID']);
       deviceID = device.id;
     }
 
     int? screenDeviceID;
     if (map['screenDeviceID'] != null) {
-      Device device = await RelDB.get().devicesDAO.getDeviceForServerID(map['screenDeviceID']);
+      Device device = await RelDB.get()
+          .devicesDAO
+          .getDeviceForServerID(map['screenDeviceID']);
       screenDeviceID = device.id;
     }
 
@@ -151,7 +157,8 @@ class Boxes extends Table {
       try {
         device = await RelDB.get().devicesDAO.getDevice(box.device!);
       } catch (e) {
-        Logger.throwError('Missing serverID for device relation', data: {"box": box, "device": box.device});
+        Logger.throwError('Missing serverID for device relation',
+            data: {"box": box, "device": box.device});
       }
       obj['deviceID'] = device.serverID;
       obj['deviceBox'] = box.deviceBox;
@@ -161,14 +168,16 @@ class Boxes extends Table {
       try {
         device = await RelDB.get().devicesDAO.getDevice(box.screenDevice!);
       } catch (e) {
-        Logger.throwError('Missing serverID for device relation', data: {"box": box, "device": box.device});
+        Logger.throwError('Missing serverID for device relation',
+            data: {"box": box, "device": box.device});
       }
       obj['screenDeviceID'] = device.serverID;
     }
     if (box.feed != null) {
       Feed feed = await RelDB.get().feedsDAO.getFeed(box.feed!);
       if (feed.serverID == null) {
-        Logger.throwError('Missing serverID for feed relation', data: {"box": box, "feed": feed});
+        Logger.throwError('Missing serverID for feed relation',
+            data: {"box": box, "feed": feed});
       }
       obj['feedID'] = feed.serverID;
     }
@@ -193,17 +202,20 @@ class Timelapses extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get plant => integer()();
 
-  TextColumn get type => text().withDefault(Constant('dropbox')).withLength(min: 1, max: 32)();
+  TextColumn get type =>
+      text().withDefault(Constant('dropbox')).withLength(min: 1, max: 32)();
   TextColumn get settings => text().withDefault(Constant('{}'))();
 
   // TODO: remove those fields
   TextColumn get ssid => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get password => text().withLength(min: 1, max: 64).nullable()();
-  TextColumn get controllerID => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get controllerID =>
+      text().withLength(min: 1, max: 64).nullable()();
   TextColumn get rotate => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get name => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get strain => text().withLength(min: 1, max: 64).nullable()();
-  TextColumn get dropboxToken => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get dropboxToken =>
+      text().withLength(min: 1, max: 64).nullable()();
   TextColumn get uploadName => text().withLength(min: 1, max: 64).nullable()();
   // /TODO
 
@@ -214,7 +226,8 @@ class Timelapses extends Table {
     if (map['deleted'] == true) {
       return DeletedTimelapsesCompanion(Value(map['id'] as String));
     }
-    Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
+    Plant plant =
+        await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
       plant: Value(plant.id),
       type: Value(map['type']),
@@ -227,7 +240,8 @@ class Timelapses extends Table {
   static Future<Map<String, dynamic>> toMap(Timelapse timelapse) async {
     Plant plant = await RelDB.get().plantsDAO.getPlant(timelapse.plant);
     if (plant.serverID == null) {
-      Logger.throwError('Missing serverID for plant relation', data: {"timelapse": timelapse, "plant": plant});
+      Logger.throwError('Missing serverID for plant relation',
+          data: {"timelapse": timelapse, "plant": plant});
     }
     return {
       'id': timelapse.serverID,
@@ -257,22 +271,32 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<Plant> getPlantForServerID(String serverID) {
-    return (select(plants)..where((p) => p.serverID.equals(serverID))).getSingle();
+    return (select(plants)..where((p) => p.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<Plant> getLastPlant() {
     return (select(plants)
-          ..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])
+          ..orderBy(
+              [(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])
           ..limit(1))
         .getSingle();
   }
 
   Future<List<Plant>> getPlants() {
-    return (select(plants)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])).get();
+    return (select(plants)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .get();
   }
 
   Stream<List<Plant>> watchPlants() {
-    return (select(plants)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])).watch();
+    return (select(plants)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .watch();
   }
 
   Future<List<Plant>> getUnsyncedPlants() {
@@ -296,7 +320,8 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future updatePlant(PlantsCompanion plant) {
-    return (update(plants)..where((p) => p.id.equals(plant.id.value))).write(plant);
+    return (update(plants)..where((p) => p.id.equals(plant.id.value)))
+        .write(plant);
   }
 
   Future deletePlant(Plant plant) {
@@ -308,7 +333,8 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<Box> getBoxForServerID(String serverID) {
-    return (select(boxes)..where((b) => b.serverID.equals(serverID))).getSingle();
+    return (select(boxes)..where((b) => b.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<Box> getBoxWithFeed(int feedID) {
@@ -316,7 +342,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<List<Box>> getBoxes() {
-    return (select(boxes)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])).get();
+    return (select(boxes)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .get();
   }
 
   Future<List<Box>> getUnsyncedBoxes() {
@@ -324,7 +354,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Stream<List<Box>> watchBoxes() {
-    return (select(boxes)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)])).watch();
+    return (select(boxes)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .watch();
   }
 
   Stream<Box> watchBox(int id) {
@@ -358,7 +392,9 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<ChartCache?> getChartCache(int boxID, String name) async {
-    List<ChartCache> cs = await (select(chartCaches)..where((c) => c.box.equals(boxID) & c.name.equals(name))).get();
+    List<ChartCache> cs = await (select(chartCaches)
+          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
+        .get();
     if (cs.length == 0) {
       return null;
     }
@@ -366,7 +402,9 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Stream<ChartCache> watchChartCache(int boxID, String name) {
-    return (select(chartCaches)..where((c) => c.box.equals(boxID) & c.name.equals(name))).watchSingle();
+    return (select(chartCaches)
+          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
+        .watchSingle();
   }
 
   Future deleteChartCacheForBox(int boxID) {
@@ -386,11 +424,13 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<Timelapse> getTimelapse(int timelapseID) {
-    return (select(timelapses)..where((t) => t.id.equals(timelapseID))).getSingle();
+    return (select(timelapses)..where((t) => t.id.equals(timelapseID)))
+        .getSingle();
   }
 
   Future<Timelapse> getTimelapseForServerID(String serverID) {
-    return (select(timelapses)..where((t) => t.serverID.equals(serverID))).getSingle();
+    return (select(timelapses)..where((t) => t.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<List<Timelapse>> getUnsyncedTimelapses() {
@@ -402,7 +442,8 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future updateTimelapse(TimelapsesCompanion timelapse) {
-    return (update(timelapses)..where((t) => t.id.equals(timelapse.id.value))).write(timelapse);
+    return (update(timelapses)..where((t) => t.id.equals(timelapse.id.value)))
+        .write(timelapse);
   }
 
   Future deleteTimelapse(Timelapse timelapse) {

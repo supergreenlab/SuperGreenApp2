@@ -76,7 +76,8 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
             onPressed: isValid()
                 ? () {
                     Product product = createProduct();
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: product));
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigatorActionPop(param: product));
                   }
                 : null,
           ),

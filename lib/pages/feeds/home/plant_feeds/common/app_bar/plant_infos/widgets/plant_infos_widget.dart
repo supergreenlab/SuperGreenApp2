@@ -43,7 +43,9 @@ class PlantInfosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = value == null && this.valueWidget == null ? _renderNoValue() : _renderValue();
+    Widget content = value == null && this.valueWidget == null
+        ? _renderNoValue()
+        : _renderValue();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: AppBarAction(
@@ -54,14 +56,18 @@ class PlantInfosWidget extends StatelessWidget {
         content: content,
         action: onEdit,
         addIcon: false,
-        actionIcon: onEdit != null ? SvgPicture.asset("assets/plant_infos/edit.svg") : null,
+        actionIcon: onEdit != null
+            ? SvgPicture.asset("assets/plant_infos/edit.svg")
+            : null,
       ),
     );
   }
 
   Widget _renderNoValue() {
     if (onEdit == null) {
-      return Text("Not set", style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300));
+      return Text("Not set",
+          style:
+              TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300));
     }
     return Text(
       "Tap to set",
@@ -78,8 +84,14 @@ class PlantInfosWidget extends StatelessWidget {
       data: value ?? '',
       styleSheet: MarkdownStyleSheet(
           p: TextStyle(color: Color(0xFF494949), fontSize: 16),
-          h1: TextStyle(color: Color(0xFF494949), fontSize: 20, fontWeight: FontWeight.bold),
-          strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16, fontWeight: FontWeight.bold)),
+          h1: TextStyle(
+              color: Color(0xFF494949),
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+          strong: TextStyle(
+              color: Color(0xff3bb30b),
+              fontSize: 16,
+              fontWeight: FontWeight.bold)),
     );
   }
 }

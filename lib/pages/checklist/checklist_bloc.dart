@@ -106,7 +106,8 @@ class ChecklistBlocStateLoaded extends ChecklistBlocState {
   final List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>>? actions;
   final List<ChecklistCollection> collections;
 
-  ChecklistBlocStateLoaded(this.plant, this.box, this.checklist, this.checklistSeeds, this.actions, this.collections);
+  ChecklistBlocStateLoaded(this.plant, this.box, this.checklist,
+      this.checklistSeeds, this.actions, this.collections);
 
   @override
   List<Object?> get props => [
@@ -136,35 +137,61 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
   @override
   Stream<ChecklistBlocState> mapEventToState(ChecklistBlocEvent event) async* {
     if (event is ChecklistBlocEventInit) {
-      subChecklist = RelDB.get().checklistsDAO.watchChecklist(args.checklist.id).listen((event) {
+      subChecklist = RelDB.get()
+          .checklistsDAO
+          .watchChecklist(args.checklist.id)
+          .listen((event) {
         add(ChecklistBlocEventLoad());
       });
-      subChecklistSeeds = RelDB.get().checklistsDAO.watchChecklistSeeds(this.args.checklist.id).listen((e) {
+      subChecklistSeeds = RelDB.get()
+          .checklistsDAO
+          .watchChecklistSeeds(this.args.checklist.id)
+          .listen((e) {
         add(ChecklistBlocEventLoad());
       });
-      subLogs = RelDB.get().checklistsDAO.watchChecklistLogs(this.args.checklist.id).listen((e) {
+      subLogs = RelDB.get()
+          .checklistsDAO
+          .watchChecklistLogs(this.args.checklist.id)
+          .listen((e) {
         add(ChecklistBlocEventLoad());
       });
-      subCollections = RelDB.get().checklistsDAO.watchCollections(this.args.checklist.id).listen((e) {
+      subCollections = RelDB.get()
+          .checklistsDAO
+          .watchCollections(this.args.checklist.id)
+          .listen((e) {
         add(ChecklistBlocEventLoad());
       });
     } else if (event is ChecklistBlocEventLoad) {
-      Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(this.args.checklist.id);
+      Checklist checklist =
+          await RelDB.get().checklistsDAO.getChecklist(this.args.checklist.id);
       late List<ChecklistSeed> checklistSeeds;
       if (searchTerms == null || searchTerms == '') {
-        checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(this.args.checklist.id);
+        checklistSeeds = await RelDB.get()
+            .checklistsDAO
+            .getChecklistSeeds(this.args.checklist.id);
       } else {
-        checklistSeeds = await RelDB.get().checklistsDAO.searchSeeds(searchTerms!, this.args.checklist.id).get();
+        checklistSeeds = await RelDB.get()
+            .checklistsDAO
+            .searchSeeds(searchTerms!, this.args.checklist.id)
+            .get();
       }
-      List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(this.args.checklist.id);
-      List<ChecklistCollection> collections = await RelDB.get().checklistsDAO.getChecklistCollections(this.args.checklist.id);
+      List<ChecklistLog> logs = await RelDB.get()
+          .checklistsDAO
+          .getChecklistLogs(this.args.checklist.id);
+      List<ChecklistCollection> collections = await RelDB.get()
+          .checklistsDAO
+          .getChecklistCollections(this.args.checklist.id);
       List<Tuple3<ChecklistSeed, ChecklistAction, ChecklistLog>> actions = [];
       for (int i = 0; i < logs.length; ++i) {
         Map<String, dynamic> action = json.decode(logs[i].action);
-        ChecklistSeed checklistSeed = await RelDB.get().checklistsDAO.getChecklistSeed(logs[i].checklistSeed);
-        actions.add(Tuple3(checklistSeed, ChecklistAction.fromMap(action), logs[i]));
+        ChecklistSeed checklistSeed = await RelDB.get()
+            .checklistsDAO
+            .getChecklistSeed(logs[i].checklistSeed);
+        actions.add(
+            Tuple3(checklistSeed, ChecklistAction.fromMap(action), logs[i]));
       }
-      yield ChecklistBlocStateLoaded(this.args.plant, this.args.box, checklist, checklistSeeds, actions, collections);
+      yield ChecklistBlocStateLoaded(this.args.plant, this.args.box, checklist,
+          checklistSeeds, actions, collections);
     } else if (event is ChecklistBlocEventDeleteChecklistSeed) {
       await ChecklistHelper.deleteChecklistSeed(event.checklistSeed);
     } else if (event is ChecklistBlocEventSkipChecklistLog) {
@@ -172,13 +199,18 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
     } else if (event is ChecklistBlocEventCheckChecklistLog) {
       await ChecklistHelper.checkChecklistLog(event.checklistLog);
     } else if (event is ChecklistBlocEventCreate) {
-      Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
-      await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed.copyWith(
+      Checklist checklist =
+          await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
+      await RelDB.get()
+          .checklistsDAO
+          .addChecklistSeed(event.checklistSeed.copyWith(
             checklistServerID: Value(checklist.serverID),
           ));
     } else if (event is ChecklistBlocEventAutoChecklist) {
-      Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(this.args.checklist.id);
-      await ChecklistHelper.subscribeCollection(BackendAPI().checklistCollectionTheBasics, checklist);
+      Checklist checklist =
+          await RelDB.get().checklistsDAO.getChecklist(this.args.checklist.id);
+      await ChecklistHelper.subscribeCollection(
+          BackendAPI().checklistCollectionTheBasics, checklist);
       add(ChecklistBlocEventLoad());
     } else if (event is ChecklistBlocEventFilter) {
       this.searchTerms = event.searchTerms;

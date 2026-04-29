@@ -49,6 +49,8 @@ class DeletesDAO extends DatabaseAccessor<RelDB> with _$DeletesDAOMixin {
   }
 
   Future removeDeletes(List<Delete> dels) {
-    return (delete(deletes)..where((d) => d.id.isIn(dels.map<int>((d) => d.id)))).go();
+    return (delete(deletes)
+          ..where((d) => d.id.isIn(dels.map<int>((d) => d.id))))
+        .go();
   }
 }

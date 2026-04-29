@@ -27,7 +27,8 @@ class Permissions {
       Map<Permission, PermissionStatus> res = await [
         Permission.photos,
       ].request();
-      return res[Permission.photos] == PermissionStatus.granted || res[Permission.photos] == PermissionStatus.limited;
+      return res[Permission.photos] == PermissionStatus.granted ||
+          res[Permission.photos] == PermissionStatus.limited;
     } else if (Platform.isAndroid) {
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -39,7 +40,8 @@ class Permissions {
         ].request();
         return (res[Permission.photos] == PermissionStatus.granted ||
                 res[Permission.photos] == PermissionStatus.limited) &&
-            (res[Permission.videos] == PermissionStatus.granted || res[Permission.videos] == PermissionStatus.limited);
+            (res[Permission.videos] == PermissionStatus.granted ||
+                res[Permission.videos] == PermissionStatus.limited);
       } else {
         Map<Permission, PermissionStatus> res = await [
           Permission.storage,

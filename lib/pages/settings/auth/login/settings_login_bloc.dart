@@ -54,7 +54,8 @@ class SettingsLoginBlocStateError extends SettingsLoginBlocState {
   List<Object> get props => [];
 }
 
-class SettingsLoginBloc extends LegacyBloc<SettingsLoginBlocEvent, SettingsLoginBlocState> {
+class SettingsLoginBloc
+    extends LegacyBloc<SettingsLoginBlocEvent, SettingsLoginBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsLogin args;
   late bool _isAuth;
@@ -65,16 +66,21 @@ class SettingsLoginBloc extends LegacyBloc<SettingsLoginBlocEvent, SettingsLogin
   }
 
   @override
-  Stream<SettingsLoginBlocState> mapEventToState(SettingsLoginBlocEvent event) async* {
+  Stream<SettingsLoginBlocState> mapEventToState(
+      SettingsLoginBlocEvent event) async* {
     if (event is SettingsLoginBlocEventInit) {
       yield SettingsLoginBlocStateLoading();
       yield SettingsLoginBlocStateLoaded(_isAuth);
     } else if (event is SettingsLoginBlocEventLogin) {
       yield SettingsLoginBlocStateLoading();
       try {
-        await BackendAPI().usersAPI.login(event.nickname, event.password, event.token);
+        await BackendAPI()
+            .usersAPI
+            .login(event.nickname, event.password, event.token);
         String? notificationToken = AppDB().getAppData().notificationToken;
-        await BackendAPI().feedsAPI.createUserEnd(notificationToken: notificationToken);
+        await BackendAPI()
+            .feedsAPI
+            .createUserEnd(notificationToken: notificationToken);
       } catch (e, trace) {
         Logger.logError(e, trace);
         yield SettingsLoginBlocStateError();

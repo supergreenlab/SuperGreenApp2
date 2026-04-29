@@ -43,14 +43,16 @@ class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
       return state;
     }
     return state.copyWith(
-        shareLink: 'https://supergreenlab.com/public/box?id=${box.serverID}&feid=${feedEntry.serverID}');
+        shareLink:
+            'https://supergreenlab.com/public/box?id=${box.serverID}&feid=${feedEntry.serverID}');
   }
 
   @override
   Future<void> loadFeed() async {
     box = await RelDB.get().plantsDAO.getBoxWithFeed(feedID);
     AppData appData = AppDB().getAppData();
-    feedState = BoxFeedState(appData.jwt != null, appData.storeGeo, BoxSettings.fromJSON(box.settings));
+    feedState = BoxFeedState(appData.jwt != null, appData.storeGeo,
+        BoxSettings.fromJSON(box.settings));
     add(FeedBlocEventFeedLoaded(feedState));
 
     boxStream = RelDB.get().plantsDAO.watchBox(box.id).listen(boxUpdated);

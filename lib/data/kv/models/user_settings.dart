@@ -33,13 +33,26 @@ class UserSettings {
   @HiveField(4)
   String? userID;
 
-  UserSettings({this.timeOffset, this.preferredNotificationHour, this.freedomUnits, this.userID});
-  UserSettings.defaults({this.timeOffset = 0, this.preferredNotificationHour = 18, this.freedomUnits=false, this.userID});
+  UserSettings(
+      {this.timeOffset,
+      this.preferredNotificationHour,
+      this.freedomUnits,
+      this.userID});
+  UserSettings.defaults(
+      {this.timeOffset = 0,
+      this.preferredNotificationHour = 18,
+      this.freedomUnits = false,
+      this.userID});
 
-  UserSettings copyWith({int? timeOffset, int? preferredNotificationHour, bool? freedomUnits, String? userID}) {
+  UserSettings copyWith(
+      {int? timeOffset,
+      int? preferredNotificationHour,
+      bool? freedomUnits,
+      String? userID}) {
     return UserSettings(
       timeOffset: timeOffset ?? this.timeOffset,
-      preferredNotificationHour: preferredNotificationHour ?? this.preferredNotificationHour,
+      preferredNotificationHour:
+          preferredNotificationHour ?? this.preferredNotificationHour,
       freedomUnits: freedomUnits ?? this.freedomUnits,
       userID: userID ?? this.userID,
     );

@@ -35,7 +35,8 @@ class TowelieActionPlantCreated extends TowelieAction {
       Timer(Duration(seconds: 5), () async {
         await CardPlantType.createPlantType(feed);
       });
-      yield TowelieBlocStateHomeNavigation(HomeNavigateToPlantFeedEvent(event.plant));
+      yield TowelieBlocStateHomeNavigation(
+          HomeNavigateToPlantFeedEvent(event.plant));
     }
   }
 }

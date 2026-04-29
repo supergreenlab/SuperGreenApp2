@@ -17,7 +17,8 @@ import 'package:super_green_app/widgets/textfield.dart';
 
 class SettingsCreateAccountPage extends StatefulWidget {
   @override
-  _SettingsCreateAccountPageState createState() => _SettingsCreateAccountPageState();
+  _SettingsCreateAccountPageState createState() =>
+      _SettingsCreateAccountPageState();
 }
 
 class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
@@ -31,15 +32,18 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SettingsCreateAccountBloc, SettingsCreateAccountBlocState>(
+    return BlocListener<SettingsCreateAccountBloc,
+        SettingsCreateAccountBlocState>(
       listener: (BuildContext context, SettingsCreateAccountBlocState state) {
         if (state is SettingsCreateAccountBlocStateDone) {
           Timer(Duration(seconds: 2), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: true));
           });
         }
       },
-      child: BlocBuilder<SettingsCreateAccountBloc, SettingsCreateAccountBlocState>(
+      child: BlocBuilder<SettingsCreateAccountBloc,
+          SettingsCreateAccountBlocState>(
         bloc: BlocProvider.of<SettingsCreateAccountBloc>(context),
         builder: (BuildContext context, SettingsCreateAccountBlocState state) {
           Widget body = FullscreenLoading(
@@ -76,7 +80,8 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                   Container(
                     color: Colors.indigo,
                     child: Center(
-                      child: Text('Create account', style: TextStyle(color: Colors.white, fontSize: 20)),
+                      child: Text('Create account',
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
                   ),
                   Expanded(
@@ -90,13 +95,15 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                           elevation: 5,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 24.0),
                           child: SGLTextField(
                               textCapitalization: TextCapitalization.none,
                               focusNode: _nicknameFocusNode,
                               onFieldSubmitted: (_) {
                                 _nicknameFocusNode.unfocus();
-                                FocusScope.of(context).requestFocus(_passwordFocusNode);
+                                FocusScope.of(context)
+                                    .requestFocus(_passwordFocusNode);
                               },
                               hintText: 'Ex: Bob',
                               controller: _nicknameController,
@@ -112,7 +119,8 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                           elevation: 5,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 24.0),
                           child: SGLTextField(
                               textCapitalization: TextCapitalization.none,
                               focusNode: _passwordFocusNode,
@@ -135,7 +143,8 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                       alignment: Alignment.centerRight,
                       child: GreenButton(
                         title: 'CREATE ACCOUNT',
-                        onPressed: _nicknameController.value.text != '' && _passwordController.value.text != ''
+                        onPressed: _nicknameController.value.text != '' &&
+                                _passwordController.value.text != ''
                             ? () => _handleInput(context)
                             : null,
                       ),
@@ -152,9 +161,11 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                 backgroundColor: Colors.indigo,
                 titleColor: Colors.white,
                 iconColor: Colors.white,
-                hideBackButton: !(state is SettingsCreateAccountBlocStateLoaded),
+                hideBackButton:
+                    !(state is SettingsCreateAccountBlocStateLoaded),
               ),
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
@@ -162,8 +173,11 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
 
   void _onTokenReceived(String token) {
     Navigator.pop(context);
-    BlocProvider.of<SettingsCreateAccountBloc>(context).add(SettingsCreateAccountBlocEventCreateAccount(
-        _nicknameController.value.text, _passwordController.value.text, token));
+    BlocProvider.of<SettingsCreateAccountBloc>(context).add(
+        SettingsCreateAccountBlocEventCreateAccount(
+            _nicknameController.value.text,
+            _passwordController.value.text,
+            token));
   }
 
   void _handleInput(BuildContext context) {
@@ -183,8 +197,11 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
             );
           });
     } else {
-      BlocProvider.of<SettingsCreateAccountBloc>(context).add(SettingsCreateAccountBlocEventCreateAccount(
-        _nicknameController.value.text, _passwordController.value.text, Config.skipCaptchaToken));
+      BlocProvider.of<SettingsCreateAccountBloc>(context).add(
+          SettingsCreateAccountBlocEventCreateAccount(
+              _nicknameController.value.text,
+              _passwordController.value.text,
+              Config.skipCaptchaToken));
     }
   }
 

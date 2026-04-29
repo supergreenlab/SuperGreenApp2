@@ -72,7 +72,8 @@ class SectionBlocStateNotLogged extends SectionBlocState {
   List<Object> get props => [];
 }
 
-abstract class SectionBloc<ItemType> extends LegacyBloc<SectionBlocEvent, SectionBlocState> {
+abstract class SectionBloc<ItemType>
+    extends LegacyBloc<SectionBlocEvent, SectionBlocState> {
   StreamSubscription<hive.BoxEvent>? appDataStream;
 
   SectionBloc() : super(SectionBlocStateInit()) {

@@ -29,25 +29,28 @@ class LocalNotifications {
   LocalNotifications(this.add, this.onNotificationData);
 
   Future init() async {
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = DarwinInitializationSettings(
         requestSoundPermission: false,
         requestBadgePermission: false,
         requestAlertPermission: false);
-    var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: _onSelectNotification);
   }
 
   Future _onSelectNotification(NotificationResponse? payload) async {
-    NotificationData notificationData = NotificationData.fromJSON(payload?.payload ?? '{}');
+    NotificationData notificationData =
+        NotificationData.fromJSON(payload?.payload ?? '{}');
     onNotificationData(notificationData);
   }
 
   Future<bool> checkPermissions() async {
     return await flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+            .resolvePlatformSpecificImplementation<
+                IOSFlutterLocalNotificationsPlugin>()
             ?.requestPermissions(
               alert: true,
               badge: true,
@@ -56,19 +59,28 @@ class LocalNotifications {
         true;
   }
 
-  Future reminderNotification(int id, int afterMinutes, NotificationData notificationData) async {
+  Future reminderNotification(
+      int id, int afterMinutes, NotificationData notificationData) async {
     if (!await this.checkPermissions()) {
       return;
     }
 
-    var scheduledNotificationDateTime = DateTime.now().add(Duration(minutes: afterMinutes));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails('REMINDERS', 'Towelie\'s reminders',
-        channelDescription: 'Towelie can help you not forget anything about your grow.');
+    var scheduledNotificationDateTime =
+        DateTime.now().add(Duration(minutes: afterMinutes));
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'REMINDERS', 'Towelie\'s reminders',
+        channelDescription:
+            'Towelie can help you not forget anything about your grow.');
     var iOSPlatformChannelSpecifics = DarwinNotificationDetails();
-    NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        id, notificationData.title, notificationData.body, tz.TZDateTime.from(scheduledNotificationDateTime, tz.UTC), platformChannelSpecifics,
+        id,
+        notificationData.title,
+        notificationData.body,
+        tz.TZDateTime.from(scheduledNotificationDateTime, tz.UTC),
+        platformChannelSpecifics,
         payload: notificationData.toJSON(),
         androidScheduleMode: AndroidScheduleMode.alarmClock,
         uiLocalNotificationDateInterpretation:

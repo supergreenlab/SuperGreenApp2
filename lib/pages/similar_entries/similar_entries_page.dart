@@ -61,9 +61,11 @@ class SimilarEntriesPage extends StatelessWidget {
     return FullscreenLoading();
   }
 
-  Widget renderLoaded(BuildContext context, SimilarEntriesBlocStateLoaded state) {
+  Widget renderLoaded(
+      BuildContext context, SimilarEntriesBlocStateLoaded state) {
     return BlocProvider(
-        create: (context) => FeedBloc(SimilarEntriesFeedBlocDelegate(state.feedEntryState)),
+        create: (context) =>
+            FeedBloc(SimilarEntriesFeedBlocDelegate(state.feedEntryState)),
         child: FeedPage(
           title: '',
           color: Colors.white,
@@ -79,7 +81,8 @@ class SimilarEntriesPage extends StatelessWidget {
                           highlightColor: Colors.transparent,
                           onTap: () {
                             if (BackendAPI().usersAPI.loggedIn) {
-                              BlocProvider.of<FeedBloc>(context).add(ExplorerFeedBlocDelegateFollowEvent(state));
+                              BlocProvider.of<FeedBloc>(context).add(
+                                  ExplorerFeedBlocDelegateFollowEvent(state));
                             } else {
                               _login(context);
                             }
@@ -93,23 +96,30 @@ class SimilarEntriesPage extends StatelessWidget {
                                   color: Color(0xff3bb30b),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                  child: Text('Follow', style: TextStyle(color: Colors.white)),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 2.0, horizontal: 10.0),
+                                  child: Text('Follow',
+                                      style: TextStyle(color: Colors.white)),
                                 ),
                               ),
                             ],
                           ),
                         )
-                      : Text('Followed', style: TextStyle(color: Color(0xff3bb30b)))),
+                      : Text('Followed',
+                          style: TextStyle(color: Color(0xff3bb30b)))),
               IconButton(
                 icon: Text(
                   'Open plant',
-                  style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      color: Color(0xff3bb30b),
+                      fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToPublicPlant(state.plantID!, feedEntryID: state.feedEntryID));
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToPublicPlant(state.plantID!,
+                          feedEntryID: state.feedEntryID));
                 },
               )
             ];
@@ -142,7 +152,8 @@ class SimilarEntriesPage extends StatelessWidget {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 }

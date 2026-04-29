@@ -59,15 +59,22 @@ class DeepLinkBloc extends LegacyBloc<DeepLinkBlocEvent, DeepLinkBlocState> {
       });
     } else if (event is DeepLinkBlocEventUri) {
       if (event.uri.path == '/public/plant') {
-        yield DeepLinkBlocStateMainNavigation(MainNavigateToPublicPlant(event.uri.queryParameters['id']!,
+        yield DeepLinkBlocStateMainNavigation(MainNavigateToPublicPlant(
+            event.uri.queryParameters['id']!,
             feedEntryID: event.uri.queryParameters['feid']));
       } else if (event.uri.path == '/plant') {
         if (event.uri.queryParameters['id']?.length == 36) {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(event.uri.queryParameters['id']!);
-          yield DeepLinkBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(event.uri.queryParameters['id']!);
+          yield DeepLinkBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } else {
-          Plant plant = await RelDB.get().plantsDAO.getPlant(int.parse(event.uri.queryParameters['id']!));
-          yield DeepLinkBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlant(int.parse(event.uri.queryParameters['id']!));
+          yield DeepLinkBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         }
       }
     }

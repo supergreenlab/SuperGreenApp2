@@ -19,7 +19,8 @@
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/form/feed_transplant_form_bloc.dart';
 
-class FeedTransplantFormPage extends FeedCareCommonFormPage<FeedTransplantFormBloc> {
+class FeedTransplantFormPage
+    extends FeedCareCommonFormPage<FeedTransplantFormBloc> {
   @override
   String title() {
     return '🌱';

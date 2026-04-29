@@ -32,11 +32,14 @@ class ProductInfosBlocState extends Equatable {
   List<Object> get props => [productCategoryID];
 }
 
-class ProductInfosBloc extends LegacyBloc<ProductInfosBlocEvent, ProductInfosBlocState> {
+class ProductInfosBloc
+    extends LegacyBloc<ProductInfosBlocEvent, ProductInfosBlocState> {
   final MainNavigateToProductInfosEvent args;
 
-  ProductInfosBloc(this.args) : super(ProductInfosBlocState(args.productCategoryID));
+  ProductInfosBloc(this.args)
+      : super(ProductInfosBlocState(args.productCategoryID));
 
   @override
-  Stream<ProductInfosBlocState> mapEventToState(ProductInfosBlocEvent event) async* {}
+  Stream<ProductInfosBlocState> mapEventToState(
+      ProductInfosBlocEvent event) async* {}
 }

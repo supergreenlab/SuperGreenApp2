@@ -53,7 +53,8 @@ class DeviceTestBlocStateDone extends DeviceTestBlocState {
       : super(nLedChannels);
 }
 
-class DeviceTestBloc extends LegacyBloc<DeviceTestBlocEvent, DeviceTestBlocState> {
+class DeviceTestBloc
+    extends LegacyBloc<DeviceTestBlocEvent, DeviceTestBlocState> {
   final MainNavigateToDeviceTestEvent args;
 
   int _nLedChannels = 0;

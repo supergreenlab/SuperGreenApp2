@@ -4,25 +4,25 @@ import 'package:super_green_app/theme.dart';
 
 ScreenLockConfig get screenLockConfig {
   return ScreenLockConfig(
-    backgroundColor: SglColor.green,
-    textStyle: TextStyle(fontSize: 16),
-    titleTextStyle: TextStyle(fontSize: 18),
-    buttonStyle: ButtonStyle(
-      shape: MaterialStateProperty.all(RoundedRectangleBorder( borderRadius: BorderRadius.circular(40))),
-      foregroundColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.pressed)) {
-          return SglColor.inactive;
-        }
-        return Colors.white;
-      }),
-      shadowColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.pressed)) {
-          return SglColor.inactive;
-        }
-        return Colors.white;
-      }),
-    )
-  );
+      backgroundColor: SglColor.green,
+      textStyle: TextStyle(fontSize: 16),
+      titleTextStyle: TextStyle(fontSize: 18),
+      buttonStyle: ButtonStyle(
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(40))),
+        foregroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return SglColor.inactive;
+          }
+          return Colors.white;
+        }),
+        shadowColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return SglColor.inactive;
+          }
+          return Colors.white;
+        }),
+      ));
 }
 
 KeyPadConfig get screenLockKeyPadConfig {

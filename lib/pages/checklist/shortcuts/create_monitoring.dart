@@ -35,7 +35,9 @@ class CreateMonitoring extends StatefulWidget {
   final Checklist checklist;
   final Function() onClose;
 
-  const CreateMonitoring({Key? key, required this.checklist, required this.onClose}) : super(key: key);
+  const CreateMonitoring(
+      {Key? key, required this.checklist, required this.onClose})
+      : super(key: key);
 
   @override
   State<CreateMonitoring> createState() => _CreateMonitoringState();
@@ -85,12 +87,19 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
                 onPressed: condition.valid == false || action.valid == false
                     ? null
                     : () {
-                        BlocProvider.of<ChecklistBloc>(context)
-                            .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
+                        BlocProvider.of<ChecklistBloc>(context).add(
+                            ChecklistBlocEventCreate(
+                                ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
-                          title: drift.Value('${LabMetricNames[(condition as ChecklistConditionMetric).key]!} monitoring'),
+                          title: drift.Value(
+                              '${LabMetricNames[(condition as ChecklistConditionMetric).key]!} monitoring'),
                           category: drift.Value(CH_ENVIRONMENT),
-                          fast: drift.Value(((this.action as ChecklistActionMessage).instructions?.length ?? 0) == 0),
+                          fast: drift.Value(
+                              ((this.action as ChecklistActionMessage)
+                                          .instructions
+                                          ?.length ??
+                                      0) ==
+                                  0),
                           public: drift.Value(false),
                           repeat: drift.Value(true),
                           mine: drift.Value(true),
@@ -99,7 +108,8 @@ class _CreateMonitoringState extends State<CreateMonitoring> {
                           actions: drift.Value('[${action.toJSON()}]'),
                           synced: drift.Value(false),
                         )));
-                        SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
+                        SyncerBloc syncerBloc =
+                            BlocProvider.of<SyncerBloc>(context);
                         Future.delayed(const Duration(milliseconds: 200), () {
                           syncerBloc.add(SyncerBlocEventForceSyncChecklists());
                         });

@@ -42,7 +42,8 @@ Then you will choose one of the options above to **connect to the controller**.'
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpAddDevice.towelieHelperAddDevice);
+      yield TowelieBlocStateHelper(
+          event.settings, TowelieActionHelpAddDevice.towelieHelperAddDevice);
     }
   }
 }

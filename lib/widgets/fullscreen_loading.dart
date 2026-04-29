@@ -59,7 +59,9 @@ class FullscreenLoading extends StatelessWidget {
                   Text(
                     circleText ?? '${(percent! * 100).toInt()}%',
                     style: TextStyle(
-                        fontWeight: FontWeight.w900, fontSize: fontSize, color: textColor ?? Color(0xffababab)),
+                        fontWeight: FontWeight.w900,
+                        fontSize: fontSize,
+                        color: textColor ?? Color(0xffababab)),
                     textAlign: TextAlign.center,
                   ),
                 ],

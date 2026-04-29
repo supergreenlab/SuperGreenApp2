@@ -104,7 +104,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     if (event is SyncerBlocEventInit) {
       final results = await Connectivity().checkConnectivity();
       _usingWifi = results.contains(ConnectivityResult.wifi);
-      _connectivity = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
+      _connectivity = Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> results) {
         _usingWifi = results.contains(ConnectivityResult.wifi);
       });
       _timerOut = Timer.periodic(Duration(seconds: 5), (_) async {
@@ -174,7 +176,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       FeedsCompanion feedsCompanion = feeds[i];
       Feed? exists;
       try {
-        exists = await RelDB.get().feedsDAO.getFeedForServerID(feedsCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .feedsDAO
+            .getFeedForServerID(feedsCompanion.serverID.value!);
       } catch (e) {}
       if (feedsCompanion is DeletedFeedsCompanion) {
         if (exists != null) {
@@ -182,7 +186,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().feedsDAO.updateFeed(feedsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get()
+              .feedsDAO
+              .updateFeed(feedsCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().feedsDAO.addFeed(feedsCompanion);
         }
@@ -192,16 +198,20 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncInFeedEntries() async {
-    List<FeedEntriesCompanion> feedEntries = await BackendAPI().feedsAPI.unsyncedFeedEntries();
+    List<FeedEntriesCompanion> feedEntries =
+        await BackendAPI().feedsAPI.unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'entry: ${i + 1}/${feedEntries.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'entry: ${i + 1}/${feedEntries.length}'));
       FeedEntriesCompanion feedEntriesCompanion = feedEntries[i];
       FeedEntry? exists;
       try {
-        exists = await RelDB.get().feedsDAO.getFeedEntryForServerID(feedEntriesCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .feedsDAO
+            .getFeedEntryForServerID(feedEntriesCompanion.serverID.value!);
       } catch (e) {}
       if (feedEntriesCompanion is DeletedFeedEntriesCompanion) {
         if (exists != null) {
@@ -209,17 +219,20 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await FeedEntryHelper.updateFeedEntry(feedEntriesCompanion.copyWith(id: Value(exists.id)));
+          await FeedEntryHelper.updateFeedEntry(
+              feedEntriesCompanion.copyWith(id: Value(exists.id)));
         } else {
           await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
         }
       }
-      await UserEndHelper.setSynced("feedEntry", feedEntriesCompanion.serverID.value!);
+      await UserEndHelper.setSynced(
+          "feedEntry", feedEntriesCompanion.serverID.value!);
     }
   }
 
   Future _syncInFeedMedias() async {
-    List<FeedMediasCompanion> feedMedias = await BackendAPI().feedsAPI.unsyncedFeedMedias();
+    List<FeedMediasCompanion> feedMedias =
+        await BackendAPI().feedsAPI.unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -229,7 +242,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       FeedMediasCompanion feedMediasCompanion = feedMedias[i];
       FeedMedia? exists;
       try {
-        exists = await RelDB.get().feedsDAO.getFeedMediaForServerID(feedMediasCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .feedsDAO
+            .getFeedMediaForServerID(feedMediasCompanion.serverID.value!);
       } catch (e) {}
       if (feedMediasCompanion is DeletedFeedMediasCompanion) {
         if (exists != null) {
@@ -240,28 +255,34 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
             '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
         String thumbnailPath =
             '${FeedMedias.makeFilePath(prefix: 'thumbnail_')}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
-        await BackendAPI()
-            .feedsAPI
-            .download(feedMediasCompanion.filePath.value, FeedMedias.makeAbsoluteFilePath(filePath));
-        await BackendAPI()
-            .feedsAPI
-            .download(feedMediasCompanion.thumbnailPath.value, FeedMedias.makeAbsoluteFilePath(thumbnailPath));
+        await BackendAPI().feedsAPI.download(feedMediasCompanion.filePath.value,
+            FeedMedias.makeAbsoluteFilePath(filePath));
+        await BackendAPI().feedsAPI.download(
+            feedMediasCompanion.thumbnailPath.value,
+            FeedMedias.makeAbsoluteFilePath(thumbnailPath));
         if (exists != null) {
-          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(exists.filePath));
-          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
-          await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion.copyWith(
-              id: Value(exists.id), filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
+          await _deleteFileIfExists(
+              FeedMedias.makeAbsoluteFilePath(exists.filePath));
+          await _deleteFileIfExists(
+              FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
+          await RelDB.get().feedsDAO.updateFeedMedia(
+              feedMediasCompanion.copyWith(
+                  id: Value(exists.id),
+                  filePath: Value(filePath),
+                  thumbnailPath: Value(thumbnailPath)));
         } else {
-          await RelDB.get().feedsDAO.addFeedMedia(
-              feedMediasCompanion.copyWith(filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
+          await RelDB.get().feedsDAO.addFeedMedia(feedMediasCompanion.copyWith(
+              filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
         }
       }
-      await UserEndHelper.setSynced("feedMedia", feedMediasCompanion.serverID.value!);
+      await UserEndHelper.setSynced(
+          "feedMedia", feedMediasCompanion.serverID.value!);
     }
   }
 
   Future _syncInDevices() async {
-    List<DevicesCompanion> devices = await BackendAPI().feedsAPI.unsyncedDevices();
+    List<DevicesCompanion> devices =
+        await BackendAPI().feedsAPI.unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -270,7 +291,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       DevicesCompanion devicesCompanion = devices[i];
       Device? exists;
       try {
-        exists = await RelDB.get().devicesDAO.getDeviceForServerID(devicesCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .devicesDAO
+            .getDeviceForServerID(devicesCompanion.serverID.value!);
       } catch (e) {}
       if (devicesCompanion is DeletedDevicesCompanion) {
         if (exists != null) {
@@ -278,12 +301,17 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().devicesDAO.updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get()
+              .devicesDAO
+              .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
         } else {
-          int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
+          int deviceID =
+              await RelDB.get().devicesDAO.addDevice(devicesCompanion);
           String? auth = AppDB().getDeviceAuth(devices[i].identifier.value);
           // No await, that's intentional
-          DeviceAPI.fetchAllParams(devicesCompanion.ip.value, deviceID, (adv) {}, auth: auth);
+          DeviceAPI.fetchAllParams(
+              devicesCompanion.ip.value, deviceID, (adv) {},
+              auth: auth);
         }
       }
       await UserEndHelper.setSynced("device", devicesCompanion.serverID.value!);
@@ -300,7 +328,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       BoxesCompanion boxesCompanion = boxes[i];
       Box? exists;
       try {
-        exists = await RelDB.get().plantsDAO.getBoxForServerID(boxesCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .plantsDAO
+            .getBoxForServerID(boxesCompanion.serverID.value!);
       } catch (e) {}
       if (boxesCompanion is DeletedBoxesCompanion) {
         if (exists != null) {
@@ -308,7 +338,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().plantsDAO.updateBox(boxesCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get()
+              .plantsDAO
+              .updateBox(boxesCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().plantsDAO.addBox(boxesCompanion);
         }
@@ -327,7 +359,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       PlantsCompanion plantsCompanion = plants[i];
       Plant? exists;
       try {
-        exists = await RelDB.get().plantsDAO.getPlantForServerID(plantsCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .plantsDAO
+            .getPlantForServerID(plantsCompanion.serverID.value!);
       } catch (e) {}
       if (plantsCompanion is DeletedPlantsCompanion) {
         if (exists != null) {
@@ -335,7 +369,9 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().plantsDAO.updatePlant(plantsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get()
+              .plantsDAO
+              .updatePlant(plantsCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().plantsDAO.addPlant(plantsCompanion);
         }
@@ -345,16 +381,20 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncInTimelapses() async {
-    List<TimelapsesCompanion> timelapses = await BackendAPI().feedsAPI.unsyncedTimelapses();
+    List<TimelapsesCompanion> timelapses =
+        await BackendAPI().feedsAPI.unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${timelapses.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'timelapse: ${i + 1}/${timelapses.length}'));
       TimelapsesCompanion timelapsesCompanion = timelapses[i];
       Timelapse? exists;
       try {
-        exists = await RelDB.get().plantsDAO.getTimelapseForServerID(timelapsesCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .plantsDAO
+            .getTimelapseForServerID(timelapsesCompanion.serverID.value!);
       } catch (e) {}
       if (timelapsesCompanion is DeletedTimelapsesCompanion) {
         if (exists != null) {
@@ -362,27 +402,32 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().plantsDAO.updateTimelapse(
+              timelapsesCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
         }
       }
-      await UserEndHelper.setSynced("timelapse", timelapsesCompanion.serverID.value!);
+      await UserEndHelper.setSynced(
+          "timelapse", timelapsesCompanion.serverID.value!);
     }
   }
 
   Future _syncInChecklistSeeds() async {
-    List<ChecklistSeedsCompanion> checklistSeeds = await BackendAPI().checklistAPI.unsyncedChecklistSeeds();
+    List<ChecklistSeedsCompanion> checklistSeeds =
+        await BackendAPI().checklistAPI.unsyncedChecklistSeeds();
     for (int i = 0; i < checklistSeeds.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'checklist seed: ${i + 1}/${checklistSeeds.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'checklist seed: ${i + 1}/${checklistSeeds.length}'));
       ChecklistSeedsCompanion checklistSeedsCompanion = checklistSeeds[i];
       ChecklistSeed? exists;
       try {
         exists = await RelDB.get().checklistsDAO.getChecklistSeedForServerIDs(
-            checklistSeedsCompanion.serverID.value!, checklistSeedsCompanion.checklistServerID.value!);
+            checklistSeedsCompanion.serverID.value!,
+            checklistSeedsCompanion.checklistServerID.value!);
       } catch (e) {}
       if (checklistSeedsCompanion is DeletedChecklistSeedsCompanion) {
         if (exists != null) {
@@ -390,44 +435,62 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (checklistSeedsCompanion.checklistCollectionServerID.value != null) {
-          Checklist checklist =
-              await RelDB.get().checklistsDAO.getChecklistForServerID(checklistSeedsCompanion.checklistServerID.value!);
+          Checklist checklist = await RelDB.get()
+              .checklistsDAO
+              .getChecklistForServerID(
+                  checklistSeedsCompanion.checklistServerID.value!);
           try {
             // If exists.
-            ChecklistCollection collection = await RelDB.get().checklistsDAO.getChecklistCollectionForServerID(
-                checklist, checklistSeedsCompanion.checklistCollectionServerID.value!);
-            checklistSeedsCompanion = checklistSeedsCompanion.copyWith(collection: Value(collection.id));
+            ChecklistCollection collection = await RelDB.get()
+                .checklistsDAO
+                .getChecklistCollectionForServerID(checklist,
+                    checklistSeedsCompanion.checklistCollectionServerID.value!);
+            checklistSeedsCompanion = checklistSeedsCompanion.copyWith(
+                collection: Value(collection.id));
           } catch (e) {
             ChecklistCollectionsCompanion collection = await BackendAPI()
                 .checklistAPI
-                .getChecklistCollection(checklistSeedsCompanion.checklistCollectionServerID.value!);
+                .getChecklistCollection(
+                    checklistSeedsCompanion.checklistCollectionServerID.value!);
             collection = collection.copyWith(checklist: Value(checklist.id));
-            int id = await RelDB.get().checklistsDAO.addChecklistCollection(collection);
-            checklistSeedsCompanion = checklistSeedsCompanion.copyWith(collection: Value(id));
+            int id = await RelDB.get()
+                .checklistsDAO
+                .addChecklistCollection(collection);
+            checklistSeedsCompanion =
+                checklistSeedsCompanion.copyWith(collection: Value(id));
           }
         }
         if (exists != null) {
-          await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().checklistsDAO.updateChecklistSeed(
+              checklistSeedsCompanion.copyWith(id: Value(exists.id)));
         } else {
-          int id = await RelDB.get().checklistsDAO.addChecklistSeed(checklistSeedsCompanion);
-          checklistSeedsCompanion = checklistSeedsCompanion.copyWith(id: Value(id));
+          int id = await RelDB.get()
+              .checklistsDAO
+              .addChecklistSeed(checklistSeedsCompanion);
+          checklistSeedsCompanion =
+              checklistSeedsCompanion.copyWith(id: Value(id));
         }
       }
-      await UserEndHelper.setSynced("checklistseed", checklistSeedsCompanion.serverID.value!);
+      await UserEndHelper.setSynced(
+          "checklistseed", checklistSeedsCompanion.serverID.value!);
     }
   }
 
   Future _syncInChecklists() async {
-    List<ChecklistsCompanion> checklists = await BackendAPI().checklistAPI.unsyncedChecklists();
+    List<ChecklistsCompanion> checklists =
+        await BackendAPI().checklistAPI.unsyncedChecklists();
     for (int i = 0; i < checklists.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'checklist: ${i + 1}/${checklists.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'checklist: ${i + 1}/${checklists.length}'));
       ChecklistsCompanion checklistsCompanion = checklists[i];
       Checklist? exists;
       try {
-        exists = await RelDB.get().checklistsDAO.getChecklistForServerID(checklistsCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .checklistsDAO
+            .getChecklistForServerID(checklistsCompanion.serverID.value!);
       } catch (e) {}
       if (checklistsCompanion is DeletedChecklistsCompanion) {
         if (exists != null) {
@@ -435,26 +498,32 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().checklistsDAO.updateChecklist(checklistsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().checklistsDAO.updateChecklist(
+              checklistsCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().checklistsDAO.addChecklist(checklistsCompanion);
         }
       }
-      await UserEndHelper.setSynced("checklist", checklistsCompanion.serverID.value!);
+      await UserEndHelper.setSynced(
+          "checklist", checklistsCompanion.serverID.value!);
     }
   }
 
   Future _syncInChecklistLogs() async {
-    List<ChecklistLogsCompanion> checklistLogs = await BackendAPI().checklistAPI.unsyncedChecklistLog();
+    List<ChecklistLogsCompanion> checklistLogs =
+        await BackendAPI().checklistAPI.unsyncedChecklistLog();
     for (int i = 0; i < checklistLogs.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'checklist log: ${i + 1}/${checklistLogs.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'checklist log: ${i + 1}/${checklistLogs.length}'));
       ChecklistLogsCompanion checklistLogsCompanion = checklistLogs[i];
       ChecklistLog? exists;
       try {
-        exists = await RelDB.get().checklistsDAO.getChecklistLogForServerID(checklistLogsCompanion.serverID.value!);
+        exists = await RelDB.get()
+            .checklistsDAO
+            .getChecklistLogForServerID(checklistLogsCompanion.serverID.value!);
       } catch (e) {}
       if (checklistLogsCompanion is DeletedChecklistLogsCompanion) {
         if (exists != null) {
@@ -462,12 +531,16 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         }
       } else {
         if (exists != null) {
-          await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().checklistsDAO.updateChecklistLog(
+              checklistLogsCompanion.copyWith(id: Value(exists.id)));
         } else {
-          await RelDB.get().checklistsDAO.addChecklistLog(checklistLogsCompanion);
+          await RelDB.get()
+              .checklistsDAO
+              .addChecklistLog(checklistLogsCompanion);
         }
       }
-      await UserEndHelper.setSynced("checklistlog", checklistLogsCompanion.serverID.value!);
+      await UserEndHelper.setSynced(
+          "checklistlog", checklistLogsCompanion.serverID.value!);
     }
   }
 
@@ -515,7 +588,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeedEntries() async {
-    List<FeedEntry> feedEntries = await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
+    List<FeedEntry> feedEntries =
+        await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -527,7 +601,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutOrphanedFeedMedias() async {
-    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getOrphanedFeedMedias();
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getOrphanedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -538,7 +613,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeedMedias(int feedEntryID) async {
-    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -582,7 +658,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutTimelapses() async {
-    List<Timelapse> timelapses = await RelDB.get().plantsDAO.getUnsyncedTimelapses();
+    List<Timelapse> timelapses =
+        await RelDB.get().plantsDAO.getUnsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -593,7 +670,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutChecklistSeeds() async {
-    List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getUnsyncedChecklistSeeds();
+    List<ChecklistSeed> checklistSeeds =
+        await RelDB.get().checklistsDAO.getUnsyncedChecklistSeeds();
     for (int i = 0; i < checklistSeeds.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -604,26 +682,30 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutChecklists() async {
-    List<Checklist> checklists = await RelDB.get().checklistsDAO.getUnsyncedChecklists();
+    List<Checklist> checklists =
+        await RelDB.get().checklistsDAO.getUnsyncedChecklists();
     for (int i = 0; i < checklists.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
       Checklist checklist = checklists[i];
-      String? serverID = await BackendAPI().checklistAPI.syncChecklist(checklist);
+      String? serverID =
+          await BackendAPI().checklistAPI.syncChecklist(checklist);
       if (serverID != null) {
-        List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(checklist.id);
+        List<ChecklistSeed> checklistSeeds =
+            await RelDB.get().checklistsDAO.getChecklistSeeds(checklist.id);
         for (int j = 0; j < checklistSeeds.length; ++j) {
-          await RelDB.get()
-              .checklistsDAO
-              .updateChecklistSeed(checklistSeeds[j].copyWith(checklistServerID: Value(serverID)).toCompanion(false));
+          await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeeds[j]
+              .copyWith(checklistServerID: Value(serverID))
+              .toCompanion(false));
         }
       }
     }
   }
 
   Future _syncOutChecklistLogs() async {
-    List<ChecklistLog> checklistLogs = await RelDB.get().checklistsDAO.getUnsyncedChecklistLogs();
+    List<ChecklistLog> checklistLogs =
+        await RelDB.get().checklistsDAO.getUnsyncedChecklistLogs();
     for (int i = 0; i < checklistLogs.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';

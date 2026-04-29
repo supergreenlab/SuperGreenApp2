@@ -32,7 +32,8 @@ class TowelieButtonPlantSeedPhase extends TowelieButtonPlantPhase {
   @override
   String get id => _seedID;
 
-  static Map<String, dynamic> createButton() => TowelieButton.createButton(_seedID, {
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_seedID, {
         'title': 'Seed',
       });
 
@@ -49,7 +50,8 @@ class TowelieButtonPlantCloningPhase extends TowelieButtonPlantPhase {
   @override
   String get id => _cloningID;
 
-  static Map<String, dynamic> createButton() => TowelieButton.createButton(_cloningID, {
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_cloningID, {
         'title': 'Clone',
       });
 
@@ -62,7 +64,8 @@ class TowelieButtonPlantSeedlingPhase extends TowelieButtonPlantPhase {
   @override
   String get id => _seedlingID;
 
-  static Map<String, dynamic> createButton() => TowelieButton.createButton(_seedlingID, {
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_seedlingID, {
         'title': 'Seedling',
       });
 
@@ -75,7 +78,8 @@ class TowelieButtonPlantVegPhase extends TowelieButtonPlantPhase {
   @override
   String get id => _vegID;
 
-  static Map<String, dynamic> createButton() => TowelieButton.createButton(_vegID, {
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_vegID, {
         'title': 'Veg',
       });
 
@@ -88,7 +92,8 @@ class TowelieButtonPlantBloomPhase extends TowelieButtonPlantPhase {
   @override
   String get id => _bloomID;
 
-  static Map<String, dynamic> createButton() => TowelieButton.createButton(_bloomID, {
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_bloomID, {
         'title': 'Bloom',
       });
 
@@ -102,14 +107,16 @@ abstract class TowelieButtonPlantPhase extends TowelieButton {
   TowelieButtonPlantPhase(this.phase, this.schedule);
 
   @override
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
     final db = RelDB.get();
     Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed);
     Box box = await db.plantsDAO.getBox(plant.box);
     PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
 
     if (phase != null) {
-      yield TowelieBlocStateMainNavigation(MainNavigateToFeedLifeEventFormEvent(plant, phase!));
+      yield TowelieBlocStateMainNavigation(
+          MainNavigateToFeedLifeEventFormEvent(plant, phase!));
     }
 
     BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
@@ -123,7 +130,8 @@ abstract class TowelieButtonPlantPhase extends TowelieButton {
     ));
 
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
-    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await createNextCard(feed);
     await selectButtons(feedEntry, selectedButtonID: id);
   }

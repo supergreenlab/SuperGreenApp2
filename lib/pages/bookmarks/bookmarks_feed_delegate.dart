@@ -36,11 +36,13 @@ class BookmarksFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   FeedEntryState postProcess(FeedEntryState state) {
     return state.copyWith(
-        shareLink: 'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
+        shareLink:
+            'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
+  Future<List<FeedEntryState>> loadEntries(
+      int n, int offset, List<String>? filters) async {
     List<dynamic> entriesMap = await BackendAPI().feedsAPI.fetchBookmarks();
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;

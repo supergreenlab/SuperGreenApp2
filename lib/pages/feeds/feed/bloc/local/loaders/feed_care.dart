@@ -37,41 +37,55 @@ class FeedCareLoader extends LocalFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<FeedMedia> medias = await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
+    List<FeedMedia> medias =
+        await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
     List<MediaState> beforeMedias = medias
         .where((m) {
           final Map<String, dynamic> params = JsonDecoder().convert(m.params);
           return params['before'];
         })
-        .map<MediaState>((m) => MediaState(m.id, FeedMedias.makeAbsoluteFilePath(m.filePath),
-            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath), JsonDecoder().convert(m.params), m.synced))
+        .map<MediaState>((m) => MediaState(
+            m.id,
+            FeedMedias.makeAbsoluteFilePath(m.filePath),
+            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            JsonDecoder().convert(m.params),
+            m.synced))
         .toList();
     List<MediaState> afterMedias = medias
         .where((m) {
           final Map<String, dynamic> params = JsonDecoder().convert(m.params);
           return !params['before'];
         })
-        .map<MediaState>((m) => MediaState(m.id, FeedMedias.makeAbsoluteFilePath(m.filePath),
-            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath), JsonDecoder().convert(m.params), m.synced))
+        .map<MediaState>((m) => MediaState(
+            m.id,
+            FeedMedias.makeAbsoluteFilePath(m.filePath),
+            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            JsonDecoder().convert(m.params),
+            m.synced))
         .toList();
 
-    state = FeedCareCommonState(state, beforeMedias: beforeMedias, afterMedias: afterMedias);
+    state = FeedCareCommonState(state,
+        beforeMedias: beforeMedias, afterMedias: afterMedias);
     this.loadSocialState(state);
     return super.load(state);
   }
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {
-    await FeedEntryHelper.updateFeedEntry(
-        FeedEntriesCompanion(id: Value(entry.feedEntryID), params: Value(params.toJSON()), synced: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(entry.feedEntryID),
+        params: Value(params.toJSON()),
+        synced: Value(false)));
   }
 
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
     super.startListenEntryChanges(entry);
     RelDB db = RelDB.get();
-    _streams[entry.feedEntryID] = db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
+    _streams[entry.feedEntryID] =
+        db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
       try {
-        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
         await updateFeedEntryState(feedEntry, forceNew: true);
       } catch (e) {}
     });

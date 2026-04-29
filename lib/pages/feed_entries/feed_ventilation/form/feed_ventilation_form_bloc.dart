@@ -37,20 +37,27 @@ const int TEMP_REF_OFFSET = 0x1;
 const int TIMER_REF_OFFSET = 0x8;
 const int HUMI_REF_OFFSET = 0xf;
 
-bool isTempSource(int source) => source >= TEMP_REF_OFFSET && source < TIMER_REF_OFFSET;
-bool isTimerSource(int source) => source >= TIMER_REF_OFFSET && source < HUMI_REF_OFFSET;
+bool isTempSource(int source) =>
+    source >= TEMP_REF_OFFSET && source < TIMER_REF_OFFSET;
+bool isTimerSource(int source) =>
+    source >= TIMER_REF_OFFSET && source < HUMI_REF_OFFSET;
 bool isHumiSource(int source) => source >= HUMI_REF_OFFSET;
 
 abstract class FeedVentilationParamsController extends ParamsController {
-  FeedVentilationParamsController({required Map<String, ParamController> params}) : super(params: params);
+  FeedVentilationParamsController(
+      {required Map<String, ParamController> params})
+      : super(params: params);
 
-  FeedVentilationParamsController copyWith({Map<String, ParamController>? params});
+  FeedVentilationParamsController copyWith(
+      {Map<String, ParamController>? params});
 
   FeedVentilationParams toCardParams();
 }
 
-abstract class VentilationParamsController extends FeedVentilationParamsController {
-  VentilationParamsController({required Map<String, ParamController>? params}) : super(params: params ?? {});
+abstract class VentilationParamsController
+    extends FeedVentilationParamsController {
+  VentilationParamsController({required Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get min;
   ParamController get max;
@@ -60,7 +67,8 @@ abstract class VentilationParamsController extends FeedVentilationParamsControll
 }
 
 class FanParamsController extends VentilationParamsController {
-  FanParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+  FanParamsController({Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get min => params['min']!;
   ParamController get max => params['max']!;
@@ -78,7 +86,8 @@ class FanParamsController extends VentilationParamsController {
     return c;
   }
 
-  FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
+  FeedVentilationParamsController copyWith(
+          {Map<String, ParamController>? params}) =>
       FanParamsController(params: params ?? this.params);
 
   @override
@@ -102,7 +111,8 @@ class FanParamsController extends VentilationParamsController {
 }
 
 class BlowerParamsController extends VentilationParamsController {
-  BlowerParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+  BlowerParamsController({Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get min => params['min']!;
   ParamController get max => params['max']!;
@@ -120,7 +130,8 @@ class BlowerParamsController extends VentilationParamsController {
     return c;
   }
 
-  FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
+  FeedVentilationParamsController copyWith(
+          {Map<String, ParamController>? params}) =>
       BlowerParamsController(params: params ?? this.params);
 
   @override
@@ -144,19 +155,22 @@ class BlowerParamsController extends VentilationParamsController {
 }
 
 class LegacyBlowerParamsController extends FeedVentilationParamsController {
-  LegacyBlowerParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+  LegacyBlowerParamsController({Map<String, ParamController>? params})
+      : super(params: params ?? {});
 
   ParamController get blowerDay => params['blowerDay']!;
   ParamController get blowerNight => params['blowerNight']!;
 
-  static Future<LegacyBlowerParamsController> load(Device device, Box box) async {
+  static Future<LegacyBlowerParamsController> load(
+      Device device, Box box) async {
     LegacyBlowerParamsController c = LegacyBlowerParamsController();
     await c.loadBoxParam(device, box, 'BLOWER_DAY', 'blowerDay');
     await c.loadBoxParam(device, box, 'BLOWER_NIGHT', 'blowerNight');
     return c;
   }
 
-  FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
+  FeedVentilationParamsController copyWith(
+          {Map<String, ParamController>? params}) =>
       LegacyBlowerParamsController(params: params ?? this.params);
 
   @override
@@ -198,7 +212,8 @@ class FeedVentilationFormBlocEventCreate extends FeedVentilationFormBlocEvent {
   List<Object> get props => [];
 }
 
-class FeedVentilationFormBlocParamsChangedEvent extends FeedVentilationFormBlocEvent {
+class FeedVentilationFormBlocParamsChangedEvent
+    extends FeedVentilationFormBlocEvent {
   final FeedVentilationParamsController paramsController;
 
   FeedVentilationFormBlocParamsChangedEvent({
@@ -209,7 +224,8 @@ class FeedVentilationFormBlocParamsChangedEvent extends FeedVentilationFormBlocE
   List<Object?> get props => [paramsController];
 }
 
-class FeedVentilationFormBlocEventCancelEvent extends FeedVentilationFormBlocEvent {
+class FeedVentilationFormBlocEventCancelEvent
+    extends FeedVentilationFormBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -223,7 +239,8 @@ class FeedVentilationFormBlocFanModeEvent extends FeedVentilationFormBlocEvent {
   List<Object> get props => [savePrevious];
 }
 
-class FeedVentilationFormBlocBlowerModeEvent extends FeedVentilationFormBlocEvent {
+class FeedVentilationFormBlocBlowerModeEvent
+    extends FeedVentilationFormBlocEvent {
   final bool savePrevious;
 
   FeedVentilationFormBlocBlowerModeEvent(this.savePrevious);
@@ -239,7 +256,8 @@ class FeedVentilationFormBlocStateInit extends FeedVentilationFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedVentilationFormBlocStateNoDevice extends FeedVentilationFormBlocState {
+class FeedVentilationFormBlocStateNoDevice
+    extends FeedVentilationFormBlocState {
   @override
   List<Object> get props => [];
 }
@@ -294,7 +312,8 @@ class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
       ];
 }
 
-class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
+class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent,
+    FeedVentilationFormBlocState> {
   final MainNavigateToFeedVentilationFormEvent args;
 
   late Device device;
@@ -308,19 +327,23 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   late FeedVentilationParamsController paramsController;
   late List<StreamSubscription<Param>> paramsControllerListeners;
 
-  FeedVentilationFormBloc(this.args) : super(FeedVentilationFormBlocStateInit()) {
+  FeedVentilationFormBloc(this.args)
+      : super(FeedVentilationFormBlocStateInit()) {
     add(FeedVentilationFormBlocEventInit());
   }
 
   @override
-  Stream<FeedVentilationFormBlocState> mapEventToState(FeedVentilationFormBlocEvent event) async* {
+  Stream<FeedVentilationFormBlocState> mapEventToState(
+      FeedVentilationFormBlocEvent event) async* {
     if (event is FeedVentilationFormBlocEventInit) {
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(args.box.id);
       device = await db.devicesDAO.getDevice(box.device!);
 
-      temperature = await DeviceHelper.loadBoxParam(device, box, 'TEMP', asyncRefresh: true);
-      humidity = await DeviceHelper.loadBoxParam(device, box, 'HUMI', asyncRefresh: true);
+      temperature = await DeviceHelper.loadBoxParam(device, box, 'TEMP',
+          asyncRefresh: true);
+      humidity = await DeviceHelper.loadBoxParam(device, box, 'HUMI',
+          asyncRefresh: true);
 
       paramsController = await LegacyBlowerParamsController.load(device, box);
       if (!paramsController.isAvailable()) {
@@ -328,9 +351,16 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       }
       paramsController.refreshParams(device); // no await
       yield loadedState();
-      paramsControllerListeners = paramsController.listenParams(device, onParamsChange);
-      temperatureListener = RelDB.get().devicesDAO.watchParam(device.id, temperature.key).listen(onTemperatureChange);
-      humidityListener = RelDB.get().devicesDAO.watchParam(device.id, humidity.key).listen(onHumidityChange);
+      paramsControllerListeners =
+          paramsController.listenParams(device, onParamsChange);
+      temperatureListener = RelDB.get()
+          .devicesDAO
+          .watchParam(device.id, temperature.key)
+          .listen(onTemperatureChange);
+      humidityListener = RelDB.get()
+          .devicesDAO
+          .watchParam(device.id, humidity.key)
+          .listen(onHumidityChange);
     } else if (event is FeedVentilationFormBlocParamsChangedEvent) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
@@ -384,11 +414,13 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   }
 
   Future<void> syncParams() async {
-    paramsController = await paramsController.syncParams(device) as FeedVentilationParamsController;
+    paramsController = await paramsController.syncParams(device)
+        as FeedVentilationParamsController;
   }
 
   Future<void> cancelParams() async {
-    paramsController = await paramsController.cancelParams(device) as FeedVentilationParamsController;
+    paramsController = await paramsController.cancelParams(device)
+        as FeedVentilationParamsController;
   }
 
   void onTemperatureChange(Param temperature) {
@@ -412,7 +444,8 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     this.add(FeedVentilationFormBlocEventUpdate());
   }
 
-  Stream<FeedVentilationFormBlocState> saveParamsController({bool sendDone = false}) async* {
+  Stream<FeedVentilationFormBlocState> saveParamsController(
+      {bool sendDone = false}) async* {
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(args.box.id);
     if (box.device == null) {
@@ -423,10 +456,12 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     FeedEntry? feedEntry;
     for (int i = 0; i < plants.length; ++i) {
       PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
-      if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
+      if (plantSettings.dryingStart != null ||
+          plantSettings.curingStart != null) {
         continue;
       }
-      int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID =
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',
         feed: plants[i].feed,
         date: DateTime.now(),
@@ -449,7 +484,8 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     return super.close();
   }
 
-  FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
+  FeedVentilationFormBlocStateLoaded loadedState() =>
+      FeedVentilationFormBlocStateLoaded(
         device: device,
         box: box,
         temperature: temperature,

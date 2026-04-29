@@ -25,7 +25,8 @@ class MediaState extends Equatable {
   final Map<String, dynamic> params;
   final bool synced;
 
-  MediaState(this.id, this.filePath, this.thumbnailPath, this.params, this.synced);
+  MediaState(
+      this.id, this.filePath, this.thumbnailPath, this.params, this.synced);
 
   @override
   List<Object> get props => [id, filePath, thumbnailPath, params, synced];

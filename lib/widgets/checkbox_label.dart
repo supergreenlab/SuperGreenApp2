@@ -22,9 +22,14 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 class CheckboxLabel extends StatelessWidget {
   final void Function(bool?) onChanged;
   final bool value;
-  final  String text;
+  final String text;
 
-  const CheckboxLabel({Key? key, required this.onChanged, required this.value, required this.text}) : super(key: key);
+  const CheckboxLabel(
+      {Key? key,
+      required this.onChanged,
+      required this.value,
+      required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,8 @@ class CheckboxLabel extends StatelessWidget {
                 fitContent: true,
                 shrinkWrap: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
               ),
             ),
           ),
@@ -64,5 +70,4 @@ class CheckboxLabel extends StatelessWidget {
       ),
     );
   }
-
 }

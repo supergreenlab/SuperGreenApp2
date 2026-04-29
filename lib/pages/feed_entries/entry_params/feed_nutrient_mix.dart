@@ -56,7 +56,9 @@ class NutrientProduct extends Equatable {
 
   NutrientProduct copyWith({Product? product, double? quantity, String? unit}) {
     return NutrientProduct(
-        product: product ?? this.product, quantity: quantity ?? this.quantity, unit: unit ?? this.unit);
+        product: product ?? this.product,
+        quantity: quantity ?? this.quantity,
+        unit: unit ?? this.unit);
   }
 }
 
@@ -83,16 +85,17 @@ class FeedNutrientMixParams extends FeedEntryParams {
     required this.basedOn,
   });
 
-  FeedNutrientMixParams copyWith({String? name, String? message}) => FeedNutrientMixParams(
-      name: name ?? this.name,
-      volume: this.volume,
-      ph: this.ph,
-      ec: this.ec,
-      tds: this.tds,
-      nutrientProducts: this.nutrientProducts,
-      message: message ?? this.message,
-      phase: this.phase,
-      basedOn: this.basedOn);
+  FeedNutrientMixParams copyWith({String? name, String? message}) =>
+      FeedNutrientMixParams(
+          name: name ?? this.name,
+          volume: this.volume,
+          ph: this.ph,
+          ec: this.ec,
+          tds: this.tds,
+          nutrientProducts: this.nutrientProducts,
+          message: message ?? this.message,
+          phase: this.phase,
+          basedOn: this.basedOn);
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -103,9 +106,13 @@ class FeedNutrientMixParams extends FeedEntryParams {
       ph: map['ph'],
       ec: map['ec'],
       tds: map['tds'],
-      nutrientProducts: (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
+      nutrientProducts:
+          (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
       message: map['message'],
-      phase: map['phase'] == null ? null : EnumToString.fromString(NutrientMixPhase.values, map['phase'] as String),
+      phase: map['phase'] == null
+          ? null
+          : EnumToString.fromString(
+              NutrientMixPhase.values, map['phase'] as String),
       basedOn: map['basedOn'],
     );
   }
@@ -120,11 +127,13 @@ class FeedNutrientMixParams extends FeedEntryParams {
       'tds': tds,
       'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList(),
       'message': message,
-      'phase': this.phase == null ? null : EnumToString.convertToString(this.phase),
+      'phase':
+          this.phase == null ? null : EnumToString.convertToString(this.phase),
       'basedOn': basedOn,
     });
   }
 
   @override
-  List<Object?> get props => [name, volume, ph, ec, tds, nutrientProducts, message];
+  List<Object?> get props =>
+      [name, volume, ph, ec, tds, nutrientProducts, message];
 }

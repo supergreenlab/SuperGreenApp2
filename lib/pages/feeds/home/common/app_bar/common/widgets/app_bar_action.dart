@@ -102,7 +102,10 @@ class AppBarAction extends StatelessWidget {
     );
 
     if (this.disabled) {
-      body = Opacity(opacity: 0.5, child: body,);
+      body = Opacity(
+        opacity: 0.5,
+        child: body,
+      );
     }
 
     if (onCheck != null && onSkip != null) {
@@ -159,7 +162,10 @@ class AppBarAction extends StatelessWidget {
                   color: Colors.white,
                 ),
                 child: this.iconWidget ??
-                    SvgPicture.asset(this.icon!, width: iconSize, height: iconSize, fit: BoxFit.contain)),
+                    SvgPicture.asset(this.icon!,
+                        width: iconSize,
+                        height: iconSize,
+                        fit: BoxFit.contain)),
           ),
         ],
       ),
@@ -167,7 +173,9 @@ class AppBarAction extends StatelessWidget {
   }
 
   Widget renderBody(BuildContext context) {
-    Widget top = AutoSizeText(title, maxLines: 1, style: TextStyle(color: color, fontWeight: FontWeight.bold));
+    Widget top = AutoSizeText(title,
+        maxLines: 1,
+        style: TextStyle(color: color, fontWeight: FontWeight.bold));
     if (titleIcon != null) {
       top = Row(children: [top, titleIcon!]);
     }
@@ -180,7 +188,8 @@ class AppBarAction extends StatelessWidget {
           top,
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
+            crossAxisAlignment:
+                center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
             children: [
               content ?? Container(),
             ],
@@ -202,17 +211,25 @@ class AppBarAction extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
               ),
-              child: addIcon ? Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  actionIcon!,
-                  Positioned(
-                    right: -5,
-                    bottom: -10,
-                    child: Text('+', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 93, 96, 147)),),
-                  ),
-                ],
-              ) : actionIcon!),
+              child: addIcon
+                  ? Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        actionIcon!,
+                        Positioned(
+                          right: -5,
+                          bottom: -10,
+                          child: Text(
+                            '+',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 93, 96, 147)),
+                          ),
+                        ),
+                      ],
+                    )
+                  : actionIcon!),
         ),
       ],
     );

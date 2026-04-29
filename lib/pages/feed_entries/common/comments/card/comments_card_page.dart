@@ -29,13 +29,16 @@ class CommentsCardPage extends StatefulWidget {
   final FeedEntryState state;
   final FeedState feedState;
 
-  const CommentsCardPage({Key? key, required this.state, required this.feedState}) : super(key: key);
+  const CommentsCardPage(
+      {Key? key, required this.state, required this.feedState})
+      : super(key: key);
 
   @override
   _CommentsCardPageState createState() => _CommentsCardPageState();
 }
 
-class _CommentsCardPageState extends State<CommentsCardPage> with TickerProviderStateMixin {
+class _CommentsCardPageState extends State<CommentsCardPage>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (widget.state.socialState is FeedEntrySocialStateNotLoaded) {
@@ -44,10 +47,12 @@ class _CommentsCardPageState extends State<CommentsCardPage> with TickerProvider
     return AnimatedSizeAndFade(
         fadeDuration: Duration(milliseconds: 200),
         sizeDuration: Duration(milliseconds: 200),
-        child: renderLoaded(context, widget.state.socialState as FeedEntrySocialStateLoaded));
+        child: renderLoaded(
+            context, widget.state.socialState as FeedEntrySocialStateLoaded));
   }
 
-  Widget renderLoaded(BuildContext context, FeedEntrySocialStateLoaded socialState) {
+  Widget renderLoaded(
+      BuildContext context, FeedEntrySocialStateLoaded socialState) {
     List<Widget> content = [];
     if (socialState.comments?.length == 2) {
       content.add(SmallCommentView(
@@ -74,8 +79,9 @@ class _CommentsCardPageState extends State<CommentsCardPage> with TickerProvider
     }
     return InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToCommentFormEvent(false, widget.state as FeedEntryStateLoaded));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToCommentFormEvent(
+                  false, widget.state as FeedEntryStateLoaded));
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),

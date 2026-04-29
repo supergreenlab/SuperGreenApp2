@@ -81,7 +81,8 @@ class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedMeasureFormBloc extends LegacyBloc<FeedMeasureFormBlocEvent, FeedMeasureFormBlocState> {
+class FeedMeasureFormBloc
+    extends LegacyBloc<FeedMeasureFormBlocEvent, FeedMeasureFormBlocState> {
   final MainNavigateToFeedMeasureFormEvent args;
 
   FeedMeasureFormBloc(this.args) : super(FeedMeasureFormBlocStateInit()) {
@@ -89,30 +90,36 @@ class FeedMeasureFormBloc extends LegacyBloc<FeedMeasureFormBlocEvent, FeedMeasu
   }
 
   @override
-  Stream<FeedMeasureFormBlocState> mapEventToState(FeedMeasureFormBlocEvent event) async* {
+  Stream<FeedMeasureFormBlocState> mapEventToState(
+      FeedMeasureFormBlocEvent event) async* {
     if (event is FeedMeasureFormBlocEventInit) {
       final db = RelDB.get();
-      List<FeedMedia> measures = await db.feedsDAO.getFeedMediasWithType('FE_MEASURE', feedID: args.plant.feed);
+      List<FeedMedia> measures = await db.feedsDAO
+          .getFeedMediasWithType('FE_MEASURE', feedID: args.plant.feed);
       yield FeedMeasureFormBlocStateLoaded(measures);
     } else if (event is FeedMeasureFormBlocEventCreate) {
       yield FeedMeasureFormBlocStateLoading();
       final db = RelDB.get();
       FeedEntry? previousEntry;
       if (event.previous != null) {
-        previousEntry = await RelDB.get().feedsDAO.getFeedEntry(event.previous!.feedEntry);
+        previousEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(event.previous!.feedEntry);
       }
-      int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID =
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEASURE',
         feed: args.plant.feed,
         date: DateTime.now(),
         params: Value(FeedMeasureParams(
                 event.message,
-                event.previous != null ? DateTime.now().difference(previousEntry!.date).inSeconds : null,
+                event.previous != null
+                    ? DateTime.now().difference(previousEntry!.date).inSeconds
+                    : null,
                 event.previous != null ? event.previous!.id : null)
             .toJSON()),
       ));
-      await db.feedsDAO
-          .addFeedMedia(event.current!.copyWith(feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
+      await db.feedsDAO.addFeedMedia(event.current!.copyWith(
+          feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
       yield FeedMeasureFormBlocStateDone(args.plant, feedEntry);
     }

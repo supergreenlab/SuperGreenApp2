@@ -49,7 +49,8 @@ class SelectNewProductBlocEventCreateProduct extends SelectNewProductBlocEvent {
   List<Object> get props => [product];
 }
 
-class SelectNewProductBlocEventCreateProductSuppliers extends SelectNewProductBlocEvent {
+class SelectNewProductBlocEventCreateProductSuppliers
+    extends SelectNewProductBlocEvent {
   final List<Product> products;
 
   SelectNewProductBlocEventCreateProductSuppliers(this.products);
@@ -65,7 +66,8 @@ class SelectNewProductBlocStateInit extends SelectNewProductBlocState {
   List<Object> get props => [];
 }
 
-class SelectNewProductBlocStateSelectedProducts extends SelectNewProductBlocState {
+class SelectNewProductBlocStateSelectedProducts
+    extends SelectNewProductBlocState {
   final List<Product> selectedProducts;
 
   SelectNewProductBlocStateSelectedProducts(this.selectedProducts);
@@ -88,17 +90,20 @@ class SelectNewProductBlocStateLoaded extends SelectNewProductBlocState {
   List<Object> get props => [products];
 }
 
-class SelectNewProductBlocStateCreatingProduct extends SelectNewProductBlocState {
+class SelectNewProductBlocStateCreatingProduct
+    extends SelectNewProductBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SelectNewProductBlocStateCreatingProductSuppliers extends SelectNewProductBlocState {
+class SelectNewProductBlocStateCreatingProductSuppliers
+    extends SelectNewProductBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SelectNewProductBlocStateCreateProductDone extends SelectNewProductBlocState {
+class SelectNewProductBlocStateCreateProductDone
+    extends SelectNewProductBlocState {
   final Product product;
 
   SelectNewProductBlocStateCreateProductDone(this.product);
@@ -116,7 +121,8 @@ class SelectNewProductBlocStateDone extends SelectNewProductBlocState {
   List<Object> get props => [products];
 }
 
-class SelectNewProductBloc extends LegacyBloc<SelectNewProductBlocEvent, SelectNewProductBlocState> {
+class SelectNewProductBloc
+    extends LegacyBloc<SelectNewProductBlocEvent, SelectNewProductBlocState> {
   final MainNavigateToSelectNewProductEvent args;
 
   SelectNewProductBloc(this.args) : super(SelectNewProductBlocStateInit()) {
@@ -124,21 +130,24 @@ class SelectNewProductBloc extends LegacyBloc<SelectNewProductBlocEvent, SelectN
   }
 
   @override
-  Stream<SelectNewProductBlocState> mapEventToState(SelectNewProductBlocEvent event) async* {
+  Stream<SelectNewProductBlocState> mapEventToState(
+      SelectNewProductBlocEvent event) async* {
     if (event is SelectNewProductBlocEventInit) {
       yield SelectNewProductBlocStateSelectedProducts(args.selectedProducts);
     } else if (event is SelectNewProductBlocEventSearchTerms) {
       yield SelectNewProductBlocStateLoading();
       try {
-        List<Product> products =
-            await BackendAPI().productsAPI.searchProducts(event.searchTerms, categoryID: args.categoryID);
+        List<Product> products = await BackendAPI()
+            .productsAPI
+            .searchProducts(event.searchTerms, categoryID: args.categoryID);
         yield SelectNewProductBlocStateLoaded(products);
       } catch (e) {
         yield SelectNewProductBlocStateLoaded([]);
       }
     } else if (event is SelectNewProductBlocEventCreateProduct) {
       yield SelectNewProductBlocStateCreatingProduct();
-      String productID = await BackendAPI().productsAPI.createProduct(event.product);
+      String productID =
+          await BackendAPI().productsAPI.createProduct(event.product);
       Product product = event.product.copyWith(id: productID);
       yield SelectNewProductBlocStateCreateProductDone(product);
     } else if (event is SelectNewProductBlocEventCreateProductSuppliers) {
@@ -146,8 +155,11 @@ class SelectNewProductBloc extends LegacyBloc<SelectNewProductBlocEvent, SelectN
       List<Product> products = [];
       for (Product product in event.products) {
         if (product.supplier != null) {
-          String productSupplierID = await BackendAPI().productsAPI.createProductSupplier(product.supplier!);
-          products.add(product.copyWith(supplier: product.supplier!.copyWith(id: productSupplierID)));
+          String productSupplierID = await BackendAPI()
+              .productsAPI
+              .createProductSupplier(product.supplier!);
+          products.add(product.copyWith(
+              supplier: product.supplier!.copyWith(id: productSupplierID)));
         } else {
           products.add(product);
         }

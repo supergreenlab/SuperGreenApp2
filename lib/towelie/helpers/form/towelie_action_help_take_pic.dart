@@ -37,9 +37,13 @@ class TowelieActionHelpFormTakePic extends TowelieActionHelp {
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    int nPics = await RelDB.get().feedsDAO.getNFeedEntriesWithType('FE_MEDIA').getSingle();
+    int nPics = await RelDB.get()
+        .feedsDAO
+        .getNFeedEntriesWithType('FE_MEDIA')
+        .getSingle();
     if (nPics == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormTakePic.towelieHelperFormTakePic);
+      yield TowelieBlocStateHelper(event.settings,
+          TowelieActionHelpFormTakePic.towelieHelperFormTakePic);
     }
   }
 }

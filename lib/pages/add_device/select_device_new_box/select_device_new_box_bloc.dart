@@ -24,7 +24,8 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SelectDeviceNewBoxBlocEvent extends Equatable {}
 
-class SelectDeviceNewBoxBlocEventInitialize extends SelectDeviceNewBoxBlocEvent {
+class SelectDeviceNewBoxBlocEventInitialize
+    extends SelectDeviceNewBoxBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -38,7 +39,8 @@ class SelectDeviceNewBoxBlocEventSelectLed extends SelectDeviceNewBoxBlocEvent {
   List<Object> get props => [ledID];
 }
 
-class SelectDeviceNewBoxBlocEventUnselectLed extends SelectDeviceNewBoxBlocEvent {
+class SelectDeviceNewBoxBlocEventUnselectLed
+    extends SelectDeviceNewBoxBlocEvent {
   final int ledID;
 
   SelectDeviceNewBoxBlocEventUnselectLed(this.ledID);
@@ -47,7 +49,8 @@ class SelectDeviceNewBoxBlocEventUnselectLed extends SelectDeviceNewBoxBlocEvent
   List<Object> get props => [ledID];
 }
 
-class SelectDeviceNewBoxBlocEventSelectLeds extends SelectDeviceNewBoxBlocEvent {
+class SelectDeviceNewBoxBlocEventSelectLeds
+    extends SelectDeviceNewBoxBlocEvent {
   final List<int> leds;
 
   SelectDeviceNewBoxBlocEventSelectLeds(this.leds);
@@ -69,7 +72,8 @@ class SelectDeviceNewBoxBlocStateLoaded extends SelectDeviceNewBoxBlocState {
   SelectDeviceNewBoxBlocStateLoaded(List<int> leds) : super(leds);
 }
 
-class SelectDeviceNewBoxBlocStateDeviceFull extends SelectDeviceNewBoxBlocState {
+class SelectDeviceNewBoxBlocStateDeviceFull
+    extends SelectDeviceNewBoxBlocState {
   SelectDeviceNewBoxBlocStateDeviceFull(List<int> leds) : super(leds);
 }
 
@@ -84,7 +88,8 @@ class SelectDeviceNewBoxBlocStateDone extends SelectDeviceNewBoxBlocState {
   List<Object> get props => [leds];
 }
 
-class SelectDeviceNewBoxBloc extends LegacyBloc<SelectDeviceNewBoxBlocEvent, SelectDeviceNewBoxBlocState> {
+class SelectDeviceNewBoxBloc extends LegacyBloc<SelectDeviceNewBoxBlocEvent,
+    SelectDeviceNewBoxBlocState> {
   List<int> boxes = [];
   List<int> leds = [];
   final MainNavigateToSelectNewDeviceBoxEvent args;
@@ -94,7 +99,8 @@ class SelectDeviceNewBoxBloc extends LegacyBloc<SelectDeviceNewBoxBlocEvent, Sel
   }
 
   @override
-  Stream<SelectDeviceNewBoxBlocState> mapEventToState(SelectDeviceNewBoxBlocEvent event) async* {
+  Stream<SelectDeviceNewBoxBlocState> mapEventToState(
+      SelectDeviceNewBoxBlocEvent event) async* {
     if (event is SelectDeviceNewBoxBlocEventInitialize) {
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(args.device.id);
@@ -123,25 +129,31 @@ class SelectDeviceNewBoxBloc extends LegacyBloc<SelectDeviceNewBoxBlocEvent, Sel
       yield SelectDeviceNewBoxBlocStateLoaded(leds);
     } else if (event is SelectDeviceNewBoxBlocEventSelectLed) {
       final ddb = RelDB.get().devicesDAO;
-      final ledDuty = await ddb.getParam(args.device.id, 'LED_${event.ledID}_DUTY');
+      final ledDuty =
+          await ddb.getParam(args.device.id, 'LED_${event.ledID}_DUTY');
       await DeviceHelper.updateIntParam(args.device, ledDuty, 20);
-      final ledDim = await ddb.getParam(args.device.id, 'LED_${event.ledID}_DIM');
+      final ledDim =
+          await ddb.getParam(args.device.id, 'LED_${event.ledID}_DIM');
       await DeviceHelper.updateIntParam(args.device, ledDim, 100);
     } else if (event is SelectDeviceNewBoxBlocEventUnselectLed) {
       final ddb = RelDB.get().devicesDAO;
-      final ledDuty = await ddb.getParam(args.device.id, 'LED_${event.ledID}_DUTY');
+      final ledDuty =
+          await ddb.getParam(args.device.id, 'LED_${event.ledID}_DUTY');
       await DeviceHelper.updateIntParam(args.device, ledDuty, 0);
     } else if (event is SelectDeviceNewBoxBlocEventSelectLeds) {
       yield SelectDeviceNewBoxBlocStateLoading(leds);
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(args.device.id);
       for (int i = 0; i < event.leds.length; ++i) {
-        final ledBox = await ddb.getParam(device.id, 'LED_${event.leds[i]}_BOX');
+        final ledBox =
+            await ddb.getParam(device.id, 'LED_${event.leds[i]}_BOX');
         await DeviceHelper.updateIntParam(device, ledBox, args.boxID);
-        final ledDuty = await ddb.getParam(device.id, 'LED_${event.leds[i]}_DUTY');
+        final ledDuty =
+            await ddb.getParam(device.id, 'LED_${event.leds[i]}_DUTY');
         await DeviceHelper.updateIntParam(device, ledDuty, 0);
       }
-      final boxEnabled = await ddb.getParam(device.id, 'BOX_${args.boxID}_ENABLED');
+      final boxEnabled =
+          await ddb.getParam(device.id, 'BOX_${args.boxID}_ENABLED');
       await DeviceHelper.updateIntParam(device, boxEnabled, 1);
       yield SelectDeviceNewBoxBlocStateDone(leds);
     }

@@ -21,13 +21,18 @@ import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistDuration extends StatefulWidget {
-
   final int? duration;
   final String? unit;
   final Function(int? duration, String? unit) onUpdate;
   final bool hideUnit;
 
-  const ChecklistDuration({Key? key, required this.onUpdate, required this.unit, required this.duration, this.hideUnit=false}) : super(key: key);
+  const ChecklistDuration(
+      {Key? key,
+      required this.onUpdate,
+      required this.unit,
+      required this.duration,
+      this.hideUnit = false})
+      : super(key: key);
 
   @override
   State<ChecklistDuration> createState() => _ChecklistDurationState();
@@ -38,7 +43,8 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
 
   @override
   void initState() {
-    _controller.text = widget.duration == null ? '' : widget.duration.toString();
+    _controller.text =
+        widget.duration == null ? '' : widget.duration.toString();
     super.initState();
   }
 
@@ -66,8 +72,8 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
                 }
                 int nv = 0;
                 try {
-                   nv = int.parse(value);
-                } catch(e) {
+                  nv = int.parse(value);
+                } catch (e) {
                   setState(() {
                     _controller.text = '';
                   });
@@ -80,23 +86,25 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
               textEditingController: _controller,
             ),
           ),
-          widget.hideUnit ? Container() : Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: DropdownButton<String>(
-                value: widget.unit,
-                onChanged: (String? value) {
-                  widget.onUpdate(widget.duration, value!);
-                },
-                items: choices.map((c) {
-                  return DropdownMenuItem(
-                    value: c.item1,
-                    child: Text(c.item2),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
+          widget.hideUnit
+              ? Container()
+              : Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: DropdownButton<String>(
+                      value: widget.unit,
+                      onChanged: (String? value) {
+                        widget.onUpdate(widget.duration, value!);
+                      },
+                      items: choices.map((c) {
+                        return DropdownMenuItem(
+                          value: c.item1,
+                          child: Text(c.item2),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
         ],
       ),
     );

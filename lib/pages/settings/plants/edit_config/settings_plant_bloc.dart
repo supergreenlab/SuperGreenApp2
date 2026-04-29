@@ -67,7 +67,8 @@ class SettingsPlantBlocStateError extends SettingsPlantBlocState {
   List<Object> get props => [message];
 }
 
-class SettingsPlantBloc extends LegacyBloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
+class SettingsPlantBloc
+    extends LegacyBloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsPlant args;
   late Plant plant;
@@ -78,11 +79,13 @@ class SettingsPlantBloc extends LegacyBloc<SettingsPlantBlocEvent, SettingsPlant
   }
 
   @override
-  Stream<SettingsPlantBlocState> mapEventToState(SettingsPlantBlocEvent event) async* {
+  Stream<SettingsPlantBlocState> mapEventToState(
+      SettingsPlantBlocEvent event) async* {
     if (event is SettingsPlantBlocEventInit) {
       plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       box = await RelDB.get().plantsDAO.getBox(plant.box);
-      yield SettingsPlantBlocStateLoaded(plant, box, BackendAPI().usersAPI.loggedIn);
+      yield SettingsPlantBlocStateLoaded(
+          plant, box, BackendAPI().usersAPI.loggedIn);
     } else if (event is SettingsPlantBlocEventUpdate) {
       yield SettingsPlantBlocStateLoading();
       await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(

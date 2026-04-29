@@ -39,7 +39,8 @@ class TowelieButtonReminder extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton(String title, NotificationData notificationData, int afterMinutes) =>
+  static Map<String, dynamic> createButton(
+          String title, NotificationData notificationData, int afterMinutes) =>
       TowelieButton.createButton(_id, {
         'title': title,
         'notificationID': notificationData.id,
@@ -50,15 +51,20 @@ class TowelieButtonReminder extends TowelieButton {
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
-    NotificationsBloc.localNotifications.reminderNotification(event.params['notificationID'],
-        event.params['afterMinutes'], NotificationData.fromJSON(event.params['notificationPayload']));
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
+    NotificationsBloc.localNotifications.reminderNotification(
+        event.params['notificationID'],
+        event.params['afterMinutes'],
+        NotificationData.fromJSON(event.params['notificationPayload']));
     NotificationDataReminder notificationData =
-        NotificationDataReminder.fromMap(json.decode(event.params['notificationPayload']));
+        NotificationDataReminder.fromMap(
+            json.decode(event.params['notificationPayload']));
 
     if (event.feedEntry != null) {
       await selectButtons(event.feedEntry,
-          selector: (params) => params['afterMinutes'] == event.params['afterMinutes']);
+          selector: (params) =>
+              params['afterMinutes'] == event.params['afterMinutes']);
     }
 
     if (AppDB().getAppData().jwt == null) {
@@ -67,10 +73,14 @@ class TowelieButtonReminder extends TowelieButton {
 
     Checklist? checklist;
     try {
-      checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(notificationData.plantID);
+      checklist = await RelDB.get()
+          .checklistsDAO
+          .getChecklistForPlant(notificationData.plantID);
     } catch (e) {}
     if (checklist == null) {
-      int checklistID = await RelDB.get().checklistsDAO.addChecklist(ChecklistsCompanion.insert(
+      int checklistID = await RelDB.get()
+          .checklistsDAO
+          .addChecklist(ChecklistsCompanion.insert(
             plant: notificationData.plantID,
             synced: Value(false),
           ));
@@ -98,6 +108,7 @@ class TowelieButtonReminder extends TowelieButton {
       synced: Value(false),
     );
     await RelDB.get().checklistsDAO.addChecklistSeed(reminder);
-    BlocProvider.of<SyncerBloc>(event.context).add(SyncerBlocEventForceSyncChecklists());
+    BlocProvider.of<SyncerBloc>(event.context)
+        .add(SyncerBlocEventForceSyncChecklists());
   }
 }

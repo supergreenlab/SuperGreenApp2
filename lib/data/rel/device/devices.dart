@@ -117,7 +117,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future<Device> getDeviceForServerID(String serverID) {
-    return (select(devices)..where((d) => d.serverID.equals(serverID))).getSingle();
+    return (select(devices)..where((d) => d.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Stream<Device> watchDevice(int id) {
@@ -125,7 +126,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future<Device> getDeviceByIdentifier(String identifier) {
-    return (select(devices)..where((d) => d.identifier.equals(identifier))).getSingle();
+    return (select(devices)..where((d) => d.identifier.equals(identifier)))
+        .getSingle();
   }
 
   Future<List<Device>> getDevices() {
@@ -137,7 +139,9 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Stream<List<Device>> watchDevices({bool? isController, bool? isScreen}) {
-    SimpleSelectStatement<Devices, Device> query = select(devices)..orderBy([(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)]);
+    SimpleSelectStatement<Devices, Device> query = select(devices)
+      ..orderBy(
+          [(t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)]);
     if (isController != null) {
       query = (query..where((tbl) => tbl.isController.equals(isController)));
     }
@@ -148,7 +152,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future updateDevice(DevicesCompanion device) {
-    return (update(devices)..where((tbl) => tbl.id.equals(device.id.value))).write(device);
+    return (update(devices)..where((tbl) => tbl.id.equals(device.id.value)))
+        .write(device);
   }
 
   Future deleteDevice(Device device) {
@@ -160,7 +165,9 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future<Module> getModule(int deviceID, String name) {
-    return (select(modules)..where((m) => m.device.equals(deviceID) & m.name.equals(name))).getSingle();
+    return (select(modules)
+          ..where((m) => m.device.equals(deviceID) & m.name.equals(name)))
+        .getSingle();
   }
 
   Future deleteModules(int deviceID) {
@@ -172,7 +179,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   SimpleSelectStatement<Params, Param> _getParam(int deviceID, String key) {
-    return (select(params)..where((p) => p.device.equals(deviceID) & p.key.equals(key)));
+    return (select(params)
+      ..where((p) => p.device.equals(deviceID) & p.key.equals(key)));
   }
 
   Future<Param> getParam(int deviceID, String key) {

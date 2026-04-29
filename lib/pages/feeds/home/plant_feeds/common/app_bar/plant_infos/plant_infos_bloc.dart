@@ -29,10 +29,12 @@ class PlantInfos extends Equatable {
   final PlantSettings? plantSettings;
   final bool editable;
 
-  PlantInfos(this.name, this.filePath, this.thumbnailPath, this.boxSettings, this.plantSettings, this.editable);
+  PlantInfos(this.name, this.filePath, this.thumbnailPath, this.boxSettings,
+      this.plantSettings, this.editable);
 
   @override
-  List<Object?> get props => [name, filePath, thumbnailPath, boxSettings, plantSettings, editable];
+  List<Object?> get props =>
+      [name, filePath, thumbnailPath, boxSettings, plantSettings, editable];
 
   PlantInfos copyWith({
     String? name,
@@ -103,7 +105,8 @@ class PlantInfosBlocStateLoaded extends PlantInfosBlocState {
   List<Object> get props => [plantInfos];
 }
 
-class PlantInfosBloc extends LegacyBloc<PlantInfosBlocEvent, PlantInfosBlocState> {
+class PlantInfosBloc
+    extends LegacyBloc<PlantInfosBlocEvent, PlantInfosBlocState> {
   final PlantInfosBlocDelegate delegate;
 
   PlantInfosBloc(this.delegate) : super(PlantInfosBlocStateLoading()) {
@@ -112,7 +115,8 @@ class PlantInfosBloc extends LegacyBloc<PlantInfosBlocEvent, PlantInfosBlocState
   }
 
   @override
-  Stream<PlantInfosBlocState> mapEventToState(PlantInfosBlocEvent event) async* {
+  Stream<PlantInfosBlocState> mapEventToState(
+      PlantInfosBlocEvent event) async* {
     if (event is PlantInfosEventLoad) {
       delegate.loadPlant();
     } else if (event is PlantInfosEventLoaded) {

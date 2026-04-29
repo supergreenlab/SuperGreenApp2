@@ -33,7 +33,15 @@ class MessageActionPage extends StatefulWidget {
   final bool hideTitle;
   final bool noBorder;
 
-  MessageActionPage({Key? key, this.onClose, required this.action, required this.onUpdate, this.hideTitle=false, this.noBorder=false, this.textHeight=150}) : super(key: key);
+  MessageActionPage(
+      {Key? key,
+      this.onClose,
+      required this.action,
+      required this.onUpdate,
+      this.hideTitle = false,
+      this.noBorder = false,
+      this.textHeight = 150})
+      : super(key: key);
 
   @override
   State<MessageActionPage> createState() => _MessageActionPageState();
@@ -69,9 +77,13 @@ class _MessageActionPageState extends State<MessageActionPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Notification title',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
-          ),
+        Text(
+          'Notification title',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Color(0xff6A6A6A)),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
@@ -90,7 +102,10 @@ class _MessageActionPageState extends State<MessageActionPage> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             'Description',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Color(0xff6A6A6A)),
           ),
         ),
         Padding(
@@ -102,7 +117,8 @@ class _MessageActionPageState extends State<MessageActionPage> {
               noPadding: true,
               textEditingController: _instructionController,
               onChanged: (value) {
-                widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
+                widget.onUpdate(widget.action
+                    .copyWith(instructions: _instructionController.text));
               },
             ),
           ),

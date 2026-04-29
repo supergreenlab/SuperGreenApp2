@@ -4,7 +4,6 @@ const kPadding8 = EdgeInsets.all(8);
 const kPadding16 = EdgeInsets.all(16);
 const kPadding24 = EdgeInsets.all(24);
 
-
 class SglColor {
   static const green = Color(0xFF3BB30B);
   static const inactive = Color(0xFFbdbdbd);
@@ -21,12 +20,12 @@ class SglFilledGreenButton extends SglButton {
     required this.onPressed,
     this.expanded = false,
   }) : super(
-    title: title,
-    onPressed: onPressed,
-    color: SglColor.green,
-    expanded: expanded,
-    fill: true,
-  );
+          title: title,
+          onPressed: onPressed,
+          color: SglColor.green,
+          expanded: expanded,
+          fill: true,
+        );
 
   final String title;
   final VoidCallback onPressed;
@@ -39,11 +38,11 @@ class SglOutlinedGreenButton extends SglOutlinedButton {
     required this.onPressed,
     this.expanded = false,
   }) : super(
-    title: title,
-    onPressed: onPressed,
-    color: SglColor.green,
-    expanded: expanded,
-  );
+          title: title,
+          onPressed: onPressed,
+          color: SglColor.green,
+          expanded: expanded,
+        );
 
   final String title;
   final VoidCallback onPressed;
@@ -56,11 +55,11 @@ class SglOutlinedRedButton extends SglOutlinedButton {
     required this.onPressed,
     this.expanded = false,
   }) : super(
-    title: title,
-    onPressed: onPressed,
-    color: SglColor.red,
-    expanded: expanded,
-  );
+          title: title,
+          onPressed: onPressed,
+          color: SglColor.red,
+          expanded: expanded,
+        );
 
   final String title;
   final VoidCallback onPressed;
@@ -74,12 +73,12 @@ class SglOutlinedButton extends SglButton {
     required this.color,
     this.expanded = false,
   }) : super(
-    title: title,
-    onPressed: onPressed,
-    color: SglColor.red,
-    expanded: expanded,
-    fill: false,
-  );
+          title: title,
+          onPressed: onPressed,
+          color: SglColor.red,
+          expanded: expanded,
+          fill: false,
+        );
 
   final String title;
   final VoidCallback onPressed;
@@ -126,23 +125,22 @@ class SglButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return expanded
-      ? Row(
-          children: [
-            Expanded(child: _button),
-          ],
-        )
-      : _button;
+        ? Row(
+            children: [
+              Expanded(child: _button),
+            ],
+          )
+        : _button;
   }
 }
 
 void showSnackBar(BuildContext context, String text) {
   final snackBar = SnackBar(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(16),
-        topRight: Radius.circular(16),
-      )
-    ),
+        borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(16),
+      topRight: Radius.circular(16),
+    )),
     padding: kPadding16,
     content: Text(
       text,

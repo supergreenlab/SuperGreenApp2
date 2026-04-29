@@ -68,7 +68,14 @@ class AlertsSettings extends Equatable {
   }
 
   AlertsSettings copyWith(
-      {minTempDay, maxTempDay, minTempNight, maxTempNight, minHumiDay, maxHumiDay, minHumiNight, maxHumiNight}) {
+      {minTempDay,
+      maxTempDay,
+      minTempNight,
+      maxTempNight,
+      minHumiDay,
+      maxHumiDay,
+      minHumiNight,
+      maxHumiNight}) {
     return AlertsSettings(
       minTempDay: minTempDay ?? this.minTempDay,
       maxTempDay: maxTempDay ?? this.maxTempDay,

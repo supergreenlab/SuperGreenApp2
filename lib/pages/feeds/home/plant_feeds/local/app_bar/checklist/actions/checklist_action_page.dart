@@ -34,18 +34,62 @@ abstract class ChecklistActionButton extends StatelessWidget {
   final Function() onCheck;
   final Function() onSkip;
 
-  const ChecklistActionButton({Key? key, required this.plant, required this.box, required this.checklistSeed, required this.checklistAction, required this.onCheck, required this.onSkip, required this.summarize}) : super(key: key);
+  const ChecklistActionButton(
+      {Key? key,
+      required this.plant,
+      required this.box,
+      required this.checklistSeed,
+      required this.checklistAction,
+      required this.onCheck,
+      required this.onSkip,
+      required this.summarize})
+      : super(key: key);
 
-  static Widget getActionPage({required Plant plant, required Box box, required ChecklistSeed checklistSeed, required ChecklistAction checklistAction, required Function() onCheck, required Function() onSkip, required  bool summarize}) {
+  static Widget getActionPage(
+      {required Plant plant,
+      required Box box,
+      required ChecklistSeed checklistSeed,
+      required ChecklistAction checklistAction,
+      required Function() onCheck,
+      required Function() onSkip,
+      required bool summarize}) {
     switch (checklistAction.type) {
       case ChecklistActionWebpage.TYPE:
-        return ChecklistActionWebpageButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip, summarize: summarize);
+        return ChecklistActionWebpageButton(
+            plant: plant,
+            box: box,
+            checklistSeed: checklistSeed,
+            checklistAction: checklistAction,
+            onCheck: onCheck,
+            onSkip: onSkip,
+            summarize: summarize);
       case ChecklistActionCreateCard.TYPE:
-        return ChecklistActionCreateCardButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip, summarize: summarize);
+        return ChecklistActionCreateCardButton(
+            plant: plant,
+            box: box,
+            checklistSeed: checklistSeed,
+            checklistAction: checklistAction,
+            onCheck: onCheck,
+            onSkip: onSkip,
+            summarize: summarize);
       case ChecklistActionBuyProduct.TYPE:
-        return ChecklistActionBuyProductButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip, summarize: summarize);
+        return ChecklistActionBuyProductButton(
+            plant: plant,
+            box: box,
+            checklistSeed: checklistSeed,
+            checklistAction: checklistAction,
+            onCheck: onCheck,
+            onSkip: onSkip,
+            summarize: summarize);
       case ChecklistActionMessage.TYPE:
-        return ChecklistActionMessageButton(plant: plant, box: box, checklistSeed: checklistSeed, checklistAction: checklistAction, onCheck: onCheck, onSkip: onSkip, summarize: summarize);
+        return ChecklistActionMessageButton(
+            plant: plant,
+            box: box,
+            checklistSeed: checklistSeed,
+            checklistAction: checklistAction,
+            onCheck: onCheck,
+            onSkip: onSkip,
+            summarize: summarize);
     }
     throw 'Uknown type ${checklistAction.type}';
   }

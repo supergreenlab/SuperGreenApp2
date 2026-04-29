@@ -56,13 +56,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  description: 'This channel is used for important notifications.', // description
+  description:
+      'This channel is used for important notifications.', // description
   importance: Importance.high,
   enableVibration: true,
   playSound: true,
 );
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +77,8 @@ Future initApp() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true, // Required to display a heads up notification
@@ -129,7 +132,8 @@ Future initApp() async {
     Future.microtask(() async {
       try {
         BackendAPI().usersAPI.syncUserSettings();
-        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+        BackendAPI().blockedUserIDs =
+            await BackendAPI().feedsAPI.fetchBlockedUserIDs();
       } catch (e, t) {
         Logger.logError(e, t);
       }
@@ -144,11 +148,13 @@ void main() async {
 
       runApp(MultiBlocProvider(providers: <BlocProvider>[
         BlocProvider<PinLockBloc>(create: (context) => PinLockBloc()),
-        BlocProvider<MainNavigatorBloc>(create: (context) => MainNavigatorBloc(navigatorKey)),
+        BlocProvider<MainNavigatorBloc>(
+            create: (context) => MainNavigatorBloc(navigatorKey)),
         BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
         BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
         BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
-        BlocProvider<NotificationsBloc>(create: (context) => NotificationsBloc()),
+        BlocProvider<NotificationsBloc>(
+            create: (context) => NotificationsBloc()),
         BlocProvider<DeepLinkBloc>(create: (context) => DeepLinkBloc()),
       ], child: MainPage(navigatorKey)));
     },

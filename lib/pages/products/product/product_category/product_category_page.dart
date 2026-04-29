@@ -66,7 +66,8 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: SectionTitle(
-                  title: ProductTypePage.productTypePageSelectCategorySectionTitle,
+                  title:
+                      ProductTypePage.productTypePageSelectCategorySectionTitle,
                   icon: 'assets/products/toolbox/icon_item_type.svg',
                   iconPadding: 0,
                 ),
@@ -74,8 +75,10 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 4,
-                  children: productCategories.keys.map<Widget>((ProductCategoryID name) {
-                    final ProductCategoryUI categoryUI = productCategories[name]!;
+                  children: productCategories.keys
+                      .map<Widget>((ProductCategoryID name) {
+                    final ProductCategoryUI categoryUI =
+                        productCategories[name]!;
                     return InkWell(
                       onTap: () {
                         setState(() {
@@ -91,13 +94,19 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    border: selectedCategory == name ? Border.all(color: Colors.green) : null,
-                                    borderRadius:
-                                        selectedCategory == name ? BorderRadius.all(Radius.circular(25)) : null),
+                                    border: selectedCategory == name
+                                        ? Border.all(color: Colors.green)
+                                        : null,
+                                    borderRadius: selectedCategory == name
+                                        ? BorderRadius.all(Radius.circular(25))
+                                        : null),
                                 child: SvgPicture.asset(categoryUI.icon)),
                           ),
                           Text(categoryUI.name,
-                              style: TextStyle(fontWeight: selectedCategory == name ? FontWeight.bold : null))
+                              style: TextStyle(
+                                  fontWeight: selectedCategory == name
+                                      ? FontWeight.bold
+                                      : null))
                         ],
                       ),
                     );
@@ -109,16 +118,21 @@ class _ProductTypePageState extends State<ProductTypePage> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: GreenButton(
-                    title: ProductTypePage.productTypePageSelectCategoryNextButton,
+                    title:
+                        ProductTypePage.productTypePageSelectCategoryNextButton,
                     onPressed: selectedCategory == null
                         ? null
                         : () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToProductInfosEvent(selectedCategory!, futureFn: (future) async {
+                            BlocProvider.of<MainNavigatorBloc>(context).add(
+                                MainNavigateToProductInfosEvent(
+                                    selectedCategory!,
+                                    futureFn: (future) async {
                               Product? product = await future;
                               if (product != null) {
-                                BlocProvider.of<MainNavigatorBloc>(context)
-                                    .add(MainNavigatorActionPop(param: product.copyWith(category: selectedCategory)));
+                                BlocProvider.of<MainNavigatorBloc>(context).add(
+                                    MainNavigatorActionPop(
+                                        param: product.copyWith(
+                                            category: selectedCategory)));
                               }
                             }));
                           },
@@ -136,7 +150,8 @@ class _ProductTypePageState extends State<ProductTypePage> {
                 iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );

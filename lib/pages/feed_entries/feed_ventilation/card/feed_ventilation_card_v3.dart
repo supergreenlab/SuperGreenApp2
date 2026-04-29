@@ -25,7 +25,6 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedVentilationCardV3Values {
-
   final String type;
   final int refSource;
   final int refMin;
@@ -33,12 +32,11 @@ class FeedVentilationCardV3Values {
   final int min;
   final int max;
 
-  FeedVentilationCardV3Values(this.type, this.refSource, this.refMin, this.refMax, this.min, this.max);
-
+  FeedVentilationCardV3Values(
+      this.type, this.refSource, this.refMin, this.refMax, this.min, this.max);
 }
 
 class FeedVentilationCardV3 extends StatelessWidget {
-
   final FeedVentilationCardV3Values values;
 
   FeedVentilationCardV3({Key? key, required this.values}) : super(key: key);
@@ -71,7 +69,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.min}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.lightBlue)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.lightBlue)),
               Text('at ${_tempUnit(values.refMin.toDouble())}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
@@ -83,7 +84,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.max}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.red)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.red)),
               Text('at ${_tempUnit(values.refMax.toDouble())}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
@@ -92,7 +96,8 @@ class FeedVentilationCardV3 extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text(FeedVentilationCardPage.feedVentilationCardPageTemperatureMode,
+        child: Text(
+            FeedVentilationCardPage.feedVentilationCardPageTemperatureMode,
             style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
@@ -120,7 +125,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.min}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.lightBlue)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.lightBlue)),
               Text('at ${values.refMin.toDouble()}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
@@ -132,7 +140,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.max}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.red)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.red)),
               Text('at ${values.refMax.toDouble()}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
@@ -167,7 +178,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.min}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.blue)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.blue)),
             ],
           )),
       renderCard(
@@ -177,7 +191,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.max}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.orange)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.orange)),
             ],
           )),
     ];
@@ -210,7 +227,10 @@ class FeedVentilationCardV3 extends StatelessWidget {
           Column(
             children: [
               Text('${values.min}%',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.grey)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.grey)),
             ],
           )),
     ];
@@ -234,9 +254,8 @@ class FeedVentilationCardV3 extends StatelessWidget {
     ]);
   }
 
-
-
-  Widget renderCard(String icon, double iconPadding, String title, Widget child) {
+  Widget renderCard(
+      String icon, double iconPadding, String title, Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(

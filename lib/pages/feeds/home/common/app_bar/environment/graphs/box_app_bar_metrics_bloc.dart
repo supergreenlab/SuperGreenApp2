@@ -54,20 +54,23 @@ class PlantFeedAppBarBlocStateLoaded extends PlantFeedAppBarBlocState {
   final Plant? plant;
   final Box box;
 
-  PlantFeedAppBarBlocStateLoaded(this.version, this.graphData, this.plant, this.box);
+  PlantFeedAppBarBlocStateLoaded(
+      this.version, this.graphData, this.plant, this.box);
 
   @override
   List<Object?> get props => [version, graphData, plant, box];
 }
 
-class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
+class BoxAppBarMetricsBloc
+    extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
   Timer? _timer;
   final Plant? plant;
   Box? box;
 
   late List<dynamic> version;
 
-  BoxAppBarMetricsBloc({this.plant, this.box}) : super(PlantFeedAppBarBlocStateInit()) {
+  BoxAppBarMetricsBloc({this.plant, this.box})
+      : super(PlantFeedAppBarBlocStateInit()) {
     add(PlantFeedAppBarBlocEventLoadChart());
     _timer = Timer.periodic(Duration(seconds: 30), (timer) {
       this.add(PlantFeedAppBarBlocEventReloadChart());
@@ -75,7 +78,8 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   }
 
   @override
-  Stream<PlantFeedAppBarBlocState> mapEventToState(PlantFeedAppBarBlocEvent event) async* {
+  Stream<PlantFeedAppBarBlocState> mapEventToState(
+      PlantFeedAppBarBlocEvent event) async* {
     if (event is PlantFeedAppBarBlocEventLoadChart) {
       try {
         if (box == null) {
@@ -111,44 +115,57 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       }
       String identifier = device.identifier;
       int deviceBox = box!.deviceBox!;
-      version = await TimeSeriesAPI.fetchMetric(box!, identifier, 'OTA_TIMESTAMP', 0, 10000000000);
-      ChartSeries temp = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Temperature', 'BOX_${deviceBox}_TEMP', Colors.green, 0, 50,
+      version = await TimeSeriesAPI.fetchMetric(
+          box!, identifier, 'OTA_TIMESTAMP', 0, 10000000000);
+      ChartSeries temp = await TimeSeriesAPI.fetchTimeSeries(box!, identifier,
+          'Temperature', 'BOX_${deviceBox}_TEMP', Colors.green, 0, 50,
           transform: _tempUnit);
-      ChartSeries humi = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Humidity', 'BOX_${deviceBox}_HUMI', Colors.blue, 0, 100);
-      ChartSeries vpd = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'VPD', 'BOX_${deviceBox}_VPD', Colors.deepOrange, 0, 254,
+      ChartSeries humi = await TimeSeriesAPI.fetchTimeSeries(box!, identifier,
+          'Humidity', 'BOX_${deviceBox}_HUMI', Colors.blue, 0, 100);
+      ChartSeries vpd = await TimeSeriesAPI.fetchTimeSeries(box!, identifier,
+          'VPD', 'BOX_${deviceBox}_VPD', Colors.deepOrange, 0, 254,
           transform: _vpd);
 
       ChartSeries ventilation = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Ventilation', 'BOX_${deviceBox}_BLOWER_DUTY', Colors.cyan, 0, 100);
+          box!,
+          identifier,
+          'Ventilation',
+          'BOX_${deviceBox}_BLOWER_DUTY',
+          Colors.cyan,
+          0,
+          100);
 
       late ChartSeries light;
       try {
-        List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT', 0, 100);
+        List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(
+            box!, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT', 0, 100);
         List<List<dynamic>> dims = [];
-        Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
+        Module lightModule =
+            await RelDB.get().devicesDAO.getModule(device.id, "led");
         for (int i = 0; i < lightModule.arrayLen; ++i) {
-          Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+          Param boxParam =
+              await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
           if (boxParam.ivalue != box!.deviceBox!) {
             continue;
           }
-          List<dynamic> dim = await TimeSeriesAPI.fetchMetric(box!, identifier, 'LED_${i}_DIM', 0, 100);
+          List<dynamic> dim = await TimeSeriesAPI.fetchMetric(
+              box!, identifier, 'LED_${i}_DIM', 0, 100);
           dims.add(dim);
         }
         List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
         light = TimeSeriesAPI.toTimeSeries(
-            TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', Colors.yellow.shade700);
+            TimeSeriesAPI.multiplyMetric(timerOutput, avgDims),
+            'Light',
+            Colors.yellow.shade700);
       } catch (e) {
         light = TimeSeriesAPI.toTimeSeries([], 'Light', Colors.yellow.shade700);
       }
 
-      ChartSeries co2 = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', Colors.grey, 0, 100000,
+      ChartSeries co2 = await TimeSeriesAPI.fetchTimeSeries(box!, identifier,
+          'CO2', 'BOX_${deviceBox}_CO2', Colors.grey, 0, 100000,
           transform: _co2);
-      ChartSeries weight = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', Colors.purple, 0, 100000,
+      ChartSeries weight = await TimeSeriesAPI.fetchTimeSeries(box!, identifier,
+          'Weight', 'BOX_${deviceBox}_WEIGHT', Colors.purple, 0, 100000,
           transform: _weight);
       return [temp, humi, vpd, light, ventilation, co2, weight];
     }
@@ -157,32 +174,60 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   List<ChartSeries> _createDummyData() {
     final tempData = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            _tempUnit((cos(index / 100) * 20) + Random().nextInt(7) + 20, index).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            _tempUnit((cos(index / 100) * 20) + Random().nextInt(7) + 20, index)
+                .toDouble()));
     final humiData = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            ((sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20)
+                .toDouble()));
     final vpdData = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            ((sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20)
+                .toDouble()));
     final lightData = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
+                .toDouble()));
     final ventilationData = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
+                .toDouble()));
     final co2Data = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
+                .toDouble()));
     final weightData = List.generate(
         50,
-        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
-            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
+                .toDouble()));
 
     return [
       ChartSeries(id: 'Temperature', color: Colors.green, data: tempData),
@@ -203,7 +248,13 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   }
 
   double _vpd(double vpd, int i) {
-    return min(140, max(version[i][1] != 0 && version[i][1] < 1700000000 ? vpd * 4 :  vpd * 0.4, 0));
+    return min(
+        140,
+        max(
+            version[i][1] != 0 && version[i][1] < 1700000000
+                ? vpd * 4
+                : vpd * 0.4,
+            0));
   }
 
   double _weight(double weight, int i) {

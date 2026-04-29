@@ -44,7 +44,8 @@ class NumberFormParam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String Function(double) displayFn = this.displayFn ?? (v) => '${value * displayMultiplier}';
+    String Function(double) displayFn =
+        this.displayFn ?? (v) => '${value * displayMultiplier}';
     return FeedFormParamLayout(
       icon: icon,
       title: title,
@@ -57,8 +58,11 @@ class NumberFormParam extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ButtonTheme(
-                    padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                    padding: EdgeInsets.symmetric(
+                        vertical: 4.0,
+                        horizontal: 8.0), //adds padding inside the button
+                    materialTapTargetSize: MaterialTapTargetSize
+                        .shrinkWrap, //limits the touch area to the button area
                     height: 36,
                     minWidth: 60, //wraps child's width
                     child: FeedFormButton(
@@ -66,15 +70,21 @@ class NumberFormParam extends StatelessWidget {
                       onPressed: () {
                         onChange(value - step);
                       },
-                      textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('${displayFn(value)}$unit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  child: Text('${displayFn(value)}$unit',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 ),
                 ButtonTheme(
-                    padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+                    padding: EdgeInsets.symmetric(
+                        vertical: 4.0,
+                        horizontal: 8.0), //adds padding inside the button
+                    materialTapTargetSize: MaterialTapTargetSize
+                        .shrinkWrap, //limits the touch area to the button area
                     height: 36,
                     minWidth: 60, //wraps child's width
                     child: FeedFormButton(
@@ -82,7 +92,8 @@ class NumberFormParam extends StatelessWidget {
                       onPressed: () {
                         onChange(value + step);
                       },
-                      textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     )),
               ],
             ),

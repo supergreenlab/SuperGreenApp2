@@ -23,13 +23,17 @@ import 'package:super_green_app/pages/checklist/create/create_checklist_section.
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class BuyProductActionPage extends StatefulWidget {
-
   final ChecklistActionBuyProduct action;
 
   final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  BuyProductActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
+  BuyProductActionPage(
+      {Key? key,
+      required this.onClose,
+      required this.action,
+      required this.onUpdate})
+      : super(key: key);
 
   @override
   State<BuyProductActionPage> createState() => _BuyProductActionPageState();
@@ -66,7 +70,10 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Name of the product:',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A))),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Color(0xff6A6A6A))),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
@@ -82,7 +89,10 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
           ),
         ),
         Text('Enter URL of webpage to open:',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A))),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Color(0xff6A6A6A))),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: FeedFormTextarea(
@@ -101,7 +111,10 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             'Description',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Color(0xff6A6A6A)),
           ),
         ),
         Padding(
@@ -109,11 +122,13 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
           child: SizedBox(
             height: 150,
             child: FeedFormTextarea(
-              placeholder: 'ex: When the temperature gets too high, some fungus might develop on your leaves.',
+              placeholder:
+                  'ex: When the temperature gets too high, some fungus might develop on your leaves.',
               noPadding: true,
               textEditingController: _instructionController,
               onChanged: (value) {
-                widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
+                widget.onUpdate(widget.action
+                    .copyWith(instructions: _instructionController.text));
               },
             ),
           ),

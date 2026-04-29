@@ -51,5 +51,14 @@ class PublicPlant extends Equatable {
       boxSettings: BoxSettings.fromJSON(map['boxSettings'] ?? '{}'));
 
   @override
-  List<Object?> get props => [id, name, lastUpdate, thumbnailPath, followed, nFollows, settings, boxSettings];
+  List<Object?> get props => [
+        id,
+        name,
+        lastUpdate,
+        thumbnailPath,
+        followed,
+        nFollows,
+        settings,
+        boxSettings
+      ];
 }

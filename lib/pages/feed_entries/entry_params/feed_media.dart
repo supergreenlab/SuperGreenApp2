@@ -27,16 +27,19 @@ class FeedMediaParams extends FeedEntryParams {
 
   FeedMediaParams(this.message, this.helpRequest, {this.boxFeed = false});
 
-  FeedMediaParams copyWith(String message) => FeedMediaParams(message, this.helpRequest, boxFeed: boxFeed);
+  FeedMediaParams copyWith(String message) =>
+      FeedMediaParams(message, this.helpRequest, boxFeed: boxFeed);
 
   factory FeedMediaParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedMediaParams(map['message'], map['helpRequest'], boxFeed: map['boxFeed']);
+    return FeedMediaParams(map['message'], map['helpRequest'],
+        boxFeed: map['boxFeed']);
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({'message': message, 'helpRequest': helpRequest, 'boxFeed': boxFeed});
+    return JsonEncoder().convert(
+        {'message': message, 'helpRequest': helpRequest, 'boxFeed': boxFeed});
   }
 
   @override

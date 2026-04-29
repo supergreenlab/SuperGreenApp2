@@ -60,8 +60,10 @@ class PlantStrain extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 4.0, right: 8.0, bottom: 3.0),
-              child: SvgPicture.asset("assets/explorer/icon_seeds.svg", width: 35, height: 35),
+              padding:
+                  const EdgeInsets.only(left: 4.0, right: 8.0, bottom: 3.0),
+              child: SvgPicture.asset("assets/explorer/icon_seeds.svg",
+                  width: 35, height: 35),
             ),
             Expanded(
               child: Column(

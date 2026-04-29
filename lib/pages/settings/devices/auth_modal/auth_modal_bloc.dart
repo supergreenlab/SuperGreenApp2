@@ -67,7 +67,8 @@ class AuthModalBloc extends LegacyBloc<AuthModalBlocEvent, AuthModalBlocState> {
   final Device device;
   final Function onClose;
 
-  AuthModalBloc({required this.device, required this.onClose}) : super(AuthModalBlocStateInit()) {
+  AuthModalBloc({required this.device, required this.onClose})
+      : super(AuthModalBlocStateInit()) {
     add(AuthModalBlocEventInit());
   }
 

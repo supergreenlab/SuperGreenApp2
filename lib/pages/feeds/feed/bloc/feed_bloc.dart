@@ -290,7 +290,8 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
     if (event is FeedBlocEventInit) {
       await delegate.init(this.add);
       try {
-        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+        BackendAPI().blockedUserIDs =
+            await BackendAPI().feedsAPI.fetchBlockedUserIDs();
       } catch (e) {}
       await delegate.loadFeed();
     } else if (event is FeedBlocEventFeedLoaded) {
@@ -302,7 +303,8 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       yield FeedBlocStateFeedLoaded(feedState, clear: true);
       add(FeedBlocEventLoadEntries(10, entries.length));
     } else if (event is FeedBlocEventLoadEntries) {
-      List<FeedEntryState> fes = await delegate.loadEntries(event.n, entries.length, filters);
+      List<FeedEntryState> fes =
+          await delegate.loadEntries(event.n, entries.length, filters);
       entries.addAll(fes.map((f) => delegate.postProcess(f)));
       yield FeedBlocStateEntriesLoaded(fes, fes.length < event.n, initialLoad);
       if (initialLoad) {
@@ -321,17 +323,20 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventEntryHidden) {
       FeedEntryState e = entries[event.index];
       FeedEntryLoader loader = delegate.loaderForType(e.type);
-      loader.cancelListenEntryChanges(entries[event.index] as FeedEntryStateLoaded);
+      loader.cancelListenEntryChanges(
+          entries[event.index] as FeedEntryStateLoaded);
     } else if (event is FeedBlocEventAddedEntry) {
       int index = _insertIndex(event.entry);
       yield* _insertEntryAt(index, event.entry);
     } else if (event is FeedBlocEventDeletedFeedEntry) {
-      int index = entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
+      int index =
+          entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
       if (index >= 0) {
         yield* _removeEntryAt(index);
       }
     } else if (event is FeedBlocEventUpdatedEntry) {
-      int index = entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
+      int index =
+          entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
       FeedEntryState entry = delegate.postProcess(event.entry);
       int newIndex = _insertIndex(entry);
       if (index == newIndex) {
@@ -368,7 +373,8 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventReportEntry) {
       await BackendAPI().feedsAPI.reportFeedEntry(event.entry);
       try {
-        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+        BackendAPI().blockedUserIDs =
+            await BackendAPI().feedsAPI.fetchBlockedUserIDs();
       } catch (e) {}
     } else {
       yield* delegate.mapEventToState(event);
@@ -377,7 +383,9 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
 
   int _insertIndex(FeedEntryState feedEntry) {
     int index = 0;
-    for (; index < entries.length && entries[index].date.isAfter(feedEntry.date); ++index) {}
+    for (;
+        index < entries.length && entries[index].date.isAfter(feedEntry.date);
+        ++index) {}
     return index;
   }
 
@@ -433,7 +441,8 @@ abstract class FeedBlocDelegate {
   Future<void> loadFeed();
   Stream<FeedBlocState> onInitialLoad() async* {}
   FeedEntryState postProcess(FeedEntryState state);
-  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters);
+  Future<List<FeedEntryState>> loadEntries(
+      int n, int offset, List<String>? filters);
   Future deleteFeedEntry(dynamic feedEntryID);
   Future forceSyncFeedEntry(dynamic feedEntryID);
   Future moveFeedEntry(dynamic feedEntryID, dynamic plantID);

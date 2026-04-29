@@ -43,7 +43,8 @@ class TowelieActionHelpWifi extends TowelieActionHelp {
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 1) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpWifi.towelieHelperDeviceWifi);
+      yield TowelieBlocStateHelper(
+          event.settings, TowelieActionHelpWifi.towelieHelperDeviceWifi);
     }
   }
 }

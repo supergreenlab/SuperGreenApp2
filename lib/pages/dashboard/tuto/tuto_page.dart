@@ -67,38 +67,47 @@ class _TutoPageState extends State<TutoPage> {
           margin: EdgeInsets.symmetric(vertical: 20),
           child: Column(
             children: [
-              Text("Welcome to", style: TextStyle(
-                fontWeight: FontWeight.w200,
-                fontSize: 30,
-              )),
+              Text("Welcome to",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w200,
+                    fontSize: 30,
+                  )),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
-                child: SvgPicture.asset('assets/tutos/logo-tuto.svg', fit: BoxFit.contain,
-                  width: 300,),
+                child: SvgPicture.asset(
+                  'assets/tutos/logo-tuto.svg',
+                  fit: BoxFit.contain,
+                  width: 300,
+                ),
               ),
-              Text("What brings you here?", style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 20,
-              )),
+              Text("What brings you here?",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 20,
+                  )),
             ],
           ),
         ),
         TutoItem(
           image: 'assets/tutos/icon-looking-around.svg',
           title: 'JUST LOOKING AROUND',
-          description: 'Go to the community tab to see what others are growing with SuperGreenLab!',
+          description:
+              'Go to the community tab to see what others are growing with SuperGreenLab!',
           label: 'Open community tab >',
           action: () {
-            BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToExplorerEvent());
+            BlocProvider.of<HomeNavigatorBloc>(context)
+                .add(HomeNavigateToExplorerEvent());
           },
         ),
         TutoItem(
           image: 'assets/tutos/icon-setup-bundle.png',
           title: 'I’M READY TO SETUP MY SGL BUNDLE!',
-          description: 'Ok let’s get started by creating a first plant and a lab.',
+          description:
+              'Ok let’s get started by creating a first plant and a lab.',
           label: 'Setup bundle >',
           action: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToCreatePlantEvent());
           },
         ),
         TutoItem(
@@ -107,7 +116,8 @@ class _TutoPageState extends State<TutoPage> {
           description: 'Create your first plant to start your first diary!',
           label: 'Start diary >',
           action: () {
-           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToCreatePlantEvent());
           },
         ),
         TutoItem(

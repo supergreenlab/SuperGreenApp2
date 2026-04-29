@@ -29,30 +29,34 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistAPI {
   Future<ChecklistsCompanion> getChecklist(String plantID) async {
-    Response resp =
-        await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklist/$plantID'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse('${BackendAPI().serverHost}/checklist/$plantID'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('/checklist/$plantID failed with error: ${resp.body}', fwdThrow: true);
+      Logger.throwError('/checklist/$plantID failed with error: ${resp.body}',
+          fwdThrow: true);
     }
     Map<String, dynamic> checklistMap = JsonDecoder().convert(resp.body);
     return Checklists.fromMap(checklistMap);
   }
 
   Future<List<ChecklistCollectionsCompanion>> getChecklistCollections() async {
-    Response resp =
-        await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklistcollections'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse('${BackendAPI().serverHost}/checklistcollections'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     Map<String, dynamic> result = JsonDecoder().convert(resp.body);
     List<ChecklistCollectionsCompanion> results = [];
     List<dynamic> maps = result['checklistcollections'];
     for (int i = 0; i < maps.length; ++i) {
       try {
-        ChecklistCollectionsCompanion fe = await ChecklistCollections.fromMap(maps[i]);
+        ChecklistCollectionsCompanion fe =
+            await ChecklistCollections.fromMap(maps[i]);
         results.add(fe);
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
@@ -61,26 +65,32 @@ class ChecklistAPI {
     return results;
   }
 
-  Future<ChecklistCollectionsCompanion> getChecklistCollection(String collectionID) async {
-    Response resp =
-        await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+  Future<ChecklistCollectionsCompanion> getChecklistCollection(
+      String collectionID) async {
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse(
+            '${BackendAPI().serverHost}/checklistcollection/$collectionID'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('/checklistcollection/$collectionID failed with error: ${resp.body}', fwdThrow: true);
+      Logger.throwError(
+          '/checklistcollection/$collectionID failed with error: ${resp.body}',
+          fwdThrow: true);
     }
     Map<String, dynamic> checklistMap = JsonDecoder().convert(resp.body);
     return ChecklistCollections.fromMap(checklistMap);
   }
 
   Future subscribeCollection(String collectionID, String checklistID) async {
-    await BackendAPI()
-        .apiClient
-        .post(Uri.parse('${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$checklistID/true'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    await BackendAPI().apiClient.post(
+        Uri.parse(
+            '${BackendAPI().serverHost}/checklistcollection/$collectionID/sub/$checklistID/true'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+        });
   }
 
   Future syncChecklistSeed(ChecklistSeed checklistSeed) async {
@@ -90,16 +100,20 @@ class ChecklistAPI {
     }
     String? serverID = await BackendAPI().postPut('/checklistseed', obj);
 
-    ChecklistSeedsCompanion checklistSeedsCompanion =
-        ChecklistSeedsCompanion(id: Value(checklistSeed.id), synced: Value(true));
+    ChecklistSeedsCompanion checklistSeedsCompanion = ChecklistSeedsCompanion(
+        id: Value(checklistSeed.id), synced: Value(true));
     if (serverID != null) {
-      checklistSeedsCompanion = checklistSeedsCompanion.copyWith(serverID: Value(serverID));
+      checklistSeedsCompanion =
+          checklistSeedsCompanion.copyWith(serverID: Value(serverID));
     }
-    await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion);
+    await RelDB.get()
+        .checklistsDAO
+        .updateChecklistSeed(checklistSeedsCompanion);
   }
 
   Future<List<ChecklistSeedsCompanion>> unsyncedChecklistSeeds() async {
-    Map<String, dynamic> syncData = await UserEndHelper.unsynced("ChecklistSeeds");
+    Map<String, dynamic> syncData =
+        await UserEndHelper.unsynced("ChecklistSeeds");
     List<dynamic> maps = syncData['items'];
     List<ChecklistSeedsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -120,9 +134,11 @@ class ChecklistAPI {
     Map<String, dynamic> obj = await Checklists.toMap(checklist);
     String? serverID = await BackendAPI().postPut('/checklist', obj);
 
-    ChecklistsCompanion checklistsCompanion = ChecklistsCompanion(id: Value(checklist.id), synced: Value(true));
+    ChecklistsCompanion checklistsCompanion =
+        ChecklistsCompanion(id: Value(checklist.id), synced: Value(true));
     if (serverID != null) {
-      checklistsCompanion = checklistsCompanion.copyWith(serverID: Value(serverID));
+      checklistsCompanion =
+          checklistsCompanion.copyWith(serverID: Value(serverID));
     }
     await RelDB.get().checklistsDAO.updateChecklist(checklistsCompanion);
     return serverID;
@@ -153,13 +169,15 @@ class ChecklistAPI {
     ChecklistLogsCompanion checklistLogsCompanion =
         ChecklistLogsCompanion(id: Value(checklistLog.id), synced: Value(true));
     if (serverID != null) {
-      checklistLogsCompanion = checklistLogsCompanion.copyWith(serverID: Value(serverID));
+      checklistLogsCompanion =
+          checklistLogsCompanion.copyWith(serverID: Value(serverID));
     }
     await RelDB.get().checklistsDAO.updateChecklistLog(checklistLogsCompanion);
   }
 
   Future<List<ChecklistLogsCompanion>> unsyncedChecklistLog() async {
-    Map<String, dynamic> syncData = await UserEndHelper.unsynced("ChecklistLogs");
+    Map<String, dynamic> syncData =
+        await UserEndHelper.unsynced("ChecklistLogs");
     List<dynamic> maps = syncData['items'];
     List<ChecklistLogsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {

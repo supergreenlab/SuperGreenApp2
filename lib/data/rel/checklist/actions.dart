@@ -45,7 +45,9 @@ abstract class ChecklistAction extends Equatable {
   bool get valid => !props.contains(null) && !props.contains('');
 
   static List<ChecklistAction> fromMapArray(List<dynamic> maps) {
-    return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
+    return maps
+        .map<ChecklistAction>((m) => ChecklistAction.fromMap(m))
+        .toList();
   }
 
   static ChecklistAction fromMap(Map<String, dynamic> map) {
@@ -149,7 +151,8 @@ class ChecklistActionCreateCard extends ChecklistAction {
   String get asSentence => 'Create ${FeedEntryNames[entryType!]!} diary entry.';
   bool get hasBody => (instructions ?? '').length > 0;
 
-  ChecklistActionCreateCard({this.entryType, this.instructions}) : super(type: TYPE);
+  ChecklistActionCreateCard({this.entryType, this.instructions})
+      : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {
@@ -195,7 +198,8 @@ class ChecklistActionBuyProduct extends ChecklistAction {
   String get asSentence => 'Get a ${name!} at ${Uri.parse(url!).host}';
   bool get hasBody => (instructions ?? '').length > 0;
 
-  ChecklistActionBuyProduct({this.name, this.url, this.instructions}) : super(type: TYPE);
+  ChecklistActionBuyProduct({this.name, this.url, this.instructions})
+      : super(type: TYPE);
 
   bool get valid {
     if (url == null) {

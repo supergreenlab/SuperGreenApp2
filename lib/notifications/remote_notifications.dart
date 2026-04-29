@@ -35,7 +35,8 @@ class RemoteNotifications {
   RemoteNotifications(this.add, this.onNotificationData);
 
   Future init() async {
-    NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
       String token = (await FirebaseMessaging.instance.getToken())!;
@@ -46,13 +47,15 @@ class RemoteNotifications {
         Logger.logError(e, trace);
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
-    } else if (BackendAPI().usersAPI.loggedIn && AppDB().getAppData().notificationOnStartAsked != true) {
+    } else if (BackendAPI().usersAPI.loggedIn &&
+        AppDB().getAppData().notificationOnStartAsked != true) {
       Timer(Duration(milliseconds: 1000), () {
         add(NotificationsBlocEventRequestPermission());
         AppDB().setNotificationOnStartAsked(true);
       });
     }
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       Timer(Duration(milliseconds: 300), () {
         notificationSelected(initialMessage);
@@ -82,8 +85,11 @@ class RemoteNotifications {
   }
 
   Future sendToken() async {
-    if (BackendAPI().usersAPI.loggedIn && AppDB().getAppData().notificationTokenSent == false) {
-      await BackendAPI().feedsAPI.updateNotificationToken(AppDB().getAppData().notificationToken!);
+    if (BackendAPI().usersAPI.loggedIn &&
+        AppDB().getAppData().notificationTokenSent == false) {
+      await BackendAPI()
+          .feedsAPI
+          .updateNotificationToken(AppDB().getAppData().notificationToken!);
       AppDB().setNotificationTokenSent(true);
     }
   }
@@ -111,7 +117,8 @@ class RemoteNotifications {
   }
 
   static Future<bool> checkPermissions() async {
-    NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.getNotificationSettings();
     return settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional;
   }

@@ -54,7 +54,8 @@ class SettingsPlantsBlocStateLoaded extends SettingsPlantsBlocState {
   List<Object> get props => [plants, boxes];
 }
 
-class SettingsPlantsBloc extends LegacyBloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
+class SettingsPlantsBloc
+    extends LegacyBloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
   List<Plant> plants = [];
   List<Box> boxes = [];
   StreamSubscription<List<Plant>>? _plantsStream;
@@ -71,8 +72,10 @@ class SettingsPlantsBloc extends LegacyBloc<SettingsPlantsBlocEvent, SettingsPla
   Stream<SettingsPlantsBlocState> mapEventToState(event) async* {
     if (event is SettingsPlantsBlocEventInit) {
       yield SettingsPlantsBlocStateLoading();
-      _plantsStream = RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
-      _boxesStream = RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
+      _plantsStream =
+          RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
+      _boxesStream =
+          RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
     } else if (event is SettingsPlantsblocEventPlantListChanged) {
       yield SettingsPlantsBlocStateLoaded(event.plants, event.boxes);
     } else if (event is SettingsPlantsBlocEventDeletePlant) {

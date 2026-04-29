@@ -57,7 +57,8 @@ class FeedLightFormPage extends StatefulWidget {
     return Intl.message(
       'Dimming control\nrequires an SGL controller',
       name: 'feedLightFormPageControllerRequired',
-      desc: 'Fullscreen message displayed with no controller is available for light control',
+      desc:
+          'Fullscreen message displayed with no controller is available for light control',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -110,8 +111,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           Timer(Duration(milliseconds: 100), () {
-            BlocProvider.of<DeviceReachableListenerBloc>(context)
-                .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
+            BlocProvider.of<DeviceReachableListenerBloc>(context).add(
+                DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
           });
           setState(() {
             values = List.from(state.values);
@@ -122,13 +123,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             loading = state.index;
           });
         } else if (state is FeedLightFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(mustPop: true, param: state.feedEntry));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigatorActionPop(mustPop: true, param: state.feedEntry));
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
           bloc: BlocProvider.of<FeedLightFormBloc>(context),
-          buildWhen: (FeedLightFormBlocState oldState, FeedLightFormBlocState newState) {
+          buildWhen: (FeedLightFormBlocState oldState,
+              FeedLightFormBlocState newState) {
             return !(newState is FeedLightFormBlocStateLightsLoading);
           },
           builder: (context, state) {
@@ -136,9 +138,11 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               title: 'Loading..',
             );
             if (state is FeedLightFormBlocStateLoading) {
-              body = FullscreenLoading(title: FeedLightFormPage.feedLightFormPageSaving);
+              body = FullscreenLoading(
+                  title: FeedLightFormPage.feedLightFormPageSaving);
             } else if (state is FeedLightFormBlocStateCancelling) {
-              body = FullscreenLoading(title: FeedLightFormPage.feedLightFormPageCancelling);
+              body = FullscreenLoading(
+                  title: FeedLightFormPage.feedLightFormPageCancelling);
             } else if (state is FeedLightFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -147,22 +151,27 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                     itemBuilder: _renderLightParam,
                   ),
                   Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white60),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white60),
                     child: Fullscreen(
-                      title: FeedLightFormPage.feedLightFormPageControllerRequired,
+                      title:
+                          FeedLightFormPage.feedLightFormPageControllerRequired,
                       child: Column(
                         children: <Widget>[
                           GreenButton(
                             title: FeedLightFormPage.feedLightFormPageShopNow,
                             onPressed: () {
-                              launchUrl(Uri.parse('https://www.supergreenlab.com/bundle/micro-box-bundle'));
+                              launchUrl(Uri.parse(
+                                  'https://www.supergreenlab.com/bundle/micro-box-bundle'));
                             },
                           ),
                           Text(FeedLightFormPage.feedLightFormPageOr),
                           GreenButton(
                             title: FeedLightFormPage.feedLightFormPageDIYNow,
                             onPressed: () {
-                              launchUrl(Uri.parse('https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
+                              launchUrl(Uri.parse(
+                                  'https://picofarmled.com/guide/how-to-setup-pico-farm-os'));
                             },
                           ),
                         ],
@@ -202,7 +211,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               if (_reachable == false) {
                 String title = 'Looking for device..';
                 if (_usingWifi == false) {
-                  title = 'Device unreachable!\n(You\'re not connected to any wifi)';
+                  title =
+                      'Device unreachable!\n(You\'re not connected to any wifi)';
                 }
                 content = Stack(
                   children: <Widget>[
@@ -214,16 +224,23 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                             ? Icon(Icons.error, color: Colors.red, size: 100)
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(width: 50, height: 50, child: CircularProgressIndicator()),
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator()),
                               )),
                   ],
                 );
               }
-              body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-                  listener: (BuildContext context, DeviceReachableListenerBlocState listenerState) {
-                    if (listenerState is DeviceReachableListenerBlocStateDeviceReachable &&
+              body = BlocListener<DeviceReachableListenerBloc,
+                      DeviceReachableListenerBlocState>(
+                  listener: (BuildContext context,
+                      DeviceReachableListenerBlocState listenerState) {
+                    if (listenerState
+                            is DeviceReachableListenerBlocStateDeviceReachable &&
                         listenerState.device.id == state.box.device) {
-                      if (_reachable == listenerState.reachable && _usingWifi == listenerState.usingWifi) return;
+                      if (_reachable == listenerState.reachable &&
+                          _usingWifi == listenerState.usingWifi) return;
                       setState(() {
                         _reachable = listenerState.reachable;
                         _usingWifi = listenerState.usingWifi;
@@ -241,7 +258,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   state is FeedLightFormBlocStateLoading ||
                   state is FeedLightFormBlocStateCancelling),
               onOK: () {
-                BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocEventCreate(values));
+                BlocProvider.of<FeedLightFormBloc>(context)
+                    .add(FeedLightFormBlocEventCreate(values));
               },
               body: WillPopScope(
                 onWillPop: () async {
@@ -252,12 +270,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                     return true;
                   }
                   if (changed) {
-                    BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocEventCancel());
+                    BlocProvider.of<FeedLightFormBloc>(context)
+                        .add(FeedLightFormBlocEventCancel());
                     return false;
                   }
                   return true;
                 },
-                child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+                child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
               ),
             );
           }),
@@ -285,8 +305,12 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             if (initialMasterValue != 0) {
               double ratio = newValue / initialMasterValue;
               for (int i = 0; i < values.length; i++) {
-                double nv = (initialValues[i].value.ivalue! == 0 ? 1 : initialValues[i].value.ivalue!) * ratio;
-                int newLightValue = min(100, max(0, ratio < 1 ? nv.floor() : nv.ceil()));
+                double nv = (initialValues[i].value.ivalue! == 0
+                        ? 1
+                        : initialValues[i].value.ivalue!) *
+                    ratio;
+                int newLightValue =
+                    min(100, max(0, ratio < 1 ? nv.floor() : nv.ceil()));
                 if (newValue >= 99) {
                   newLightValue = newValue.round();
                 }
@@ -294,14 +318,18 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   newLightValue = 0;
                 }
                 BoxLight newBoxLight = values[i].copyWith(
-                  value: values[i].value.copyWith(ivalue: drift.Value(newLightValue)),
+                  value: values[i]
+                      .value
+                      .copyWith(ivalue: drift.Value(newLightValue)),
                 );
                 values[i] = newBoxLight;
               }
             } else {
-             for (int i = 0; i < values.length; i++) {
+              for (int i = 0; i < values.length; i++) {
                 BoxLight newBoxLight = values[i].copyWith(
-                  value: values[i].value.copyWith(ivalue: drift.Value(newValue.round())),
+                  value: values[i]
+                      .value
+                      .copyWith(ivalue: drift.Value(newValue.round())),
                 );
                 values[i] = newBoxLight;
               }
@@ -329,29 +357,35 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         key: Key('$i'),
         title: values[i].lightSettings.name ?? 'Light ${i + 1}',
         onTitleEdited: (String newTitle) {
-          BoxLight newBoxLight = values[i].copyWith(lightSettings: values[i].lightSettings.copyWith(name: newTitle));
+          BoxLight newBoxLight = values[i].copyWith(
+              lightSettings: values[i].lightSettings.copyWith(name: newTitle));
           setState(() {
             values[i] = newBoxLight;
           });
-          BlocProvider.of<FeedLightFormBloc>(context)
-              .add(FeedLightFormBlocLightSettingsChangedEvent(i, newBoxLight.lightSettings));
+          BlocProvider.of<FeedLightFormBloc>(context).add(
+              FeedLightFormBlocLightSettingsChangedEvent(
+                  i, newBoxLight.lightSettings));
         },
-        icon: 'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
+        icon:
+            'assets/feed_form/icon_${values[i].value.ivalue! > 30 ? "sun" : "moon"}.svg',
         value: values[i].value.ivalue!.toDouble(),
         color: _color(values[i].value.ivalue!),
         loading: loading == i,
         disable: loading != -1 && loading != i,
         onChanged: (double newValue) {
           setState(() {
-            BoxLight newBoxLight =
-                values[i].copyWith(value: values[i].value.copyWith(ivalue: drift.Value(newValue.toInt())));
+            BoxLight newBoxLight = values[i].copyWith(
+                value: values[i]
+                    .value
+                    .copyWith(ivalue: drift.Value(newValue.toInt())));
             values[i] = newBoxLight;
             changed = true;
             _updateMasterValue();
           });
         },
         onChangeEnd: (double value) {
-          BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocValueChangedEvent(i, value.round()));
+          BlocProvider.of<FeedLightFormBloc>(context)
+              .add(FeedLightFormBlocValueChangedEvent(i, value.round()));
         },
       ),
     );

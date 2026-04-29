@@ -66,14 +66,16 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                     color: Colors.white,
                     border: Border.all(color: Color(0xffcdcdcd), width: 1),
                     borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(commentTypes[feedEntry.commentType]!['pic']!, width: 25, height: 25),
+                child: Image.asset(commentTypes[feedEntry.commentType]!['pic']!,
+                    width: 25, height: 25),
               )),
         ],
       );
     }
     return InkWell(
       onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToPublicPlant(
           feedEntry.plantID!,
           name: feedEntry.plantName,
           feedEntryID: feedEntry.id,
@@ -83,7 +85,8 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
       },
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Color(0xffdedede)), borderRadius: BorderRadius.circular(5.0)),
+            border: Border.all(width: 1, color: Color(0xffdedede)),
+            borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Column(
@@ -95,7 +98,10 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 4.0),
-                      child: Image.asset(commentTypes[feedEntry.commentType]!['pic']!, width: 20, height: 20),
+                      child: Image.asset(
+                          commentTypes[feedEntry.commentType]!['pic']!,
+                          width: 20,
+                          height: 20),
                     ),
                     Text(feedEntry.plantName!,
                         style: TextStyle(
@@ -113,18 +119,27 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
-                          (feedEntry.thumbnailPath ?? "") != "" || (feedEntry.plantThumbnailPath ?? "") != "" ? Image.network(
-                              BackendAPI()
-                                  .feedsAPI
-                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath ?? ""),
-                              fit: BoxFit.cover,
-                              headers: {'Host': BackendAPI().storageServerHostHeader},
-                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return ItemLoading();
-                          }) : SvgPicture.asset(FeedEntryIcons[feedEntry.type] ?? ""),
+                          (feedEntry.thumbnailPath ?? "") != "" ||
+                                  (feedEntry.plantThumbnailPath ?? "") != ""
+                              ? Image.network(
+                                  BackendAPI().feedsAPI.absoluteFileURL(
+                                      feedEntry.thumbnailPath ??
+                                          feedEntry.plantThumbnailPath ??
+                                          ""),
+                                  fit: BoxFit.cover,
+                                  headers: {
+                                      'Host':
+                                          BackendAPI().storageServerHostHeader
+                                    }, loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return ItemLoading();
+                                })
+                              : SvgPicture.asset(
+                                  FeedEntryIcons[feedEntry.type] ?? ""),
                           Positioned(
                             child: avatar,
                             top: -4,
@@ -139,10 +154,15 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
+                              padding: const EdgeInsets.only(
+                                  left: 4.0, right: 4.0, bottom: 4.0),
                               child: MarkdownBody(
-                                data: '**${feedEntry.nickname}** ${feedEntry.commentTruncated}',
-                                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 14)),
+                                data:
+                                    '**${feedEntry.nickname}** ${feedEntry.commentTruncated}',
+                                styleSheet: MarkdownStyleSheet(
+                                    p: TextStyle(
+                                        color: Color(0xff454545),
+                                        fontSize: 14)),
                               ),
                             ),
                           ),
@@ -155,8 +175,12 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(child: PlantStrain(plantSettings: feedEntry.plantSettings)),
-                  Expanded(child: PlantPhase(plantSettings: feedEntry.plantSettings)),
+                  Expanded(
+                      child:
+                          PlantStrain(plantSettings: feedEntry.plantSettings)),
+                  Expanded(
+                      child:
+                          PlantPhase(plantSettings: feedEntry.plantSettings)),
                 ],
               )
             ],

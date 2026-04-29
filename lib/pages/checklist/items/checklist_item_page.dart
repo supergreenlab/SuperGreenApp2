@@ -52,7 +52,8 @@ class ChecklistItemPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           builder: (BuildContext c) {
             return BlocProvider<ChecklistActionPopupBloc>(
-              create: (BuildContext context) => ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
+              create: (BuildContext context) => ChecklistActionPopupBloc(
+                  this.plant, this.box, this.checklistSeed),
               child: ChecklistActionPopupPage(),
             );
           },
@@ -124,7 +125,9 @@ class ChecklistItemPage extends StatelessWidget {
                         child: Text(
                           checklistSeed.synced ? "Synced" : "Not synced",
                           style: TextStyle(
-                            color: checklistSeed.synced ? Color(0xff2D6A14) : Color.fromARGB(255, 150, 40, 58),
+                            color: checklistSeed.synced
+                                ? Color(0xff2D6A14)
+                                : Color.fromARGB(255, 150, 40, 58),
                             fontSize: 10,
                           ),
                         ),
@@ -135,30 +138,34 @@ class ChecklistItemPage extends StatelessWidget {
               ),
             ),
           ),
-          onDelete == null ? Container() : InkWell(
-              onTap: onDelete,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 4.0,
-                  right: 16.0,
-                ),
-                child: Icon(
-                  Icons.delete,
-                  color: Color(0xff606060),
-                ),
-              )),
-          onSelect == null ? Container() : InkWell(
-              onTap: onSelect,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 4.0,
-                  right: 16.0,
-                ),
-                child: Icon(
-                  Icons.settings,
-                  color: Color(0xff606060),
-                ),
-              )),
+          onDelete == null
+              ? Container()
+              : InkWell(
+                  onTap: onDelete,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 4.0,
+                      right: 16.0,
+                    ),
+                    child: Icon(
+                      Icons.delete,
+                      color: Color(0xff606060),
+                    ),
+                  )),
+          onSelect == null
+              ? Container()
+              : InkWell(
+                  onTap: onSelect,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 4.0,
+                      right: 16.0,
+                    ),
+                    child: Icon(
+                      Icons.settings,
+                      color: Color(0xff606060),
+                    ),
+                  )),
         ],
       ),
     );
@@ -176,13 +183,15 @@ class ChecklistItemPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
                     'From collection: ${collection!.title}',
-                    style: TextStyle(color: Color(0xff606060), fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Color(0xff606060), fontWeight: FontWeight.bold),
                   ),
                 ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text('Tap to view details', style: TextStyle(color: Color(0xffababab))),
+              Text('Tap to view details',
+                  style: TextStyle(color: Color(0xffababab))),
             ],
           ),
         ],

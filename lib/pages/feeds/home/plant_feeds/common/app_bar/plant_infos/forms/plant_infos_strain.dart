@@ -27,7 +27,11 @@ class PlantInfosStrain extends StatefulWidget {
   final Function onCancel;
   final Function(String? strain, String? seedbank) onSubmit;
 
-  PlantInfosStrain({required this.strain, required this.seedbank, required this.onCancel, required this.onSubmit});
+  PlantInfosStrain(
+      {required this.strain,
+      required this.seedbank,
+      required this.onCancel,
+      required this.onSubmit});
 
   @override
   _PlantInfosStrainState createState() => _PlantInfosStrainState();
@@ -55,8 +59,14 @@ class _PlantInfosStrainState extends State<PlantInfosStrain> {
       },
       child: Column(
         children: <Widget>[
-          PlantInfosTextInput(controller: strainController, labelText: 'Strain', hintText: 'Ex: White widow'),
-          PlantInfosTextInput(controller: seedbankController, labelText: 'Seedbank', hintText: 'Ex: Paradise Seeds'),
+          PlantInfosTextInput(
+              controller: strainController,
+              labelText: 'Strain',
+              hintText: 'Ex: White widow'),
+          PlantInfosTextInput(
+              controller: seedbankController,
+              labelText: 'Seedbank',
+              hintText: 'Ex: Paradise Seeds'),
         ],
       ),
     );

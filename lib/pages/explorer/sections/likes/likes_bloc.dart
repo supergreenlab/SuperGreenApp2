@@ -26,7 +26,8 @@ class LikesBloc extends SectionBloc<PublicFeedEntry> {
 
   Future<List<dynamic>> loadItems(int n, int offset) async {
     List<dynamic> likes = await BackendAPI().feedsAPI.publicLiked(n, offset);
-    likes.removeWhere((l) => BackendAPI().blockedUserIDs.contains(l['likedBy']));
+    likes
+        .removeWhere((l) => BackendAPI().blockedUserIDs.contains(l['likedBy']));
     return likes;
   }
   /*Future<List<dynamic>> loadItems(int n, int offset) async {
@@ -39,5 +40,6 @@ class LikesBloc extends SectionBloc<PublicFeedEntry> {
     return allLikes;
   }*/
 
-  PublicFeedEntry itemFromMap(Map<String, dynamic> map) => PublicFeedEntry.fromMap(map);
+  PublicFeedEntry itemFromMap(Map<String, dynamic> map) =>
+      PublicFeedEntry.fromMap(map);
 }

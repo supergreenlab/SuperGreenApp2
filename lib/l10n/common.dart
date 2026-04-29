@@ -42,7 +42,8 @@ class CommonL10N {
     return Intl.message(
       'Setting parameters..',
       name: 'settingParameters',
-      desc: 'Setting parameter message usually displayed on the fullscreen overlay',
+      desc:
+          'Setting parameter message usually displayed on the fullscreen overlay',
       locale: SGLLocalizations.current?.localeName,
     );
   }

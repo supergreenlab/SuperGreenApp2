@@ -61,7 +61,8 @@ class _AuthModalPageState extends State<AuthModalPage> {
     return BlocListener<AuthModalBloc, AuthModalBlocState>(
       listener: (BuildContext context, AuthModalBlocState state) {
         if (state is AuthModalBlocStateDone) {
-          BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoggedIn(state.device));
+          BlocProvider.of<DeviceDaemonBloc>(context)
+              .add(DeviceDaemonBlocEventLoggedIn(state.device));
         }
       },
       child: BlocBuilder<AuthModalBloc, AuthModalBlocState>(
@@ -107,7 +108,8 @@ class _AuthModalPageState extends State<AuthModalPage> {
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         child: SvgPicture.asset(
                           'assets/settings/icon_password.svg',
                           width: 40,
@@ -145,7 +147,8 @@ class _AuthModalPageState extends State<AuthModalPage> {
                       }),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16),
+                  padding:
+                      const EdgeInsets.only(left: 16.0, right: 16.0, top: 16),
                   child: Text('Password',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -170,8 +173,10 @@ class _AuthModalPageState extends State<AuthModalPage> {
                       child: GreenButton(
                         onPressed: isValid()
                             ? () {
-                                BlocProvider.of<AuthModalBloc>(context).add(AuthModalBlocEventAuth(
-                                    username: _usernameController.text, password: _passwordController.text));
+                                BlocProvider.of<AuthModalBloc>(context).add(
+                                    AuthModalBlocEventAuth(
+                                        username: _usernameController.text,
+                                        password: _passwordController.text));
                               }
                             : null,
                         title: 'LOGIN',
@@ -186,6 +191,7 @@ class _AuthModalPageState extends State<AuthModalPage> {
   }
 
   bool isValid() {
-    return _usernameController.text.length >= 4 && _passwordController.text.length >= 4;
+    return _usernameController.text.length >= 4 &&
+        _passwordController.text.length >= 4;
   }
 }

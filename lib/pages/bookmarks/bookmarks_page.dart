@@ -87,11 +87,15 @@ class _BookmarksPageState extends State<BookmarksPage> {
             IconButton(
               icon: Text(
                 'Open plant',
-                style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 12.0,
+                    color: Color(0xff3bb30b),
+                    fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToPublicPlant(state.plantID!, feedEntryID: state.feedEntryID));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToPublicPlant(state.plantID!,
+                        feedEntryID: state.feedEntryID));
               },
             )
           ];
@@ -103,7 +107,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget renderNoCard(BuildContext context) {
     return Fullscreen(
       title: 'No bookmarks yet',
-      subtitle: 'You can add important diary entries here, checkout the plant diaries to add some now!',
+      subtitle:
+          'You can add important diary entries here, checkout the plant diaries to add some now!',
       child: Icon(
         Icons.bookmark,
         color: Color(0xff3bb30b),

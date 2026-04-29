@@ -87,8 +87,20 @@ class FeedVentilationParamsValues extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [fanRefSource, fanRefMin, fanRefMax, fanMin, fanMax, blowerRefSource, blowerRefMin, blowerRefMax, blowerMin, blowerMax, blowerDay, blowerNight];
+  List<Object?> get props => [
+        fanRefSource,
+        fanRefMin,
+        fanRefMax,
+        fanMin,
+        fanMax,
+        blowerRefSource,
+        blowerRefMin,
+        blowerRefMax,
+        blowerMin,
+        blowerMax,
+        blowerDay,
+        blowerNight
+      ];
 }
 
 class FeedVentilationParams extends FeedEntryParams {
@@ -100,12 +112,14 @@ class FeedVentilationParams extends FeedEntryParams {
   factory FeedVentilationParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedVentilationParams(
-        FeedVentilationParamsValues.fromMap(map['values']), FeedVentilationParamsValues.fromMap(map['initialValues']));
+        FeedVentilationParamsValues.fromMap(map['values']),
+        FeedVentilationParamsValues.fromMap(map['initialValues']));
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({'values': values.toMap(), 'initialValues': initialValues.toMap()});
+    return JsonEncoder().convert(
+        {'values': values.toMap(), 'initialValues': initialValues.toMap()});
   }
 
   @override

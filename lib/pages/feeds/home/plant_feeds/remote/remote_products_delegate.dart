@@ -13,8 +13,10 @@ class RemoteProductsBlocDelegate extends ProductsBlocDelegate {
 
   @override
   void loadProducts() async {
-    Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
-    productsLoaded(PlantSettings.fromJSON(plant['settings']), BoxSettings.fromJSON(plant['boxSettings']));
+    Map<String, dynamic> plant =
+        await BackendAPI().feedsAPI.publicPlant(plantID);
+    productsLoaded(PlantSettings.fromJSON(plant['settings']),
+        BoxSettings.fromJSON(plant['boxSettings']));
   }
 
   @override

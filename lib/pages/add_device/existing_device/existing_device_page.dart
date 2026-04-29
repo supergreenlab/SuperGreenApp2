@@ -109,11 +109,13 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
       bloc: BlocProvider.of<ExistingDeviceBloc>(context),
       listener: (BuildContext context, ExistingDeviceBlocState state) {
         if (state is ExistingDeviceBlocStateFound) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceSetupEvent(state.ip, futureFn: (future) async {
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDeviceSetupEvent(state.ip,
+                  futureFn: (future) async {
             Device? device = await future;
             if (device != null) {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigatorActionPop(param: device));
             }
           }));
         }
@@ -141,7 +143,8 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
                     data: ExistingDevicePage.instructionsExistingDevice,
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Color(0xff454545), fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Color(0xff454545), fontSize: 16)),
                   ),
                 ),
                 Padding(
@@ -157,8 +160,11 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
               if (state is ExistingDeviceBlocStateNotFound) {
                 form.add(Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(ExistingDevicePage.existingDeviceNotFound(_nameController.value.text),
-                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500)),
+                  child: Text(
+                      ExistingDevicePage.existingDeviceNotFound(
+                          _nameController.value.text),
+                      style: TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.w500)),
                 ));
               }
               body = Column(
@@ -175,7 +181,9 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                       alignment: Alignment.centerRight,
                       child: GreenButton(
                         title: ExistingDevicePage.existingDeviceSearchButton,
-                        onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+                        onPressed: _nameController.value.text != ''
+                            ? () => _handleInput(context)
+                            : null,
                       ),
                     ),
                   ),
@@ -190,14 +198,16 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                 iconColor: Colors.white,
                 hideBackButton: state is ExistingDeviceBlocStateResolving,
               ),
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body),
             );
           }),
     );
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<ExistingDeviceBloc>(context).add(ExistingDeviceBlocEventStartSearch(_nameController.value.text));
+    BlocProvider.of<ExistingDeviceBloc>(context)
+        .add(ExistingDeviceBlocEventStartSearch(_nameController.value.text));
   }
 
   @override

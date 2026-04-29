@@ -32,7 +32,8 @@ abstract class DeviceNavigationArgHolder {
 
 abstract class DeviceReachableListenerBlocEvent extends Equatable {}
 
-class DeviceReachableListenerBlocEventLoadDevice extends DeviceReachableListenerBlocEvent {
+class DeviceReachableListenerBlocEventLoadDevice
+    extends DeviceReachableListenerBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final int deviceID;
 
@@ -42,13 +43,15 @@ class DeviceReachableListenerBlocEventLoadDevice extends DeviceReachableListener
   List<Object> get props => [rand, deviceID];
 }
 
-class DeviceReachableListenerBlocEventDeviceReachable extends DeviceReachableListenerBlocEvent {
+class DeviceReachableListenerBlocEventDeviceReachable
+    extends DeviceReachableListenerBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final Device device;
   final bool reachable;
   final bool remote;
 
-  DeviceReachableListenerBlocEventDeviceReachable(this.device, this.reachable, this.remote);
+  DeviceReachableListenerBlocEventDeviceReachable(
+      this.device, this.reachable, this.remote);
 
   @override
   List<Object> get props => [rand, device, reachable, remote];
@@ -56,26 +59,29 @@ class DeviceReachableListenerBlocEventDeviceReachable extends DeviceReachableLis
 
 abstract class DeviceReachableListenerBlocState extends Equatable {}
 
-class DeviceReachableListenerBlocStateInit extends DeviceReachableListenerBlocState {
+class DeviceReachableListenerBlocStateInit
+    extends DeviceReachableListenerBlocState {
   @override
   List<Object> get props => [];
 }
 
-class DeviceReachableListenerBlocStateDeviceReachable extends DeviceReachableListenerBlocState {
+class DeviceReachableListenerBlocStateDeviceReachable
+    extends DeviceReachableListenerBlocState {
   final int rand = Random().nextInt(1 << 32);
   final Device device;
   final bool reachable;
   final bool remote;
   final bool usingWifi;
 
-  DeviceReachableListenerBlocStateDeviceReachable(this.device, this.reachable, this.remote, this.usingWifi);
+  DeviceReachableListenerBlocStateDeviceReachable(
+      this.device, this.reachable, this.remote, this.usingWifi);
 
   @override
   List<Object> get props => [rand, device, reachable, usingWifi];
 }
 
-class DeviceReachableListenerBloc
-    extends LegacyBloc<DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
+class DeviceReachableListenerBloc extends LegacyBloc<
+    DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
   final DeviceNavigationArgHolder deviceArgHolder;
 
   late Device device;
@@ -85,21 +91,28 @@ class DeviceReachableListenerBloc
 
   StreamSubscription? subscription;
 
-  DeviceReachableListenerBloc(this.deviceArgHolder) : super(DeviceReachableListenerBlocStateInit());
+  DeviceReachableListenerBloc(this.deviceArgHolder)
+      : super(DeviceReachableListenerBlocStateInit());
 
   @override
-  Stream<DeviceReachableListenerBlocState> mapEventToState(DeviceReachableListenerBlocEvent event) async* {
+  Stream<DeviceReachableListenerBlocState> mapEventToState(
+      DeviceReachableListenerBlocEvent event) async* {
     if (event is DeviceReachableListenerBlocEventLoadDevice) {
       if (subscription == null) {
         device = await deviceArgHolder.getDevice() as Device;
         final results = await Connectivity().checkConnectivity();
         _usingWifi = results.contains(ConnectivityResult.wifi);
-        connectivity = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) {
+        connectivity = Connectivity()
+            .onConnectivityChanged
+            .listen((List<ConnectivityResult> results) {
           _usingWifi = results.contains(ConnectivityResult.wifi);
         });
-        subscription = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device? newDevice) {
-          add(DeviceReachableListenerBlocEventDeviceReachable(
-              newDevice!, newDevice.isReachable || newDevice.isRemote, newDevice.isRemote));
+        subscription = RelDB.get()
+            .devicesDAO
+            .watchDevice(device.id)
+            .listen((Device? newDevice) {
+          add(DeviceReachableListenerBlocEventDeviceReachable(newDevice!,
+              newDevice.isReachable || newDevice.isRemote, newDevice.isRemote));
         });
       }
     } else if (event is DeviceReachableListenerBlocEventDeviceReachable) {

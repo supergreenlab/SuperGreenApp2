@@ -29,11 +29,13 @@ class RemoteBoxFeedBlocStateInit extends RemoteBoxFeedBlocState {
   List<Object> get props => [];
 }
 
-class RemoteBoxFeedBloc extends LegacyBloc<RemoteBoxFeedBlocEvent, RemoteBoxFeedBlocState> {
+class RemoteBoxFeedBloc
+    extends LegacyBloc<RemoteBoxFeedBlocEvent, RemoteBoxFeedBlocState> {
   MainNavigateToRemoteBoxEvent args;
 
   RemoteBoxFeedBloc(this.args) : super(RemoteBoxFeedBlocStateInit());
 
   @override
-  Stream<RemoteBoxFeedBlocState> mapEventToState(RemoteBoxFeedBlocEvent event) async* {}
+  Stream<RemoteBoxFeedBlocState> mapEventToState(
+      RemoteBoxFeedBlocEvent event) async* {}
 }

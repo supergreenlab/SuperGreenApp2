@@ -73,7 +73,8 @@ class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
   List<Object> get props => [device, rand];
 }
 
-class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
+class DeviceDaemonBloc
+    extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
   StreamSubscription<ConnectivityResult>? _connectivity;
 
   Timer? _timer;
@@ -83,7 +84,8 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
   DeviceDaemonBloc() : super(DeviceDaemonBlocStateInit());
 
   @override
-  Stream<DeviceDaemonBlocState> mapEventToState(DeviceDaemonBlocEvent event) async* {
+  Stream<DeviceDaemonBlocState> mapEventToState(
+      DeviceDaemonBlocEvent event) async* {
     if (event is DeviceDaemonBlocEventInit) {
       _scheduleUpdate();
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
@@ -120,17 +122,22 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
       try {
         String? identifier;
         try {
-          identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
+          identifier = await DeviceAPI.fetchStringParam(
+              device.ip, 'BROKER_CLIENTID',
+              nRetries: 1, auth: auth);
         } catch (e) {}
         if (identifier == device.identifier) {
           if (device.isSetup == false || device.needsRefresh) {
-            await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null, auth: auth);
+            await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null,
+                auth: auth);
           }
-          await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
+          await ddb.updateDevice(
+              DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
           await _updateDeviceTime(device);
         } else {
           if (identifier != null) {
-            await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+            await ddb.updateDevice(DevicesCompanion(
+                id: Value(device.id), isReachable: Value(false)));
             Logger.throwError("Wrong identifier for device ${device.name}",
                 data: {"identifier": identifier});
           } else {
@@ -144,18 +151,22 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
           return;
         }
 
-        await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+        await RelDB.get().devicesDAO.updateDevice(
+            DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
         await new Future.delayed(const Duration(seconds: 2));
         String? ip = await DeviceAPI.resolveLocalName(device.mdns);
         if (ip != null && ip != "") {
           try {
             String? identifier;
             try {
-              identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID', auth: auth);
+              identifier = await DeviceAPI.fetchStringParam(
+                  ip, 'BROKER_CLIENTID',
+                  auth: auth);
             } catch (e) {}
             if (identifier == device.identifier) {
               if (device.isSetup == false || device.needsRefresh) {
-                await DeviceAPI.fetchAllParams(ip, device.id, (_) => null, auth: auth);
+                await DeviceAPI.fetchAllParams(ip, device.id, (_) => null,
+                    auth: auth);
               }
               await ddb.updateDevice(DevicesCompanion(
                   id: Value(device.id),
@@ -172,12 +183,12 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
             }
           } catch (e, trace) {
             Logger.logError(e, trace, data: {"device": device.identifier});
-            await RelDB.get()
-                .devicesDAO
-                .updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+            await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+                id: Value(device.id), isReachable: Value(false)));
           }
         } else {
-          await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+          await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+              id: Value(device.id), isReachable: Value(false)));
         }
       }
     } catch (e, trace) {
@@ -202,8 +213,10 @@ class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlo
   }
 
   Future<void> _updateDeviceTime(Device device) async {
-    final Param? time = await RelDB.get().devicesDAO.getParam(device.id, 'TIME');
-    await DeviceHelper.updateIntParam(device, time!, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+    final Param? time =
+        await RelDB.get().devicesDAO.getParam(device.id, 'TIME');
+    await DeviceHelper.updateIntParam(
+        device, time!, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
   }
 
   @override

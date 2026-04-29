@@ -46,7 +46,8 @@ class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final Comment? replyTo;
   final List<Product>? recommend;
 
-  CommentsFormBlocEventPostComment(this.text, this.type, this.replyTo, this.recommend);
+  CommentsFormBlocEventPostComment(
+      this.text, this.type, this.replyTo, this.recommend);
 
   @override
   List<Object?> get props => [
@@ -169,7 +170,8 @@ class CommentsFormBlocStateUser extends CommentsFormBlocState {
   List<Object?> get props => [user];
 }
 
-class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlocState> {
+class CommentsFormBloc
+    extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
 
   StreamSubscription<hive.BoxEvent>? appDataStream;
@@ -181,7 +183,8 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
   }
 
   @override
-  Stream<CommentsFormBlocState> mapEventToState(CommentsFormBlocEvent event) async* {
+  Stream<CommentsFormBlocState> mapEventToState(
+      CommentsFormBlocEvent event) async* {
     if (event is CommentsFormBlocEventInit) {
       if (BackendAPI().usersAPI.loggedIn) {
         this.user = await BackendAPI().usersAPI.me();
@@ -191,19 +194,21 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
       if (args.feedEntry.isRemoteState) {
         feedEntryID = args.feedEntry.feedEntryID;
       } else {
-        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
         feedEntryID = feedEntry.serverID!;
       }
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
-      yield CommentsFormBlocStateUpdateComment(
-          event.comment.copyWith(liked: !event.comment.liked, nLikes: event.comment.nLikes + 1));
+      yield CommentsFormBlocStateUpdateComment(event.comment.copyWith(
+          liked: !event.comment.liked, nLikes: event.comment.nLikes + 1));
     } else if (event is CommentsFormBlocEventReport) {
       await BackendAPI().feedsAPI.reportComment(event.comment);
       try {
-        BackendAPI().blockedUserIDs = await BackendAPI().feedsAPI.fetchBlockedUserIDs();
-      } catch(e) {}
+        BackendAPI().blockedUserIDs =
+            await BackendAPI().feedsAPI.fetchBlockedUserIDs();
+      } catch (e) {}
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventPostComment) {
       String tempID = Uuid().v4();
@@ -218,13 +223,15 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
         type: event.type,
         createdAt: DateTime.now(),
         liked: false,
-        params: JsonEncoder().convert(CommentParam(recommend: event.recommend).toMap()),
+        params: JsonEncoder()
+            .convert(CommentParam(recommend: event.recommend).toMap()),
         isNew: true,
         nLikes: 0,
       );
       yield CommentsFormBlocStateAddComment(comment);
       comment = await BackendAPI().feedsAPI.postComment(comment);
-      yield CommentsFormBlocStateUpdateComment(comment.copyWith(isNew: false), oldID: tempID);
+      yield CommentsFormBlocStateUpdateComment(comment.copyWith(isNew: false),
+          oldID: tempID);
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventLoadComments) {
       yield* fetchComments(offset: event.offset);
@@ -237,17 +244,30 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
     List<Comment> comments;
     int n;
     if (args.commentID != null) {
-      comments = await BackendAPI().feedsAPI.fetchComment(args.replyTo ?? args.commentID!);
+      comments = await BackendAPI()
+          .feedsAPI
+          .fetchComment(args.replyTo ?? args.commentID!);
       n = 1;
     } else {
-      comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
-      n = await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
+      comments = await BackendAPI()
+          .feedsAPI
+          .fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
+      n = await BackendAPI()
+          .feedsAPI
+          .fetchCommentCountForFeedEntry(feedEntryID);
     }
 
     comments.removeWhere((c) => BackendAPI().blockedUserIDs.contains(c.userID));
 
-    yield CommentsFormBlocStateLoaded(this.args.autoFocus, this.args.feedEntry, comments, n, this.user,
-        comments.where((c) => c.replyTo == null).length != limit, this.args.commentID, this.args.replyTo);
+    yield CommentsFormBlocStateLoaded(
+        this.args.autoFocus,
+        this.args.feedEntry,
+        comments,
+        n,
+        this.user,
+        comments.where((c) => c.replyTo == null).length != limit,
+        this.args.commentID,
+        this.args.replyTo);
   }
 
   void appDataUpdated(hive.BoxEvent boxEvent) async {

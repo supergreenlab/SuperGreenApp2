@@ -56,16 +56,19 @@ class DeviceNameBlocStateLoading extends DeviceNameBlocState {
 class DeviceNameBlocStateDone extends DeviceNameBlocState {
   final bool requiresWifiSetup;
 
-  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup) : super(device);
+  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup)
+      : super(device);
 }
 
-class DeviceNameBloc extends LegacyBloc<DeviceNameBlocEvent, DeviceNameBlocState> {
+class DeviceNameBloc
+    extends LegacyBloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   final MainNavigateToDeviceNameEvent args;
 
   DeviceNameBloc(this.args) : super(DeviceNameBlocState(args.device));
 
   @override
-  Stream<DeviceNameBlocState> mapEventToState(DeviceNameBlocEvent event) async* {
+  Stream<DeviceNameBlocState> mapEventToState(
+      DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventReset) {
       yield DeviceNameBlocState(args.device);
     } else if (event is DeviceNameBlocEventSetName) {

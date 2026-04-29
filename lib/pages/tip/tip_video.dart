@@ -48,6 +48,8 @@ class _TipVideoState extends State<TipVideo> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (context, constraints) => SizedBox(
-            width: constraints.maxWidth, height: constraints.maxHeight, child: VideoPlayer(_videoPlayerController)));
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            child: VideoPlayer(_videoPlayerController)));
   }
 }

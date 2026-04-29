@@ -30,7 +30,6 @@ class CreateChecklistBlocEventInit extends CreateChecklistSeedBlocEvent {
 }
 
 class CreateChecklistSeedBlocEventSave extends CreateChecklistSeedBlocEvent {
-
   final ChecklistSeedsCompanion checklistSeed;
 
   CreateChecklistSeedBlocEventSave(this.checklistSeed);
@@ -61,17 +60,19 @@ class CreateChecklistSeedBlocStateCreated extends CreateChecklistSeedBlocState {
   List<Object> get props => [];
 }
 
-class CreateChecklistSeedBloc extends LegacyBloc<CreateChecklistSeedBlocEvent, CreateChecklistSeedBlocState> {
-
+class CreateChecklistSeedBloc extends LegacyBloc<CreateChecklistSeedBlocEvent,
+    CreateChecklistSeedBlocState> {
   final MainNavigateToCreateChecklist args;
   late final ChecklistSeedsCompanion checklistSeed;
 
-  CreateChecklistSeedBloc(this.args) : super(CreateChecklistSeedBlocStateInit()) {
+  CreateChecklistSeedBloc(this.args)
+      : super(CreateChecklistSeedBlocStateInit()) {
     add(CreateChecklistBlocEventInit());
   }
 
   @override
-  Stream<CreateChecklistSeedBlocState> mapEventToState(CreateChecklistSeedBlocEvent event) async* {
+  Stream<CreateChecklistSeedBlocState> mapEventToState(
+      CreateChecklistSeedBlocEvent event) async* {
     if (event is CreateChecklistBlocEventInit) {
       if (args.checklistSeed == null) {
         checklistSeed = ChecklistSeedsCompanion.insert(
@@ -90,13 +91,20 @@ class CreateChecklistSeedBloc extends LegacyBloc<CreateChecklistSeedBlocEvent, C
       } else {
         checklistSeed = args.checklistSeed!.toCompanion(false);
       }
-      yield CreateChecklistSeedBlocStateLoaded(this.args.checklist, checklistSeed);
+      yield CreateChecklistSeedBlocStateLoaded(
+          this.args.checklist, checklistSeed);
     } else if (event is CreateChecklistSeedBlocEventSave) {
       if (event.checklistSeed.id.present) {
-        await RelDB.get().checklistsDAO.updateChecklistSeed(event.checklistSeed.copyWith(synced: Value(false)));
+        await RelDB.get().checklistsDAO.updateChecklistSeed(
+            event.checklistSeed.copyWith(synced: Value(false)));
       } else {
-        Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
-        await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed.copyWith(checklistServerID: Value(checklist.serverID),));
+        Checklist checklist =
+            await RelDB.get().checklistsDAO.getChecklist(args.checklist.id);
+        await RelDB.get()
+            .checklistsDAO
+            .addChecklistSeed(event.checklistSeed.copyWith(
+              checklistServerID: Value(checklist.serverID),
+            ));
       }
       yield CreateChecklistSeedBlocStateCreated();
     }

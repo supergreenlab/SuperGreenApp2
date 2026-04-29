@@ -105,7 +105,9 @@ class BoxSettings extends Equatable {
       schedule: map['schedule'] ?? 'VEG',
       schedules: map['schedules'] ?? DEFAULT_SCHEDULES,
       products: products.map<Product>((p) => Product.fromMap(p)).toList(),
-      lightSettings: lightSettings.map<LightSettings>((l) => LightSettings.fromMap(l)).toList(),
+      lightSettings: lightSettings
+          .map<LightSettings>((l) => LightSettings.fromMap(l))
+          .toList(),
     );
   }
 
@@ -132,7 +134,8 @@ class BoxSettings extends Equatable {
   }
 
   @override
-  List<Object?> get props => [schedule, schedules, width, height, depth, unit, products];
+  List<Object?> get props =>
+      [schedule, schedules, width, height, depth, unit, products];
 
   BoxSettings copyWith({
     String? schedule,

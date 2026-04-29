@@ -33,6 +33,8 @@ class FeedTowelieInfoLoader extends LocalFeedEntryLoader {
   }
 
   @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry, {bool forceNew = false}) =>
-      FeedTowelieInfoState(super.stateForFeedEntry(feedEntry, forceNew: forceNew));
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry,
+          {bool forceNew = false}) =>
+      FeedTowelieInfoState(
+          super.stateForFeedEntry(feedEntry, forceNew: forceNew));
 }

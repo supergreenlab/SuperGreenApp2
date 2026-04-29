@@ -45,7 +45,8 @@ class PublicPlantPage extends StatefulWidget {
     return Intl.message(
       'Viewing single log entry',
       name: 'publicPlantPageSingleEntry',
-      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Label for the button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -54,7 +55,8 @@ class PublicPlantPage extends StatefulWidget {
     return Intl.message(
       'View complete diary',
       name: 'publicPlantPageSingleEntryButton',
-      desc: 'Button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current?.localeName,
     );
   }
@@ -93,7 +95,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
         title: PublicPlantPage.publicPlantPageSingleEntry,
         button: PublicPlantPage.publicPlantPageSingleEntryButton,
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToPublicPlant(
             state.plantID,
           ));
         },
@@ -106,7 +109,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           color: Colors.white,
         ),
         onPressed: () async {
-          await Share.share("https://supergreenlab.com/public/plant?id=${state.plantID}");
+          await Share.share(
+              "https://supergreenlab.com/public/plant?id=${state.plantID}");
         },
       ),
     ];
@@ -117,7 +121,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
             highlightColor: Colors.transparent,
             onTap: () {
               if (BackendAPI().usersAPI.loggedIn) {
-                BlocProvider.of<PublicPlantBloc>(context).add(PublicPlantBlocEventFollowPlant());
+                BlocProvider.of<PublicPlantBloc>(context)
+                    .add(PublicPlantBlocEventFollowPlant());
               } else {
                 _login(context);
               }
@@ -131,8 +136,11 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
                     color: Color(0xff3bb30b),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                    child: Text(state.follows! ? 'Following (${state.nFollows})' : 'Follow'),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 10.0),
+                    child: Text(state.follows!
+                        ? 'Following (${state.nFollows})'
+                        : 'Follow'),
                   ),
                 ),
               ],
@@ -175,7 +183,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
                   return tabs[index](context, state);
                 },
                 pagination: SwiperPagination(
-                  builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
+                  builder: new DotSwiperPaginationBuilder(
+                      color: Colors.white, activeColor: Color(0xff3bb30b)),
                 ),
                 loop: false,
               ),
@@ -196,12 +205,15 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
 
   Widget _renderPlantInfos(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-        create: (context) => PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)), child: PlantInfosPage());
+        create: (context) =>
+            PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)),
+        child: PlantInfosPage());
   }
 
   Widget _renderProducts(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-      create: (context) => ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
+      create: (context) =>
+          ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
       child: ProductsPage(
         editable: false,
       ),
@@ -233,7 +245,8 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           );
         });
     if (confirm ?? false) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 }

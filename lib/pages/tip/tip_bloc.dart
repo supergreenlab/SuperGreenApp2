@@ -52,7 +52,8 @@ class TipBlocStateInit extends TipBlocState {
 class TipBlocStateLoaded extends TipBlocState {
   final List<Map<String, dynamic>> tips;
 
-  TipBlocStateLoaded(MainNavigateToFeedFormEvent? nextRoute, this.tips) : super(nextRoute);
+  TipBlocStateLoaded(MainNavigateToFeedFormEvent? nextRoute, this.tips)
+      : super(nextRoute);
 
   @override
   List<Object?> get props => [nextRoute, tips];
@@ -70,7 +71,8 @@ class TipBloc extends LegacyBloc<TipBlocEvent, TipBlocState> {
     if (event is TipBlocEventInit) {
       List<Map<String, dynamic>> tips = [];
       for (int i = 0; i < args.paths.length; i += 1) {
-        Response resp = await get(Uri.parse('https://tipapi.supergreenlab.com/${args.paths[i]}'));
+        Response resp = await get(
+            Uri.parse('https://tipapi.supergreenlab.com/${args.paths[i]}'));
         Map<String, dynamic>? body = JsonDecoder().convert(resp.body);
         if (body != null && body.length > 0) {
           tips.add(body);

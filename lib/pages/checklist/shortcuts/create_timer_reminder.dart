@@ -34,7 +34,9 @@ class CreateTimerReminder extends StatefulWidget {
   final Function() onClose;
   final Checklist checklist;
 
-  const CreateTimerReminder({Key? key, required this.checklist, required this.onClose}) : super(key: key);
+  const CreateTimerReminder(
+      {Key? key, required this.checklist, required this.onClose})
+      : super(key: key);
 
   @override
   State<CreateTimerReminder> createState() => _CreateTimerReminderState();
@@ -88,21 +90,29 @@ class _CreateTimerReminderState extends State<CreateTimerReminder> {
                 onPressed: condition.valid == false || action.valid == false
                     ? null
                     : () {
-                        BlocProvider.of<ChecklistBloc>(context)
-                            .add(ChecklistBlocEventCreate(ChecklistSeedsCompanion.insert(
+                        BlocProvider.of<ChecklistBloc>(context).add(
+                            ChecklistBlocEventCreate(
+                                ChecklistSeedsCompanion.insert(
                           checklist: widget.checklist.id,
                           title: drift.Value('Reminder'),
                           category: drift.Value(CH_OTHER),
-                          fast: drift.Value(((this.action as ChecklistActionMessage).instructions?.length ?? 0) == 0),
+                          fast: drift.Value(
+                              ((this.action as ChecklistActionMessage)
+                                          .instructions
+                                          ?.length ??
+                                      0) ==
+                                  0),
                           public: drift.Value(false),
-                          repeat: drift.Value((condition as ChecklistConditionTimer).repeat),
+                          repeat: drift.Value(
+                              (condition as ChecklistConditionTimer).repeat),
                           mine: drift.Value(true),
                           conditions: drift.Value('[${condition.toJSON()}]'),
                           exitConditions: drift.Value('[]'),
                           actions: drift.Value('[${action.toJSON()}]'),
                           synced: drift.Value(false),
                         )));
-                        SyncerBloc syncerBloc = BlocProvider.of<SyncerBloc>(context);
+                        SyncerBloc syncerBloc =
+                            BlocProvider.of<SyncerBloc>(context);
                         Future.delayed(const Duration(milliseconds: 200), () {
                           syncerBloc.add(SyncerBlocEventForceSyncChecklists());
                         });

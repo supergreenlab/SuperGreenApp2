@@ -37,8 +37,10 @@ class FeedNutrientMixLoader extends LocalFeedEntryLoader {
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {
-    await FeedEntryHelper.updateFeedEntry(
-        FeedEntriesCompanion(id: Value(entry.feedEntryID), params: Value(params.toJSON()), synced: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(entry.feedEntryID),
+        params: Value(params.toJSON()),
+        synced: Value(false)));
   }
 
   @override

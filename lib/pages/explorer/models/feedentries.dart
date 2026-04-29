@@ -95,7 +95,8 @@ class PublicFeedEntry extends Equatable {
       type: map['type'],
       plantSettings: PlantSettings.fromJSON(map['plantSettings'] ?? '{}'),
       boxSettings: BoxSettings.fromJSON(map['boxSettings'] ?? '{}'),
-      params: FeedEntriesParamHelpers.paramForFeedEntryType(map['type'], map['params'] ?? '{}'),
+      params: FeedEntriesParamHelpers.paramForFeedEntryType(
+          map['type'], map['params'] ?? '{}'),
       meta: JsonDecoder().convert(map['meta'] ?? '{}'),
       liked: map['liked'],
       bookmarked: map['bookmarked'],
@@ -109,9 +110,15 @@ class PublicFeedEntry extends Equatable {
       commentID: map['commentID'],
       comment: map['comment'],
       replyTo: map['commentReplyTo'],
-      commentType: map['commentType'] == null ? null : EnumToString.fromString(CommentType.values, map['commentType']),
-      commentDate: map['commentDate'] == null ? null : DateTime.parse(map['commentDate'] as String),
-      likeDate: map['likeDate'] == null ? null : DateTime.parse(map['likeDate'] as String),
+      commentType: map['commentType'] == null
+          ? null
+          : EnumToString.fromString(CommentType.values, map['commentType']),
+      commentDate: map['commentDate'] == null
+          ? null
+          : DateTime.parse(map['commentDate'] as String),
+      likeDate: map['likeDate'] == null
+          ? null
+          : DateTime.parse(map['likeDate'] as String),
       thumbnailPath: map['thumbnailPath']);
 
   int get commentLength {

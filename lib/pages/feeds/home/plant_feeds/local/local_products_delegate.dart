@@ -21,9 +21,11 @@ class LocalProductsBlocDelegate extends ProductsBlocDelegate {
   void loadProducts() async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     box = await RelDB.get().plantsDAO.getBox(plant.box);
-    plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
+    plantStream =
+        RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
     boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
-    productsLoaded(PlantSettings.fromJSON(plant.settings), BoxSettings.fromJSON(box.settings));
+    productsLoaded(PlantSettings.fromJSON(plant.settings),
+        BoxSettings.fromJSON(box.settings));
   }
 
   @override
@@ -44,30 +46,41 @@ class LocalProductsBlocDelegate extends ProductsBlocDelegate {
     }
 
     String plantSettingsJSON = PlantSettings.fromJSON(plant.settings)
-        .copyWith(products: plantProducts, strain: seed?.name ?? '', seedbank: (seed?.specs as SeedSpecs?)?.bank ?? '')
+        .copyWith(
+            products: plantProducts,
+            strain: seed?.name ?? '',
+            seedbank: (seed?.specs as SeedSpecs?)?.bank ?? '')
         .toJSON();
-    String boxSettingsJSON = BoxSettings.fromJSON(box.settings).copyWith(products: boxProducts).toJSON();
+    String boxSettingsJSON = BoxSettings.fromJSON(box.settings)
+        .copyWith(products: boxProducts)
+        .toJSON();
 
     if (plant.settings != plantSettingsJSON) {
-      PlantsCompanion plant =
-          PlantsCompanion(id: Value(this.plant.id), settings: Value(plantSettingsJSON), synced: Value(false));
+      PlantsCompanion plant = PlantsCompanion(
+          id: Value(this.plant.id),
+          settings: Value(plantSettingsJSON),
+          synced: Value(false));
       await RelDB.get().plantsDAO.updatePlant(plant);
     }
     if (box.settings != boxSettingsJSON) {
-      BoxesCompanion box =
-          BoxesCompanion(id: Value(this.box.id), settings: Value(boxSettingsJSON), synced: Value(false));
+      BoxesCompanion box = BoxesCompanion(
+          id: Value(this.box.id),
+          settings: Value(boxSettingsJSON),
+          synced: Value(false));
       await RelDB.get().plantsDAO.updateBox(box);
     }
   }
 
   void plantUpdated(Plant plant) {
     this.plant = plant;
-    productsLoaded(PlantSettings.fromJSON(plant.settings), BoxSettings.fromJSON(box.settings));
+    productsLoaded(PlantSettings.fromJSON(plant.settings),
+        BoxSettings.fromJSON(box.settings));
   }
 
   void boxUpdated(Box box) {
     this.box = box;
-    productsLoaded(PlantSettings.fromJSON(plant.settings), BoxSettings.fromJSON(box.settings));
+    productsLoaded(PlantSettings.fromJSON(plant.settings),
+        BoxSettings.fromJSON(box.settings));
   }
 
   @override

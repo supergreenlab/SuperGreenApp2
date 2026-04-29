@@ -77,7 +77,8 @@ class DeviceNamePage extends StatefulWidget {
 class DeviceNamePageState extends State<DeviceNamePage> {
   final _nameController = TextEditingController();
 
-  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  final KeyboardVisibilityController _keyboardVisibility =
+      KeyboardVisibilityController();
   late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
@@ -108,17 +109,21 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         if (state is DeviceNameBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
           if (state.device.nLeds == 0) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(mustPop: true, param: state.device));
             return;
           }
           FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceTestEvent(state.device, futureFn: ff.futureFn));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDeviceTestEvent(state.device,
+                  futureFn: ff.futureFn));
           bool done = await ff.future;
           if (done == true) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(mustPop: true, param: state.device));
           } else {
-            BlocProvider.of<DeviceNameBloc>(context).add(DeviceNameBlocEventReset());
+            BlocProvider.of<DeviceNameBloc>(context)
+                .add(DeviceNameBlocEventReset());
           }
         }
       },
@@ -150,7 +155,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
                     titleColor: Colors.white,
                     iconColor: Colors.white,
                   ),
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
@@ -180,7 +186,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                   hintText: DeviceNamePage.deviceNamePageSetNameHint,
                   controller: _nameController,
@@ -197,7 +204,9 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GreenButton(
-              onPressed: _nameController.text.length > 0 ? () => _handleInput(context) : null,
+              onPressed: _nameController.text.length > 0
+                  ? () => _handleInput(context)
+                  : null,
               title: 'OK',
             ),
           ),

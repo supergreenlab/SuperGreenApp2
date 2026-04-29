@@ -27,18 +27,22 @@ class TowelieButtonPushRouteFeedMedia extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton(String title, int plantID) => TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton(String title, int plantID) =>
+      TowelieButton.createButton(_id, {
         'title': title,
         'plantID': plantID,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
     int plantID = event.params['plantID'];
     Plant plant = await RelDB.get().plantsDAO.getPlant(plantID);
-    yield TowelieBlocStateMainNavigation(MainNavigateToFeedMediaFormEvent(plant: plant));
+    yield TowelieBlocStateMainNavigation(
+        MainNavigateToFeedMediaFormEvent(plant: plant));
     if (event.feedEntry != null) {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
       await selectButtons(feedEntry, selectedButtonID: id);
     }
   }

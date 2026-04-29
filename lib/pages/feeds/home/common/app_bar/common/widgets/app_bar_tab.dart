@@ -31,19 +31,25 @@ class AppBarTab extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(color: Colors.white),
           child: Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 2.0), boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(50),
-              ),
-              const BoxShadow(
-                color: Color(0xFFEFEFEF),
-                spreadRadius: -3.0,
-                blurRadius: 3.0,
-              ),
-            ]),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 2.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(50),
+                  ),
+                  const BoxShadow(
+                    color: Color(0xFFEFEFEF),
+                    spreadRadius: -3.0,
+                    blurRadius: 3.0,
+                  ),
+                ]),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [Expanded(child: Padding(padding: const EdgeInsets.all(6.0), child: child))]),
+                children: [
+                  Expanded(
+                      child: Padding(
+                          padding: const EdgeInsets.all(6.0), child: child))
+                ]),
           ),
         ));
   }

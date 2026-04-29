@@ -43,7 +43,8 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 0) {
-      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpAddExistingDevice.towelieHelperAddExistingDevice);
+      yield TowelieBlocStateHelper(event.settings,
+          TowelieActionHelpAddExistingDevice.towelieHelperAddExistingDevice);
     }
   }
 }

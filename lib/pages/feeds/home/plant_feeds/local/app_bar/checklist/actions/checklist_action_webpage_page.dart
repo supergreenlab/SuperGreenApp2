@@ -57,7 +57,8 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
       child: AppBarAction(
         iconWidget: FaviconImage(
           url: (checklistAction as ChecklistActionWebpage).url!,
-          alternativeImage: SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
+          alternativeImage: SvgPicture.asset(
+              ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
         ),
         color: Colors.teal,
         title: checklistSeed.title,
@@ -81,7 +82,8 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
               backgroundColor: Colors.transparent,
               builder: (BuildContext c) {
                 return BlocProvider<ChecklistActionPopupBloc>(
-                  create: (BuildContext context) => ChecklistActionPopupBloc(this.plant, this.box, this.checklistSeed),
+                  create: (BuildContext context) => ChecklistActionPopupBloc(
+                      this.plant, this.box, this.checklistSeed),
                   child: ChecklistActionPopupPage(),
                 );
               },
@@ -90,7 +92,10 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
             launchUrl(url);
           }
         },
-        actionIcon: !summarize ? null : SvgPicture.asset(ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
+        actionIcon: !summarize
+            ? null
+            : SvgPicture.asset(
+                ChecklistActionIcons[ChecklistActionWebpage.TYPE]!),
       ),
     );
   }
@@ -105,11 +110,18 @@ class ChecklistActionWebpageButton extends ChecklistActionButton {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           MarkdownBody(
-            data: (checklistAction as ChecklistActionWebpage).instructions ?? '',
+            data:
+                (checklistAction as ChecklistActionWebpage).instructions ?? '',
             styleSheet: MarkdownStyleSheet(
               p: TextStyle(color: Color(0xff454545), fontSize: 15),
-              h1: TextStyle(color: Color(0xff454545), fontSize: 17, fontWeight: FontWeight.bold),
-              h2: TextStyle(color: Color(0xff454545), fontSize: 16, fontWeight: FontWeight.bold),
+              h1: TextStyle(
+                  color: Color(0xff454545),
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold),
+              h2: TextStyle(
+                  color: Color(0xff454545),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],

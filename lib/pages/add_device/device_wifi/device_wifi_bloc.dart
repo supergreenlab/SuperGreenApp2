@@ -98,13 +98,15 @@ class DeviceWifiBlocStateDone extends DeviceWifiBlocState {
   List<Object> get props => [];
 }
 
-class DeviceWifiBloc extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
+class DeviceWifiBloc
+    extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
   final MainNavigateToDeviceWifiEvent args;
 
   DeviceWifiBloc(this.args) : super(DeviceWifiBlocState());
 
   @override
-  Stream<DeviceWifiBlocState> mapEventToState(DeviceWifiBlocEvent event) async* {
+  Stream<DeviceWifiBlocState> mapEventToState(
+      DeviceWifiBlocEvent event) async* {
     if (event is DeviceWifiBlocEventSetup) {
       yield DeviceWifiBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
@@ -117,7 +119,8 @@ class DeviceWifiBloc extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState
       }
       try {
         Param pass = await ddb.getParam(args.device.id, 'WIFI_PASSWORD');
-        await DeviceHelper.updateStringParam(args.device, pass, event.pass, timeout: 5, nRetries: 1);
+        await DeviceHelper.updateStringParam(args.device, pass, event.pass,
+            timeout: 5, nRetries: 1);
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"device": args.device});
       }
@@ -135,7 +138,8 @@ class DeviceWifiBloc extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState
     Device device = await ddb.getDevice(args.device.id);
 
     yield DeviceWifiBlocStateSearching(1, 10);
-    await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+    await ddb.updateDevice(
+        DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
 
     String? ip;
     Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
@@ -165,9 +169,8 @@ class DeviceWifiBloc extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState
       return;
     }
 
-    await RelDB.get()
-        .devicesDAO
-        .updateDevice(DevicesCompanion(id: Value(device.id), ip: Value(ip), isReachable: Value(true)));
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+        id: Value(device.id), ip: Value(ip), isReachable: Value(true)));
     device = await RelDB.get().devicesDAO.getDevice(device.id);
 
     ipParam = await ddb.getParam(device.id, 'WIFI_IP');

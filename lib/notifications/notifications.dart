@@ -42,7 +42,8 @@ class NotificationsBlocEventReminder extends NotificationsBlocEvent {
   final String body;
   final String payload;
 
-  NotificationsBlocEventReminder(this.id, this.afterMinutes, this.title, this.body, this.payload);
+  NotificationsBlocEventReminder(
+      this.id, this.afterMinutes, this.title, this.body, this.payload);
 
   @override
   List<Object> get props => [id, afterMinutes, title, body, payload];
@@ -116,7 +117,8 @@ class NotificationsBlocStateRequestPermission extends NotificationsBlocState {
   List<Object> get props => [rand];
 }
 
-class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, NotificationsBlocState> {
+class NotificationsBloc
+    extends LegacyBloc<NotificationsBlocEvent, NotificationsBlocState> {
   static late RemoteNotifications remoteNotifications;
   static late LocalNotifications localNotifications;
 
@@ -126,7 +128,8 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
   }
 
   @override
-  Stream<NotificationsBlocState> mapEventToState(NotificationsBlocEvent event) async* {
+  Stream<NotificationsBlocState> mapEventToState(
+      NotificationsBlocEvent event) async* {
     if (event is NotificationsBlocEventInit) {
       await Future.wait([
         remoteNotifications.init(),
@@ -136,18 +139,28 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
       NotificationData notificationData = event.notificationData;
       if (notificationData is NotificationDataPlantComment) {
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
-          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
+          FeedEntry feedEntry = await RelDB.get()
+              .feedsDAO
+              .getFeedEntryForServerID(notificationData.feedEntryID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
-        } catch (e) {
           yield NotificationsBlocStateMainNavigation(
-              MainNavigateToPublicPlant(notificationData.plantID, feedEntryID: notificationData.feedEntryID));
+              MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
+        } catch (e) {
+          yield NotificationsBlocStateMainNavigation(MainNavigateToPublicPlant(
+              notificationData.plantID,
+              feedEntryID: notificationData.feedEntryID));
         }
       } else if (notificationData is NotificationDataPlantCommentReply) {
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
-          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
+          FeedEntry feedEntry = await RelDB.get()
+              .feedsDAO
+              .getFeedEntryForServerID(notificationData.feedEntryID);
           AppDB().setLastPlant(plant.id);
           yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
             plant: plant,
@@ -166,31 +179,46 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
       } else if (notificationData is NotificationDataReminder) {
         yield NotificationsBlocStateNotification(event.notificationData);
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
+          Plant plant =
+              await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataAlert) {
         yield NotificationsBlocStateNotification(event.notificationData);
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataLikePlantFeedEntry) {
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
-          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
+          FeedEntry feedEntry = await RelDB.get()
+              .feedsDAO
+              .getFeedEntryForServerID(notificationData.feedEntryID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
-        } catch (e) {
           yield NotificationsBlocStateMainNavigation(
-              MainNavigateToPublicPlant(notificationData.plantID, feedEntryID: notificationData.feedEntryID));
+              MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
+        } catch (e) {
+          yield NotificationsBlocStateMainNavigation(MainNavigateToPublicPlant(
+              notificationData.plantID,
+              feedEntryID: notificationData.feedEntryID));
         }
       } else if (notificationData is NotificationDataLikePlantComment) {
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
-          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
+          FeedEntry feedEntry = await RelDB.get()
+              .feedsDAO
+              .getFeedEntryForServerID(notificationData.feedEntryID);
           AppDB().setLastPlant(plant.id);
           yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
             plant: plant,
@@ -209,56 +237,79 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
       } else if (notificationData is NotificationDataFollowedPlantActivity) {
         try {
           yield NotificationsBlocStateNotification(event.notificationData);
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataNewFollower) {
         try {
           yield NotificationsBlocStateNotification(event.notificationData);
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataDeviceUnreachable) {
         try {
           yield NotificationsBlocStateNotification(event.notificationData);
-          Device device = await RelDB.get().devicesDAO.getDeviceForServerID(notificationData.deviceID);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToSettingsDevice(device));
+          Device device = await RelDB.get()
+              .devicesDAO
+              .getDeviceForServerID(notificationData.deviceID);
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToSettingsDevice(device));
         } catch (e) {}
       } else if (notificationData is NotificationDataLivecamUnreachable) {
         yield NotificationsBlocStateNotification(event.notificationData);
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataNewTimelapse) {
         yield NotificationsBlocStateNotification(event.notificationData);
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToHomeEvent(plant: plant));
         } catch (e) {}
       } else if (notificationData is NotificationDataChecklistSeedTriggered) {
         // yield NotificationsBlocStateNotification(event.notificationData);
         try {
-          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
-          Checklist checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(notificationData.checklistID);
+          Plant plant = await RelDB.get()
+              .plantsDAO
+              .getPlantForServerID(notificationData.plantID);
+          Checklist checklist = await RelDB.get()
+              .checklistsDAO
+              .getChecklistForServerID(notificationData.checklistID);
           ChecklistSeed checklistSeed = await RelDB.get()
               .checklistsDAO
-              .getChecklistSeedForServerIDs(notificationData.checklistSeedID, notificationData.checklistID);
+              .getChecklistSeedForServerIDs(notificationData.checklistSeedID,
+                  notificationData.checklistID);
 
           AppDB().setLastPlant(plant.id);
           yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
-              plant: plant, checklist: checklist, checklistSeed: checklistSeed,));
+            plant: plant,
+            checklist: checklist,
+            checklistSeed: checklistSeed,
+          ));
         } catch (e) {
           print(e);
         }
       }
     } else if (event is NotificationsBlocEventReminder) {
-      await localNotifications.reminderNotification(
-          event.id, event.afterMinutes, NotificationData.fromJSON(event.payload));
+      await localNotifications.reminderNotification(event.id,
+          event.afterMinutes, NotificationData.fromJSON(event.payload));
     } else if (event is NotificationsBlocEventRequestPermission) {
       if (!await RemoteNotifications.checkPermissions()) {
         yield NotificationsBlocStateRequestPermission();

@@ -30,7 +30,12 @@ class PlantInfosForm extends StatelessWidget {
   final Function()? onSubmit;
 
   const PlantInfosForm(
-      {Key? key, this.icon, required this.title, required this.child, required this.onCancel, required this.onSubmit})
+      {Key? key,
+      this.icon,
+      required this.title,
+      required this.child,
+      required this.onCancel,
+      required this.onSubmit})
       : super(key: key);
 
   @override
@@ -42,12 +47,18 @@ class PlantInfosForm extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: icon != null ? SvgPicture.asset("assets/plant_infos/$icon", height: 25,) : Container(),
+              child: icon != null
+                  ? SvgPicture.asset(
+                      "assets/plant_infos/$icon",
+                      height: 25,
+                    )
+                  : Container(),
             ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(title, style: TextStyle(color: Colors.white, fontSize: 15)),
+                child: Text(title,
+                    style: TextStyle(color: Colors.white, fontSize: 15)),
               ),
             ),
           ],

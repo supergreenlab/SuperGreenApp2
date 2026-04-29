@@ -29,11 +29,13 @@ class ProductTypeBlocStateInit extends ProductTypeBlocState {
   List<Object> get props => [];
 }
 
-class ProductTypeBloc extends LegacyBloc<ProductTypeBlocEvent, ProductTypeBlocState> {
+class ProductTypeBloc
+    extends LegacyBloc<ProductTypeBlocEvent, ProductTypeBlocState> {
   final MainNavigateToProductTypeEvent args;
 
   ProductTypeBloc(this.args) : super(ProductTypeBlocStateInit());
 
   @override
-  Stream<ProductTypeBlocState> mapEventToState(ProductTypeBlocEvent event) async* {}
+  Stream<ProductTypeBlocState> mapEventToState(
+      ProductTypeBlocEvent event) async* {}
 }

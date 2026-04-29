@@ -75,7 +75,8 @@ class SettingsDevicesBlocStateLoaded extends SettingsDevicesBlocState {
   List<Object> get props => [devices];
 }
 
-class SettingsDevicesBloc extends LegacyBloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
+class SettingsDevicesBloc
+    extends LegacyBloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
   late List<Device> devices;
   StreamSubscription<List<Device>>? _devicesStream;
 
@@ -90,7 +91,8 @@ class SettingsDevicesBloc extends LegacyBloc<SettingsDevicesBlocEvent, SettingsD
   Stream<SettingsDevicesBlocState> mapEventToState(event) async* {
     if (event is SettingsDevicesBlocEventInit) {
       yield SettingsDevicesBlocStateLoading();
-      _devicesStream = RelDB.get().devicesDAO.watchDevices().listen(_onDeviceListChange);
+      _devicesStream =
+          RelDB.get().devicesDAO.watchDevices().listen(_onDeviceListChange);
     } else if (event is SettingsDevicesblocEventBoxListChanged) {
       yield SettingsDevicesBlocStateLoaded(event.devices);
     } else if (event is SettingsDevicesBlocEventDeleteDevice) {

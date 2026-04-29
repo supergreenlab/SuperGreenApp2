@@ -35,7 +35,8 @@ class DeleteAccountBlocEventDelete extends DeleteAccountBlocEvent {
   final String token;
   final bool deleteLocalData;
 
-  DeleteAccountBlocEventDelete(this.nickname, this.password, this.token, this.deleteLocalData);
+  DeleteAccountBlocEventDelete(
+      this.nickname, this.password, this.token, this.deleteLocalData);
 
   @override
   List<Object?> get props => [
@@ -73,17 +74,21 @@ class DeleteAccountBlocStateDone extends DeleteAccountBlocState {
   List<Object?> get props => [];
 }
 
-class DeleteAccountBloc extends LegacyBloc<DeleteAccountBlocEvent, DeleteAccountBlocState> {
+class DeleteAccountBloc
+    extends LegacyBloc<DeleteAccountBlocEvent, DeleteAccountBlocState> {
   DeleteAccountBloc() : super(DeleteAccountBlocStateInit()) {
     add(DeleteAccountBlocEventInit());
   }
 
   @override
-  Stream<DeleteAccountBlocState> mapEventToState(DeleteAccountBlocEvent event) async* {
+  Stream<DeleteAccountBlocState> mapEventToState(
+      DeleteAccountBlocEvent event) async* {
     if (event is DeleteAccountBlocEventInit) {
     } else if (event is DeleteAccountBlocEventDelete) {
       try {
-        await BackendAPI().usersAPI.deleteUser(event.nickname, event.password, event.token);
+        await BackendAPI()
+            .usersAPI
+            .deleteUser(event.nickname, event.password, event.token);
       } catch (e) {
         yield DeleteAccountBlocStateError();
         return;

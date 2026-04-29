@@ -38,7 +38,8 @@ class _MotorPortPageState extends State<MotorPortPage> {
     return BlocListener<MotorPortBloc, MotorPortBlocState>(
       listener: (BuildContext context, state) async {
         if (state is MotorPortBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop());
         } else if (state is MotorPortBlocStateLoaded) {
           setState(() {
             loading = false;
@@ -69,7 +70,8 @@ class _MotorPortPageState extends State<MotorPortPage> {
     );
   }
 
-  Widget _renderMissingConfig(BuildContext context, MotorPortBlocStateMissingConfig state) {
+  Widget _renderMissingConfig(
+      BuildContext context, MotorPortBlocStateMissingConfig state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -84,7 +86,8 @@ class _MotorPortPageState extends State<MotorPortPage> {
         GreenButton(
           title: 'REFRESH PARAMETERS',
           onPressed: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToRefreshParameters(state.device));
           },
         ),
       ],
@@ -108,9 +111,11 @@ class _MotorPortPageState extends State<MotorPortPage> {
                     setState(() {
                       loading = true;
                     });
-                    BlocProvider.of<MotorPortBloc>(context).add(MotorPortBlocEventSourceUpdated(
-                        source.copyWith(params: {"source": source.source.copyWith(value: value!)})
-                            as MotorSourceParamsController));
+                    BlocProvider.of<MotorPortBloc>(context).add(
+                        MotorPortBlocEventSourceUpdated(source.copyWith(
+                            params: {
+                          "source": source.source.copyWith(value: value!)
+                        }) as MotorSourceParamsController));
                   },
             items: state.helpers.map<DropdownMenuItem<int>>((h) {
               int j = state.helpers.indexOf(h);

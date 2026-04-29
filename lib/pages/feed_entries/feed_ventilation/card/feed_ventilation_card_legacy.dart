@@ -21,10 +21,10 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_page.dart';
 
 class FeedVentilationCardLegacy extends StatelessWidget {
-
   final FeedVentilationParams params;
 
-  const FeedVentilationCardLegacy({Key? key, required this.params}) : super(key: key);
+  const FeedVentilationCardLegacy({Key? key, required this.params})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +33,15 @@ class FeedVentilationCardLegacy extends StatelessWidget {
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _renderValues([params.values.blowerDay, params.values.blowerNight],
+        children: _renderValues(
+            [params.values.blowerDay, params.values.blowerNight],
             [params.initialValues.blowerDay, params.initialValues.blowerNight]),
       ),
     );
   }
 
-  List<Widget> _renderValues(List<dynamic> values, List<dynamic> initialValues) {
+  List<Widget> _renderValues(
+      List<dynamic> values, List<dynamic> initialValues) {
     int i = 0;
     return values
         .map<Map<String, int>>((v) {
@@ -62,17 +64,26 @@ class FeedVentilationCardLegacy extends StatelessWidget {
                     Text(
                         v['i'] == 0
                             ? FeedVentilationCardPage.feedVentilationCardPageDay
-                            : FeedVentilationCardPage.feedVentilationCardPageNight,
-                        style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300, color: Colors.grey)),
+                            : FeedVentilationCardPage
+                                .feedVentilationCardPageNight,
+                        style: TextStyle(
+                            fontSize: 45,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.grey)),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('${v['from']}%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
+                    Text('${v['from']}%',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w300)),
                     Icon(Icons.arrow_forward, size: 18),
                     Text('${v['to']}%',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: Colors.green)),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.green)),
                   ],
                 ),
               ],
@@ -81,5 +92,4 @@ class FeedVentilationCardLegacy extends StatelessWidget {
         })
         .toList();
   }
-
 }

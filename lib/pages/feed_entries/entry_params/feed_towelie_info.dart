@@ -51,14 +51,17 @@ class FeedTowelieInfoParams extends FeedEntryParams {
   final List<FeedTowelieParamsButton>? buttons;
   final FeedTowelieParamsButton? selectedButton;
 
-  FeedTowelieInfoParams(this.topPic, this.text, this.buttons, this.selectedButton);
+  FeedTowelieInfoParams(
+      this.topPic, this.text, this.buttons, this.selectedButton);
 
   factory FeedTowelieInfoParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    List<FeedTowelieParamsButton> buttons =
-        (map['buttons'] ?? []).map<FeedTowelieParamsButton>((b) => FeedTowelieParamsButton.fromMap(b)).toList();
-    FeedTowelieParamsButton? selectedButton =
-        map['selectedButton'] == null ? null : FeedTowelieParamsButton.fromMap(map['selectedButton']);
+    List<FeedTowelieParamsButton> buttons = (map['buttons'] ?? [])
+        .map<FeedTowelieParamsButton>((b) => FeedTowelieParamsButton.fromMap(b))
+        .toList();
+    FeedTowelieParamsButton? selectedButton = map['selectedButton'] == null
+        ? null
+        : FeedTowelieParamsButton.fromMap(map['selectedButton']);
     return FeedTowelieInfoParams(
       map['top_pic'],
       map['text'],

@@ -73,7 +73,8 @@ class NewDeviceBloc extends LegacyBloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   MainNavigateToNewDeviceEvent args;
 
   NewDeviceBloc(this.args) : super(NewDeviceBlocState()) {
-    Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));
+    Future.delayed(const Duration(seconds: 1),
+        () => this.add(NewDeviceBlocEventStartSearch()));
   }
 
   @override
@@ -83,7 +84,8 @@ class NewDeviceBloc extends LegacyBloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     }
   }
 
-  Stream<NewDeviceBlocState> _startSearch(NewDeviceBlocEventStartSearch event) async* {
+  Stream<NewDeviceBlocState> _startSearch(
+      NewDeviceBlocEventStartSearch event) async* {
     if (Platform.isIOS && await Permission.locationWhenInUse.isGranted) {
       final result = await [Permission.locationWhenInUse].request();
       if (result[Permission.locationWhenInUse] != PermissionStatus.granted) {
@@ -95,7 +97,10 @@ class NewDeviceBloc extends LegacyBloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     if (currentSSID != DefaultSSID) {
       yield NewDeviceBlocStateConnectingToSSID();
       if (await WiFiForIoTPlugin.connect(DefaultSSID,
-              password: DefaultPass, security: NetworkSecurity.WPA, joinOnce: false, withInternet: false) ==
+              password: DefaultPass,
+              security: NetworkSecurity.WPA,
+              joinOnce: false,
+              withInternet: false) ==
           false) {
         yield NewDeviceBlocStateConnectionToSSIDFailed(args.popOnComplete);
         return;

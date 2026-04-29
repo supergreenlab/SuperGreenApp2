@@ -106,7 +106,8 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
       bloc: BlocProvider.of<SelectDeviceNewBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceNewBoxBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: true));
         }
       },
       child: BlocBuilder<SelectDeviceNewBoxBloc, SelectDeviceNewBoxBlocState>(
@@ -114,11 +115,14 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceNewBoxBlocStateLoading) {
-              body = FullscreenLoading(title: SelectDeviceNewBoxPage.selectDeviceNewBoxSettingUp);
+              body = FullscreenLoading(
+                  title: SelectDeviceNewBoxPage.selectDeviceNewBoxSettingUp);
             } else if (state is SelectDeviceNewBoxBlocStateDeviceFull) {
               body = _renderNoLedsAvailable(context, state);
             } else if (state is SelectDeviceNewBoxBlocStateDone) {
-              body = Fullscreen(title: CommonL10N.done, child: Icon(Icons.done, color: Color(0xff0b6ab3), size: 100));
+              body = Fullscreen(
+                  title: CommonL10N.done,
+                  child: Icon(Icons.done, color: Color(0xff0b6ab3), size: 100));
             } else {
               body = _renderLedSelection(context, state);
             }
@@ -130,7 +134,8 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
@@ -170,10 +175,13 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           titleColor: Colors.white,
           elevation: 5,
         ),
-        _renderLeds(state.leds.where((l) => !_selectedLeds.contains(l)).toList(), (int led) {
+        _renderLeds(
+            state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
+            (int led) {
           setState(() {
             _selectedLeds.add(led);
-            BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventSelectLed(led));
+            BlocProvider.of<SelectDeviceNewBoxBloc>(context)
+                .add(SelectDeviceNewBoxBlocEventSelectLed(led));
           });
         }),
         Padding(
@@ -189,7 +197,8 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
         _renderLeds(_selectedLeds, (int led) {
           setState(() {
             _selectedLeds.remove(led);
-            BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventUnselectLed(led));
+            BlocProvider.of<SelectDeviceNewBoxBloc>(context)
+                .add(SelectDeviceNewBoxBlocEventUnselectLed(led));
           });
         }),
         Expanded(
@@ -222,10 +231,14 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: <Widget>[
-                          Text(SelectDeviceNewBoxPage.selectDeviceNewBoxLEDChannel, style: TextStyle(fontSize: 10)),
+                          Text(
+                              SelectDeviceNewBoxPage
+                                  .selectDeviceNewBoxLEDChannel,
+                              style: TextStyle(fontSize: 10)),
                           Text(
                             '${led + 1}',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -236,10 +249,12 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
   }
 
   void _handleInput(BuildContext context) {
-    BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventSelectLeds(_selectedLeds));
+    BlocProvider.of<SelectDeviceNewBoxBloc>(context)
+        .add(SelectDeviceNewBoxBlocEventSelectLeds(_selectedLeds));
   }
 
-  Widget _renderBox(Key key, BuildContext context, Function() onPressed, Widget content) {
+  Widget _renderBox(
+      Key key, BuildContext context, Function() onPressed, Widget content) {
     return SizedBox(
         key: key,
         width: 100,
@@ -249,7 +264,9 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           child: RawMaterialButton(
             onPressed: onPressed,
             child: Container(
-                decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(10)),
                 child: content),
           ),
         ));

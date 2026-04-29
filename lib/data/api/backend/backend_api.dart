@@ -76,10 +76,16 @@ class BackendAPI {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (true || (await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
-      serverHost = local ? 'http://192.168.1.53:8090' : 'https://devapi2.supergreenlab.com';
-      websocketServerHost = local ? 'ws://192.168.1.53:8090' : 'wss://devapi2.supergreenlab.com';
-      storageServerHost = local ? 'http://192.168.1.53:9000' : 'https://devstorage.supergreenlab.com';
-      storageServerHostHeader = local ? 'minio:9000' : 'devstorage.supergreenlab.com';
+      serverHost = local
+          ? 'http://192.168.1.53:8090'
+          : 'https://devapi2.supergreenlab.com';
+      websocketServerHost =
+          local ? 'ws://192.168.1.53:8090' : 'wss://devapi2.supergreenlab.com';
+      storageServerHost = local
+          ? 'http://192.168.1.53:9000'
+          : 'https://devstorage.supergreenlab.com';
+      storageServerHostHeader =
+          local ? 'minio:9000' : 'devstorage.supergreenlab.com';
     } else {
       serverHost = 'http://10.0.2.2:8090';
       websocketServerHost = 'ws://10.0.2.2:8090';
@@ -88,7 +94,8 @@ class BackendAPI {
     }
   }
 
-  Future<String?> postPut(String path, Map<String, dynamic> obj, {bool forcePut = false}) async {
+  Future<String?> postPut(String path, Map<String, dynamic> obj,
+      {bool forcePut = false}) async {
     Function(Uri uri, {Map<String, String>? headers, Object? body}) postPut =
         obj['id'] != null || forcePut ? apiClient.put : apiClient.post;
     Response resp = await postPut(Uri.parse('${BackendAPI().serverHost}$path'),
@@ -111,7 +118,8 @@ class BackendAPI {
   }
 
   Future<dynamic> get(String path) async {
-    Response resp = await apiClient.get(Uri.parse('${BackendAPI().serverHost}$path'), headers: {
+    Response resp = await apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}$path'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });

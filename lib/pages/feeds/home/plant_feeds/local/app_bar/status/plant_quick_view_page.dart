@@ -50,30 +50,39 @@ class PlantQuickViewPage extends StatelessWidget {
             if (state is PlantQuickViewBlocStateInit) {
               return AppBarTab(child: _renderLoading(context, state));
             }
-            return AppBarTab(child: _renderLoaded(context, state as PlantQuickViewBlocStateLoaded));
+            return AppBarTab(
+                child: _renderLoaded(
+                    context, state as PlantQuickViewBlocStateLoaded));
           }),
     );
   }
 
-  Widget _renderLoading(BuildContext context, PlantQuickViewBlocStateInit state) {
+  Widget _renderLoading(
+      BuildContext context, PlantQuickViewBlocStateInit state) {
     return FullscreenLoading(
       title: PlantQuickViewPage.plantQuickViewPageLoadingPlantData,
     );
   }
 
-  Widget _renderLoaded(BuildContext context, PlantQuickViewBlocStateLoaded state) {
+  Widget _renderLoaded(
+      BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        AppBarTitle(title: 'Quick view', plant: state.plant, body: AppBarBoxMetricsPage()),
+        AppBarTitle(
+            title: 'Quick view',
+            plant: state.plant,
+            body: AppBarBoxMetricsPage()),
         Expanded(child: _renderActions(context, state)),
       ],
     );
   }
 
-  Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
+  Widget _renderActions(
+      BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return BlocProvider(
-      create: (BuildContext context) => AppbarChecklistBloc(state.plant, state.box),
+      create: (BuildContext context) =>
+          AppbarChecklistBloc(state.plant, state.box),
       child: AppbarChecklistPage(),
     );
   }
@@ -86,7 +95,8 @@ class PlantQuickViewPage extends StatelessWidget {
     if (state.watering.length >= 2) {
       period = state.watering[0].date.difference(state.watering[1].date);
     }
-    return DateTime.now().difference(state.watering[0].date).inSeconds > period.inSeconds * 0.85;
+    return DateTime.now().difference(state.watering[0].date).inSeconds >
+        period.inSeconds * 0.85;
   }
 
   bool mediaAlert(PlantQuickViewBlocStateLoaded state) {
@@ -94,6 +104,7 @@ class PlantQuickViewPage extends StatelessWidget {
       return true;
     }
     Duration period = Duration(days: 3);
-    return DateTime.now().difference(state.media!.date).inSeconds > period.inSeconds;
+    return DateTime.now().difference(state.media!.date).inSeconds >
+        period.inSeconds;
   }
 }

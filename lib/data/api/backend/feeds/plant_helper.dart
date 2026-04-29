@@ -24,16 +24,17 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:collection/collection.dart';
 
 class PlantHelper {
-
   static Future deletePlant(Plant plant, {addDeleted = true}) async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     await RelDB.get().plantsDAO.deletePlant(plant);
     if (addDeleted && plant.serverID != null) {
-      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(serverID: Value(plant.serverID!), type: Value('plants')));
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(plant.serverID!), type: Value('plants')));
     }
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
     await FeedEntryHelper.deleteFeed(feed, addDeleted: addDeleted);
-    List<Timelapse> timelapses = await RelDB.get().plantsDAO.getTimelapses(plant.id);
+    List<Timelapse> timelapses =
+        await RelDB.get().plantsDAO.getTimelapses(plant.id);
     for (Timelapse timelapse in timelapses) {
       await PlantHelper.deleteTimelapse(timelapse, addDeleted: addDeleted);
     }
@@ -43,25 +44,28 @@ class PlantHelper {
     box = await RelDB.get().plantsDAO.getBox(box.id);
     await RelDB.get().plantsDAO.deleteBox(box);
     if (addDeleted && box.serverID != null) {
-      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(serverID: Value(box.serverID!), type: Value('boxes')));
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(box.serverID!), type: Value('boxes')));
     }
   }
 
-  static Future deleteTimelapse(Timelapse timelapse, {addDeleted = true}) async {
+  static Future deleteTimelapse(Timelapse timelapse,
+      {addDeleted = true}) async {
     timelapse = await RelDB.get().plantsDAO.getTimelapse(timelapse.id);
     await RelDB.get().plantsDAO.deleteTimelapse(timelapse);
     if (addDeleted && timelapse.serverID != null) {
-      await RelDB.get()
-          .deletesDAO
-          .addDelete(DeletesCompanion(serverID: Value(timelapse.serverID!), type: Value('timelapses')));
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(timelapse.serverID!), type: Value('timelapses')));
     }
   }
 
-  static Future<FeedEntry?> updatePlantPhase(Plant plant, PlantPhases phase, DateTime date) async {
+  static Future<FeedEntry?> updatePlantPhase(
+      Plant plant, PlantPhases phase, DateTime date) async {
     final db = RelDB.get();
     plant = await db.plantsDAO.getPlant(plant.id);
 
-    List<FeedEntry> lifeEvents = await db.feedsDAO.getFeedEntriesForFeedWithType(plant.feed, 'FE_LIFE_EVENT');
+    List<FeedEntry> lifeEvents = await db.feedsDAO
+        .getFeedEntriesForFeedWithType(plant.feed, 'FE_LIFE_EVENT');
     FeedEntry? lifeEvent = lifeEvents.firstWhereOrNull((fe) {
       FeedLifeEventParams params = FeedLifeEventParams.fromJSON(fe.params);
       return params.phase == phase;

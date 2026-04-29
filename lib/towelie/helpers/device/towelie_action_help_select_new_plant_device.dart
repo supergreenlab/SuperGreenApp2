@@ -42,7 +42,9 @@ To **better understand** you should have your LED panels **connected to the cont
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpSelectNewPlantDevice.towelieHelperSelectNewPlantDeviceBox);
+          event.settings,
+          TowelieActionHelpSelectNewPlantDevice
+              .towelieHelperSelectNewPlantDeviceBox);
     }
   }
 }
