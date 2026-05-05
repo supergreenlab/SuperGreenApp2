@@ -94,8 +94,9 @@ class UsersAPI {
               'token': token,
             }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('CreateUser failed with error: ${resp.body}',
-          fwdThrow: true);
+      final String body = resp.body.trim();
+      Logger.throwError(
+          body.isEmpty ? 'Create user failed' : body, fwdThrow: true);
     }
     AppDB().setJWT(resp.headers['x-sgl-token']!);
   }

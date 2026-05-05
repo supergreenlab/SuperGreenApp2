@@ -26,6 +26,12 @@ class SettingsCreateAccountBlocEventCreateAccount
   List<Object> get props => [nickname, password, token];
 }
 
+class SettingsCreateAccountBlocEventClearError
+    extends SettingsCreateAccountBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 abstract class SettingsCreateAccountBlocState extends Equatable {}
 
 class SettingsCreateAccountBlocStateInit
@@ -43,20 +49,15 @@ class SettingsCreateAccountBlocStateLoading
 class SettingsCreateAccountBlocStateLoaded
     extends SettingsCreateAccountBlocState {
   final bool isAuth;
+  final String? errorMessage;
 
-  SettingsCreateAccountBlocStateLoaded(this.isAuth);
+  SettingsCreateAccountBlocStateLoaded(this.isAuth, {this.errorMessage});
 
   @override
-  List<Object> get props => [isAuth];
+  List<Object?> get props => [isAuth, errorMessage];
 }
 
 class SettingsCreateAccountBlocStateDone
-    extends SettingsCreateAccountBlocState {
-  @override
-  List<Object> get props => [];
-}
-
-class SettingsCreateAccountBlocStateError
     extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
@@ -80,6 +81,8 @@ class SettingsCreateAccountBloc extends LegacyBloc<
     if (event is SettingsCreateAccountBlocEventInit) {
       yield SettingsCreateAccountBlocStateLoading();
       yield SettingsCreateAccountBlocStateLoaded(_isAuth);
+    } else if (event is SettingsCreateAccountBlocEventClearError) {
+      yield SettingsCreateAccountBlocStateLoaded(_isAuth);
     } else if (event is SettingsCreateAccountBlocEventCreateAccount) {
       yield SettingsCreateAccountBlocStateLoading();
       try {
@@ -91,9 +94,9 @@ class SettingsCreateAccountBloc extends LegacyBloc<
             notificationToken: AppDB().getAppData().notificationToken);
       } catch (e, trace) {
         Logger.logError(e, trace);
-        yield SettingsCreateAccountBlocStateError();
-        await Future.delayed(Duration(seconds: 2));
-        yield SettingsCreateAccountBlocStateLoaded(_isAuth);
+        final String message = e is String ? e : e.toString();
+        yield SettingsCreateAccountBlocStateLoaded(_isAuth,
+            errorMessage: message);
         return;
       }
       yield SettingsCreateAccountBlocStateDone();

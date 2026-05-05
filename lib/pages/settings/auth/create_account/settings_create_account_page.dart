@@ -63,17 +63,8 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                 size: 100,
               ),
             );
-          } else if (state is SettingsCreateAccountBlocStateError) {
-            body = Fullscreen(
-              title: 'Error',
-              subtitle: 'Couldn\'t create account',
-              child: Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 100,
-              ),
-            );
           } else if (state is SettingsCreateAccountBlocStateLoaded) {
+            final String? errorMessage = state.errorMessage;
             body = SafeArea(
               child: Column(
                 children: <Widget>[
@@ -95,8 +86,8 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                           elevation: 5,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 24.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 24.0, 8.0, 8.0),
                           child: SGLTextField(
                               textCapitalization: TextCapitalization.none,
                               focusNode: _nicknameFocusNode,
@@ -108,9 +99,21 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                               hintText: 'Ex: Bob',
                               controller: _nicknameController,
                               onChanged: (_) {
-                                setState(() {});
+                                _onCredentialsChanged(context);
                               }),
                         ),
+                        if (errorMessage != null)
+                          Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(16.0, 0, 8.0, 8.0),
+                            child: Text(
+                              errorMessage,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
                         SectionTitle(
                           title: 'Enter your password:',
                           icon: 'assets/settings/icon_password.svg',
@@ -131,7 +134,7 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                               obscureText: true,
                               hintText: '***',
                               onChanged: (_) {
-                                setState(() {});
+                                _onCredentialsChanged(context);
                               }),
                         ),
                       ],
@@ -169,6 +172,15 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
         },
       ),
     );
+  }
+
+  void _onCredentialsChanged(BuildContext context) {
+    final bloc = BlocProvider.of<SettingsCreateAccountBloc>(context);
+    final SettingsCreateAccountBlocState s = bloc.state;
+    if (s is SettingsCreateAccountBlocStateLoaded && s.errorMessage != null) {
+      bloc.add(SettingsCreateAccountBlocEventClearError());
+    }
+    setState(() {});
   }
 
   void _onTokenReceived(String token) {
