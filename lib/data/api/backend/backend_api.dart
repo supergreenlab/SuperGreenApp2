@@ -52,7 +52,10 @@ class BackendAPI {
 
   String checklistCollectionTheBasics = '9859f126-592d-4282-905c-403bc8dc90ba';
 
-  factory BackendAPI() => _instance;
+  factory BackendAPI() {
+    print('BackendAPI serverHost: ${Config.apiServerHost}');
+    return _instance;
+  }
 
   BackendAPI._newInstance();
 

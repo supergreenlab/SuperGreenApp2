@@ -22,9 +22,11 @@ import 'dart:io';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,6 +50,21 @@ import 'data/config.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
+// Pass --dart-define=FLAVOR=dev or --dart-define=FLAVOR=prod to override.
+// Otherwise we default to .env.dev in debug/profile and .env.prod in release.
+const String _flavor = String.fromEnvironment('FLAVOR');
+
+String _envFileName() {
+  switch (_flavor) {
+    case 'prod':
+      return '.env.prod';
+    case 'dev':
+      return '.env.dev';
+    default:
+      return kReleaseMode ? '.env.prod' : '.env.dev';
+  }
+}
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print("Handling a background message: ${message.messageId}");
@@ -68,6 +85,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: _envFileName());
 
   await Logger.init();
   FlutterError.onError = (FlutterErrorDetails details) {
